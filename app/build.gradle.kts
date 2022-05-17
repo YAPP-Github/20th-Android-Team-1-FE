@@ -1,5 +1,3 @@
-import common.GradleUtil.implement
-
 plugins {
     id(app.Plugins.androidApplication)
     kotlin("android")
@@ -15,11 +13,6 @@ android {
         targetSdk = Configs.TARGET_SDK
         versionCode = Configs.VERSION_CODE
         versionName = Configs.VERSION_NAME
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -35,12 +28,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
-    }
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -49,6 +36,5 @@ android {
 }
 
 dependencies {
-    app.AppDependencies.androidCoreDependencies.implement(this)
-    app.AppDependencies.composeDependencies.implement(this)
+    implementation(project(Modules.PRESENTATION))
 }

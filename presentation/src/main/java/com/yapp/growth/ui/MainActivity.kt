@@ -1,4 +1,4 @@
-package com.yapp.growth
+package com.yapp.growth.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
