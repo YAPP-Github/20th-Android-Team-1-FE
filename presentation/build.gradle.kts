@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(Modules.DOMAIN))
+
     app.AppDependencies.androidCoreDependencies.implement(this)
     app.AppDependencies.composeDependencies.implement(this)
 }

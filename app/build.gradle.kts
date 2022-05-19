@@ -37,4 +37,5 @@ android {
 
 dependencies {
     implementation(project(Modules.PRESENTATION))
+    implementation(project(Modules.DOMAIN))
 }
