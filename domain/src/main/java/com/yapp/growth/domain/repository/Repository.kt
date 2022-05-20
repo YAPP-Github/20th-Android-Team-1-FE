@@ -1,4 +1,4 @@
 package com.yapp.growth.domain.repository
 
-interface repository {
+interface Repository {
 }
