@@ -26,4 +26,7 @@ dependencies {
     implementation(project(Modules.DOMAIN))
 
     app.AppDependencies.androidCoreDependencies.implement(this)
+    app.AppDependencies.coroutineDependencies.implement(this)
+    app.AppDependencies.retrofitDependencies.implement(this)
+    app.AppDependencies.okhttpDependencies.implement(this)
 }
