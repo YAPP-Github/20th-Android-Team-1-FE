@@ -22,4 +22,19 @@ object AppDependencies {
         DependencyInfo("androidx.activity:activity-compose", Versions.activityComposeVersion, Method.IMPLEMENTATION),
         DependencyInfo("io.coil-kt:coil-compose", Versions.coilVersion, Method.IMPLEMENTATION)
     )
+
+    val coroutineDependencies = arrayOf(
+        DependencyInfo("org.jetbrains.kotlinx:kotlinx-coroutines-core", Versions.kotlinCoroutine, Method.IMPLEMENTATION),
+        DependencyInfo("org.jetbrains.kotlinx:kotlinx-coroutines-android", Versions.kotlinCoroutine, Method.IMPLEMENTATION)
+    )
+
+    val retrofitDependencies = arrayOf(
+        DependencyInfo("com.squareup.retrofit2:retrofit", Versions.retrofit, Method.IMPLEMENTATION),
+        DependencyInfo("com.squareup.retrofit2:converter-gson", Versions.retrofit, Method.IMPLEMENTATION)
+    )
+
+    val okhttpDependencies = arrayOf(
+        DependencyInfo("com.squareup.okhttp3:okhttp", Versions.okhttp, Method.IMPLEMENTATION),
+        DependencyInfo("com.squareup.okhttp3:logging-interceptor", Versions.okhttp, Method.IMPLEMENTATION)
+    )
 }
