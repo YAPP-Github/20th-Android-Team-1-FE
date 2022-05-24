@@ -12,4 +12,5 @@ object Versions {
     const val kotlinCoroutine  = "1.5.1"
     const val retrofit = "2.7.1"
     const val okhttp = "4.3.1"
+    const val espressoCore = "3.4.0"
 }

@@ -9,7 +9,7 @@ object AppDependencies {
         DependencyInfo("androidx.core:core-ktx", Versions.androidCoreVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.appcompat:appcompat", Versions.androidAppCompatVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.constraintlayout:constraintlayout", Versions.constraintlayoutVersion, Method.IMPLEMENTATION),
-        DependencyInfo("junit:junit", Versions.androidAppCompatVersion, Method.TESTIMPLEMENTATION)
+        DependencyInfo("junit:junit", Versions.junitVersion, Method.TESTIMPLEMENTATION)
     )
 
     val composeDependencies = arrayOf(
@@ -20,7 +20,7 @@ object AppDependencies {
         DependencyInfo("androidx.compose.ui:ui-tooling", Versions.composeVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.compose.material:material-icons-extended", Versions.composeVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.activity:activity-compose", Versions.activityComposeVersion, Method.IMPLEMENTATION),
-        DependencyInfo("io.coil-kt:coil-compose", Versions.coilVersion, Method.IMPLEMENTATION)
+        DependencyInfo("io.coil-kt:coil-compose", Versions.coilVersion, Method.IMPLEMENTATION),
     )
 
     val coroutineDependencies = arrayOf(
