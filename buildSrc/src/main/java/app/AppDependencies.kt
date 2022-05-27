@@ -9,7 +9,7 @@ object AppDependencies {
         DependencyInfo("androidx.core:core-ktx", Versions.androidCoreVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.appcompat:appcompat", Versions.androidAppCompatVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.constraintlayout:constraintlayout", Versions.constraintlayoutVersion, Method.IMPLEMENTATION),
-        DependencyInfo("junit:junit", Versions.androidAppCompatVersion, Method.TESTIMPLEMENTATION)
+        DependencyInfo("junit:junit", Versions.junitVersion, Method.TESTIMPLEMENTATION)
     )
 
     val composeDependencies = arrayOf(
