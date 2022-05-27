@@ -1,6 +1,10 @@
+import common.GradleUtil.implement
+
 plugins {
-    id(app.Plugins.androidApplication)
-    kotlin("android")
+    id(app.Plugins.ANDROID_APPLICATION)
+    id(app.Plugins.KOTLIN_ANDROID)
+    id(app.Plugins.KOTLIN_KAPT)
+    id(app.Plugins.HILT_ANDROID)
 }
 
 android {
@@ -39,4 +43,7 @@ dependencies {
     implementation(project(Modules.PRESENTATION))
     implementation(project(Modules.DOMAIN))
     implementation(project(Modules.DATA))
+
+    app.ModuleDependencies.hilt.implement(this)
+    app.ModuleDependencies.hiltAndroid.implement(this)
 }

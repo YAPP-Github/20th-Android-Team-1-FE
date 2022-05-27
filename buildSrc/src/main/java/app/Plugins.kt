@@ -1,12 +1,11 @@
 package app
 
 object Plugins {
-    const val androidApplication = "com.android.application"
-    const val kotlinAndroid = "kotlin-android"
-    const val kotlinKapt = "kotlin-kapt"
-    const val daggerPlugin = "dagger.hilt.android.plugin"
-    const val kotlinParcelize = "kotlin-parcelize"
-
-
-    const val androidLibrary = "com.android.library"
+    const val ANDROID_APPLICATION = "com.android.application"
+    const val ANDROID_LIBRARY = "com.android.library"
+    const val KOTLIN = "kotlin"
+    const val KOTLIN_ANDROID = "kotlin-android"
+    const val KOTLIN_KAPT = "kotlin-kapt"
+    const val KOTLIN_PARCELIZE = "kotlin-parcelize"
+    const val HILT_ANDROID = "dagger.hilt.android.plugin"
 }
