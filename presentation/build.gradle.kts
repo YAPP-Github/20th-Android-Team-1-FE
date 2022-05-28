@@ -41,4 +41,5 @@ dependencies {
     app.ModuleDependencies.compose.implement(this)
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.hiltAndroid.implement(this)
+    app.ModuleDependencies.timber.implement(this)
 }

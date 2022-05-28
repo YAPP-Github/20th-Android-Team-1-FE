@@ -31,4 +31,5 @@ dependencies {
     app.ModuleDependencies.retrofit.implement(this)
     app.ModuleDependencies.okhttp.implement(this)
     app.ModuleDependencies.hilt.implement(this)
+    app.ModuleDependencies.timber.implement(this)
 }

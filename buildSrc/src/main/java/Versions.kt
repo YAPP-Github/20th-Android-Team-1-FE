@@ -14,4 +14,5 @@ object Versions {
     const val OKHTTP = "4.3.1"
     const val HILT = "2.42"
     const val HILT_ANDROID = "1.0.0-beta01"
+    const val TIMBER = "5.0.1"
 }

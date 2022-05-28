@@ -116,4 +116,8 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
     )
+
+    val timber = arrayOf(
+        DependencyInfo("com.jakewharton.timber:timber", Versions.TIMBER, Method.IMPLEMENTATION)
+    )
 }
