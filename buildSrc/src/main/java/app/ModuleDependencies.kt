@@ -52,6 +52,11 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
         DependencyInfo(
+            "androidx.compose.ui:ui-tooling",
+            Versions.COMPOSE,
+            Method.DEBUG_IMPLEMENTATION
+        ),
+        DependencyInfo(
             "androidx.compose.material:material-icons-extended",
             Versions.COMPOSE,
             Method.IMPLEMENTATION
@@ -116,7 +121,11 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
     )
-
+    
+    val timber = arrayOf(
+        DependencyInfo("com.jakewharton.timber:timber", Versions.TIMBER, Method.IMPLEMENTATION)
+    )
+    
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics-ktx"

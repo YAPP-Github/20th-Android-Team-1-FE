@@ -31,6 +31,7 @@ dependencies {
     app.ModuleDependencies.retrofit.implement(this)
     app.ModuleDependencies.okhttp.implement(this)
     app.ModuleDependencies.hilt.implement(this)
+    app.ModuleDependencies.timber.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
