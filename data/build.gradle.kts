@@ -31,4 +31,8 @@ dependencies {
     app.ModuleDependencies.retrofit.implement(this)
     app.ModuleDependencies.okhttp.implement(this)
     app.ModuleDependencies.hilt.implement(this)
+
+    implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
+    implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
+    implementation(app.ModuleDependencies.FIREBASE_CRASHLYTICS)
 }

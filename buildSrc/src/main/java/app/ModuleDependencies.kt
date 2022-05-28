@@ -58,7 +58,7 @@ object ModuleDependencies {
         ),
         DependencyInfo(
             "androidx.activity:activity-compose",
-            Versions.ACTIVITY_COMPOSE,
+            Versions.COMPOSE_ACTIVITY,
             Method.IMPLEMENTATION
         ),
         DependencyInfo("io.coil-kt:coil-compose", Versions.COIL, Method.IMPLEMENTATION)
@@ -116,4 +116,8 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
     )
+
+    const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
+    const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
+    const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics-ktx"
 }
