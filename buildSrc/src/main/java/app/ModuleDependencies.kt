@@ -52,6 +52,11 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
         DependencyInfo(
+            "androidx.compose.ui:ui-tooling",
+            Versions.COMPOSE,
+            Method.DEBUG_IMPLEMENTATION
+        ),
+        DependencyInfo(
             "androidx.compose.material:material-icons-extended",
             Versions.COMPOSE,
             Method.IMPLEMENTATION

@@ -1,8 +1,8 @@
 object Versions {
     const val ANDROID_BUILD_TOOL = "7.2.0"
     const val ANDROID_CORE = "1.7.0"
-    const val KOTLIN = "1.6.20"
-    const val COMPOSE = "1.2.0-alpha08"
+    const val KOTLIN = "1.6.10"
+    const val COMPOSE = "1.1.1"
     const val ACTIVITY_COMPOSE = "1.4.0"
     const val ANDROID_APP_COMPAT = "1.4.1"
     const val CONSTRAINT_LAYOUT = "2.1.3"
