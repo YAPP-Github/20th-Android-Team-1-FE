@@ -1,9 +1,10 @@
 import common.GradleUtil.implement
 
 plugins {
-    id(app.Plugins.androidLibrary)
-    kotlin("android")
-    kotlin("kapt")
+    id(app.Plugins.ANDROID_LIBRARY)
+    id(app.Plugins.KOTLIN_ANDROID)
+    id(app.Plugins.KOTLIN_KAPT)
+    id(app.Plugins.HILT_ANDROID)
 }
 
 android {
@@ -25,8 +26,9 @@ android {
 dependencies {
     implementation(project(Modules.DOMAIN))
 
-    app.AppDependencies.androidCoreDependencies.implement(this)
-    app.AppDependencies.coroutineDependencies.implement(this)
-    app.AppDependencies.retrofitDependencies.implement(this)
-    app.AppDependencies.okhttpDependencies.implement(this)
+    app.ModuleDependencies.androidCore.implement(this)
+    app.ModuleDependencies.coroutines.implement(this)
+    app.ModuleDependencies.retrofit.implement(this)
+    app.ModuleDependencies.okhttp.implement(this)
+    app.ModuleDependencies.hilt.implement(this)
 }

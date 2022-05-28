@@ -2,7 +2,7 @@ package common
 
 enum class Method(val methodString : String) {
     IMPLEMENTATION("implementation"),
-    TESTIMPLEMENTATION("testImplementation"),
+    TEST_IMPLEMENTATION("testImplementation"),
     KAPT("kapt"),
-    ANDROIDTESTIMPLEMENTATION("androidTestImplementation")
+    ANDROID_TEST_IMPLEMENTATION("androidTestImplementation")
 }

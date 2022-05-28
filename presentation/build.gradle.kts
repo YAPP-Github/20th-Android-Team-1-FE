@@ -1,9 +1,11 @@
 import common.GradleUtil.implement
 
 plugins {
-    id(app.Plugins.androidLibrary)
-    kotlin("android")
-    kotlin("kapt")
+    id(app.Plugins.ANDROID_LIBRARY)
+    id(app.Plugins.KOTLIN_ANDROID)
+    id(app.Plugins.KOTLIN_PARCELIZE)
+    id(app.Plugins.KOTLIN_KAPT)
+    id(app.Plugins.HILT_ANDROID)
 }
 
 android {
@@ -29,13 +31,14 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = Versions.COMPOSE
     }
 }
 
 dependencies {
     implementation(project(Modules.DOMAIN))
-
-    app.AppDependencies.androidCoreDependencies.implement(this)
-    app.AppDependencies.composeDependencies.implement(this)
+    app.ModuleDependencies.androidCore.implement(this)
+    app.ModuleDependencies.compose.implement(this)
+    app.ModuleDependencies.hilt.implement(this)
+    app.ModuleDependencies.hiltAndroid.implement(this)
 }

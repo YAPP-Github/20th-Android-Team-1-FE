@@ -1,8 +1,4 @@
 object Configs {
-    //Plugins
-    const val KOTLIN                    = "kotlin"
-    const val KOTLIN_KAPT               = "kotlin-kapt"
-
     //Android Config
     const val COMPILE_SDK               = 32
 
