@@ -9,7 +9,7 @@ object Versions {
     const val coilVersion = "1.4.0"
     const val lifecycleVersion = "2.4.1"
     const val junitVersion = "4.13.2"
-    const val kotlinCoroutine  = "1.5.1"
-    const val retrofit = "2.7.1"
-    const val okhttp = "4.3.1"
+    const val kotlinCoroutineVersion  = "1.5.1"
+    const val retrofitVersion = "2.7.1"
+    const val okhttpVersion = "4.3.1"
 }

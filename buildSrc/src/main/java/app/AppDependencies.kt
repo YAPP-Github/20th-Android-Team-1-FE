@@ -9,7 +9,7 @@ object AppDependencies {
         DependencyInfo("androidx.core:core-ktx", Versions.androidCoreVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.appcompat:appcompat", Versions.androidAppCompatVersion, Method.IMPLEMENTATION),
         DependencyInfo("androidx.constraintlayout:constraintlayout", Versions.constraintlayoutVersion, Method.IMPLEMENTATION),
-        DependencyInfo("junit:junit", Versions.androidAppCompatVersion, Method.TESTIMPLEMENTATION)
+        DependencyInfo("junit:junit", Versions.junitVersion, Method.TESTIMPLEMENTATION)
     )
 
     val composeDependencies = arrayOf(
@@ -24,17 +24,17 @@ object AppDependencies {
     )
 
     val coroutineDependencies = arrayOf(
-        DependencyInfo("org.jetbrains.kotlinx:kotlinx-coroutines-core", Versions.kotlinCoroutine, Method.IMPLEMENTATION),
-        DependencyInfo("org.jetbrains.kotlinx:kotlinx-coroutines-android", Versions.kotlinCoroutine, Method.IMPLEMENTATION)
+        DependencyInfo("org.jetbrains.kotlinx:kotlinx-coroutines-core", Versions.kotlinCoroutineVersion, Method.IMPLEMENTATION),
+        DependencyInfo("org.jetbrains.kotlinx:kotlinx-coroutines-android", Versions.kotlinCoroutineVersion, Method.IMPLEMENTATION)
     )
 
     val retrofitDependencies = arrayOf(
-        DependencyInfo("com.squareup.retrofit2:retrofit", Versions.retrofit, Method.IMPLEMENTATION),
-        DependencyInfo("com.squareup.retrofit2:converter-gson", Versions.retrofit, Method.IMPLEMENTATION)
+        DependencyInfo("com.squareup.retrofit2:retrofit", Versions.retrofitVersion, Method.IMPLEMENTATION),
+        DependencyInfo("com.squareup.retrofit2:converter-gson", Versions.retrofitVersion, Method.IMPLEMENTATION)
     )
 
     val okhttpDependencies = arrayOf(
-        DependencyInfo("com.squareup.okhttp3:okhttp", Versions.okhttp, Method.IMPLEMENTATION),
-        DependencyInfo("com.squareup.okhttp3:logging-interceptor", Versions.okhttp, Method.IMPLEMENTATION)
+        DependencyInfo("com.squareup.okhttp3:okhttp", Versions.okhttpVersion, Method.IMPLEMENTATION),
+        DependencyInfo("com.squareup.okhttp3:logging-interceptor", Versions.okhttpVersion, Method.IMPLEMENTATION)
     )
 }
