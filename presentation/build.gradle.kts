@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yapp.growth.presentation"
+    namespace = "com.yapp.growth"
     compileSdk = Configs.COMPILE_SDK
 
     defaultConfig {
