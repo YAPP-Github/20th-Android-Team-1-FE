@@ -10,11 +10,10 @@ plugins {
 }
 
 android {
-    namespace = "com.yapp.growth"
     compileSdk = Configs.COMPILE_SDK
 
     defaultConfig {
-        applicationId = "com.yapp.growth"
+        applicationId = Configs.APPLICATION_ID
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
         versionCode = Configs.VERSION_CODE
