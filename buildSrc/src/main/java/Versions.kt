@@ -7,7 +7,7 @@ object Versions {
     const val COMPOSE = "1.2.0-alpha08"
     const val COMPOSE_ACTIVITY = "1.4.0"
     const val CONSTRAINT_LAYOUT = "2.1.3"
-    const val FIREBASE_BOM = "30.1.0"
+    const val FIREBASE_BOM = "29.1.0"
     const val FIREBASE_CRASHLYTICS = "2.9.0"
     const val GOOGLE_SERVICE = "4.3.10"
     const val HILT = "2.42"
