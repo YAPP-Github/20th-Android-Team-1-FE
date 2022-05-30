@@ -15,4 +15,6 @@ object Versions {
     const val HILT = "2.42"
     const val HILT_ANDROID = "1.0.0-beta01"
     const val TIMBER = "5.0.1"
+    const val MOSHI = "1.13.0"
+    const val INJECT = "1"
 }

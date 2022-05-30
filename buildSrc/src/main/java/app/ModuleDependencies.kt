@@ -83,12 +83,16 @@ object ModuleDependencies {
     )
 
     val retrofit = arrayOf(
-        DependencyInfo("com.squareup.retrofit2:retrofit", Versions.RETROFIT, Method.IMPLEMENTATION),
         DependencyInfo(
-            "com.squareup.retrofit2:converter-gson",
+            "com.squareup.retrofit2:retrofit", Versions.RETROFIT, Method.IMPLEMENTATION),
+        DependencyInfo(
+            "com.squareup.retrofit2:converter-moshi",
             Versions.RETROFIT,
             Method.IMPLEMENTATION
-        )
+        ),
+        DependencyInfo("com.squareup.moshi:moshi-kotlin",
+            Versions.MOSHI,
+            Method.IMPLEMENTATION)
     )
 
     val okhttp = arrayOf(
@@ -124,5 +128,9 @@ object ModuleDependencies {
 
     val timber = arrayOf(
         DependencyInfo("com.jakewharton.timber:timber", Versions.TIMBER, Method.IMPLEMENTATION)
+    )
+
+    val javaInject = arrayOf(
+        DependencyInfo("javax.inject:javax.inject", Versions.INJECT, Method.IMPLEMENTATION)
     )
 }
