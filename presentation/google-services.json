@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:626079185695:android:a0c32837fa7d87257cce2a",
         "android_client_info": {
-          "package_name": "com.yapp.growth"
+          "package_name": "com.yapp.growth.presentation"
         }
       },
       "oauth_client": [
