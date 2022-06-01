@@ -20,6 +20,12 @@ android {
         versionName = Configs.VERSION_NAME
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("../keystore/debug.keystore")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
