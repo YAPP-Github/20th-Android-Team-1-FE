@@ -22,7 +22,7 @@ android {
 
     signingConfigs {
         getByName("debug") {
-            storeFile = file("../keystore/debug.keystore")
+            storeFile = file("$rootDir/debug.keystore")
         }
     }
 
