@@ -6,19 +6,19 @@ import com.yapp.growth.ui.sample.SampleContract.*
 
 class SampleViewModel(
     private val useCase: UseCase
-) : BaseViewModel<SampleViewState, SampleViewSideEffect, SampleViewEvent>(
+) : BaseViewModel<SampleViewState, SampleSideEffect, SampleEvent>(
     SampleViewState()
 ) {
 
     fun anyFunction() {
         // anything do . . .
-        setEffect { SampleViewSideEffect.NavigateToAnyScreen }
+        setEffect { SampleSideEffect.NavigateToAnyScreen }
         setState { copy(isLoading = false) }
     }
 
-    override fun handleEvents(event: SampleViewEvent) {
+    override fun handleEvents(event: SampleEvent) {
         when (event) {
-            is SampleViewEvent.OnAnyButtonClicked -> {
+            is SampleEvent.OnAnyButtonClicked -> {
                 setState { copy(isLoading = true) }
                 anyFunction()
             }

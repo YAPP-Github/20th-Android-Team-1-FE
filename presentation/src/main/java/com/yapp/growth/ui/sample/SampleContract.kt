@@ -10,13 +10,13 @@ class SampleContract {
         val isLoading: Boolean = false
     ) : ViewState
 
-    sealed class SampleViewSideEffect : ViewSideEffect {
-        object NavigateToAnyScreen : SampleViewSideEffect()
-        data class ShowToast(val msg: String) : SampleViewSideEffect()
+    sealed class SampleSideEffect : ViewSideEffect {
+        object NavigateToAnyScreen : SampleSideEffect()
+        data class ShowToast(val msg: String) : SampleSideEffect()
     }
 
-    sealed class SampleViewEvent : ViewEvent {
-        object OnAnyButtonClicked : SampleViewEvent()
+    sealed class SampleEvent : ViewEvent {
+        object OnAnyButtonClicked : SampleEvent()
     }
 
 }
