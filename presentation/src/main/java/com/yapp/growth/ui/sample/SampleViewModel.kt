@@ -12,17 +12,17 @@ class SampleViewModel(
 
     private fun anyFunction() {
         // anything do . . .
-        setEffect(
+        sendEffect(
             { SampleSideEffect.NavigateToAnyScreen },
             { SampleSideEffect.ShowToast("This is Sample Data") }
         )
-        setState { copy(isLoading = false) }
+        updateState { copy(isLoading = false) }
     }
 
     override fun handleEvents(event: SampleEvent) {
         when (event) {
             is SampleEvent.OnAnyButtonClicked -> {
-                setState { copy(isLoading = true) }
+                updateState { copy(isLoading = true) }
                 anyFunction()
             }
         }
