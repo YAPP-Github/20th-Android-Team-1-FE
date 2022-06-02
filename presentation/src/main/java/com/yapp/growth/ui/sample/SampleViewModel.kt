@@ -10,9 +10,12 @@ class SampleViewModel(
     SampleViewState()
 ) {
 
-    fun anyFunction() {
+    private fun anyFunction() {
         // anything do . . .
-        setEffect { SampleSideEffect.NavigateToAnyScreen }
+        setEffect(
+            { SampleSideEffect.NavigateToAnyScreen },
+            { SampleSideEffect.ShowToast("This is Sample Data") }
+        )
         setState { copy(isLoading = false) }
     }
 

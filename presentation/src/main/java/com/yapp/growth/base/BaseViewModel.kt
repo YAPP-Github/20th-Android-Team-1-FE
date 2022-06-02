@@ -40,9 +40,10 @@ abstract class BaseViewModel<S : ViewState, A : ViewSideEffect, E : ViewEvent>(
         _viewState.value = newState
     }
 
-    protected fun setEffect(builder: () -> A) {
-        val effectValue = builder()
-        viewModelScope.launch { _effect.send(effectValue) }
+    protected fun setEffect(vararg builder: () -> A) {
+        for (effectValue in builder) {
+            viewModelScope.launch { _effect.send(effectValue()) }
+        }
     }
 
     open fun setEvent(event : E) {
