@@ -23,18 +23,6 @@ abstract class BaseViewModel<S : ViewState, A : ViewSideEffect, E : ViewEvent>(
 
     private val _event: MutableSharedFlow<E> = MutableSharedFlow()
 
-    init {
-        subscribeToEvents()
-    }
-
-    private fun subscribeToEvents() {
-        viewModelScope.launch {
-            _event.collect {
-                handleEvents(it)
-            }
-        }
-    }
-
     protected fun updateState(reducer: S.() -> S) {
         val newState = currentState.reducer()
         _viewState.value = newState
@@ -47,6 +35,10 @@ abstract class BaseViewModel<S : ViewState, A : ViewSideEffect, E : ViewEvent>(
     }
 
     open fun setEvent(event : E) {
-        viewModelScope.launch { _event.emit(event) }
+        deliverEvent(event)
+    }
+
+    private fun deliverEvent(event : E) = viewModelScope.launch {
+        handleEvents(event)
     }
 }
