@@ -19,4 +19,6 @@ object Versions {
     const val OKHTTP = "4.3.1"
     const val RETROFIT = "2.7.1"
     const val TIMBER = "5.0.1"
+    const val MOSHI = "1.13.0"
+    const val INJECT = "1"
 }
