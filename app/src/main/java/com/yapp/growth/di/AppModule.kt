@@ -14,13 +14,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides @Named("isDebug")
-    fun provideIsDebug(): Boolean = BuildConfig.DEBUG
-
-    @Provides
-    @Named("GrowthBaseUrl")
-    fun provideGrowthBaseUrl(): String = BASE_URL
-
     @Provides
     @Singleton
     fun provideNetworkSettings(): NetworkSettings {

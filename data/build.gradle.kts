@@ -13,6 +13,8 @@ android {
     defaultConfig {
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
+
+        buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

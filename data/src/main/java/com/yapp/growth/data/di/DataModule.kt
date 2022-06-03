@@ -2,6 +2,7 @@ package com.yapp.growth.data.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.yapp.growth.data.BuildConfig
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.NetworkSettings
 import dagger.Module
@@ -19,27 +20,15 @@ import javax.inject.Singleton
 @Module
 internal class DataModule {
 
-    @Provides
-    @Named("GrowthApiUrl")
-    fun provideGrowthApiUrl(
-        @Named("isDebug") debug: Boolean,
-        @Named("GrowthBaseUrl") growthBaseUrl: String
-    ): String =
-        when (debug) {
-            true -> growthBaseUrl
-            else -> growthBaseUrl
-        }
-
     @Singleton
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        @Named("GrowthApiUrl") growthApiUrl: String,
         jsonAdapterFactory: Converter.Factory
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(growthApiUrl)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(jsonAdapterFactory)
             .build()
 
