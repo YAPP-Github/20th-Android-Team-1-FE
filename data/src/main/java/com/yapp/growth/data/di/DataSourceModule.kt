@@ -11,11 +11,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class DataSourceModule {
+internal abstract class DataSourceModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun bindUserDataSource(dataSource: UserDataSourceImpl): UserDataSource {
-        return dataSource
-    }
+    abstract fun bindUserDataSource(dataSource: UserDataSourceImpl): UserDataSource
 }

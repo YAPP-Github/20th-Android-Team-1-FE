@@ -7,7 +7,7 @@ import com.yapp.growth.data.mapper.toUserList
 import com.yapp.growth.domain.entity.User
 import javax.inject.Inject
 
-class UserDataSourceImpl @Inject constructor(
+internal class UserDataSourceImpl @Inject constructor(
     private val retrofitApi: GrowthApi
 ) : UserDataSource {
 
