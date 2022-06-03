@@ -27,6 +27,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+            isMinifyEnabled = false
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -54,7 +60,7 @@ dependencies {
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.hiltAndroid.implement(this)
     app.ModuleDependencies.timber.implement(this)
-    
+
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
     implementation(app.ModuleDependencies.FIREBASE_CRASHLYTICS)
