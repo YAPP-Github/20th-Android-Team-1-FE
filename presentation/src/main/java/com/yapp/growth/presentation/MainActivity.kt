@@ -1,4 +1,4 @@
-package com.yapp.growth.ui
+package com.yapp.growth.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,9 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.yapp.growth.ui.theme.GrowthTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.yapp.growth.presentation.theme.GrowthTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

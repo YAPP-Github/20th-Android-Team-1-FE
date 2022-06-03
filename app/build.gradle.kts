@@ -4,15 +4,16 @@ plugins {
     id(app.Plugins.ANDROID_APPLICATION)
     id(app.Plugins.KOTLIN_ANDROID)
     id(app.Plugins.KOTLIN_KAPT)
+    id(app.Plugins.GOOGLE_SERVICE)
+    id(app.Plugins.FIREBASE_CRASHLYTICS)
     id(app.Plugins.HILT_ANDROID)
 }
 
 android {
-    namespace = "com.yapp.growth"
     compileSdk = Configs.COMPILE_SDK
 
     defaultConfig {
-        applicationId = "com.yapp.growth"
+        applicationId = Configs.APPLICATION_ID
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
         versionCode = Configs.VERSION_CODE
@@ -47,4 +48,8 @@ dependencies {
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.hiltAndroid.implement(this)
     app.ModuleDependencies.timber.implement(this)
+    
+    implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
+    implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
+    implementation(app.ModuleDependencies.FIREBASE_CRASHLYTICS)
 }

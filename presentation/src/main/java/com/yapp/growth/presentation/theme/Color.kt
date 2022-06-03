@@ -1,4 +1,4 @@
-package com.yapp.growth.ui.theme
+package com.yapp.growth.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

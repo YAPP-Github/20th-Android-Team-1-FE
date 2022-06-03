@@ -7,5 +7,7 @@ object Plugins {
     const val KOTLIN_ANDROID = "kotlin-android"
     const val KOTLIN_KAPT = "kotlin-kapt"
     const val KOTLIN_PARCELIZE = "kotlin-parcelize"
+    const val GOOGLE_SERVICE = "com.google.gms.google-services"
+    const val FIREBASE_CRASHLYTICS = "com.google.firebase.crashlytics"
     const val HILT_ANDROID = "dagger.hilt.android.plugin"
 }

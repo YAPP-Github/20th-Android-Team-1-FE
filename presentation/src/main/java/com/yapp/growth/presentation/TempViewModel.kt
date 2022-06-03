@@ -1,7 +1,6 @@
-package com.yapp.growth.ui
+package com.yapp.growth.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.usecase.GetUserListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
