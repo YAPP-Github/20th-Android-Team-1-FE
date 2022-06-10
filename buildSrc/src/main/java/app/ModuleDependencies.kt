@@ -26,15 +26,15 @@ object ModuleDependencies {
             Versions.CONSTRAINT_LAYOUT,
             Method.IMPLEMENTATION
         ),
-        DependencyInfo("junit:junit", Versions.JUNIT, Method.TEST_IMPLEMENTATION)
-    )
-
-    val compose = arrayOf(
+        DependencyInfo("junit:junit", Versions.JUNIT, Method.TEST_IMPLEMENTATION),
         DependencyInfo(
             "androidx.lifecycle:lifecycle-runtime-ktx",
             Versions.LIFECYCLE,
             Method.IMPLEMENTATION
         ),
+    )
+
+    val compose = arrayOf(
         DependencyInfo("androidx.compose.ui:ui", Versions.COMPOSE, Method.IMPLEMENTATION),
         DependencyInfo(
             "androidx.compose.material:material",
@@ -125,7 +125,7 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
     )
-    
+
     val timber = arrayOf(
         DependencyInfo("com.jakewharton.timber:timber", Versions.TIMBER, Method.IMPLEMENTATION)
     )
