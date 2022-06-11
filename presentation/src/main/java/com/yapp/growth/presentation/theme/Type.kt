@@ -17,7 +17,7 @@ val Pretendard = FontFamily(
 
 // Set of Material typography styles to start with
 // TODO :: 디자이너분께서 폰트 관련 자세한 정보 주시면 추후 수정
-val Typography = Typography(
+val PlanzTypography = Typography(
     h1 = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Bold,
