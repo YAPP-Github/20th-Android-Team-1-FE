@@ -15,10 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.MainGradient
+import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.ui.splash.SplashContract.LoginState
 import kotlinx.coroutines.delay
 
@@ -75,5 +77,13 @@ fun SplashLoad(loginState: LoginState, navigateToLogin: () -> Unit, navigateToMa
             LoginState.REQUIRED -> navigateToLogin()
             LoginState.NONE -> navigateToLogin()
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SplashPreview() {
+    PlanzTheme {
+        SplashScreen(navigateToLogin = { /*TODO*/ }) {}
     }
 }
