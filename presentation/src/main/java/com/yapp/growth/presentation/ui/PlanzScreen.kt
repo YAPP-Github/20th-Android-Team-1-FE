@@ -35,7 +35,7 @@ import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.theme.Purple
 import com.yapp.growth.presentation.ui.home.HomeScreen
-import com.yapp.growth.presentation.ui.makeplan.MakePlanScreen
+import com.yapp.growth.presentation.ui.createplan.CreatePlanScreen
 import com.yapp.growth.presentation.ui.manageplan.ManagePlanScreen
 import com.yapp.growth.presentation.ui.sample.SampleScreen
 
@@ -60,8 +60,8 @@ fun PlanzScreen(
         },
         floatingActionButton = {
             if (bottomBarState) {
-                MakePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                    navController.navigate(GrowthScreenRoute.MAKE_PLAN.route)
+                CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
+                    navController.navigate(GrowthScreenRoute.CREATE_PLAN.route)
                 }
             }
         },
@@ -76,8 +76,8 @@ fun PlanzScreen(
                 HomeScreen()
             }
 
-            composable(route = GrowthScreenRoute.MAKE_PLAN.route) {
-                MakePlanScreen()
+            composable(route = GrowthScreenRoute.CREATE_PLAN.route) {
+                CreatePlanScreen()
             }
 
             composable(route = GrowthScreenRoute.MANAGE_PLAN.route) {
@@ -115,14 +115,14 @@ fun PlanzBottomNavigation(
                         modifier = Modifier.padding(4.dp),
                         imageVector = ImageVector.vectorResource(id = navigationItem.icon),
                         contentDescription = null,
-                        tint = if (navigationItem.route == GrowthScreenRoute.MAKE_PLAN.route) Color.Unspecified else LocalContentColor.current,
+                        tint = if (navigationItem.route == GrowthScreenRoute.CREATE_PLAN.route) Color.Unspecified else LocalContentColor.current,
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(navigationItem.title),
                         color = when (navigationItem.route) {
-                            GrowthScreenRoute.MAKE_PLAN.route -> Purple
+                            GrowthScreenRoute.CREATE_PLAN.route -> Purple
                             currentDestination?.route -> Gray900
                             else -> Gray400
                         },
@@ -144,7 +144,7 @@ fun PlanzBottomNavigation(
 }
 
 @Composable
-fun MakePlanFAB(
+fun CreatePlanFAB(
     modifier: Modifier = Modifier,
     navigateToManageScreen: () -> Unit,
 ) {
@@ -167,7 +167,7 @@ fun navigateBottomNavigationScreen(
     navController: NavHostController,
     navigationItem: BottomNavigationItem,
 ) {
-    if (navigationItem == BottomNavigationItem.MAKE_PLAN) {
+    if (navigationItem == BottomNavigationItem.CREATE_PLAN) {
         navController.navigate(navigationItem.route)
     } else {
         navController.navigate(navigationItem.route) {
@@ -190,10 +190,10 @@ enum class BottomNavigationItem(
         icon = R.drawable.ic_navigation_home,
         title = R.string.navigation_home_text
     ),
-    MAKE_PLAN(
-        route = GrowthScreenRoute.MAKE_PLAN.route,
+    CREATE_PLAN(
+        route = GrowthScreenRoute.CREATE_PLAN.route,
         icon = R.drawable.ic_navigation_blank,
-        title = R.string.navigation_make_plan_text
+        title = R.string.navigation_create_plan_text
     ),
     MANAGE_PLAN(
         route = GrowthScreenRoute.MANAGE_PLAN.route,
@@ -204,7 +204,7 @@ enum class BottomNavigationItem(
 
 enum class GrowthScreenRoute(val route: String) {
     HOME("home"),
-    MAKE_PLAN("make-plan"),
+    CREATE_PLAN("create-plan"),
     MANAGE_PLAN("manage-plan"),
     SAMPLE("sample")
 }

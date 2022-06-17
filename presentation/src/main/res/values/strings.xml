@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="navigation_home_text">메인 홈</string>
-    <string name="navigation_make_plan_text">약속잡기</string>
+    <string name="navigation_create_plan_text">약속잡기</string>
     <string name="navigation_manage_plan_text">약속관리</string>
 </resources>

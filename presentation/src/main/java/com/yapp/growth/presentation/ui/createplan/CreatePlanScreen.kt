@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.makeplan
+package com.yapp.growth.presentation.ui.createplan
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -9,17 +9,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun MakePlanScreen() {
+fun CreatePlanScreen() {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Text(text = "Make Plan")
+        Text(text = "Create Plan")
     }
 }
 
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    MakePlanScreen()
+    CreatePlanScreen()
 }
