@@ -10,8 +10,6 @@ class SplashContract {
     ) : ViewState
 
     sealed class SplashSideEffect : ViewSideEffect {
-        object NavigateToMainScreen : SplashSideEffect()
-        object NavigateToLoginScreen : SplashSideEffect()
     }
 
     sealed class SplashEvent : ViewEvent {
