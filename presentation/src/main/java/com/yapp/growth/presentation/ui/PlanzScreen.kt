@@ -1,0 +1,210 @@
+package com.yapp.growth.presentation.ui
+
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.yapp.growth.presentation.R
+import com.yapp.growth.presentation.theme.Gray400
+import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.Pretendard
+import com.yapp.growth.presentation.theme.Purple
+import com.yapp.growth.presentation.ui.home.HomeScreen
+import com.yapp.growth.presentation.ui.makeplan.MakePlanScreen
+import com.yapp.growth.presentation.ui.manageplan.ManagePlanScreen
+import com.yapp.growth.presentation.ui.sample.SampleScreen
+
+@Composable
+fun PlanzScreen(
+    navController: NavHostController = rememberNavController(),
+) {
+    var bottomBarState by rememberSaveable { mutableStateOf(true) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    Scaffold(
+        bottomBar = {
+            if (bottomBarState) {
+                PlanzBottomNavigation(
+                    currentDestination = currentDestination,
+                    navigateToScreen = { navigationItem ->
+                        navigateBottomNavigationScreen(navController, navigationItem)
+                    }
+                )
+            }
+        },
+        floatingActionButton = {
+            if (bottomBarState) {
+                MakePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
+                    navController.navigate(GrowthScreenRoute.MAKE_PLAN.route)
+                }
+            }
+        },
+        isFloatingActionButtonDocked = true,
+        floatingActionButtonPosition = FabPosition.Center,
+    ) {
+        NavHost(
+            navController = navController,
+            startDestination = GrowthScreenRoute.HOME.route
+        ) {
+            composable(route = GrowthScreenRoute.HOME.route) {
+                HomeScreen()
+            }
+
+            composable(route = GrowthScreenRoute.MAKE_PLAN.route) {
+                MakePlanScreen()
+            }
+
+            composable(route = GrowthScreenRoute.MANAGE_PLAN.route) {
+                ManagePlanScreen()
+            }
+
+            composable(route = GrowthScreenRoute.SAMPLE.route) {
+                SampleScreen()
+            }
+        }
+    }
+
+    bottomBarState = when (currentDestination?.route) {
+        GrowthScreenRoute.HOME.route -> true
+        GrowthScreenRoute.MANAGE_PLAN.route -> true
+        else -> false
+    }
+}
+
+@Composable
+fun PlanzBottomNavigation(
+    currentDestination: NavDestination?,
+    navigateToScreen: (BottomNavigationItem) -> Unit,
+) {
+    BottomNavigation(
+        backgroundColor = Color.White,
+        modifier = Modifier.height(72.dp),
+        elevation = 24.dp
+    ) {
+        BottomNavigationItem.values().forEach { navigationItem ->
+            BottomNavigationItem(
+                modifier = Modifier.padding(8.dp),
+                icon = {
+                    Icon(
+                        modifier = Modifier.padding(4.dp),
+                        imageVector = ImageVector.vectorResource(id = navigationItem.icon),
+                        contentDescription = null,
+                        tint = if (navigationItem.route == GrowthScreenRoute.MAKE_PLAN.route) Color.Unspecified else LocalContentColor.current,
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(navigationItem.title),
+                        color = when (navigationItem.route) {
+                            GrowthScreenRoute.MAKE_PLAN.route -> Purple
+                            currentDestination?.route -> Gray900
+                            else -> Gray400
+                        },
+                        style = TextStyle(
+                            fontFamily = Pretendard,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 12.sp,
+                            lineHeight = 12.sp
+                        )
+                    )
+                },
+                selected = currentDestination?.hierarchy?.any { it.route == navigationItem.route } == true,
+                onClick = { navigateToScreen(navigationItem) },
+                selectedContentColor = Gray900,
+                unselectedContentColor = Gray400,
+            )
+        }
+    }
+}
+
+@Composable
+fun MakePlanFAB(
+    modifier: Modifier = Modifier,
+    navigateToManageScreen: () -> Unit,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        IconButton(onClick = { navigateToManageScreen() }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_fab_create),
+                contentDescription = null,
+                tint = Color.Unspecified,
+            )
+        }
+    }
+
+}
+
+fun navigateBottomNavigationScreen(
+    navController: NavHostController,
+    navigationItem: BottomNavigationItem,
+) {
+    if (navigationItem == BottomNavigationItem.MAKE_PLAN) {
+        navController.navigate(navigationItem.route)
+    } else {
+        navController.navigate(navigationItem.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+}
+
+enum class BottomNavigationItem(
+    val route: String,
+    @DrawableRes val icon: Int,
+    @StringRes val title: Int,
+) {
+    HOME(
+        route = GrowthScreenRoute.HOME.route,
+        icon = R.drawable.ic_navigation_home,
+        title = R.string.navigation_home_text
+    ),
+    MAKE_PLAN(
+        route = GrowthScreenRoute.MAKE_PLAN.route,
+        icon = R.drawable.ic_navigation_blank,
+        title = R.string.navigation_make_plan_text
+    ),
+    MANAGE_PLAN(
+        route = GrowthScreenRoute.MANAGE_PLAN.route,
+        icon = R.drawable.ic_navigation_manage,
+        title = R.string.navigation_manage_plan_text
+    )
+}
+
+enum class GrowthScreenRoute(val route: String) {
+    HOME("home"),
+    MAKE_PLAN("make-plan"),
+    MANAGE_PLAN("manage-plan"),
+    SAMPLE("sample")
+}
