@@ -33,7 +33,7 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray400
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.Pretendard
-import com.yapp.growth.presentation.theme.Purple
+import com.yapp.growth.presentation.theme.MainPurple
 import com.yapp.growth.presentation.ui.home.HomeScreen
 import com.yapp.growth.presentation.ui.createplan.CreatePlanScreen
 import com.yapp.growth.presentation.ui.manageplan.ManagePlanScreen
@@ -122,7 +122,7 @@ fun PlanzBottomNavigation(
                     Text(
                         text = stringResource(navigationItem.title),
                         color = when (navigationItem.route) {
-                            GrowthScreenRoute.CREATE_PLAN.route -> Purple
+                            GrowthScreenRoute.CREATE_PLAN.route -> MainPurple
                             currentDestination?.route -> Gray900
                             else -> Gray400
                         },
