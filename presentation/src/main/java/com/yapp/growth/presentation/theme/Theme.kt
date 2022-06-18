@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val ColorPalette = lightColors(
-    primary = Purple,
-    primaryVariant = PurpleLight,
+    primary = MainPurple,
+    primaryVariant = MainPurpleLight,
     background = Color.White,
     onBackground = Color.Black,
     surface = Color.White,
@@ -25,12 +25,12 @@ private val ColorPalette = lightColors(
 )
 
 @Composable
-fun GrowthTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun PlanzTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = ColorPalette
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = PlanzTypography,
         shapes = Shapes,
         content = content
     )
