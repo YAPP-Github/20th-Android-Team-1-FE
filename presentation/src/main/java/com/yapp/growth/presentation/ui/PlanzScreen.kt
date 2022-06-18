@@ -61,7 +61,7 @@ fun PlanzScreen(
         floatingActionButton = {
             if (bottomBarState) {
                 CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                    navController.navigate(GrowthScreenRoute.CREATE_PLAN.route)
+                    navController.navigate(PlanzScreenRoute.CREATE_PLAN.route)
                 }
             }
         },
@@ -70,29 +70,29 @@ fun PlanzScreen(
     ) {
         NavHost(
             navController = navController,
-            startDestination = GrowthScreenRoute.HOME.route
+            startDestination = PlanzScreenRoute.HOME.route
         ) {
-            composable(route = GrowthScreenRoute.HOME.route) {
+            composable(route = PlanzScreenRoute.HOME.route) {
                 HomeScreen()
             }
 
-            composable(route = GrowthScreenRoute.CREATE_PLAN.route) {
+            composable(route = PlanzScreenRoute.CREATE_PLAN.route) {
                 CreatePlanScreen()
             }
 
-            composable(route = GrowthScreenRoute.MANAGE_PLAN.route) {
+            composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
                 ManagePlanScreen()
             }
 
-            composable(route = GrowthScreenRoute.SAMPLE.route) {
+            composable(route = PlanzScreenRoute.SAMPLE.route) {
                 SampleScreen()
             }
         }
     }
 
     bottomBarState = when (currentDestination?.route) {
-        GrowthScreenRoute.HOME.route -> true
-        GrowthScreenRoute.MANAGE_PLAN.route -> true
+        PlanzScreenRoute.HOME.route -> true
+        PlanzScreenRoute.MANAGE_PLAN.route -> true
         else -> false
     }
 }
@@ -115,14 +115,14 @@ fun PlanzBottomNavigation(
                         modifier = Modifier.padding(4.dp),
                         imageVector = ImageVector.vectorResource(id = navigationItem.icon),
                         contentDescription = null,
-                        tint = if (navigationItem.route == GrowthScreenRoute.CREATE_PLAN.route) Color.Unspecified else LocalContentColor.current,
+                        tint = if (navigationItem.route == PlanzScreenRoute.CREATE_PLAN.route) Color.Unspecified else LocalContentColor.current,
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(navigationItem.title),
                         color = when (navigationItem.route) {
-                            GrowthScreenRoute.CREATE_PLAN.route -> MainPurple
+                            PlanzScreenRoute.CREATE_PLAN.route -> MainPurple
                             currentDestination?.route -> Gray900
                             else -> Gray400
                         },
@@ -186,23 +186,23 @@ enum class BottomNavigationItem(
     @StringRes val title: Int,
 ) {
     HOME(
-        route = GrowthScreenRoute.HOME.route,
+        route = PlanzScreenRoute.HOME.route,
         icon = R.drawable.ic_navigation_home,
         title = R.string.navigation_home_text
     ),
     CREATE_PLAN(
-        route = GrowthScreenRoute.CREATE_PLAN.route,
+        route = PlanzScreenRoute.CREATE_PLAN.route,
         icon = R.drawable.ic_navigation_blank,
         title = R.string.navigation_create_plan_text
     ),
     MANAGE_PLAN(
-        route = GrowthScreenRoute.MANAGE_PLAN.route,
+        route = PlanzScreenRoute.MANAGE_PLAN.route,
         icon = R.drawable.ic_navigation_manage,
         title = R.string.navigation_manage_plan_text
     )
 }
 
-enum class GrowthScreenRoute(val route: String) {
+enum class PlanzScreenRoute(val route: String) {
     HOME("home"),
     CREATE_PLAN("create-plan"),
     MANAGE_PLAN("manage-plan"),
