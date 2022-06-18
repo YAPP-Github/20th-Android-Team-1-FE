@@ -1,4 +1,4 @@
-package com.yapp.growth.ui.splash
+package com.yapp.growth.presentation.ui.splash
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

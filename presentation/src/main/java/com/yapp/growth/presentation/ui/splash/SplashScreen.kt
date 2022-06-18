@@ -1,4 +1,4 @@
-package com.yapp.growth.ui.splash
+package com.yapp.growth.presentation.ui.splash
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.MainGradient
 import com.yapp.growth.presentation.theme.PlanzTheme
-import com.yapp.growth.ui.splash.SplashContract.LoginState
+import com.yapp.growth.presentation.ui.splash.SplashContract.LoginState
 import kotlinx.coroutines.delay
 
 @Composable

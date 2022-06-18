@@ -1,4 +1,4 @@
-package com.yapp.growth.ui.sample
+package com.yapp.growth.presentation.ui.sample
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

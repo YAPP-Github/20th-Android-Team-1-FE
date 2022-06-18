@@ -1,7 +1,7 @@
-package com.yapp.growth.ui.splash
+package com.yapp.growth.presentation.ui.splash
 
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.ui.splash.SplashContract.*
+import com.yapp.growth.presentation.ui.splash.SplashContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
