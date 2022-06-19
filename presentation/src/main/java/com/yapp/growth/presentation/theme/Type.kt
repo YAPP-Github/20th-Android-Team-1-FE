@@ -15,8 +15,6 @@ val Pretendard = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal)
 )
 
-// Set of Material typography styles to start with
-// TODO :: 디자이너분께서 폰트 관련 자세한 정보 주시면 추후 수정
 val PlanzTypography = Typography(
     h1 = TextStyle(
         fontFamily = Pretendard,
@@ -24,15 +22,45 @@ val PlanzTypography = Typography(
         fontSize = 24.sp,
         lineHeight = 36.sp
     ),
+    h2 = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp,
+        lineHeight = 30.sp
+    ),
+    h3 = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        lineHeight = 28.sp
+    ),
     subtitle1 = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
+    subtitle2 = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
     body1 = TextStyle(
         fontFamily = Pretendard,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
+    button = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
@@ -40,6 +68,6 @@ val PlanzTypography = Typography(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
-        lineHeight = 20.sp
+        lineHeight = 18.sp
     )
 )
