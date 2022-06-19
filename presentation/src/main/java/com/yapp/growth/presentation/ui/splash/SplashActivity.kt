@@ -1,45 +1,75 @@
 package com.yapp.growth.presentation.ui.splash
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.yapp.growth.presentation.MainActivity
 import com.yapp.growth.presentation.theme.PlanzTheme
+import com.yapp.growth.presentation.ui.login.LoginActivity
+import com.yapp.growth.presentation.ui.splash.SplashContract.LoginState
+import com.yapp.growth.presentation.ui.splash.SplashContract.SplashViewState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
+
+    private val viewModel: SplashViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            PlanzTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting3("Android")
-                }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val content: View = findViewById(android.R.id.content)
+            content.viewTreeObserver.addOnPreDrawListener { false }
+        }
+
+        setContent()
+
+        lifecycleScope.launch {
+            delay(SPLASH_TIME)
+            viewModel.viewState.collect { state ->
+                handleIntent(state)
             }
         }
     }
-}
 
-@Composable
-fun Greeting3(name: String) {
-    Text(text = "Hello $name!")
-}
+    private fun setContent() {
+        setContent {
+            PlanzTheme {
+                SplashScreen()
+            }
+        }
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview2() {
-    PlanzTheme {
-        Greeting3("Android")
+    private fun handleIntent(state: SplashViewState) = when (state.loginState) {
+        LoginState.SUCCESS -> startMainActivity()
+        LoginState.REQUIRED -> startLoginActivity()
+        LoginState.NONE -> startMainActivity()
+    }
+
+    private fun startMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun startLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    companion object {
+        private const val SPLASH_TIME = 1_000L
     }
 }
