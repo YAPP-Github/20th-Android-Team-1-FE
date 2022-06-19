@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Growth">
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Growth.Splash">
             <intent-filter>
@@ -23,11 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.login.LoginActivity"
+            android:name=".presentation.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.Growth" />
         <activity
-            android:name=".presentation.ui.splash.SplashActivity"
+            android:name=".presentation.ui.login.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.Growth" />
     </application>
