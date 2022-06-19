@@ -1,7 +1,7 @@
-package com.yapp.growth.ui.sample
+package com.yapp.growth.presentation.ui.sample
 
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.ui.sample.SampleContract.*
+import com.yapp.growth.presentation.ui.sample.SampleContract.*
 
 class SampleViewModel(
 ) : BaseViewModel<SampleViewState, SampleSideEffect, SampleEvent>(
