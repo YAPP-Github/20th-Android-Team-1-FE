@@ -2,7 +2,7 @@ package com.yapp.growth.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val MainPurple      = Color(0xFF8886FF)
+val MainPurple      = Color(0xFF6671F6)
 val MainPurpleLight = Color(0xFFE0E3FD)
 val SubYellow       = Color(0xFFFEDB78)
 val SubCoral        = Color(0XFFFF7F77)
