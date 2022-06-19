@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import common.GradleUtil.implement
 
 plugins {
@@ -14,7 +15,7 @@ android {
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
 
-        buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
+        buildConfigField("String", "BASE_URL", getProperty("BASE_URL"))
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -23,6 +24,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+fun getProperty(propertyKey: String): String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {
@@ -34,6 +39,7 @@ dependencies {
     app.ModuleDependencies.okhttp.implement(this)
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.timber.implement(this)
+    app.ModuleDependencies.kakaoSdk.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
