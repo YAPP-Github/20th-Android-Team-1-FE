@@ -134,6 +134,10 @@ object ModuleDependencies {
         DependencyInfo("javax.inject:javax.inject", Versions.INJECT, Method.IMPLEMENTATION)
     )
 
+    val kakaoSdk = arrayOf(
+        DependencyInfo("com.kakao.sdk:v2-user", Versions.KAKAO_SDK, Method.IMPLEMENTATION)
+    )
+
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics-ktx"
