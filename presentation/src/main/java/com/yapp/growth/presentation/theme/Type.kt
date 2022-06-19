@@ -36,6 +36,12 @@ val PlanzTypography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
+    button = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 20.sp
+    ),
     caption = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Medium,
