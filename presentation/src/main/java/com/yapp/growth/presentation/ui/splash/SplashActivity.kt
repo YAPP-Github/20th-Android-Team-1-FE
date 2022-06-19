@@ -52,18 +52,18 @@ class SplashActivity : ComponentActivity() {
     }
 
     private fun handleIntent(state: SplashViewState) = when (state.loginState) {
-        LoginState.SUCCESS -> startMainActivity()
-        LoginState.REQUIRED -> startLoginActivity()
-        LoginState.NONE -> startMainActivity()
+        LoginState.SUCCESS -> moveToMain()
+        LoginState.REQUIRED -> moveToLogin()
+        LoginState.NONE -> moveToMain()
     }
 
-    private fun startMainActivity() {
+    private fun moveToMain() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    private fun startLoginActivity() {
+    private fun moveToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

@@ -24,7 +24,7 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting3("Android")
+                    Greeting("Android")
                 }
             }
         }
@@ -32,14 +32,14 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting3(name: String) {
+fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview2() {
+fun DefaultPreview() {
     PlanzTheme {
-        Greeting3("Android")
+        Greeting("Android")
     }
 }
