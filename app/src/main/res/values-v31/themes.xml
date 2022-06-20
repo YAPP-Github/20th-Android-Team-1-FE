@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.Growth.Splash" parent="Theme.Growth">
-        <item name="android:windowSplashScreenBackground">@color/main</item>
+        <item name="android:windowSplashScreenBackground">@color/main_purple</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="android:windowSplashScreenAnimationDuration">0</item>
     </style>
