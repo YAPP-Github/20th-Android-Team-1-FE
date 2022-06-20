@@ -4,4 +4,8 @@
     <style name="Theme.Growth" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
     </style>
+
+    <style name="Theme.Growth.Splash" parent="Theme.Growth">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>
