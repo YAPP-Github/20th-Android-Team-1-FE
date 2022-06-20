@@ -5,8 +5,10 @@ import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
+import com.yapp.growth.AuthException
 import com.yapp.growth.ui.sample.KakaoAccessToken
 import com.yapp.growth.LoginSdk
+import com.yapp.growth.ui.sample.KakaoRefreshToken
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -56,13 +58,13 @@ class KakaoLoginSdk @Inject constructor(
         return awaitTokenInfoResult().isSuccess
     }
 
-    override suspend fun refreshToken(): Boolean {
+    override suspend fun refreshToken(): Pair<KakaoAccessToken, KakaoRefreshToken> {
         val awaitRefreshTokenResult = suspendCancellableCoroutine<Result<OAuthToken>> { cont ->
             kakaoAuthApiClient.refreshToken { token, e ->
                 cont.resume(getOAuthTokenResult(token, e))
             }
         }
-        return awaitRefreshTokenResult.isSuccess
+        return awaitRefreshTokenResult.mapCatching { token -> KakaoAccessToken(token.accessToken) to KakaoRefreshToken(token.refreshToken) }.getOrThrow()
     }
 
     private val awaitTokenInfoResult: suspend () -> Result<AccessTokenInfo> = {

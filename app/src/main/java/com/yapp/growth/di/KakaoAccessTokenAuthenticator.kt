@@ -1,6 +1,8 @@
 package com.yapp.growth.di
 
+import com.yapp.growth.AuthClient
 import com.yapp.growth.LoginSdk
+import com.yapp.growth.kakao.KakaoAuthClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -11,7 +13,7 @@ import okhttp3.Route
 import javax.inject.Inject
 
 class KakaoAccessTokenAuthenticator @Inject constructor(
-    private val kakaoLoginSdk: LoginSdk
+    private val kakaoAuthClient: KakaoAuthClient
 ) : Authenticator {
 
     private var refreshable: Boolean = true
