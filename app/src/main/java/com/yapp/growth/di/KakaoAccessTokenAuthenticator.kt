@@ -1,6 +1,6 @@
 package com.yapp.growth.di
 
-import com.yapp.growth.ui.sample.LoginSdk
+import com.yapp.growth.LoginSdk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

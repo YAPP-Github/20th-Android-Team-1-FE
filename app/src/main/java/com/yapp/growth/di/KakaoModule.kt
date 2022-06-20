@@ -2,7 +2,8 @@ package com.yapp.growth.di
 
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.user.UserApiClient
-import com.yapp.growth.ui.sample.LoginSdk
+import com.yapp.growth.kakao.KakaoLoginSdk
+import com.yapp.growth.LoginSdk
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -2,7 +2,7 @@ package com.yapp.growth.di
 
 import com.yapp.growth.BuildConfig
 import com.yapp.growth.data.api.NetworkSettings
-import com.yapp.growth.ui.sample.LoginSdk
+import com.yapp.growth.LoginSdk
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
