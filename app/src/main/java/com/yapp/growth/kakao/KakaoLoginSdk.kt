@@ -32,7 +32,8 @@ class KakaoLoginSdk @Inject constructor(
                     cont.resume(getOAuthTokenResult(token, error))
                 }
         }
-        return KakaoAccessToken(awaitOAuthTokenResult.map { it.accessToken }.getOrThrow())
+        return KakaoAccessToken(awaitOAuthTokenResult.map { it.accessToken }
+            .getOrAuthExceptionThrow())
     }
 
     override suspend fun logout() {
@@ -45,7 +46,7 @@ class KakaoLoginSdk @Inject constructor(
                 cont.resume(logoutResult)
             }
         }
-        awaitLogoutResult.getOrThrow()
+        awaitLogoutResult.getOrAuthExceptionThrow()
     }
 
     override suspend fun getAccessToken(): KakaoAccessToken =
@@ -58,14 +59,18 @@ class KakaoLoginSdk @Inject constructor(
         return awaitTokenInfoResult().isSuccess
     }
 
-    override suspend fun refreshToken(): Pair<KakaoAccessToken, KakaoRefreshToken> {
+    override suspend fun refreshToken(): Boolean = runCatching {
         val awaitRefreshTokenResult = suspendCancellableCoroutine<Result<OAuthToken>> { cont ->
             kakaoAuthApiClient.refreshToken { token, e ->
                 cont.resume(getOAuthTokenResult(token, e))
             }
         }
-        return awaitRefreshTokenResult.mapCatching { token -> KakaoAccessToken(token.accessToken) to KakaoRefreshToken(token.refreshToken) }.getOrThrow()
-    }
+        awaitRefreshTokenResult.mapCatching { token ->
+            KakaoAccessToken(token.accessToken) to KakaoRefreshToken(
+                token.refreshToken
+            )
+        }.getOrThrow()
+    }.isSuccess
 
     private val awaitTokenInfoResult: suspend () -> Result<AccessTokenInfo> = {
         suspendCoroutine { cont ->
@@ -92,4 +97,11 @@ class KakaoLoginSdk @Inject constructor(
     private fun Throwable?.toAuthException(): AuthException =
         AuthException(this?.message ?: "error message is null")
 
+    private fun <T> Result<T>.getOrAuthExceptionThrow(): T =
+        getOrElse { e ->
+            throw when (e) {
+                is AuthException -> e
+                else -> AuthException(message = e.message ?: "", error = e as Exception)
+            }
+        }
 }
