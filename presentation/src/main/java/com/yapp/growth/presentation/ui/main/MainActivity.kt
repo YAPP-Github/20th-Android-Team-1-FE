@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui
+package com.yapp.growth.presentation.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

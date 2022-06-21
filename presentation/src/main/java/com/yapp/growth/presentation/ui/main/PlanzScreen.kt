@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui
+package com.yapp.growth.presentation.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -34,10 +34,10 @@ import com.yapp.growth.presentation.theme.Gray400
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.theme.MainPurple
-import com.yapp.growth.presentation.ui.home.HomeScreen
-import com.yapp.growth.presentation.ui.createplan.CreatePlanScreen
-import com.yapp.growth.presentation.ui.manageplan.ManagePlanScreen
-import com.yapp.growth.presentation.ui.sample.SampleScreen
+import com.yapp.growth.presentation.ui.main.home.HomeScreen
+import com.yapp.growth.presentation.ui.main.createplan.CreatePlanScreen
+import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
+import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 
 @Composable
 fun PlanzScreen(

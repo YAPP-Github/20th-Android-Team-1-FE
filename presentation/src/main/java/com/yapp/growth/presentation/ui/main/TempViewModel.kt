@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui
+package com.yapp.growth.presentation.ui.main
 
 import androidx.lifecycle.ViewModel
 import com.yapp.growth.domain.NetworkResult

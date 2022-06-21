@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.sample
+package com.yapp.growth.presentation.ui.main.sample
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme

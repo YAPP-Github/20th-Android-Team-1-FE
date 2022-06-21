@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.MainActivity"
+            android:name=".presentation.ui.main.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.Growth" />
         <activity
