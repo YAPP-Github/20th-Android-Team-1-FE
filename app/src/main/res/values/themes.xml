@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.Growth" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="android:statusBarColor">@color/main_purple</item>
     </style>
 
     <style name="Theme.Growth.Splash" parent="Theme.Growth">
