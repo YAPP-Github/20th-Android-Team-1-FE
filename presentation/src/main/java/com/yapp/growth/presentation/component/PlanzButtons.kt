@@ -44,8 +44,8 @@ fun PlanzSecondButton(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        buttonColor = MainPurpleLight,
-        textColor = MainPurple,
+        buttonColor = MainPurple300,
+        textColor = MainPurple900,
         onClick = onClick,
     )
 }
@@ -55,7 +55,7 @@ private fun PlanzButton(
     text: String,
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
-    buttonColor: Color = MainPurple,
+    buttonColor: Color = MainPurple900,
     textColor: Color = Gray100,
     onClick: () -> Unit,
 ) {
