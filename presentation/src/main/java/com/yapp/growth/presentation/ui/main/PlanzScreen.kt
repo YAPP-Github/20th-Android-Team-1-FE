@@ -30,12 +30,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.theme.Gray400
+import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.Pretendard
-import com.yapp.growth.presentation.theme.MainPurple
-import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.createplan.CreatePlanScreen
+import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 
@@ -122,9 +122,9 @@ fun PlanzBottomNavigation(
                     Text(
                         text = stringResource(navigationItem.title),
                         color = when (navigationItem.route) {
-                            PlanzScreenRoute.CREATE_PLAN.route -> MainPurple
+                            PlanzScreenRoute.CREATE_PLAN.route -> MainPurple900
                             currentDestination?.route -> Gray900
-                            else -> Gray400
+                            else -> Gray500
                         },
                         style = TextStyle(
                             fontFamily = Pretendard,
@@ -137,7 +137,7 @@ fun PlanzBottomNavigation(
                 selected = currentDestination?.hierarchy?.any { it.route == navigationItem.route } == true,
                 onClick = { navigateToScreen(navigationItem) },
                 selectedContentColor = Gray900,
-                unselectedContentColor = Gray400,
+                unselectedContentColor = Gray500,
             )
         }
     }
