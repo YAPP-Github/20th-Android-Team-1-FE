@@ -1,20 +1,18 @@
-package com.yapp.growth.presentation
+package com.yapp.growth.presentation.ui.main
 
 import androidx.lifecycle.ViewModel
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.usecase.GetUserListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TempViewModel @Inject constructor(
-    private val getUserListUseCase: GetUserListUseCase
-): ViewModel() {
+    private val getUserListUseCase: GetUserListUseCase,
+) : ViewModel() {
 
     suspend fun loadInit(): Unit {
-        val result = getUserListUseCase.invoke()
-        when(result) {
+        when (val result = getUserListUseCase.invoke()) {
             is NetworkResult.Success -> {
                 val info = result.data
             }

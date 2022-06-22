@@ -9,7 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.yapp.growth.presentation.MainActivity
+import com.yapp.growth.presentation.ui.main.MainActivity
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.splash.SplashContract.LoginState
@@ -33,7 +33,7 @@ class SplashActivity : ComponentActivity() {
             content.viewTreeObserver.addOnPreDrawListener { false }
         }
 
-        setContent()
+        setSplashScreen()
 
         lifecycleScope.launch {
             delay(SPLASH_TIME)
@@ -43,7 +43,7 @@ class SplashActivity : ComponentActivity() {
         }
     }
 
-    private fun setContent() {
+    private fun setSplashScreen() {
         setContent {
             PlanzTheme {
                 SplashScreen()
