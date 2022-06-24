@@ -26,15 +26,15 @@ object ModuleDependencies {
             Versions.CONSTRAINT_LAYOUT,
             Method.IMPLEMENTATION
         ),
-        DependencyInfo("junit:junit", Versions.JUNIT, Method.TEST_IMPLEMENTATION)
-    )
-
-    val compose = arrayOf(
+        DependencyInfo("junit:junit", Versions.JUNIT, Method.TEST_IMPLEMENTATION),
         DependencyInfo(
             "androidx.lifecycle:lifecycle-runtime-ktx",
             Versions.LIFECYCLE,
             Method.IMPLEMENTATION
         ),
+    )
+
+    val compose = arrayOf(
         DependencyInfo("androidx.compose.ui:ui", Versions.COMPOSE, Method.IMPLEMENTATION),
         DependencyInfo(
             "androidx.compose.material:material",
@@ -66,7 +66,8 @@ object ModuleDependencies {
             Versions.COMPOSE_ACTIVITY,
             Method.IMPLEMENTATION
         ),
-        DependencyInfo("io.coil-kt:coil-compose", Versions.COIL, Method.IMPLEMENTATION)
+        DependencyInfo("io.coil-kt:coil-compose", Versions.COIL, Method.IMPLEMENTATION),
+        DependencyInfo("androidx.navigation:navigation-compose", Versions.COMPOSE_NAVIGATION, Method.IMPLEMENTATION)
     )
 
     val coroutines = arrayOf(
@@ -125,7 +126,7 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
     )
-    
+
     val timber = arrayOf(
         DependencyInfo("com.jakewharton.timber:timber", Versions.TIMBER, Method.IMPLEMENTATION)
     )
