@@ -51,33 +51,6 @@ fun PlanzSecondButton(
 }
 
 @Composable
-private fun PlanzButton(
-    text: String,
-    enabled: Boolean = true,
-    modifier: Modifier = Modifier,
-    buttonColor: Color = MainPurple900,
-    textColor: Color = Gray100,
-    onClick: () -> Unit,
-) {
-    Button(
-        modifier = modifier.height(52.dp),
-        shape = RoundedCornerShape(10.dp),
-        onClick = { if (enabled) onClick() },
-        colors = when (enabled) {
-            true -> ButtonDefaults.buttonColors(backgroundColor = buttonColor)
-            else -> ButtonDefaults.buttonColors(backgroundColor = Gray300)
-        },
-        elevation = null,
-    ) {
-        Text(
-            text = text,
-            color = if (enabled) textColor else Gray500,
-            style = PlanzTypography.button
-        )
-    }
-}
-
-@Composable
 fun PlanzButtonWithBack(
     text: String,
     enabled: Boolean = true,
@@ -112,7 +85,33 @@ fun PlanzButtonWithBack(
             onClick = onClick,
         )
     }
+}
 
+@Composable
+private fun PlanzButton(
+    text: String,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier,
+    buttonColor: Color = MainPurple900,
+    textColor: Color = Gray100,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier.height(52.dp),
+        shape = RoundedCornerShape(10.dp),
+        onClick = { if (enabled) onClick() },
+        colors = when (enabled) {
+            true -> ButtonDefaults.buttonColors(backgroundColor = buttonColor)
+            else -> ButtonDefaults.buttonColors(backgroundColor = Gray300)
+        },
+        elevation = null,
+    ) {
+        Text(
+            text = text,
+            color = if (enabled) textColor else Gray500,
+            style = PlanzTypography.button
+        )
+    }
 }
 
 @Preview
