@@ -59,24 +59,11 @@ fun PlanzButtonWithBack(
     onBackClick: () -> Unit,
 ) {
     Row(modifier = modifier.padding(horizontal = 16.dp)) {
-        Button(
-            modifier = modifier
-                .width(52.dp)
-                .height(52.dp),
-            shape = RoundedCornerShape(10.dp),
-            onClick = { onBackClick() },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Gray200),
-            elevation = null,
-        ) {
-            Icon(
-                painter = painterResource(id = com.yapp.growth.presentation.R.drawable.ic_arrow_back),
-                contentDescription = "back arrow",
-                tint = Color.Unspecified,
-            )
-        }
-
+        PlanzBackButton(
+            modifier = modifier,
+            onBackClick = onBackClick
+        )
         Spacer(modifier = Modifier.width(10.dp))
-
         PlanzButton(
             text = text,
             enabled = enabled,
@@ -110,6 +97,28 @@ private fun PlanzButton(
             text = text,
             color = if (enabled) textColor else Gray500,
             style = PlanzTypography.button
+        )
+    }
+}
+
+@Composable
+private fun PlanzBackButton(
+    modifier: Modifier,
+    onBackClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier
+            .width(52.dp)
+            .height(52.dp),
+        shape = RoundedCornerShape(10.dp),
+        onClick = { onBackClick() },
+        colors = ButtonDefaults.buttonColors(backgroundColor = Gray200),
+        elevation = null,
+    ) {
+        Icon(
+            painter = painterResource(id = com.yapp.growth.presentation.R.drawable.ic_arrow_back),
+            contentDescription = "back arrow",
+            tint = Color.Unspecified,
         )
     }
 }
