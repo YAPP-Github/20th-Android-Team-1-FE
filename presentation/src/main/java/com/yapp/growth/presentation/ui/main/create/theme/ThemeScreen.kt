@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -114,9 +115,10 @@ fun ThemeChoiceButton(
             )
 
             Icon(
-                imageVector = if (isChosen) ImageVector.vectorResource(id = R.drawable.ic_check_circle)
-                else ImageVector.vectorResource(id = R.drawable.ic_check_circle),
-                contentDescription = stringResource(id = R.string.icon_check_content_description)
+                imageVector = if (isChosen) ImageVector.vectorResource(id = R.drawable.ic_check_circle_fill)
+                else ImageVector.vectorResource(id = R.drawable.ic_check_circle_outline),
+                contentDescription = stringResource(id = R.string.icon_check_content_description),
+                tint = Color.Unspecified,
             )
         }
     }
