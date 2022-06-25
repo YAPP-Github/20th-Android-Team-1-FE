@@ -1,8 +1,13 @@
 package com.yapp.growth.presentation.ui.splash
 
+import androidx.lifecycle.viewModelScope
+import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.runCatching
 import com.yapp.growth.presentation.ui.splash.SplashContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -10,15 +15,20 @@ class SplashViewModel @Inject constructor(
 ) : BaseViewModel<SplashViewState, SplashSideEffect, SplashEvent>(
     SplashViewState()
 ) {
-    // TODO : 임시로 초기값은 무조건 로그인 화면으로 가게 지정
-    init {
-        updateState { copy(loginState = LoginState.REQUIRED) }
-    }
+    @Inject
+    lateinit var kakaoLoginSdk: LoginSdk
 
-    // TODO : 로그인 여부에 따라 상태 변경 필요
-    private fun setLoginState() {
-        // updateState { copy(loginState = LoginState.REQUIRED) }
-        // updateState { copy(loginState = LoginState.SUCCESS) }
+    internal fun checkValidLoginToken() {
+        viewModelScope.launch {
+            runCatching {
+                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
+                if (isValidLoginToken) updateState { copy(loginState = LoginState.SUCCESS) }
+                else updateState { copy(loginState = LoginState.REQUIRED) }
+            }.onError {
+                updateState { copy(loginState = LoginState.REQUIRED) }
+            }
+
+        }
     }
 
     override fun handleEvents(event: SplashEvent) {
