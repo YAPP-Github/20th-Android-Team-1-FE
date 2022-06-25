@@ -9,11 +9,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Authenticator
 import okhttp3.Interceptor
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Named("BaseUrl")
+    @Provides
+    fun provideBaseUrl(): String = "https://api.github.com"
 
     @Provides
     @Singleton

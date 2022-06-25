@@ -24,11 +24,12 @@ internal class DataModule {
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        jsonAdapterFactory: Converter.Factory
+        jsonAdapterFactory: Converter.Factory,
+        @Named("BaseUrl") baseUrl: String
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(jsonAdapterFactory)
             .build()
 
