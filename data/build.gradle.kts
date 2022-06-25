@@ -15,7 +15,7 @@ android {
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
 
-        buildConfigField("String", "BASE_URL", getProperty("BASE_URL"))
+        getProperty("BASE_URL")?.let { buildConfigField("String", "BASE_URL", it) }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -26,7 +26,7 @@ android {
     }
 }
 
-fun getProperty(propertyKey: String): String {
+fun getProperty(propertyKey: String): String? {
     return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
