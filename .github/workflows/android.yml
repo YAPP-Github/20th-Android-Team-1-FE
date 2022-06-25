@@ -20,5 +20,15 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      # Github Repository Secrets를 통해 환경 변수 파일을 생성합니다.
+    - name: Generate Environment Variables File for Production
+      run: |
+        echo "BASE_URL=$BASE_URL" >> .env.production
+        echo "KAKAO_O_AUTH=$KAKAO_O_AUTH" >> .env.production
+        echo "KAKAO_APP_KEY=$KAKAO_APP_KEY" >> .env.production
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        KAKAO_O_AUTH: ${{ secrets.KAKAO_O_AUTH }}
+        KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
     - name: Build with Gradle
       run: ./gradlew build
