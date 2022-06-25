@@ -3,4 +3,14 @@
     <string name="navigation_home_text">메인 홈</string>
     <string name="navigation_create_plan_text">약속잡기</string>
     <string name="navigation_manage_plan_text">약속관리</string>
+
+    <string name="create_plan_next_button_text">다음</string>
+
+    <string name="create_plan_theme_title_text">약속 테마를 선택해 주세요!</string>
+    <string name="create_plan_theme_list_meal">식사 약속 🍚</string>
+    <string name="create_plan_theme_list_meeting">미팅 약속 ☕️</string>
+    <string name="create_plan_theme_list_trip">여행 약속 ✈️</string>
+    <string name="create_plan_theme_list_etc">기타 ☺️️</string>
+
+    <string name="icon_check_content_description">Check Icon</string>
 </resources>
