@@ -19,7 +19,6 @@ val MainGradient    = Brush.linearGradient(
 val SubYellow   = Color(0xFFFEDB78)
 val SubCoral    = Color(0XFFFF7F77)
 
-// TODO :: 디자이너분께서 색상 관련 자세한 정보 주시면 추후 수정
 val Gray900 = Color(0XFF020202)
 val Gray800 = Color(0XFF2D3038)
 val Gray700 = Color(0XFF6A707A)
