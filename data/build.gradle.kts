@@ -14,6 +14,9 @@ android {
     defaultConfig {
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
+
+        getProperty("BASE_URL")?.let { buildConfigField("String", "BASE_URL", it) }
+        getProperty("BASE_URL")?.let { resValue("String", "BASE_URL", it) }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,6 +25,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+fun getProperty(propertyKey: String): String? {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {
