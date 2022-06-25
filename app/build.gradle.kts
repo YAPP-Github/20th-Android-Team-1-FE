@@ -20,8 +20,8 @@ android {
         versionCode = Configs.VERSION_CODE
         versionName = Configs.VERSION_NAME
 
-        getProperty("KAKAO_O_AUTH")?.let { resValue("string", "kakao_o_auth_scheme", it) }
-        getProperty("KAKAO_APP_KEY")?.let { resValue("string", "kakao_sdk_app_key", it) }
+        resValue("string", "kakao_o_auth_scheme", getProperty("KAKAO_O_AUTH"))
+        resValue("string", "kakao_sdk_app_key", getProperty("KAKAO_APP_KEY"))
     }
 
     signingConfigs {
@@ -59,7 +59,7 @@ android {
     }
 }
 
-fun getProperty(propertyKey: String): String? {
+fun getProperty(propertyKey: String): String {
     return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
