@@ -45,8 +45,7 @@ class LoginActivity : ComponentActivity() {
                             .padding(start = 20.dp, end = 24.dp, top = 54.dp)
                     ) {
 
-                        TitleIconAndText()
-                        IntroduceText()
+                        Introduce()
                     }
 
                     PlanzImage()

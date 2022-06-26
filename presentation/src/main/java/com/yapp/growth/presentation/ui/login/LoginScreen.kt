@@ -19,34 +19,35 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 
 
 @Composable
-fun TitleIconAndText() {
-    Row(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Icon(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            painter = painterResource(id = R.drawable.ic_login_title_icon),
-            contentDescription = null,
-            tint = Color.Unspecified
-        )
+fun Introduce() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                painter = painterResource(id = R.drawable.ic_login_title_icon),
+                contentDescription = null,
+                tint = Color.Unspecified
+            )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 6.dp),
+                text = stringResource(id = R.string.planz_title),
+                style = PlanzTypography.h3,
+                color = MainPurple900
+            )
+        }
+
         Text(
-            modifier = Modifier.fillMaxWidth().padding(start = 6.dp),
-            text = stringResource(id = R.string.planz_title),
-            style = PlanzTypography.h3,
-            color = MainPurple900
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 14.dp),
+            text = stringResource(id = R.string.login_introduce_text),
+            style = PlanzTypography.h1
         )
     }
-}
-
-@Composable
-fun IntroduceText() {
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 14.dp),
-        text = stringResource(id = R.string.login_introduce_text),
-        style = PlanzTypography.h1
-    )
 }
 
 @Composable
