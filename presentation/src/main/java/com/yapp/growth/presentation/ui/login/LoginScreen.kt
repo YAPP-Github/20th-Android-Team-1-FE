@@ -17,6 +17,34 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
 
+@Composable
+fun LoginScreen(
+    onClick: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 24.dp, top = 54.dp)
+        ) {
+            Introduce()
+        }
+
+        PlanzImage()
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 36.dp)
+                    .align(Alignment.BottomCenter),
+            ) {
+                KakaoLoginButton(onClick = onClick)
+            }
+        }
+
+    }
+}
 
 @Composable
 fun Introduce() {

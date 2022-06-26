@@ -7,10 +7,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.PlanzTheme
@@ -37,33 +33,7 @@ class LoginActivity : ComponentActivity() {
 
         setContent {
             PlanzTheme {
-
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp, end = 24.dp, top = 54.dp)
-                    ) {
-
-                        Introduce()
-                    }
-
-                    PlanzImage()
-
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp, bottom = 36.dp)
-                                .align(Alignment.BottomCenter),
-                        ) {
-                            KakaoLoginButton(onClick = {
-                                viewModel.requestLogin(this@LoginActivity)
-                            })
-                        }
-                    }
-
-                }
+                LoginScreen(onClick = { viewModel.requestLogin(this@LoginActivity) })
             }
         }
     }
