@@ -53,7 +53,9 @@ fun Introduce() {
 @Composable
 fun PlanzImage() {
     Box(
-        modifier = Modifier.fillMaxWidth().padding(top = 30.dp, bottom = 54.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 30.dp, bottom = 54.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_login_image),
@@ -87,7 +89,7 @@ fun KakaoLoginButton(
             )
 
             Text(
-                text = "카카오 로그인",
+                text = stringResource(id = R.string.icon_kakao_login),
                 modifier = Modifier.padding(start = 6.dp),
                 color = Color.Black,
                 style = PlanzTypography.h3
