@@ -1,18 +1,20 @@
-package com.yapp.growth.presentation.ui.splash
+package com.yapp.growth.presentation.ui.login
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 
-class SplashContract {
-    data class SplashViewState(
+class LoginContract {
+    data class LoginViewState(
         val loginState: LoginState = LoginState.NONE
-    ) : ViewState
+    ): ViewState
 
-    sealed class SplashSideEffect : ViewSideEffect {
+    sealed class LoginSideEffect: ViewSideEffect {
+
     }
 
-    sealed class SplashEvent : ViewEvent {
+    sealed class LoginEvent: ViewEvent {
+
     }
 
     enum class LoginState {
