@@ -57,9 +57,9 @@ class LoginActivity : ComponentActivity() {
                                 .padding(start = 16.dp, end = 16.dp, bottom = 36.dp)
                                 .align(Alignment.BottomCenter),
                         ) {
-                            KakaoLoginButton {
+                            KakaoLoginButton(onClick = {
                                 viewModel.requestLogin(this@LoginActivity)
-                            }
+                            })
                         }
                     }
 
