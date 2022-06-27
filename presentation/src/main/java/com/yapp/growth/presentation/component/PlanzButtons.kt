@@ -60,15 +60,13 @@ fun PlanzButtonWithBack(
 ) {
     Row(modifier = modifier.padding(horizontal = 16.dp)) {
         BackButton(
-            modifier = modifier,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
         )
         Spacer(modifier = Modifier.width(10.dp))
         PlanzBasicButton(
             text = text,
             enabled = enabled,
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             onClick = onClick,
         )
     }
@@ -103,11 +101,10 @@ fun PlanzBasicButton(
 
 @Composable
 private fun BackButton(
-    modifier: Modifier,
     onBackClick: () -> Unit,
 ) {
     Button(
-        modifier = modifier
+        modifier = Modifier
             .width(52.dp)
             .height(52.dp),
         shape = RoundedCornerShape(10.dp),
