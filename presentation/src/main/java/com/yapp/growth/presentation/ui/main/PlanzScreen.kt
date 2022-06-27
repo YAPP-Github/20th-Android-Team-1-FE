@@ -36,11 +36,13 @@ import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.Pretendard
+import com.yapp.growth.presentation.ui.main.create.date.DateScreen
 import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
+import java.util.Date
 
 @Composable
 fun PlanzScreen(
@@ -103,7 +105,37 @@ fun PlanzScreen(
                     navArgument(KEY_PLAN_THEME_TYPE) { type = NavType.StringType }
                 )
             ) {
-                TitleScreen()
+                TitleScreen(
+                    exitCreateScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNextScreen = { theme, title, place ->
+                        navController.navigate(
+                            PlanzScreenRoute.CREATE_DATE.route
+                                .plus("/$theme")
+                                .plus("/$title")
+                                .plus("/$place")
+                        )
+                    },
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = PlanzScreenRoute.CREATE_DATE.route
+                    .plus("/{$KEY_PLAN_THEME_TYPE}")
+                    .plus("/{$KEY_PLAN_TITLE}")
+                    .plus("/{$KEY_PLAN_PLACE}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_THEME_TYPE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_TITLE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_PLACE) { type = NavType.StringType },
+                )
+            ) {
+                DateScreen()
             }
 
             composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
@@ -232,8 +264,13 @@ enum class PlanzScreenRoute(val route: String) {
     HOME("home"),
     CREATE_THEME("create-theme"),
     CREATE_TITLE("create-title"),
+    CREATE_DATE("create-date"),
     MANAGE_PLAN("manage-plan"),
     SAMPLE("sample")
 }
 
 const val KEY_PLAN_THEME_TYPE = "plan-theme-type"
+const val KEY_PLAN_TITLE = "plan-title"
+const val KEY_PLAN_PLACE = "plan-place"
+
+const val BLANK_VALUE = "@"
