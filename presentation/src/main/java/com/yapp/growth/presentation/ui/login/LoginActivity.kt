@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.ui.main.MainActivity
+import com.yapp.growth.presentation.ui.login.LoginContract.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -30,12 +31,12 @@ class LoginActivity : ComponentActivity() {
             LaunchedEffect(key1 = viewModel.effect) {
                 viewModel.effect.collect { effect ->
                     when (effect) {
-                        is LoginContract.LoginSideEffect.MoveToMain -> {
+                        is LoginSideEffect.MoveToMain -> {
                             MainActivity.startActivity(this@LoginActivity)
                             finish()
                         }
 
-                        is LoginContract.LoginSideEffect.LoginFailed -> {
+                        is LoginSideEffect.LoginFailed -> {
                             Toast.makeText(
                                 this@LoginActivity,
                                 R.string.message_kakao_login_failed,
