@@ -10,7 +10,12 @@
     <string name="create_plan_theme_list_meal">식사 약속 🍚</string>
     <string name="create_plan_theme_list_meeting">미팅 약속 ☕️</string>
     <string name="create_plan_theme_list_trip">여행 약속 ✈️</string>
-    <string name="create_plan_theme_list_etc">기타 ☺️️</string>
+    <string name="create_plan_theme_list_etc">기타 약속 ☺️️</string>
+
+    <string name="planz_component_text_field_error_message_text">자를 초과하였습니다</string>
 
     <string name="icon_check_content_description">Check Icon</string>
+    <string name="icon_clear_content_description">Clear Text Icon</string>
+    <string name="icon_error_content_description">Error Icon</string>
+
 </resources>

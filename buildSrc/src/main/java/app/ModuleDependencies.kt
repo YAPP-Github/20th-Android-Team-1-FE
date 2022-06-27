@@ -67,7 +67,16 @@ object ModuleDependencies {
             Method.IMPLEMENTATION
         ),
         DependencyInfo("io.coil-kt:coil-compose", Versions.COIL, Method.IMPLEMENTATION),
-        DependencyInfo("androidx.navigation:navigation-compose", Versions.COMPOSE_NAVIGATION, Method.IMPLEMENTATION)
+        DependencyInfo(
+            "androidx.navigation:navigation-compose",
+            Versions.COMPOSE_NAVIGATION,
+            Method.IMPLEMENTATION
+        ),
+        DependencyInfo(
+            "androidx.constraintlayout:constraintlayout-compose",
+            Versions.COMPOSE_CONSTRAINT_LAYOUT,
+            Method.IMPLEMENTATION
+        )
     )
 
     val coroutines = arrayOf(
