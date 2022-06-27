@@ -23,4 +23,5 @@ object Versions {
     const val TIMBER = "5.0.1"
     const val MOSHI = "1.13.0"
     const val INJECT = "1"
+    const val KAKAO_SDK = "2.10.0"
 }

@@ -42,7 +42,6 @@ import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
-import java.util.Date
 
 @Composable
 fun PlanzScreen(

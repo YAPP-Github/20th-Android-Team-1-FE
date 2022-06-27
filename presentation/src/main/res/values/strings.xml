@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="planz_title">플랜즈</string>
+    <string name="icon_kakao_login">카카오 로그인</string>
+    <string name="login_introduce_text">친구들과 함께하는\n편리한 약속 잡기</string>
+    <string name="message_kakao_login_failed">카카오계정 로그인에 실패 하였습니다. 잠시 후 다시 시도 해 주시기 바랍니다.</string>
+
     <string name="navigation_home_text">메인 홈</string>
     <string name="navigation_create_plan_text">약속잡기</string>
     <string name="navigation_manage_plan_text">약속관리</string>
@@ -23,5 +28,4 @@
     <string name="icon_check_content_description">Check Icon</string>
     <string name="icon_clear_content_description">Clear Text Icon</string>
     <string name="icon_error_content_description">Error Icon</string>
-
 </resources>
