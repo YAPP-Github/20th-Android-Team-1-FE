@@ -1,6 +1,7 @@
 package com.yapp.growth
 
 import android.app.Application
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -14,5 +15,10 @@ class PlanzApplication : Application() {
                 super.log(priority, "Debug[$tag]", message, t)
             }
         })
+
+        KakaoSdk.init(
+            context = this,
+            appKey = getString(R.string.kakao_sdk_app_key),
+        )
     }
 }
