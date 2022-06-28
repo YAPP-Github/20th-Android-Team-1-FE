@@ -36,7 +36,8 @@ import kotlinx.coroutines.launch
 fun BottomSheetScreen(
     sheetState: BottomSheetState, scaffoldState: BottomSheetScaffoldState, scope: CoroutineScope
 ) {
-    BottomSheetScaffold(sheetBackgroundColor = Color.Transparent,
+    BottomSheetScaffold(
+        sheetBackgroundColor = Color.Transparent,
         sheetPeekHeight = 0.dp,
         scaffoldState = scaffoldState,
         sheetContent = {
