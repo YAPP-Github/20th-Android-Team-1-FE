@@ -1,22 +1,22 @@
 package com.yapp.growth.presentation.ui.main.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -122,10 +122,93 @@ fun HomeTopBox(loginState: HomeContract.LoginState) {
     }
 }
 
+// TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
 fun HomeIsLoginBox() {
+    var expanded by remember { mutableStateOf(false) }
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ),
+        ) {
+            Column {
+                Row(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "오늘의 약속",
+                        color = Color.Black,
+                        style = MaterialTheme.typography.h3,
+                    )
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Box(
+                        modifier = Modifier
+                            .size(27.dp, 18.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(color = MainPurple300),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxHeight(),
+                            text = "0",
+                            color = MainPurple900,
+                            style = MaterialTheme.typography.caption,
+                        )
+                    }
+                }
 
+                Column(
+                    modifier = Modifier.padding(top = 22.dp, bottom = 36.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                ) {
+                    // TODO : API 연동
+                    if (expanded) {
+                        for (i in 0 until 3) {
+                            // ItemTodayPlan()
+                        }
+                    } else {
+                        // ItemTodayPlan()
+                    }
+                }
+            }
+
+            IconButton(
+                modifier = Modifier
+                    .padding(bottom = 9.dp)
+                    .size(12.3.dp, 6.47.dp)
+                    .align(Alignment.BottomCenter),
+                onClick = { expanded = !expanded }) {
+                Icon(
+                    tint = Color.Unspecified,
+                    imageVector = (
+                            if (expanded) {
+                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
+                            }),
+                    contentDescription = null,
+                )
+            }
+        }
+    }
 }
+
 
 @Composable
 fun HomeIsNotLoginBox() {
