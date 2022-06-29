@@ -19,13 +19,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 
 
 @Composable
@@ -400,6 +403,31 @@ fun HomeBottomBox() {
             }
         }
     }
+}
+
+// TODO : 추후 공통 컴포넌트로 이동 (정호)
+@Composable
+fun PlanCalendar(
+    currentDate: CalendarDay
+) {
+    AndroidView(
+        { MaterialCalendarView(it) },
+        update = { views ->
+            views.apply {
+                this.setOnDateChangedListener { widget, date, selected ->
+                    Timber.d(date.toString())
+                }
+                this.selectionMode = MaterialCalendarView.SELECTION_MODE_SINGLE
+                this.selectedDate = CalendarDay.today()
+                this.showOtherDates = MaterialCalendarView.SHOW_OTHER_MONTHS
+                this.setAllowClickDaysOutsideCurrentMonth(false)
+                this.currentDate = currentDate
+                this.isDynamicHeightEnabled = true
+                this.topbarVisible = false
+                this.isPagingEnabled = false
+            }
+        }
+    )
 }
 
 // TODO : API 연동 및 매개변수 추가(정호)
