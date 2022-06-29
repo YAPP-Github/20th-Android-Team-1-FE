@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -67,25 +68,27 @@ fun PlanzScreen(
         },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
-    ) {
-        NavHost(
-            navController = navController,
-            startDestination = PlanzScreenRoute.HOME.route
-        ) {
-            composable(route = PlanzScreenRoute.HOME.route) {
-                HomeScreen()
-            }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            NavHost(
+                navController = navController,
+                startDestination = PlanzScreenRoute.HOME.route
+            ) {
+                composable(route = PlanzScreenRoute.HOME.route) {
+                    HomeScreen()
+                }
 
-            composable(route = PlanzScreenRoute.CREATE_PLAN.route) {
-                CreatePlanScreen()
-            }
+                composable(route = PlanzScreenRoute.CREATE_PLAN.route) {
+                    CreatePlanScreen()
+                }
 
-            composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
-                ManagePlanScreen()
-            }
+                composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
+                    ManagePlanScreen()
+                }
 
-            composable(route = PlanzScreenRoute.SAMPLE.route) {
-                SampleScreen()
+                composable(route = PlanzScreenRoute.SAMPLE.route) {
+                    SampleScreen()
+                }
             }
         }
     }
