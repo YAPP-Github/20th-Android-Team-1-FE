@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -410,6 +411,8 @@ fun HomeBottomBox() {
 fun PlanCalendar(
     currentDate: CalendarDay
 ) {
+    val context = LocalContext.current
+
     AndroidView(
         { MaterialCalendarView(it) },
         update = { views ->
@@ -425,6 +428,11 @@ fun PlanCalendar(
                 this.isDynamicHeightEnabled = true
                 this.topbarVisible = false
                 this.isPagingEnabled = false
+                this.addDecorator(CalendarDecorator.SelectDecorator(context, this))
+                this.addDecorator(CalendarDecorator.SundayDecorator())
+                this.addDecorator(CalendarDecorator.OtherDayDecorator(context, this))
+                this.addDecorator(CalendarDecorator.TodayDecorator(context))
+                this.addDecorator(CalendarDecorator.DotDecorator())
             }
         }
     )
