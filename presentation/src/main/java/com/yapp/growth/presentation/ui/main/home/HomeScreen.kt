@@ -370,11 +370,11 @@ fun HomeBottomBox() {
                         if (expanded) {
                             // TODO : 예시 화면 (정호)
                             for (i in 0 until 10) {
-                                // ItemTextPlan("그로스 회의회의")
+                                ItemTextPlan("그로스 회의회의")
                             }
                         } else {
                             for (i in 0 until 4) {
-                                // ItemTextPlan("그로스 회의회의")
+                                ItemTextPlan("그로스 회의회의")
                             }
                         }
                     }
@@ -435,6 +435,39 @@ fun ItemTodayPlan() {
                     style = MaterialTheme.typography.subtitle1,
                 )
             }
+        }
+    }
+}
+
+// TODO : API 연동 및 매개변수 추가 (정호)
+@Composable
+fun ItemTextPlan(content: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+    )
+    {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(modifier = Modifier.padding(5.dp))
+            Text(
+                text = "6/26",
+                color = MainPurple900,
+                style = MaterialTheme.typography.subtitle2,
+            )
+            Spacer(modifier = Modifier.padding(20.dp))
+            Text(
+                text = content,
+                color = Color.Black,
+                style = MaterialTheme.typography.body2,
+            )
+            Spacer(modifier = Modifier.weight(1F))
+            Text(
+                text = "10시 00분",
+                color = Gray500,
+                style = MaterialTheme.typography.caption,
+            )
         }
     }
 }
