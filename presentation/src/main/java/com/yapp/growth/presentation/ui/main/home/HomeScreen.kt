@@ -365,7 +365,7 @@ fun HomeBottomBox() {
                 Divider(color = Gray200, thickness = 1.dp)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
                 if (isCalendarMode) {
-                    // PlanCalendar(currentDate)
+                    PlanCalendar(currentDate)
                 } else {
                     Column(
                         modifier = Modifier.padding(top = 11.dp, bottom = 12.dp),
