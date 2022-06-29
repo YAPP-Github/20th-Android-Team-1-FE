@@ -180,10 +180,10 @@ fun HomeIsLoginBox() {
                     // TODO : API 연동
                     if (expanded) {
                         for (i in 0 until 3) {
-                            // ItemTodayPlan()
+                            ItemTodayPlan()
                         }
                     } else {
-                        // ItemTodayPlan()
+                        ItemTodayPlan()
                     }
                 }
             }
@@ -241,6 +241,43 @@ fun HomeIsNotLoginBox() {
                     tint = Color.Unspecified,
                     imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
                     contentDescription = null,
+                )
+            }
+        }
+    }
+}
+
+// TODO : API 연동 및 매개변수 추가(정호)
+@Composable
+fun ItemTodayPlan() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                onClick = { /*TODO*/ }
+            ),
+    )
+    {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // TODO : 약속 종류에 따라 아이콘 변경 (정호)
+            Icon(
+                tint = Color.Unspecified,
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_plan_meal),
+                contentDescription = null,
+            )
+            Spacer(modifier = Modifier.padding(8.dp))
+            Column {
+                Text(
+                    text = "6시 30분",
+                    color = Gray500,
+                    style = MaterialTheme.typography.caption,
+                )
+                Text(
+                    text = "돼지파티 약속 외 1건",
+                    color = Color.Black,
+                    style = MaterialTheme.typography.subtitle1,
                 )
             }
         }
