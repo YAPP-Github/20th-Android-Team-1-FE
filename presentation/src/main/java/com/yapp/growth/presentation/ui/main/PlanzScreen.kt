@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -71,8 +72,9 @@ fun PlanzScreen(
         },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
-    ) {
+    ) { innerPadding ->
         NavHost(
+            modifier = Modifier.padding(innerPadding),
             navController = navController,
             startDestination = PlanzScreenRoute.HOME.route
         ) {
