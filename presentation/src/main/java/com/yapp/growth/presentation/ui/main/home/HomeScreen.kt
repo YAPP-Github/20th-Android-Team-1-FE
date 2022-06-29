@@ -2,11 +2,10 @@ package com.yapp.growth.presentation.ui.main.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -62,6 +61,13 @@ fun HomeScreen(
         },
         modifier = Modifier.fillMaxSize(),
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            HomeTopBox(loginState = viewState.loginState)
+        }
     }
 }
 
@@ -106,6 +112,24 @@ private fun HomeAppBar(
             color = Gray900,
         )
     }
+}
+
+@Composable
+fun HomeTopBox(loginState: HomeContract.LoginState) {
+    when (loginState) {
+        HomeContract.LoginState.LOGIN -> HomeIsLoginBox()
+        HomeContract.LoginState.NONE -> HomeIsNotLoginBox()
+    }
+}
+
+@Composable
+fun HomeIsLoginBox() {
+
+}
+
+@Composable
+fun HomeIsNotLoginBox() {
+
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
