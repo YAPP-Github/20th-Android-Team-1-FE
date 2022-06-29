@@ -5,11 +5,24 @@ import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 
 class HomeContract {
-    object HomeViewState : ViewState
+    data class HomeViewState(
+        val loginState: LoginState = LoginState.LOGIN
+    ) : ViewState
 
+    // TODO : 유저 아이콘 클릭 시 내 정보 창으로 이동 (정호)
     sealed class HomeSideEffect : ViewSideEffect {
+        object NavigateToInfoScreen : HomeSideEffect()
+        object NavigateDetailPlanScreen : HomeSideEffect()
+        object OpenBottomSheet : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
+        object OnUserImageButtonClicked : HomeEvent()
+        object OnPlanClicked : HomeEvent()
+        object OnCalendarDayClicked : HomeEvent()
+    }
+
+    enum class LoginState {
+        NONE, LOGIN
     }
 }
