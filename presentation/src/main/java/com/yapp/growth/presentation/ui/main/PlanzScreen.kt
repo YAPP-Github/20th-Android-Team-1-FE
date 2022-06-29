@@ -136,7 +136,25 @@ fun PlanzScreen(
                     navArgument(KEY_PLAN_PLACE) { type = NavType.StringType },
                 )
             ) {
-                DateScreen()
+                DateScreen(
+                    exitCreateScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNextScreen = { theme, title, place, date ->
+                        // TODO: Navigate to Next Step(Available Time)
+//                        navController.navigate(
+//                            PlanzScreenRoute.CREATE_DATE.route
+//                                .plus("/$theme")
+//                                .plus("/$title")
+//                                .plus("/$place")
+//                                .plus("/date")
+//                        )
+                    },
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
             }
 
             composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
