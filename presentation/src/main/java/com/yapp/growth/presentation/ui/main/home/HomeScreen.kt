@@ -212,7 +212,39 @@ fun HomeIsLoginBox() {
 
 @Composable
 fun HomeIsNotLoginBox() {
-
+    Box(
+        modifier = Modifier
+            .height(60.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(brush = MainGradient),
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 19.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = "회원가입하고, 편리한 약속잡기를 경험하세요!",
+                color = Color.White,
+                style = MaterialTheme.typography.subtitle2,
+            )
+            IconButton(
+                modifier = Modifier.size(5.7.dp, 12.dp),
+                onClick = { /*TODO*/ },
+            ) {
+                Icon(
+                    tint = Color.Unspecified,
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
+                    contentDescription = null,
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
