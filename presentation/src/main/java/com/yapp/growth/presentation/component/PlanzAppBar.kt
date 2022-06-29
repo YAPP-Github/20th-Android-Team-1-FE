@@ -1,9 +1,12 @@
 package com.yapp.growth.presentation.component
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -13,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.PlanzTypography
 
@@ -78,7 +83,7 @@ private fun PlanzAppBar(
         Icon(
             imageVector = ImageVector.vectorResource(id = menu.icon),
             tint = Color.Unspecified,
-            contentDescription = null,
+            contentDescription = stringResource(id = menu.contentDescription),
             modifier = Modifier
                 .padding(end = menu.horizontalPadding)
                 .clip(RoundedCornerShape(30.dp))
@@ -91,14 +96,17 @@ private fun PlanzAppBar(
 enum class PlanzAppBarMenu(
     val horizontalPadding: Dp,
     @DrawableRes val icon: Int,
+    @StringRes val contentDescription: Int,
 ) {
     CREATE(
         horizontalPadding = 16.dp,
-        icon = com.yapp.growth.presentation.R.drawable.ic_create
+        icon = R.drawable.ic_create,
+        contentDescription = R.string.icon_create_content_description
     ),
     EXIT(
         horizontalPadding = 20.dp,
-        icon = com.yapp.growth.presentation.R.drawable.ic_exit
+        icon = R.drawable.ic_exit,
+        contentDescription = R.string.icon_exit_content_description
     )
 }
 
