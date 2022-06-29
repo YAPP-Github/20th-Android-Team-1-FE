@@ -7,12 +7,12 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.lifecycleScope
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.MainActivity
-import com.yapp.growth.presentation.ui.splash.SplashContract.LoginState
-import com.yapp.growth.presentation.ui.splash.SplashContract.SplashViewState
+import com.yapp.growth.presentation.ui.splash.SplashContract.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -35,9 +35,6 @@ class SplashActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             viewModel.checkValidLoginToken()
-            viewModel.viewState.collect { state ->
-                handleIntent(state)
-            }
         }
     }
 
@@ -46,13 +43,16 @@ class SplashActivity : ComponentActivity() {
             PlanzTheme {
                 SplashScreen()
             }
-        }
-    }
 
-    private fun handleIntent(state: SplashViewState) = when (state.loginState) {
-        LoginState.SUCCESS -> moveToMain()
-        LoginState.REQUIRED -> moveToLogin()
-        else -> {}
+            LaunchedEffect(key1 = viewModel.effect) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        is SplashSideEffect.MoveToMain -> moveToMain()
+                        is SplashSideEffect.LoginFailed -> moveToLogin()
+                    }
+                }
+            }
+        }
     }
 
     private fun moveToMain() {

@@ -10,6 +10,8 @@ class SplashContract {
     ) : ViewState
 
     sealed class SplashSideEffect : ViewSideEffect {
+        object MoveToMain: SplashSideEffect()
+        object LoginFailed: SplashSideEffect()
     }
 
     sealed class SplashEvent : ViewEvent {
