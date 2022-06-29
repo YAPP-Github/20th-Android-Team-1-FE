@@ -6,6 +6,7 @@ object Versions {
     const val COIL = "1.4.0"
     const val COMPOSE = "1.1.1"
     const val COMPOSE_ACTIVITY = "1.4.0"
+    const val COMPOSE_CONSTRAINT_LAYOUT = "1.0.1"
     const val CONSTRAINT_LAYOUT = "2.1.3"
     const val COMPOSE_NAVIGATION = "2.4.2"
     const val FIREBASE_BOM = "29.1.0"
