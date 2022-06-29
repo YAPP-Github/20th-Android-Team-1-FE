@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import common.GradleUtil.implement
 
 plugins {
@@ -13,8 +14,6 @@ android {
     defaultConfig {
         minSdk = Configs.MIN_SDK
         targetSdk = Configs.TARGET_SDK
-
-        buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -34,6 +33,7 @@ dependencies {
     app.ModuleDependencies.okhttp.implement(this)
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.timber.implement(this)
+    app.ModuleDependencies.kakaoSdk.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
