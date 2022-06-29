@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
@@ -67,6 +68,9 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             HomeTopBox(loginState = viewState.loginState)
+            Spacer(modifier = Modifier.padding(8.dp))
+            HomeBottomBox()
+            Spacer(modifier = Modifier.padding(20.dp))
         }
     }
 }
@@ -242,6 +246,157 @@ fun HomeIsNotLoginBox() {
                     imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
                     contentDescription = null,
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeBottomBox() {
+    var isCalendarMode by remember { mutableStateOf(true) }
+    var expanded by remember { mutableStateOf(false) }
+
+    var currentDate: CalendarDay by remember { mutableStateOf(CalendarDay.today()) }
+
+    var year: Int by remember { mutableStateOf(currentDate.year) }
+    var month: Int by remember { mutableStateOf(currentDate.month + 1) }
+
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ),
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.padding(top = 21.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "${year}년 ${month}월",
+                        style = PlanzTypography.h3
+                    )
+                    Spacer(modifier = Modifier.padding(3.dp))
+                    OutlinedButton(
+                        onClick = {
+                            month--
+                            if (month == 0) {
+                                year--
+                                month = 12
+                            }
+                            currentDate = CalendarDay.from(year, month - 1, 1)
+                        },
+                        modifier = Modifier.size(25.dp),
+                        shape = CircleShape,
+                        border = BorderStroke(1.dp, Color.Transparent),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
+                    ) {
+                        Icon(
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_arrow_left),
+                            contentDescription = null,
+                        )
+                    }
+                    OutlinedButton(
+                        onClick = {
+                            month++
+                            if (month == 13) {
+                                year++
+                                month = 1
+                            }
+                            currentDate = CalendarDay.from(year, month - 1, 1)
+                        },
+                        modifier = Modifier.size(25.dp),
+                        shape = CircleShape,
+                        border = BorderStroke(1.dp, Color.Transparent),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
+                    ) {
+                        Icon(
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_arrow_right),
+                            contentDescription = null,
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    OutlinedButton(
+                        onClick = {
+                            isCalendarMode = !isCalendarMode
+                        },
+                        modifier = Modifier.size(32.dp),
+                        shape = CircleShape,
+                        border = BorderStroke(1.dp, Color.Transparent),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
+                    ) {
+                        Icon(
+                            tint = Color.Unspecified,
+                            imageVector =
+                            if (isCalendarMode) {
+                                ImageVector.vectorResource(R.drawable.ic_list)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_calendar)
+                            },
+                            contentDescription = null,
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.padding(top = 12.dp))
+                Divider(color = Gray200, thickness = 1.dp)
+                Spacer(modifier = Modifier.padding(top = 10.dp))
+                if (isCalendarMode) {
+                    // PlanCalendar(currentDate)
+                } else {
+                    Column(
+                        modifier = Modifier.padding(top = 11.dp, bottom = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(9.5.dp),
+                    ) {
+                        if (expanded) {
+                            // TODO : 예시 화면 (정호)
+                            for (i in 0 until 10) {
+                                // ItemTextPlan("그로스 회의회의")
+                            }
+                        } else {
+                            for (i in 0 until 4) {
+                                // ItemTextPlan("그로스 회의회의")
+                            }
+                        }
+                    }
+                    IconButton(
+                        modifier = Modifier
+                            .padding(bottom = 9.dp)
+                            .size(12.3.dp, 6.47.dp),
+                        onClick = { expanded = !expanded },
+                    )
+                    {
+                        Icon(
+                            tint = Color.Unspecified,
+                            imageVector =
+                            if (expanded) {
+                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
+                            },
+                            contentDescription = null
+                        )
+                    }
+                }
             }
         }
     }
