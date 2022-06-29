@@ -43,6 +43,7 @@ dependencies {
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.hiltAndroid.implement(this)
     app.ModuleDependencies.timber.implement(this)
+    app.ModuleDependencies.materialCalendarView.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
