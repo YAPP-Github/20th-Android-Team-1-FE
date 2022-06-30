@@ -72,7 +72,10 @@ fun HomeScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            HomeTopBox(loginState = viewState.loginState)
+            when (viewState.loginState) {
+                HomeContract.LoginState.LOGIN -> HomeTodayPlan()
+                HomeContract.LoginState.NONE -> HomeInduceLogin()
+            }
             Spacer(modifier = Modifier.padding(8.dp))
             HomeMonthlyPlan()
             Spacer(modifier = Modifier.padding(20.dp))
@@ -107,7 +110,7 @@ private fun HomeUserProfile(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .border(0.79.dp, MainPurple900, CircleShape),
+                    .border(1.dp, MainPurple900, CircleShape),
                 contentDescription = null,
             )
         }
@@ -120,14 +123,6 @@ private fun HomeUserProfile(
             style = PlanzTypography.h3,
             color = Gray900,
         )
-    }
-}
-
-@Composable
-fun HomeTopBox(loginState: HomeContract.LoginState) {
-    when (loginState) {
-        HomeContract.LoginState.LOGIN -> HomeTodayPlan()
-        HomeContract.LoginState.NONE -> HomeInduceLogin()
     }
 }
 
@@ -166,40 +161,14 @@ fun HomeTodayPlan() {
                         style = MaterialTheme.typography.h3,
                     )
                     Spacer(modifier = Modifier.padding(4.dp))
-                    Box(
-                        modifier = Modifier
-                            .size(28.dp, 18.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(color = MainPurple300),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxHeight(),
-                            text = "0",
-                            color = MainPurple900,
-                            style = MaterialTheme.typography.caption,
-                        )
-                    }
+                    HomeTodayPlanCountText(planCount = 5)
                 }
-
-                Column(
-                    modifier = Modifier.padding(top = 22.dp, bottom = 36.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                ) {
-                    // TODO : API 연동
-                    if (expanded) {
-                        for (i in 0 until 3) {
-                            HomeTodayPlanItem()
-                        }
-                    } else {
-                        HomeTodayPlanItem()
-                    }
-                }
+                HomeTodayPlanList(expanded = expanded)
             }
 
             IconButton(
                 modifier = Modifier
-                    .padding(bottom = 9.dp)
+                    .padding(bottom = 8.dp)
                     .size(12.dp, 6.dp)
                     .align(Alignment.BottomCenter),
                 onClick = { expanded = !expanded }) {
@@ -233,7 +202,7 @@ fun HomeInduceLogin() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 19.dp),
+                .padding(horizontal = 18.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -259,7 +228,6 @@ fun HomeInduceLogin() {
 @Composable
 fun HomeMonthlyPlan() {
     var isCalendarMode by remember { mutableStateOf(true) }
-    var expanded by remember { mutableStateOf(false) }
     var currentDate: CalendarDay by remember { mutableStateOf(CalendarDay.today()) }
     var year: Int by remember { mutableStateOf(currentDate.year) }
     var month: Int by remember { mutableStateOf(currentDate.month + 1) }
@@ -285,7 +253,7 @@ fun HomeMonthlyPlan() {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.padding(top = 21.dp))
+                Spacer(modifier = Modifier.padding(top = 20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -295,7 +263,7 @@ fun HomeMonthlyPlan() {
                         style = PlanzTypography.h3
                     )
                     Spacer(modifier = Modifier.padding(3.dp))
-                    OutlinedButton(
+                    HomeOutlinedButton(
                         onClick = {
                             month--
                             if (month == 0) {
@@ -304,19 +272,9 @@ fun HomeMonthlyPlan() {
                             }
                             currentDate = CalendarDay.from(year, month - 1, 1)
                         },
-                        modifier = Modifier.size(25.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(1.dp, Color.Transparent),
-                        contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
-                    ) {
-                        Icon(
-                            tint = Color.Unspecified,
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_arrow_left),
-                            contentDescription = null,
-                        )
-                    }
-                    OutlinedButton(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_arrow_left),
+                    )
+                    HomeOutlinedButton(
                         onClick = {
                             month++
                             if (month == 13) {
@@ -325,40 +283,19 @@ fun HomeMonthlyPlan() {
                             }
                             currentDate = CalendarDay.from(year, month - 1, 1)
                         },
-                        modifier = Modifier.size(25.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(1.dp, Color.Transparent),
-                        contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
-                    ) {
-                        Icon(
-                            tint = Color.Unspecified,
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_arrow_right),
-                            contentDescription = null,
-                        )
-                    }
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_arrow_right),
+                    )
                     Spacer(modifier = Modifier.weight(1f))
-                    OutlinedButton(
+                    HomeOutlinedButton(
                         onClick = {
                             isCalendarMode = !isCalendarMode
                         },
-                        modifier = Modifier.size(32.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(1.dp, Color.Transparent),
-                        contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
-                    ) {
-                        Icon(
-                            tint = Color.Unspecified,
-                            imageVector =
-                            if (isCalendarMode) {
-                                ImageVector.vectorResource(R.drawable.ic_list)
-                            } else {
-                                ImageVector.vectorResource(R.drawable.ic_calendar)
-                            },
-                            contentDescription = null,
-                        )
-                    }
+                        imageVector = if (isCalendarMode) {
+                            ImageVector.vectorResource(R.drawable.ic_list)
+                        } else {
+                            ImageVector.vectorResource(R.drawable.ic_calendar)
+                        },
+                    )
                 }
                 Spacer(modifier = Modifier.padding(top = 12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
@@ -366,39 +303,7 @@ fun HomeMonthlyPlan() {
                 if (isCalendarMode) {
                     PlanzCalendar(currentDate)
                 } else {
-                    Column(
-                        modifier = Modifier.padding(top = 11.dp, bottom = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(9.5.dp),
-                    ) {
-                        if (expanded) {
-                            // TODO : 예시 화면 (정호)
-                            for (i in 0 until 10) {
-                                HomeMonthlyPlanItem("그로스 회의회의")
-                            }
-                        } else {
-                            for (i in 0 until 4) {
-                                HomeMonthlyPlanItem("그로스 회의회의")
-                            }
-                        }
-                    }
-                    IconButton(
-                        modifier = Modifier
-                            .padding(bottom = 9.dp)
-                            .size(12.dp, 6.dp),
-                        onClick = { expanded = !expanded },
-                    )
-                    {
-                        Icon(
-                            tint = Color.Unspecified,
-                            imageVector =
-                            if (expanded) {
-                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
-                            } else {
-                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
-                            },
-                            contentDescription = null
-                        )
-                    }
+                    HomeMonthlyPlanList()
                 }
             }
         }
@@ -437,6 +342,84 @@ fun PlanzCalendar(
     )
 }
 
+@Composable
+fun HomeTodayPlanCountText(
+    planCount: Int = 0
+) {
+    Box(
+        modifier = Modifier
+            .size(28.dp, 18.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(color = MainPurple300),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            modifier = Modifier.fillMaxHeight(),
+            text = "$planCount",
+            color = MainPurple900,
+            style = MaterialTheme.typography.caption,
+        )
+    }
+}
+
+@Composable
+fun HomeTodayPlanList(
+    expanded: Boolean
+) {
+    Column(
+        modifier = Modifier.padding(top = 22.dp, bottom = 36.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+    ) {
+        // TODO : API 연동
+        if (expanded) {
+            for (i in 0 until 3) {
+                HomeTodayPlanItem()
+            }
+        } else {
+            HomeTodayPlanItem()
+        }
+    }
+}
+
+@Composable
+fun HomeMonthlyPlanList() {
+    var expanded by remember { mutableStateOf(false) }
+    Column(
+        modifier = Modifier.padding(top = 11.dp, bottom = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(9.5.dp),
+    ) {
+        if (expanded) {
+            // TODO : 예시 화면 (정호)
+            for (i in 0 until 10) {
+                HomeMonthlyPlanItem("그로스 회의회의")
+            }
+        } else {
+            for (i in 0 until 4) {
+                HomeMonthlyPlanItem("그로스 회의회의")
+            }
+        }
+    }
+    IconButton(
+        modifier = Modifier
+            .padding(bottom = 9.dp)
+            .size(12.dp, 6.dp),
+        onClick = { expanded = !expanded },
+    )
+    {
+        Icon(
+            tint = Color.Unspecified,
+            imageVector =
+            if (expanded) {
+                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
+            } else {
+                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
+            },
+            contentDescription = null
+        )
+    }
+}
+
+
 // TODO : API 연동 및 매개변수 추가(정호)
 @Composable
 fun HomeTodayPlanItem() {
@@ -446,8 +429,7 @@ fun HomeTodayPlanItem() {
             .clickable(
                 onClick = { /*TODO*/ }
             ),
-    )
-    {
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -504,6 +486,29 @@ fun HomeMonthlyPlanItem(content: String) {
                 style = MaterialTheme.typography.caption,
             )
         }
+    }
+}
+
+@Composable
+fun HomeOutlinedButton(
+    onClick: () -> Unit,
+    imageVector: ImageVector
+) {
+    OutlinedButton(
+        onClick = {
+            onClick()
+        },
+        modifier = Modifier.size(25.dp),
+        shape = CircleShape,
+        border = BorderStroke(1.dp, Color.Transparent),
+        contentPadding = PaddingValues(0.dp),
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
+    ) {
+        Icon(
+            tint = Color.Unspecified,
+            imageVector = imageVector,
+            contentDescription = null,
+        )
     }
 }
 
