@@ -24,19 +24,21 @@ import java.util.*
 class CalendarDecorator {
     class TodayDecorator(context: Context) : DayViewDecorator {
         private var date = CalendarDay.today()
-        private val boldSpan: StyleSpan = StyleSpan(Typeface.BOLD)
+        private val boldSpan = StyleSpan(Typeface.BOLD)
 
         @SuppressLint("UseCompatLoadingForDrawables")
         val drawable = ContextCompat.getDrawable(context, R.drawable.bg_calendar_today)
-        override fun shouldDecorate(day: CalendarDay?): Boolean {
-            return day?.equals(date)!!
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return day == date
         }
 
-        override fun decorate(view: DayViewFacade?) {
+        override fun decorate(view: DayViewFacade) {
             if (drawable != null) {
-                view?.addSpan(object : ForegroundColorSpan(Color.White.toArgb()) {})
-                view?.setSelectionDrawable(drawable)
-                view?.addSpan(boldSpan)
+                view.apply {
+                    this.addSpan(object : ForegroundColorSpan(Color.White.toArgb()) {})
+                    this.setSelectionDrawable(drawable)
+                    this.addSpan(boldSpan)
+                }
             }
         }
     }
@@ -46,18 +48,20 @@ class CalendarDecorator {
         private val mCalendar = mCalendar.currentDate.calendar
         private val drawable = ContextCompat.getDrawable(context, R.drawable.bg_calendar_selection)
 
-        override fun shouldDecorate(day: CalendarDay?): Boolean {
-            val calendar = day!!.calendar
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            val calendar = day.calendar
 
             return calendar.get(Calendar.ERA) == mCalendar.get(Calendar.ERA)
                     && calendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR)
                     && calendar.get(Calendar.MONTH) == mCalendar.get(Calendar.MONTH)
         }
 
-        override fun decorate(view: DayViewFacade?) {
+        override fun decorate(view: DayViewFacade) {
             if (drawable != null) {
-                view?.addSpan(object : ForegroundColorSpan(Gray900.toArgb()) {})
-                view?.setSelectionDrawable(drawable)
+                view.apply {
+                    this.addSpan(object : ForegroundColorSpan(Gray900.toArgb()) {})
+                    this.setSelectionDrawable(drawable)
+                }
             }
         }
     }
@@ -66,32 +70,34 @@ class CalendarDecorator {
         @SuppressLint("UseCompatLoadingForDrawables")
         private val mCalendar = mCalendar.currentDate.calendar
         private val drawable = ContextCompat.getDrawable(context, R.drawable.bg_calendar_selection)
-        override fun shouldDecorate(day: CalendarDay?): Boolean {
-            val calendar = day!!.calendar
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            val calendar = day.calendar
 
             return calendar.get(Calendar.ERA) == mCalendar.get(Calendar.ERA)
                     && calendar.get(Calendar.YEAR) == mCalendar.get(Calendar.YEAR)
                     && calendar.get(Calendar.MONTH) != mCalendar.get(Calendar.MONTH)
         }
 
-        override fun decorate(view: DayViewFacade?) {
+        override fun decorate(view: DayViewFacade) {
             if (drawable != null) {
-                view?.addSpan(object : ForegroundColorSpan(Gray300.toArgb()) {})
-                view?.setSelectionDrawable(drawable)
+                view.apply {
+                    this.addSpan(object : ForegroundColorSpan(Gray300.toArgb()) {})
+                    this.setSelectionDrawable(drawable)
+                }
             }
         }
     }
 
     class SundayDecorator : DayViewDecorator {
         private val calendar = Calendar.getInstance()
-        override fun shouldDecorate(day: CalendarDay?): Boolean {
-            day?.copyTo(calendar)
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            day.copyTo(calendar)
             val weekDay = calendar.get(Calendar.DAY_OF_WEEK)
             return (weekDay == Calendar.SUNDAY)
         }
 
-        override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(object : ForegroundColorSpan(SubCoral.toArgb()) {})
+        override fun decorate(view: DayViewFacade) {
+            view.addSpan(object : ForegroundColorSpan(SubCoral.toArgb()) {})
         }
     }
 
@@ -99,12 +105,12 @@ class CalendarDecorator {
     class DotDecorator : DayViewDecorator {
         private var date = CalendarDay.from(2022, 5, 21)
 
-        override fun shouldDecorate(day: CalendarDay?): Boolean {
-            return day?.equals(date)!!
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return day == date
         }
 
-        override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(CustomMultipleDotSpan(4F, color = intArrayOf(SubCoral.toArgb(), SubYellow.toArgb(), MainPurple900.toArgb())))
+        override fun decorate(view: DayViewFacade) {
+            view.addSpan(CustomMultipleDotSpan(4F, color = intArrayOf(SubCoral.toArgb(), SubYellow.toArgb(), MainPurple900.toArgb())))
         }
     }
 
@@ -133,10 +139,17 @@ class CalendarDecorator {
         }
 
         override fun drawBackground(
-            canvas: Canvas, paint: Paint,
-            left: Int, right: Int, top: Int, baseline: Int, bottom: Int,
+            canvas: Canvas,
+            paint: Paint,
+            left: Int,
+            right: Int,
+            top: Int,
+            baseline: Int,
+            bottom: Int,
             charSequence: CharSequence,
-            start: Int, end: Int, lineNum: Int
+            start: Int,
+            end: Int,
+            lineNum: Int
         ) {
             val total = if (color.size > 5) 5 else color.size
             var leftMost = (total - 1) * - 10
