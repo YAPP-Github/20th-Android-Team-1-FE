@@ -8,6 +8,7 @@ plugins {
     id(app.Plugins.GOOGLE_SERVICE)
     id(app.Plugins.FIREBASE_CRASHLYTICS)
     id(app.Plugins.HILT_ANDROID)
+    id(app.Plugins.SECRETS_GRADLE)
 }
 
 android {
