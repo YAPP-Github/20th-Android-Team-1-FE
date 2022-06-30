@@ -59,7 +59,7 @@ fun HomeScreen(
     Scaffold(
         backgroundColor = BackgroundColor1,
         topBar = {
-            HomeAppBar(
+            HomeUserProfile(
                 userName = "김정호",
                 onUserIconClick = { /* TODO */ }
             )
@@ -73,7 +73,7 @@ fun HomeScreen(
         ) {
             HomeTopBox(loginState = viewState.loginState)
             Spacer(modifier = Modifier.padding(8.dp))
-            HomeBottomBox()
+            HomeMonthlyPlan()
             Spacer(modifier = Modifier.padding(20.dp))
         }
     }
@@ -81,7 +81,7 @@ fun HomeScreen(
 
 // TODO : 클릭 시 내 정보 화면으로 네비게이션 (정호)
 @Composable
-private fun HomeAppBar(
+private fun HomeUserProfile(
     modifier: Modifier = Modifier,
     userName: String,
     onUserIconClick: () -> Unit,
@@ -125,14 +125,14 @@ private fun HomeAppBar(
 @Composable
 fun HomeTopBox(loginState: HomeContract.LoginState) {
     when (loginState) {
-        HomeContract.LoginState.LOGIN -> HomeIsLoginBox()
-        HomeContract.LoginState.NONE -> HomeIsNotLoginBox()
+        HomeContract.LoginState.LOGIN -> HomeTodayPlan()
+        HomeContract.LoginState.NONE -> HomeInduceLogin()
     }
 }
 
 // TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
-fun HomeIsLoginBox() {
+fun HomeTodayPlan() {
     var expanded by remember { mutableStateOf(false) }
     Surface(
         color = Color.White,
@@ -188,10 +188,10 @@ fun HomeIsLoginBox() {
                     // TODO : API 연동
                     if (expanded) {
                         for (i in 0 until 3) {
-                            ItemTodayPlan()
+                            HomeTodayPlanItem()
                         }
                     } else {
-                        ItemTodayPlan()
+                        HomeTodayPlanItem()
                     }
                 }
             }
@@ -219,7 +219,7 @@ fun HomeIsLoginBox() {
 
 
 @Composable
-fun HomeIsNotLoginBox() {
+fun HomeInduceLogin() {
     Box(
         modifier = Modifier
             .height(60.dp)
@@ -256,7 +256,7 @@ fun HomeIsNotLoginBox() {
 }
 
 @Composable
-fun HomeBottomBox() {
+fun HomeMonthlyPlan() {
     var isCalendarMode by remember { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
 
@@ -365,7 +365,7 @@ fun HomeBottomBox() {
                 Divider(color = Gray200, thickness = 1.dp)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
                 if (isCalendarMode) {
-                    PlanCalendar(currentDate)
+                    PlanzCalendar(currentDate)
                 } else {
                     Column(
                         modifier = Modifier.padding(top = 11.dp, bottom = 12.dp),
@@ -374,11 +374,11 @@ fun HomeBottomBox() {
                         if (expanded) {
                             // TODO : 예시 화면 (정호)
                             for (i in 0 until 10) {
-                                ItemTextPlan("그로스 회의회의")
+                                HomeMonthlyPlanItem("그로스 회의회의")
                             }
                         } else {
                             for (i in 0 until 4) {
-                                ItemTextPlan("그로스 회의회의")
+                                HomeMonthlyPlanItem("그로스 회의회의")
                             }
                         }
                     }
@@ -408,7 +408,7 @@ fun HomeBottomBox() {
 
 // TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
-fun PlanCalendar(
+fun PlanzCalendar(
     currentDate: CalendarDay
 ) {
     val context = LocalContext.current
@@ -440,7 +440,7 @@ fun PlanCalendar(
 
 // TODO : API 연동 및 매개변수 추가(정호)
 @Composable
-fun ItemTodayPlan() {
+fun HomeTodayPlanItem() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -477,7 +477,7 @@ fun ItemTodayPlan() {
 
 // TODO : API 연동 및 매개변수 추가 (정호)
 @Composable
-fun ItemTextPlan(content: String) {
+fun HomeMonthlyPlanItem(content: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth(),
