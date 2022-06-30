@@ -22,7 +22,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -86,24 +85,19 @@ fun HomeScreen(
 // TODO : 클릭 시 내 정보 화면으로 네비게이션 (정호)
 @Composable
 private fun HomeUserProfile(
-    modifier: Modifier = Modifier,
     userName: String,
     onUserIconClick: () -> Unit,
 ) {
-    ConstraintLayout(
-        modifier = modifier
-            .fillMaxWidth()
+    Row(
+        modifier = Modifier
             .height(60.dp)
-    ) {
-        val (userImage, nameText) = createRefs()
-
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ){
         IconButton(
             modifier = Modifier
-                .size(30.dp, 30.dp)
-                .constrainAs(userImage) {
-                    start.linkTo(parent.start, margin = 22.dp)
-                    top.linkTo(parent.top, margin = 14.dp)
-                },
+                .size(30.dp, 30.dp),
             onClick = { onUserIconClick() }) {
             Image(
                 painter = painterResource(R.drawable.ic_default_user_image),
@@ -114,11 +108,8 @@ private fun HomeUserProfile(
                 contentDescription = null,
             )
         }
+        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
         Text(
-            modifier = Modifier.constrainAs(nameText) {
-                start.linkTo(userImage.end, margin = 12.dp)
-                top.linkTo(parent.top, margin = 16.dp)
-            },
             text = userName,
             style = PlanzTypography.h3,
             color = Gray900,
