@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -160,7 +161,7 @@ fun HomeTodayPlan() {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "오늘의 약속",
+                        text = stringResource(id = R.string.home_today_plan),
                         color = Color.Black,
                         style = MaterialTheme.typography.h3,
                     )
@@ -237,7 +238,7 @@ fun HomeInduceLogin() {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = "회원가입하고, 편리한 약속잡기를 경험하세요!",
+                text = stringResource(id = R.string.home_induce_login),
                 color = Color.White,
                 style = MaterialTheme.typography.subtitle2,
             )
