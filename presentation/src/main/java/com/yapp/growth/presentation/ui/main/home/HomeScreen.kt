@@ -168,7 +168,7 @@ fun HomeTodayPlan() {
                     Spacer(modifier = Modifier.padding(4.dp))
                     Box(
                         modifier = Modifier
-                            .size(27.dp, 18.dp)
+                            .size(28.dp, 18.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(color = MainPurple300),
                         contentAlignment = Alignment.Center,
@@ -200,7 +200,7 @@ fun HomeTodayPlan() {
             IconButton(
                 modifier = Modifier
                     .padding(bottom = 9.dp)
-                    .size(12.3.dp, 6.47.dp)
+                    .size(12.dp, 6.dp)
                     .align(Alignment.BottomCenter),
                 onClick = { expanded = !expanded }) {
                 Icon(
@@ -243,7 +243,7 @@ fun HomeInduceLogin() {
                 style = MaterialTheme.typography.subtitle2,
             )
             IconButton(
-                modifier = Modifier.size(5.7.dp, 12.dp),
+                modifier = Modifier.size(6.dp, 12.dp),
                 onClick = { /*TODO*/ },
             ) {
                 Icon(
@@ -260,9 +260,7 @@ fun HomeInduceLogin() {
 fun HomeMonthlyPlan() {
     var isCalendarMode by remember { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
-
     var currentDate: CalendarDay by remember { mutableStateOf(CalendarDay.today()) }
-
     var year: Int by remember { mutableStateOf(currentDate.year) }
     var month: Int by remember { mutableStateOf(currentDate.month + 1) }
 
@@ -386,7 +384,7 @@ fun HomeMonthlyPlan() {
                     IconButton(
                         modifier = Modifier
                             .padding(bottom = 9.dp)
-                            .size(12.3.dp, 6.47.dp),
+                            .size(12.dp, 6.dp),
                         onClick = { expanded = !expanded },
                     )
                     {
