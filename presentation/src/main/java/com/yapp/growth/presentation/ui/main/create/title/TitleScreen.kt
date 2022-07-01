@@ -43,8 +43,10 @@ fun TitleScreen(
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
-            Column {
-                Spacer(modifier = Modifier.height(44.dp))
+            Column(
+                modifier = Modifier.padding(top = 44.dp),
+                verticalArrangement = Arrangement.spacedBy(26.dp)
+            ) {
                 PlanzTextField(
                     label = stringResource(id = R.string.create_plan_title_title_label),
                     hint = stringResource(id = R.string.create_plan_title_title_hint),
@@ -53,7 +55,7 @@ fun TitleScreen(
                     onInputChanged = { viewModel.setEvent(TitleEvent.FillInTitle(it)) },
                     onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInTitle("")) }
                 )
-                Spacer(modifier = Modifier.height(26.dp))
+
                 PlanzTextField(
                     label = stringResource(id = R.string.create_plan_title_place_label),
                     hint = stringResource(id = R.string.create_plan_title_place_hint),

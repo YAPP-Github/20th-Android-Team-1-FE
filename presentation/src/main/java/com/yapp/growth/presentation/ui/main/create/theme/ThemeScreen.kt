@@ -44,8 +44,10 @@ fun ThemeScreen(
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
-            Column {
-                Spacer(modifier = Modifier.height(44.dp))
+            Column(
+                modifier = Modifier.padding(44.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 PlanThemeType.values().forEach {
                     ThemeChoiceButton(
                         isChosen = uiState.chosenTheme == it,
@@ -54,7 +56,6 @@ fun ThemeScreen(
                             viewModel.setEvent(ThemeContract.ThemeEvent.ChoosePlanTheme(it))
                         }
                     )
-                    Spacer(Modifier.height(12.dp))
                 }
             }
 

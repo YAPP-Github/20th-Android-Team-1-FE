@@ -33,7 +33,8 @@ fun PlanzCreateStepTitle(
             .padding(horizontal = 20.dp)
     ) {
         Column(
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -65,7 +66,7 @@ fun PlanzCreateStepTitle(
                         .clickable { onExitClick() },
                 )
             }
-            Spacer(modifier = Modifier.height(2.dp))
+
             Text(
                 text = title,
                 style = PlanzTypography.h2,

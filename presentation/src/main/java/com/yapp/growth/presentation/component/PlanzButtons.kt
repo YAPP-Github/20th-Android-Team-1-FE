@@ -58,11 +58,14 @@ fun PlanzButtonWithBack(
     onClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Row(modifier = modifier.padding(horizontal = 16.dp)) {
+    Row(
+        modifier = modifier.padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         BackButton(
             onBackClick = onBackClick,
         )
-        Spacer(modifier = Modifier.width(10.dp))
+
         PlanzBasicButton(
             text = text,
             enabled = enabled,
