@@ -26,16 +26,20 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.Pretendard
-import com.yapp.growth.presentation.ui.main.createplan.CreatePlanScreen
+import com.yapp.growth.presentation.ui.main.create.date.DateScreen
+import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
+import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
@@ -62,33 +66,85 @@ fun PlanzScreen(
         floatingActionButton = {
             if (bottomBarState) {
                 CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                    navController.navigate(PlanzScreenRoute.CREATE_PLAN.route)
+                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
                 }
             }
         },
         isFloatingActionButtonDocked = true,
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            NavHost(
-                navController = navController,
-                startDestination = PlanzScreenRoute.HOME.route
+        NavHost(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            startDestination = PlanzScreenRoute.HOME.route
+        ) {
+            composable(route = PlanzScreenRoute.HOME.route) {
+                HomeScreen()
+            }
+
+            composable(route = PlanzScreenRoute.CREATE_THEME.route) {
+                ThemeScreen(
+                    exitCreateScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNextScreen = { planThemeType ->
+                        navController.navigate(
+                            PlanzScreenRoute.CREATE_TITLE.route
+                                .plus("/$planThemeType")
+                        )
+                    }
+                )
+            }
+
+            composable(
+                route = PlanzScreenRoute.CREATE_TITLE.route
+                    .plus("/{$KEY_PLAN_THEME_TYPE}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_THEME_TYPE) { type = NavType.StringType }
+                )
             ) {
-                composable(route = PlanzScreenRoute.HOME.route) {
-                    HomeScreen()
-                }
+                TitleScreen(
+                    exitCreateScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNextScreen = { theme, title, place ->
+                        navController.navigate(
+                            PlanzScreenRoute.CREATE_DATE.route
+                                .plus("/$theme")
+                                .plus("/$title")
+                                .plus("/$place")
+                        )
+                    },
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
 
-                composable(route = PlanzScreenRoute.CREATE_PLAN.route) {
-                    CreatePlanScreen()
-                }
+            composable(
+                route = PlanzScreenRoute.CREATE_DATE.route
+                    .plus("/{$KEY_PLAN_THEME_TYPE}")
+                    .plus("/{$KEY_PLAN_TITLE}")
+                    .plus("/{$KEY_PLAN_PLACE}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_THEME_TYPE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_TITLE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_PLACE) { type = NavType.StringType },
+                )
+            ) {
+                DateScreen()
+            }
 
-                composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
-                    ManagePlanScreen()
-                }
+            composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
+                ManagePlanScreen()
+            }
 
-                composable(route = PlanzScreenRoute.SAMPLE.route) {
-                    SampleScreen()
-                }
+            composable(route = PlanzScreenRoute.SAMPLE.route) {
+                SampleScreen()
             }
         }
     }
@@ -118,14 +174,14 @@ fun PlanzBottomNavigation(
                         modifier = Modifier.padding(4.dp),
                         imageVector = ImageVector.vectorResource(id = navigationItem.icon),
                         contentDescription = null,
-                        tint = if (navigationItem.route == PlanzScreenRoute.CREATE_PLAN.route) Color.Unspecified else LocalContentColor.current,
+                        tint = if (navigationItem.route == PlanzScreenRoute.CREATE_THEME.route) Color.Unspecified else LocalContentColor.current,
                     )
                 },
                 label = {
                     Text(
                         text = stringResource(navigationItem.title),
                         color = when (navigationItem.route) {
-                            PlanzScreenRoute.CREATE_PLAN.route -> MainPurple900
+                            PlanzScreenRoute.CREATE_THEME.route -> MainPurple900
                             currentDestination?.route -> Gray900
                             else -> Gray500
                         },
@@ -194,7 +250,7 @@ enum class BottomNavigationItem(
         title = R.string.navigation_home_text
     ),
     CREATE_PLAN(
-        route = PlanzScreenRoute.CREATE_PLAN.route,
+        route = PlanzScreenRoute.CREATE_THEME.route,
         icon = R.drawable.ic_navigation_blank,
         title = R.string.navigation_create_plan_text
     ),
@@ -207,7 +263,15 @@ enum class BottomNavigationItem(
 
 enum class PlanzScreenRoute(val route: String) {
     HOME("home"),
-    CREATE_PLAN("create-plan"),
+    CREATE_THEME("create-theme"),
+    CREATE_TITLE("create-title"),
+    CREATE_DATE("create-date"),
     MANAGE_PLAN("manage-plan"),
     SAMPLE("sample")
 }
+
+const val KEY_PLAN_THEME_TYPE = "plan-theme-type"
+const val KEY_PLAN_TITLE = "plan-title"
+const val KEY_PLAN_PLACE = "plan-place"
+
+const val BLANK_VALUE = "@"

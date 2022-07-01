@@ -7,15 +7,13 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.runtime.LaunchedEffect
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.PlanzTheme
-import com.yapp.growth.presentation.ui.login.LoginContract.LoginState
-import com.yapp.growth.presentation.ui.login.LoginContract.LoginViewState
 import com.yapp.growth.presentation.ui.main.MainActivity
+import com.yapp.growth.presentation.ui.login.LoginContract.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
@@ -25,15 +23,29 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            viewModel.viewState.collect { state ->
-                handleEvent(state)
-            }
-        }
-
         setContent {
             PlanzTheme {
-                LoginScreen(onClick = { viewModel.requestLogin(this@LoginActivity) })
+                LoginScreen(onClick = { viewModel.setEvent(LoginContract.LoginEvent.OnClickKakaoLoginButton(this@LoginActivity)) })
+            }
+
+            LaunchedEffect(key1 = viewModel.effect) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        is LoginSideEffect.MoveToMain -> {
+                            MainActivity.startActivity(this@LoginActivity)
+                            finish()
+                        }
+
+                        is LoginSideEffect.LoginFailed -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                R.string.message_kakao_login_failed,
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+                    }
+                }
             }
         }
     }
@@ -46,16 +58,4 @@ class LoginActivity : ComponentActivity() {
         }
     }
 
-    private fun handleEvent(state: LoginViewState) = when (state.loginState) {
-        LoginState.SUCCESS -> {
-            MainActivity.startActivity(this)
-            finish()
-        }
-
-        LoginState.REQUIRED -> {
-            Toast.makeText(this, R.string.message_kakao_login_failed, Toast.LENGTH_SHORT).show()
-        }
-
-        else -> {}
-    }
 }

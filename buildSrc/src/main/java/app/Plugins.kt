@@ -10,4 +10,5 @@ object Plugins {
     const val GOOGLE_SERVICE = "com.google.gms.google-services"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase.crashlytics"
     const val HILT_ANDROID = "dagger.hilt.android.plugin"
+    const val SECRETS_GRADLE = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
 }

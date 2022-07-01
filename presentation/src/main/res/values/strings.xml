@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="planz_component_text_field_error_message_text">자를 초과하였습니다</string>
+
     <string name="planz_title">플랜즈</string>
-    <string name="navigation_home_text">메인 홈</string>
-    <string name="navigation_create_plan_text">약속잡기</string>
-    <string name="navigation_manage_plan_text">약속관리</string>
     <string name="icon_kakao_login">카카오 로그인</string>
     <string name="login_introduce_text">친구들과 함께하는\n편리한 약속 잡기</string>
     <string name="message_kakao_login_failed">카카오계정 로그인에 실패 하였습니다. 잠시 후 다시 시도 해 주시기 바랍니다.</string>
 
+    <string name="navigation_home_text">메인 홈</string>
+    <string name="navigation_create_plan_text">약속잡기</string>
+    <string name="navigation_manage_plan_text">약속관리</string>
+
     <string name="home_today_plan">오늘의 약속</string>
     <string name="home_induce_login">회원가입하고, 편리한 약속잡기를 경험하세요!</string>
+
+    <string name="create_plan_next_button_text">다음</string>
+
+    <string name="create_plan_theme_title_text">약속 테마를 선택해 주세요!</string>
+    <string name="create_plan_theme_list_meal">식사 약속 🍚</string>
+    <string name="create_plan_theme_list_meeting">미팅 약속 ☕️</string>
+    <string name="create_plan_theme_list_trip">여행 약속 ✈️</string>
+    <string name="create_plan_theme_list_etc">기타 약속 ☺️️</string>
+
+    <string name="create_plan_title_title_text">약속명과 장소를 입력해 주세요!</string>
+    <string name="create_plan_title_title_label">약속명(선택)</string>
+    <string name="create_plan_title_title_hint">약속명</string>
+    <string name="create_plan_title_place_label">장소(선택)</string>
+    <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
+
+    <string name="icon_exit_content_description">Exit Icon</string>
+    <string name="icon_create_content_description">Create Icon</string>
+    <string name="icon_check_content_description">Check Icon</string>
+    <string name="icon_clear_content_description">Clear Text Icon</string>
+    <string name="icon_error_content_description">Error Icon</string>
 </resources>
