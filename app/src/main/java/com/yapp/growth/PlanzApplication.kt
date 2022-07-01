@@ -18,7 +18,7 @@ class PlanzApplication : Application() {
 
         KakaoSdk.init(
             context = this,
-            appKey = getString(R.string.kakao_sdk_app_key),
+            appKey = BuildConfig.KAKAO_APP_KEY,
         )
     }
 }

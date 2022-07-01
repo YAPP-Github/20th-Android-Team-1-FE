@@ -22,10 +22,10 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) updateState { copy(loginState = LoginState.SUCCESS) }
-                else updateState { copy(loginState = LoginState.REQUIRED) }
+                if (isValidLoginToken) sendEffect({ SplashSideEffect.MoveToMain })
+                else sendEffect({ SplashSideEffect.LoginFailed })
             }.onError {
-                updateState { copy(loginState = LoginState.REQUIRED) }
+                sendEffect({ SplashSideEffect.LoginFailed })
             }
 
         }

@@ -14,27 +14,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-): BaseViewModel<LoginViewState, LoginSideEffect, LoginEvent>(
-    LoginViewState()) {
+) : BaseViewModel<LoginViewState, LoginSideEffect, LoginEvent>(
+    LoginViewState()
+) {
 
     @Inject
     lateinit var kakaoLoginSdk: LoginSdk
 
     override fun handleEvents(event: LoginEvent) {
-        TODO("Not yet implemented")
-    }
-
-    fun requestLogin(context: Context) {
-        viewModelScope.launch {
-
-            runCatching { kakaoLoginSdk.login(context) }
-                .onSuccess { setLoginState(true) }
-                .onError { setLoginState(false) }
+        when (event) {
+            is LoginEvent.OnClickKakaoLoginButton -> requestLogin(event.context)
         }
     }
 
-    private fun setLoginState(isLogin: Boolean) {
-        if(isLogin) updateState { copy(loginState = LoginState.SUCCESS) }
-        else updateState { copy(loginState = LoginState.REQUIRED) }
+    private fun requestLogin(context: Context) {
+        viewModelScope.launch {
+
+            runCatching { kakaoLoginSdk.login(context) }
+                .onSuccess { sendEffect({ LoginSideEffect.MoveToMain }) }
+                .onError { sendEffect({ LoginSideEffect.LoginFailed }) }
+        }
     }
+
 }
