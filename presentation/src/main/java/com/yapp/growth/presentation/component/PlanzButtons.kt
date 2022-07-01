@@ -21,7 +21,7 @@ fun PlanzMainButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    PlanzButton(
+    PlanzBasicButton(
         text = text,
         enabled = enabled,
         modifier = modifier
@@ -38,7 +38,7 @@ fun PlanzSecondButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    PlanzButton(
+    PlanzBasicButton(
         text = text,
         enabled = enabled,
         modifier = modifier
@@ -58,24 +58,25 @@ fun PlanzButtonWithBack(
     onClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-    Row(modifier = modifier.padding(horizontal = 16.dp)) {
-        PlanzBackButton(
-            modifier = modifier,
-            onBackClick = onBackClick
+    Row(
+        modifier = modifier.padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        BackButton(
+            onBackClick = onBackClick,
         )
-        Spacer(modifier = Modifier.width(10.dp))
-        PlanzButton(
+
+        PlanzBasicButton(
             text = text,
             enabled = enabled,
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             onClick = onClick,
         )
     }
 }
 
 @Composable
-private fun PlanzButton(
+fun PlanzBasicButton(
     text: String,
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
@@ -102,12 +103,11 @@ private fun PlanzButton(
 }
 
 @Composable
-private fun PlanzBackButton(
-    modifier: Modifier,
+private fun BackButton(
     onBackClick: () -> Unit,
 ) {
     Button(
-        modifier = modifier
+        modifier = Modifier
             .width(52.dp)
             .height(52.dp),
         shape = RoundedCornerShape(10.dp),
