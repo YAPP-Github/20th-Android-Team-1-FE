@@ -9,7 +9,6 @@ object Versions {
     const val COMPOSE_CONSTRAINT_LAYOUT = "1.1.0-alpha02"
     const val CONSTRAINT_LAYOUT = "2.1.3"
     const val COMPOSE_NAVIGATION = "2.4.2"
-    const val CONSTRAINT_LAYOUT = "2.1.3"
     const val FIREBASE_BOM = "29.1.0"
     const val FIREBASE_CRASHLYTICS = "2.9.0"
     const val GOOGLE_SERVICE = "4.3.10"
