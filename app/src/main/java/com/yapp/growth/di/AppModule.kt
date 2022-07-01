@@ -16,10 +16,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Named("BaseUrl")
-    @Provides
-    fun provideBaseUrl(): String = "https://api.github.com"
-
     @Provides
     @Singleton
     fun provideNetworkSettings(): NetworkSettings {
