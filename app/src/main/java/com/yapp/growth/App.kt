@@ -13,7 +13,7 @@ class App : Application() {
         Timber.plant(Timber.DebugTree())
         KakaoSdk.init(
             context = this,
-            appKey = getString(R.string.kakao_sdk_app_key),
+            appKey = BuildConfig.KAKAO_APP_KEY,
         )
     }
 }
