@@ -21,7 +21,6 @@ android {
         versionCode = Configs.VERSION_CODE
         versionName = Configs.VERSION_NAME
 
-        getProperty("KAKAO_APP_KEY")?.let { resValue("string", "kakao_sdk_app_key", it) }
     }
 
     signingConfigs {
