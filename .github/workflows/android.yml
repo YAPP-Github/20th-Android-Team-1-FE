@@ -24,12 +24,9 @@ jobs:
     - name: Generate Environment Variables File for Production
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
-        KAKAO_O_AUTH: ${{ secrets.KAKAO_O_AUTH }}
-        kakao_o_auth_scheme: ${{ secrets.KAKAO_O_AUTH }}
         KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
       run: |
-        echo BASE_URL=\"$BASE_URL\" > ./local.properties
-        echo KAKAO_O_AUTH=\"$KAKAO_O_AUTH\" > ./local.properties
-        echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" > ./local.properties
+        echo BASE_URL=\"$BASE_URL\" >> ./local.properties
+        echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew build

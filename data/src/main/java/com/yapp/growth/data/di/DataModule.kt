@@ -2,6 +2,7 @@ package com.yapp.growth.data.di
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.yapp.growth.data.BuildConfig
 import com.yapp.growth.data.api.GrowthApi
 import dagger.Module
 import dagger.Provides
@@ -23,7 +24,7 @@ internal class DataModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         jsonAdapterFactory: Converter.Factory,
-        @Named("BaseUrl") baseUrl: String
+        baseUrl: String = BuildConfig.BASE_URL
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)

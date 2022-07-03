@@ -38,15 +38,14 @@ fun PlanzTextField(
     val textState = getTextState(text = text, maxLength = maxLength)
 
     Column(
-        modifier = modifier.padding(horizontal = 20.dp)
+        modifier = modifier.padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = label,
             color = Gray900,
             style = PlanzTypography.subtitle2
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         PlanzBasicTextField(
             text = text,
@@ -56,8 +55,6 @@ fun PlanzTextField(
             onDeleteClicked = onDeleteClicked,
             textState = textState
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         ErrorAndLengthCounter(
             text = text,
@@ -140,13 +137,14 @@ private fun ErrorAndLengthCounter(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_error),
                     contentDescription = stringResource(id = R.string.icon_clear_content_description),
                     tint = Color.Unspecified
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
                     text = "$maxLength" + stringResource(id = R.string.planz_component_text_field_error_message_text),
                     color = SubCoral,

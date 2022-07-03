@@ -6,6 +6,7 @@ plugins {
     id(app.Plugins.KOTLIN_ANDROID)
     id(app.Plugins.KOTLIN_KAPT)
     id(app.Plugins.HILT_ANDROID)
+    id(app.Plugins.SECRETS_GRADLE)
 }
 
 android {

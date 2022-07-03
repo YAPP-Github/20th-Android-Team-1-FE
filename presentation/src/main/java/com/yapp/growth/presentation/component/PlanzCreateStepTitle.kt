@@ -38,7 +38,8 @@ fun PlanzCreateStepTitle(
         Column(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(top = 24.dp, bottom = type.bottomPadding)
+                .padding(top = 24.dp, bottom = type.bottomPadding),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
