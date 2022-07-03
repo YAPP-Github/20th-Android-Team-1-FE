@@ -75,9 +75,9 @@ fun HomeScreen(
                 HomeContract.LoginState.LOGIN -> HomeTodayPlan()
                 HomeContract.LoginState.NONE -> HomeInduceLogin()
             }
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             HomeMonthlyPlan()
-            Spacer(modifier = Modifier.padding(20.dp))
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -108,7 +108,7 @@ private fun HomeUserProfile(
                 contentDescription = null,
             )
         }
-        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+        Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = userName,
             style = PlanzTypography.h3,
@@ -151,9 +151,10 @@ fun HomeTodayPlan() {
                         color = Color.Black,
                         style = MaterialTheme.typography.h3,
                     )
-                    Spacer(modifier = Modifier.padding(4.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     HomeTodayPlanCountText(planCount = 5)
                 }
+                Spacer(modifier = Modifier.height(20.dp))
                 HomeTodayPlanList(expanded = expanded)
             }
 
@@ -244,7 +245,7 @@ fun HomeMonthlyPlan() {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.padding(top = 20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -253,7 +254,7 @@ fun HomeMonthlyPlan() {
                         text = "${year}년 ${month}월",
                         style = PlanzTypography.h3
                     )
-                    Spacer(modifier = Modifier.padding(3.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     HomeOutlinedButton(
                         onClick = {
                             month--
@@ -288,12 +289,12 @@ fun HomeMonthlyPlan() {
                         },
                     )
                 }
-                Spacer(modifier = Modifier.padding(top = 12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
-                Spacer(modifier = Modifier.padding(top = 10.dp))
                 if (isCalendarMode) {
                     PlanzCalendar(currentDate)
                 } else {
+                    Spacer(modifier = Modifier.height(20.dp))
                     HomeMonthlyPlanList()
                 }
             }
@@ -358,7 +359,7 @@ fun HomeTodayPlanList(
     expanded: Boolean
 ) {
     Column(
-        modifier = Modifier.padding(top = 22.dp, bottom = 36.dp),
+        modifier = Modifier.padding(bottom = 36.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         // TODO : API 연동
@@ -376,8 +377,7 @@ fun HomeTodayPlanList(
 fun HomeMonthlyPlanList() {
     var expanded by remember { mutableStateOf(false) }
     Column(
-        modifier = Modifier.padding(top = 11.dp, bottom = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(9.5.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         if (expanded) {
             // TODO : 예시 화면 (정호)
@@ -390,6 +390,7 @@ fun HomeMonthlyPlanList() {
             }
         }
     }
+    Spacer(modifier = Modifier.height(24.dp))
     IconButton(
         modifier = Modifier
             .padding(bottom = 9.dp)
@@ -430,7 +431,7 @@ fun HomeTodayPlanItem() {
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_plan_meal),
                 contentDescription = null,
             )
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
                     text = "6시 30분",
@@ -458,13 +459,13 @@ fun HomeMonthlyPlanItem(content: String) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.padding(5.dp))
+            Spacer(modifier = Modifier.width(5.dp))
             Text(
                 text = "6/26",
                 color = MainPurple900,
                 style = MaterialTheme.typography.subtitle2,
             )
-            Spacer(modifier = Modifier.padding(20.dp))
+            Spacer(modifier = Modifier.width(20.dp))
             Text(
                 text = content,
                 color = Color.Black,
