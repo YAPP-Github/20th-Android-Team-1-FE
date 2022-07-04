@@ -1,5 +1,6 @@
 // alphabet 순서대로 정렬
 object Versions {
+    const val ACCOMPANIST_PAGER = "0.12.0"
     const val ANDROID_APP_COMPAT = "1.4.1"
     const val ANDROID_BUILD_TOOL = "7.2.0"
     const val ANDROID_CORE = "1.7.0"
