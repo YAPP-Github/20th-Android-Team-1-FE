@@ -251,7 +251,7 @@ fun HomeMonthlyPlan() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${year}년 ${month}월",
+                        text = "${year}년 ${String.format("%02d", month)}월",
                         style = PlanzTypography.h3
                     )
                     Spacer(modifier = Modifier.width(6.dp))
