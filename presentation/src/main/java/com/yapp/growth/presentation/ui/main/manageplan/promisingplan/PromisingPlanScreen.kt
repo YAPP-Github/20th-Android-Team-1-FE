@@ -102,7 +102,7 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
             val dateRow: ConstrainedLayoutReference = createRef()
 
             Box(modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(start = 40.dp, end = 20.dp)
                 .constrainAs(leftArrowBox) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -133,7 +133,7 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
             }
 
             Box(modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
+                .padding(start = 22.dp, end = 16.dp)
                 .constrainAs(rightArrowBox) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
@@ -163,6 +163,7 @@ fun PromisingTimeTable(list: List<Promising>, cal: Calendar, df: DateFormat) {
                 item(key = index) {
                     Column(
                         modifier = Modifier
+                            .padding(end = 4.dp)
                             .height(26.dp)
                             .width(40.dp),
                         verticalArrangement = Arrangement.Top
