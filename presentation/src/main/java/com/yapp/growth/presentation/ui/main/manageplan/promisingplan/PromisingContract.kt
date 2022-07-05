@@ -6,7 +6,7 @@ import com.yapp.growth.base.ViewState
 
 class PromisingContract {
     data class PromisingViewState(
-        val empty: String? = null
+        val selectTimes: Boolean = false
     ): ViewState
 
     sealed class PromisingSideEffect: ViewSideEffect {
@@ -14,6 +14,7 @@ class PromisingContract {
     }
 
     sealed class PromisingEvent: ViewEvent {
+        data class OnClickTimeTable(val temp: Boolean): PromisingEvent()
         object OnClickNextButton: PromisingEvent()
         object OnClickExitButton: PromisingEvent()
     }

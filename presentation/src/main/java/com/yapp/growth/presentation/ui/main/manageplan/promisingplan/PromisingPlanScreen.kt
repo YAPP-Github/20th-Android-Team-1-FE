@@ -6,14 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,11 +28,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.domain.entity.Promising
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAndClearAppBar
+import com.yapp.growth.presentation.component.PlanzBasicButton
+import com.yapp.growth.presentation.component.PlanzBottomBasicButton
 import com.yapp.growth.presentation.theme.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
@@ -53,28 +53,44 @@ fun PromisingPlanScreen(
             )
         }
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
-            ) {
-                Text(
-                    text = "팀원들과의 시간",
-                    color = Gray800,
-                    style = PlanzTypography.subtitle2,
-                )
+        ConstraintLayout(modifier = Modifier.padding(top = 56.dp).fillMaxSize()) {
+            val (column, button) = createRefs()
 
-                /**TODO
-                 * 0/5 ~ 5/5 명 가능 UI 구현
-                 */
+            Column(modifier = Modifier.constrainAs(column) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(button.top)
+                height = Dimension.wrapContent
+            }) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
+                ) {
+                    Text(
+                        text = "팀원들과의 시간",
+                        color = Gray800,
+                        style = PlanzTypography.subtitle2,
+                    )
+
+                    /**TODO
+                     * 0/5 ~ 5/5 명 가능 UI 구현
+                     */
+                }
+
+                PromisingDateIndicator(times = viewModel.timeList)
+                PromisingTimeTable(list = viewModel.timeList, state = uiState)
             }
 
-            PromisingDateIndicator(times = viewModel.timeList)
-            PromisingTimeTable(list = viewModel.timeList)
-
+            PromisingLowButton(modifier = Modifier.constrainAs(button) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+            }, state = uiState)
         }
+
     }
 }
 
@@ -147,8 +163,11 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
 }
 
 @Composable
-fun PromisingTimeTable(list: List<Promising>) {
-
+fun PromisingTimeTable(
+    viewModel: PromisingPlanViewModel = hiltViewModel(),
+    list: List<Promising>,
+    state: PromisingContract.PromisingViewState
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -183,7 +202,10 @@ fun PromisingTimeTable(list: List<Promising>) {
                                     width = 0.5.dp,
                                     color = Gray200,
                                     shape = RectangleShape
-                                ),
+                                )
+                                .clickable {
+                                    viewModel.setEvent(PromisingContract.PromisingEvent.OnClickTimeTable(state.selectTimes))
+                                },
                             contentAlignment = Alignment.Center
                         ) {
 
@@ -197,7 +219,10 @@ fun PromisingTimeTable(list: List<Promising>) {
                                     width = 0.5.dp,
                                     color = Gray200,
                                     shape = RectangleShape
-                                ),
+                                )
+                                .clickable {
+                                    viewModel.setEvent(PromisingContract.PromisingEvent.OnClickTimeTable(state.selectTimes))
+                                },
                             contentAlignment = Alignment.Center
                         ) {
 
@@ -205,6 +230,29 @@ fun PromisingTimeTable(list: List<Promising>) {
                     }
 
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun PromisingLowButton(modifier: Modifier, state: PromisingContract.PromisingViewState) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(horizontal = 16.dp)
+            .clickable(false) { },
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        color = Color.White,
+    ) {
+        if (state.selectTimes) {
+            PlanzBottomBasicButton(modifier = Modifier.wrapContentHeight(), text = "약속시간 보내기", enabled = true) {
+
+            }
+        } else {
+            PlanzBottomBasicButton(modifier = Modifier.wrapContentHeight(), text = "되는시간 없어요", enabled = false) {
+
             }
         }
     }

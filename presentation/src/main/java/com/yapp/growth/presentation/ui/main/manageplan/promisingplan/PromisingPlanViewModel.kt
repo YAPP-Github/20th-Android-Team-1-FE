@@ -59,6 +59,10 @@ class PromisingPlanViewModel @Inject constructor(
     }
 
     override fun handleEvents(event: PromisingEvent) {
-
+        when (event) {
+            is PromisingEvent.OnClickTimeTable -> { updateState { copy(selectTimes = !event.temp) }}
+            is PromisingEvent.OnClickNextButton -> {}
+            is PromisingEvent.OnClickExitButton -> {}
+        }
     }
 }
