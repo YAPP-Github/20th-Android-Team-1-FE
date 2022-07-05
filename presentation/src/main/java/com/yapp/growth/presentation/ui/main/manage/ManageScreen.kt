@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -162,32 +163,21 @@ fun ManagePager(
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxSize()
-    ) { index ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
+    ) { tabIndex ->
+        when (tabIndex) {
+            ManageTapMenu.WAITING_PLAN.ordinal -> {
+                ManagePlansList(
+                    plans = waitingPlans,
+                    type = ManageTapMenu.WAITING_PLAN,
+                    onItemClick = onWaitingItemClick
+                )
             }
-
-            item {
-                when (index) {
-                    ManageTapMenu.WAITING_PLAN.ordinal -> {
-                        ManagePlansList(
-                            plans = waitingPlans,
-                            type = ManageTapMenu.WAITING_PLAN,
-                            onItemClick = onWaitingItemClick
-                        )
-                    }
-                    ManageTapMenu.FIXED_PLAN.ordinal -> {
-                        ManagePlansList(
-                            plans = fixedPlans,
-                            type = ManageTapMenu.FIXED_PLAN,
-                            onItemClick = onFixedItemClick
-                        )
-                    }
-                }
+            ManageTapMenu.FIXED_PLAN.ordinal -> {
+                ManagePlansList(
+                    plans = fixedPlans,
+                    type = ManageTapMenu.FIXED_PLAN,
+                    onItemClick = onFixedItemClick
+                )
             }
         }
     }
@@ -199,12 +189,26 @@ fun ManagePlansList(
     type: ManageTapMenu,
     onItemClick: (Int) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.padding(horizontal = 20.dp), /* TODO: 스크롤 범위 수정 */
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        plans.forEach { plan ->
-            ManagePlansItem(plan = plan, type = type, onItemClick = onItemClick)
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        items(plans.size) { index ->
+            ManagePlansItem(
+                plan = plans[index],
+                type = type,
+                onItemClick = onItemClick
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
@@ -219,6 +223,7 @@ fun ManagePlansItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(72.dp)
+            .clip(RoundedCornerShape(12.dp))
             .clickable { onItemClick(plan.id) },
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
@@ -325,7 +330,7 @@ fun WaitingPlanItemPreview() {
             startTime = "",
             endTime = "",
         ),
-        ManageTapMenu.WAITING_PLAN,
+        type = ManageTapMenu.WAITING_PLAN,
         onItemClick = {}
     )
 }
@@ -343,7 +348,7 @@ fun FixedPlanItemPreview() {
             place = "",
             date = "",
         ),
-        ManageTapMenu.FIXED_PLAN,
+        type = ManageTapMenu.FIXED_PLAN,
         onItemClick = {}
     )
 }
