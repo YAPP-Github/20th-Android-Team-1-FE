@@ -274,7 +274,7 @@ fun HomeMonthlyPlan() {
                             }
                             currentDate = CalendarDay.from(year, month - 1, 1)
                         },
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_border_arrow_left),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left),
                     )
                     HomeOutlinedButton(
                         modifier = Modifier.padding(horizontal = 139.dp),
@@ -286,7 +286,7 @@ fun HomeMonthlyPlan() {
                             }
                             currentDate = CalendarDay.from(year, month - 1, 1)
                         },
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_border_arrow_right),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right),
                     )
                     HomeOutlinedButton(
                         modifier = Modifier.align(alignment = Alignment.CenterEnd),
