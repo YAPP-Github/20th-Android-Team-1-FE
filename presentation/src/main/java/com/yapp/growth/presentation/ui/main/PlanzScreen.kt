@@ -42,6 +42,7 @@ import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
+import com.yapp.growth.presentation.ui.main.manageplan.promisingplan.PromisingPlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 
 @Composable
@@ -66,7 +67,8 @@ fun PlanzScreen(
         floatingActionButton = {
             if (bottomBarState) {
                 CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
+//                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
+                    navController.navigate(PlanzScreenRoute.RESPONSE_PLAN.route)
                 }
             }
         },
@@ -95,6 +97,17 @@ fun PlanzScreen(
                             PlanzScreenRoute.CREATE_TITLE.route
                                 .plus("/$planThemeType")
                         )
+                    }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.RESPONSE_PLAN.route) {
+                PromisingPlanScreen(
+                    exitResponseScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.RESPONSE_PLAN.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
@@ -267,7 +280,8 @@ enum class PlanzScreenRoute(val route: String) {
     CREATE_TITLE("create-title"),
     CREATE_DATE("create-date"),
     MANAGE_PLAN("manage-plan"),
-    SAMPLE("sample")
+    SAMPLE("sample"),
+    RESPONSE_PLAN("response-plan")
 }
 
 const val KEY_PLAN_THEME_TYPE = "plan-theme-type"
