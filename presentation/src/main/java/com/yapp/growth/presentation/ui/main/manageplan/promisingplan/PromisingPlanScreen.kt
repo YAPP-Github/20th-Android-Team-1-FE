@@ -30,6 +30,7 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAndClearAppBar
 import com.yapp.growth.presentation.theme.*
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -71,11 +72,7 @@ fun PromisingPlanScreen(
             }
 
             PromisingDateIndicator(times = viewModel.timeList)
-            PromisingTimeTable(
-                list = viewModel.timeList,
-                cal = viewModel.cal,
-                df = viewModel.df
-            )
+            PromisingTimeTable(list = viewModel.timeList)
 
         }
     }
@@ -83,7 +80,7 @@ fun PromisingPlanScreen(
 
 @Composable
 fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>) {
-    val time = rememberSaveable { LocalDateTime.now().format(DateTimeFormatter.ofPattern("M/d")) }
+    val df: DateFormat = SimpleDateFormat("M/d", Locale.KOREA)
 
     Box(
         modifier = modifier
@@ -128,7 +125,7 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
             ) {
 
                 items(times.size) {
-                    PromisingPlanDayText(date = time)
+                    PromisingPlanDayText(date = df.format(times[it].date))
                 }
             }
 
@@ -150,8 +147,7 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
 }
 
 @Composable
-fun PromisingTimeTable(list: List<Promising>, cal: Calendar, df: DateFormat) {
-    val stateCal by rememberSaveable { mutableStateOf(cal) }
+fun PromisingTimeTable(list: List<Promising>) {
 
     LazyColumn(
         modifier = Modifier
@@ -169,11 +165,10 @@ fun PromisingTimeTable(list: List<Promising>, cal: Calendar, df: DateFormat) {
                         verticalArrangement = Arrangement.Top
                     ) {
                         Text(
-                            text = df.format(stateCal.time),
+                            text = list.first().hours[index],
                             color = Gray500,
                             style = PlanzTypography.caption
                         )
-                        stateCal.add(Calendar.HOUR, 1)
                     }
                 }
 

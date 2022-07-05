@@ -22,11 +22,11 @@ class PromisingPlanViewModel @Inject constructor(
 
     private val year_df = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).parse(LocalDateTime.now().toString())
 
-    val cal = Calendar.getInstance().apply {
+    private val cal = Calendar.getInstance().apply {
         time = Date()
     }
 
-    val df: DateFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
+    private val df: DateFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 
     init {
         getTime()
@@ -41,11 +41,19 @@ class PromisingPlanViewModel @Inject constructor(
             false, true, false, true, false, true, false, true,false, true, false,
             true, false, true, false, true,true, false, true, false, true, false, true, false,).toMutableList()
 
+        val hours = mutableListOf<String>().also { timesList ->
+            repeat(booleanItems.size/2) {
+                timesList.add(df.format(cal.time))
+                cal.add(Calendar.HOUR, 1)
+            }
+        }.toList()
+
+
         val list = listOf(
-            Promising(year_df, booleanItems),
-            Promising(year_df, booleanItems2),
-            Promising(year_df, booleanItems),
-            Promising(year_df, booleanItems2)
+            Promising(year_df, hours, booleanItems),
+            Promising(year_df, hours, booleanItems2),
+            Promising(year_df, hours, booleanItems),
+            Promising(year_df, hours, booleanItems2)
         )
         _timeList.addAll(list)
     }
