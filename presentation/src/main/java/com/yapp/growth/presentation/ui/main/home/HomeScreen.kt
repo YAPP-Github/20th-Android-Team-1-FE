@@ -12,7 +12,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -71,6 +76,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(2.dp))
             when (viewState.loginState) {
                 HomeContract.LoginState.LOGIN -> HomeTodayPlan()
                 HomeContract.LoginState.NONE -> HomeInduceLogin()
@@ -94,7 +100,7 @@ private fun HomeUserProfile(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         IconButton(
             modifier = Modifier
                 .size(30.dp, 30.dp),
@@ -157,7 +163,6 @@ fun HomeTodayPlan() {
                 Spacer(modifier = Modifier.height(20.dp))
                 HomeTodayPlanList(expanded = expanded)
             }
-
             IconButton(
                 modifier = Modifier
                     .padding(bottom = 8.dp)
@@ -228,7 +233,7 @@ fun HomeMonthlyPlan() {
         color = Color.White,
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         Box(
             modifier = Modifier
@@ -246,16 +251,15 @@ fun HomeMonthlyPlan() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
-                Row(
+                Box(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "${year}년 ${String.format("%02d", month)}월",
-                        style = PlanzTypography.h3
+                        style = PlanzTypography.h3,
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
                     HomeOutlinedButton(
+                        modifier = Modifier.padding(horizontal = 113.dp),
                         onClick = {
                             month--
                             if (month == 0) {
@@ -267,6 +271,7 @@ fun HomeMonthlyPlan() {
                         imageVector = ImageVector.vectorResource(R.drawable.ic_border_arrow_left),
                     )
                     HomeOutlinedButton(
+                        modifier = Modifier.padding(horizontal = 139.dp),
                         onClick = {
                             month++
                             if (month == 13) {
@@ -277,8 +282,8 @@ fun HomeMonthlyPlan() {
                         },
                         imageVector = ImageVector.vectorResource(R.drawable.ic_border_arrow_right),
                     )
-                    Spacer(modifier = Modifier.weight(1f))
                     HomeOutlinedButton(
+                        modifier = Modifier.align(alignment = Alignment.CenterEnd),
                         onClick = {
                             isCalendarMode = !isCalendarMode
                         },
@@ -310,7 +315,9 @@ fun PlanzCalendar(
     val context = LocalContext.current
 
     AndroidView(
-        { MaterialCalendarView(it) },
+        modifier = Modifier
+            .padding(bottom = 12.dp),
+        factory = { MaterialCalendarView(it) },
         update = { views ->
             views.apply {
                 this.setOnDateChangedListener { widget, date, selected ->
@@ -454,43 +461,39 @@ fun HomeMonthlyPlanItem(content: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth(),
-    )
-    {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = "6/26",
-                color = MainPurple900,
-                style = MaterialTheme.typography.subtitle2,
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                text = content,
-                color = Color.Black,
-                style = MaterialTheme.typography.body2,
-            )
-            Spacer(modifier = Modifier.weight(1F))
-            Text(
-                text = "10시 00분",
-                color = Gray500,
-                style = MaterialTheme.typography.caption,
-            )
-        }
+    ) {
+        Text(
+            text = "7/15",
+            color = MainPurple900,
+            style = MaterialTheme.typography.subtitle2,
+            modifier = Modifier.padding(horizontal = 5.dp)
+        )
+        Text(
+            text = content,
+            color = Color.Black,
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(horizontal = 54.dp)
+        )
+        Text(
+            text = "6시 30분",
+            color = Gray500,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.align(Alignment.CenterEnd)
+        )
     }
 }
 
 @Composable
 fun HomeOutlinedButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    imageVector: ImageVector
+    imageVector: ImageVector,
 ) {
     OutlinedButton(
         onClick = {
             onClick()
         },
-        modifier = Modifier.size(25.dp),
+        modifier = modifier.size(25.dp),
         shape = CircleShape,
         border = BorderStroke(1.dp, Color.Transparent),
         contentPadding = PaddingValues(0.dp),
