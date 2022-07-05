@@ -53,7 +53,7 @@ fun PromisingPlanScreen(
             )
         }
     ) {
-        ConstraintLayout(modifier = Modifier.padding(top = 56.dp).fillMaxSize()) {
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (column, button) = createRefs()
 
             Column(modifier = Modifier.constrainAs(column) {
@@ -61,7 +61,7 @@ fun PromisingPlanScreen(
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(button.top)
-                height = Dimension.wrapContent
+                height = Dimension.fillToConstraints
             }) {
                 Row(
                     modifier = Modifier
@@ -110,9 +110,7 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
             .padding(top = 6.dp, bottom = 6.dp)
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-            val leftArrowBox: ConstrainedLayoutReference = createRef()
-            val rightArrowBox: ConstrainedLayoutReference = createRef()
-            val dateRow: ConstrainedLayoutReference = createRef()
+            val (leftArrowBox, rightArrowBox, dateRow) = createRefs()
 
             Box(modifier = Modifier
                 .padding(start = 40.dp, end = 20.dp)
@@ -170,7 +168,8 @@ fun PromisingTimeTable(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .padding(start = 16.dp)
     ) {
         items(list.first().timeList.size / 2) { index ->
