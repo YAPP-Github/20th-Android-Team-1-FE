@@ -66,6 +66,11 @@ object ModuleDependencies {
             Versions.COMPOSE_ACTIVITY,
             Method.IMPLEMENTATION
         ),
+        DependencyInfo(
+            "androidx.constraintlayout:constraintlayout-compose",
+            Versions.COMPOSE_CONSTRAINT_LAYOUT,
+            Method.IMPLEMENTATION
+        ),
         DependencyInfo("io.coil-kt:coil-compose", Versions.COIL, Method.IMPLEMENTATION),
         DependencyInfo(
             "androidx.navigation:navigation-compose",
@@ -142,6 +147,10 @@ object ModuleDependencies {
 
     val javaInject = arrayOf(
         DependencyInfo("javax.inject:javax.inject", Versions.INJECT, Method.IMPLEMENTATION)
+    )
+
+    val materialCalendarView = arrayOf(
+        DependencyInfo("com.prolificinteractive:material-calendarview", Versions.MATERIAL_CALENDAR, Method.IMPLEMENTATION)
     )
 
     val kakaoSdk = arrayOf(
