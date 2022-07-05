@@ -12,11 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,6 +28,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
+import com.yapp.growth.presentation.util.advancedShadow
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 
@@ -76,7 +72,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(5.dp))
             when (viewState.loginState) {
                 HomeContract.LoginState.LOGIN -> HomeTodayPlan()
                 HomeContract.LoginState.NONE -> HomeInduceLogin()
@@ -131,7 +127,12 @@ fun HomeTodayPlan() {
         color = Color.White,
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .advancedShadow(
+                alpha = 0.1f,
+                cornersRadius = 12.dp,
+                shadowBlurRadius = 10.dp
+            ),
     ) {
         Box(
             modifier = Modifier
@@ -233,7 +234,12 @@ fun HomeMonthlyPlan() {
         color = Color.White,
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .advancedShadow(
+                alpha = 0.1f,
+                cornersRadius = 12.dp,
+                shadowBlurRadius = 10.dp
+            ),
     ) {
         Box(
             modifier = Modifier
