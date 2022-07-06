@@ -66,6 +66,11 @@ object ModuleDependencies {
             Versions.COMPOSE_ACTIVITY,
             Method.IMPLEMENTATION
         ),
+        DependencyInfo(
+            "androidx.constraintlayout:constraintlayout-compose",
+            Versions.COMPOSE_CONSTRAINT_LAYOUT,
+            Method.IMPLEMENTATION
+        ),
         DependencyInfo("io.coil-kt:coil-compose", Versions.COIL, Method.IMPLEMENTATION),
         DependencyInfo(
             "androidx.navigation:navigation-compose",
@@ -144,8 +149,16 @@ object ModuleDependencies {
         DependencyInfo("javax.inject:javax.inject", Versions.INJECT, Method.IMPLEMENTATION)
     )
 
+    val materialCalendarView = arrayOf(
+        DependencyInfo("com.prolificinteractive:material-calendarview", Versions.MATERIAL_CALENDAR, Method.IMPLEMENTATION)
+    )
+
     val kakaoSdk = arrayOf(
         DependencyInfo("com.kakao.sdk:v2-user", Versions.KAKAO_SDK, Method.IMPLEMENTATION)
+    )
+
+    val accompanist = arrayOf(
+        DependencyInfo("com.google.accompanist:accompanist-pager", Versions.ACCOMPANIST_PAGER, Method.IMPLEMENTATION)
     )
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"

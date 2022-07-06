@@ -45,7 +45,7 @@ fun ThemeScreen(
             .fillMaxWidth()
             .fillMaxHeight()) {
             Column(
-                modifier = Modifier.padding(44.dp),
+                modifier = Modifier.padding(top = 44.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 PlanThemeType.values().forEach {
