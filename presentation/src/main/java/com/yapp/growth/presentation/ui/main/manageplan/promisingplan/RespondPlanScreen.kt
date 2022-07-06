@@ -21,14 +21,12 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.yapp.growth.domain.entity.Promising
+import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAndClearAppBar
-import com.yapp.growth.presentation.component.PlanzBasicButton
 import com.yapp.growth.presentation.component.PlanzBottomBasicButton
 import com.yapp.growth.presentation.theme.*
 import java.text.DateFormat
@@ -37,7 +35,7 @@ import java.util.*
 
 @Composable
 fun PromisingPlanScreen(
-    viewModel: PromisingPlanViewModel = hiltViewModel(),
+    viewModel: RespondPlanViewModel = hiltViewModel(),
     exitResponseScreen: () -> Unit,
 //    navigateToNextScreen: () -> Unit,
 ) {
@@ -46,9 +44,9 @@ fun PromisingPlanScreen(
     Scaffold(
         topBar = {
             PlanzBackAndClearAppBar(
-                title = stringResource(id = R.string.navigation_response_plan_text),
+                title = stringResource(id = R.string.navigation_respond_plan_text),
                 onClickBackIcon = exitResponseScreen,
-                textIconTitle = stringResource(id = R.string.response_plan_clear_select_text),
+                textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 onClickClearIcon = {}
             )
         }
@@ -95,7 +93,7 @@ fun PromisingPlanScreen(
 }
 
 @Composable
-fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>) {
+fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<RespondPlan>) {
     val df: DateFormat = SimpleDateFormat("M/d", Locale.KOREA)
 
     Box(
@@ -162,9 +160,9 @@ fun PromisingDateIndicator(modifier: Modifier = Modifier, times: List<Promising>
 
 @Composable
 fun PromisingTimeTable(
-    viewModel: PromisingPlanViewModel = hiltViewModel(),
-    list: List<Promising>,
-    state: PromisingContract.PromisingViewState
+    viewModel: RespondPlanViewModel = hiltViewModel(),
+    list: List<RespondPlan>,
+    state: RespondPlanContract.PromisingViewState
 ) {
     LazyColumn(
         modifier = Modifier
@@ -203,7 +201,7 @@ fun PromisingTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    viewModel.setEvent(PromisingContract.PromisingEvent.OnClickTimeTable(state.selectTimes))
+                                    viewModel.setEvent(RespondPlanContract.PromisingEvent.OnClickTimeTable(state.selectTimes))
                                 },
                             contentAlignment = Alignment.Center
                         ) {
@@ -220,7 +218,7 @@ fun PromisingTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    viewModel.setEvent(PromisingContract.PromisingEvent.OnClickTimeTable(state.selectTimes))
+                                    viewModel.setEvent(RespondPlanContract.PromisingEvent.OnClickTimeTable(state.selectTimes))
                                 },
                             contentAlignment = Alignment.Center
                         ) {
@@ -235,7 +233,7 @@ fun PromisingTimeTable(
 }
 
 @Composable
-fun PromisingLowButton(modifier: Modifier, state: PromisingContract.PromisingViewState) {
+fun PromisingLowButton(modifier: Modifier, state: RespondPlanContract.PromisingViewState) {
     Surface(
         modifier = modifier
             .fillMaxWidth()

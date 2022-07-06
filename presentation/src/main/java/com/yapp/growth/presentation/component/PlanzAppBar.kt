@@ -296,7 +296,7 @@ fun PlanzIconAndTextAppBarPreview() {
         title = "약속응답",
         menu = PlanzAppBarMenu.Back,
         onClickIcon = {},
-        textIconTitle = stringResource(id = R.string.response_plan_clear_select_text),
+        textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
         onclickTextIcon = {}
     )
 }

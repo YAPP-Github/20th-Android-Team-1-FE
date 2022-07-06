@@ -4,7 +4,7 @@ import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 
-class PromisingContract {
+class RespondPlanContract {
     data class PromisingViewState(
         val selectTimes: Boolean = false
     ): ViewState

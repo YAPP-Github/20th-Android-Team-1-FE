@@ -11,7 +11,7 @@
     <string name="navigation_create_plan_text">약속잡기</string>
     <string name="navigation_manage_plan_text">약속관리</string>
     <string name="navigation_confirm_plan_text">약속확정</string>
-    <string name="navigation_response_plan_text">약속응답</string>
+    <string name="navigation_respond_plan_text">약속응답</string>
 
     <string name="create_plan_next_button_text">다음</string>
 
@@ -27,7 +27,7 @@
     <string name="create_plan_title_place_label">장소(선택)</string>
     <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
 
-    <string name="response_plan_clear_select_text">선택 해제</string>
+    <string name="respond_plan_clear_select_text">선택 해제</string>
 
     <string name="icon_exit_content_description">Exit Icon</string>
     <string name="icon_create_content_description">Create Icon</string>
