@@ -8,8 +8,10 @@ import com.yapp.growth.presentation.ui.main.KEY_PLAN_THEME_TYPE
 import com.yapp.growth.presentation.ui.main.KEY_PLAN_TITLE
 import com.yapp.growth.presentation.ui.main.create.date.DateContract.*
 import com.yapp.growth.presentation.ui.main.create.title.TitleContract
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class DateViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<DateViewState, DateSideEffect, DateEvent>(DateViewState()) {
