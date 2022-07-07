@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
-import com.yapp.growth.presentation.component.PlanzCreateStepTitleAndDescription
+import com.yapp.growth.presentation.component.PlanzCreateStepTitleWithDescription
 import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.ui.main.BLANK_VALUE
 import com.yapp.growth.presentation.ui.main.create.date.DateContract.DateEvent
@@ -34,7 +34,7 @@ fun DateScreen(
 
     Scaffold(
         topBar = {
-            PlanzCreateStepTitleAndDescription(
+            PlanzCreateStepTitleWithDescription(
                 currentStep = 3,
                 title = stringResource(id = R.string.create_plan_date_title_text),
                 description = stringResource(id = R.string.create_plan_date_max_day_text),

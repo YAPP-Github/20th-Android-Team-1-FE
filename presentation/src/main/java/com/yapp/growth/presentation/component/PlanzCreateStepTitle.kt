@@ -82,7 +82,7 @@ fun PlanzCreateStepTitle(
 }
 
 @Composable
-fun PlanzCreateStepTitleAndDescription(
+fun PlanzCreateStepTitleWithDescription(
     modifier: Modifier = Modifier,
     currentStep: Int,
     title: String,
@@ -108,12 +108,12 @@ fun PlanzCreateStepTitleAndDescription(
 }
 
 @Composable
-fun PlanzCreateStepTitleAndChips(
+fun PlanzCreateStepTitleWithContents(
     modifier: Modifier = Modifier,
     currentStep: Int,
     title: String,
     onExitClick: () -> Unit,
-    chipsContent: @Composable () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     Column(modifier = modifier) {
         PlanzCreateStepTitle(
@@ -123,7 +123,7 @@ fun PlanzCreateStepTitleAndChips(
             type = PlanzCreateStepTitleType.CHIPS
         )
 
-        chipsContent()
+        content()
     }
 }
 
@@ -148,7 +148,7 @@ fun PlanzCreateStepTitlePreview() {
 @Preview(showBackground = true)
 @Composable
 fun PlanzCreateStepTitleAndDescriptionPreview() {
-    PlanzCreateStepTitleAndDescription(
+    PlanzCreateStepTitleWithDescription(
         currentStep = 1,
         title = "약속 테마를 골라주세요!",
         description = "* 최대 12일까지 선택 가능",
@@ -159,10 +159,10 @@ fun PlanzCreateStepTitleAndDescriptionPreview() {
 @Preview(showBackground = true)
 @Composable
 fun PlanzCreateStepTitleAndChipsPreview() {
-    PlanzCreateStepTitleAndChips(
+    PlanzCreateStepTitleWithContents(
         currentStep = 1,
         title = "약속 테마를 골라주세요!",
         onExitClick = { },
-        chipsContent = @Composable { }
+        content = @Composable { }
     )
 }
