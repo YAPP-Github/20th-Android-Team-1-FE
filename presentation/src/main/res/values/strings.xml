@@ -31,11 +31,34 @@
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
     <string name="create_plan_date_max_day_text">* 최대 12일까지 선택 가능</string>
 
-    <string name="icon_exit_content_description">Exit Icon</string>
-    <string name="icon_create_content_description">Create Icon</string>
-    <string name="icon_check_content_description">Check Icon</string>
-    <string name="icon_clear_content_description">Clear Text Icon</string>
-    <string name="icon_error_content_description">Error Icon</string>
+    <string name="create_plan_time_range_title_text">약속 후보 시간대를 정해 주세요!</string>
+    <string name="create_plan_time_range_from_text">시 부터</string>
+    <string name="create_plan_time_range_to_text">시 까지로 할래요!</string>
+    <string name="create_plan_time_range_time_option_am_12">오전 12시</string>
+    <string name="create_plan_time_range_time_option_am_01">오전 1시</string>
+    <string name="create_plan_time_range_time_option_am_02">오전 2시</string>
+    <string name="create_plan_time_range_time_option_am_03">오전 3시</string>
+    <string name="create_plan_time_range_time_option_am_04">오전 4시</string>
+    <string name="create_plan_time_range_time_option_am_05">오전 5시</string>
+    <string name="create_plan_time_range_time_option_am_06">오전 6시</string>
+    <string name="create_plan_time_range_time_option_am_07">오전 7시</string>
+    <string name="create_plan_time_range_time_option_am_08">오전 8시</string>
+    <string name="create_plan_time_range_time_option_am_09">오전 9시</string>
+    <string name="create_plan_time_range_time_option_am_10">오전 10시</string>
+    <string name="create_plan_time_range_time_option_am_11">오전 11시</string>
+    <string name="create_plan_time_range_time_option_pm_12">오후 12시</string>
+    <string name="create_plan_time_range_time_option_pm_01">오후 1시</string>
+    <string name="create_plan_time_range_time_option_pm_02">오후 2시</string>
+    <string name="create_plan_time_range_time_option_pm_03">오후 3시</string>
+    <string name="create_plan_time_range_time_option_pm_04">오후 4시</string>
+    <string name="create_plan_time_range_time_option_pm_05">오후 5시</string>
+    <string name="create_plan_time_range_time_option_pm_06">오후 6시</string>
+    <string name="create_plan_time_range_time_option_pm_07">오후 7시</string>
+    <string name="create_plan_time_range_time_option_pm_08">오후 8시</string>
+    <string name="create_plan_time_range_time_option_pm_09">오후 9시</string>
+    <string name="create_plan_time_range_time_option_pm_10">오후 10시</string>
+    <string name="create_plan_time_range_time_option_pm_11">오후 11시</string>
+    <string name="create_plan_time_range_error_message">올바른 범위로 시간을 설정해 주세요</string>
 
     <string name="manage_plan_app_bar_text">약속관리</string>
     <string name="manage_plan_leader_badge">파티장</string>
@@ -43,4 +66,10 @@
     <string name="manage_plan_completed_member_count_text">명 응답 완료</string>
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
+
+    <string name="icon_exit_content_description">Exit Icon</string>
+    <string name="icon_create_content_description">Create Icon</string>
+    <string name="icon_check_content_description">Check Icon</string>
+    <string name="icon_clear_content_description">Clear Text Icon</string>
+    <string name="icon_error_content_description">Error Icon</string>
 </resources>
