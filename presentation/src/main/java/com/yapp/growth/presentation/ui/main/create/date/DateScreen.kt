@@ -80,7 +80,7 @@ fun DateScreen(
                             theme,
                             viewState.title.ifBlank { BLANK_VALUE },
                             viewState.place.ifBlank { BLANK_VALUE },
-                            viewState.date.ifBlank { BLANK_VALUE }
+                            viewState.dates.ifBlank { BLANK_VALUE }
                         )
                     }
                 }

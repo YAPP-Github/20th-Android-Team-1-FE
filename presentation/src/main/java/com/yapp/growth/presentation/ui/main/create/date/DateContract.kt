@@ -4,14 +4,13 @@ import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract
 
 class DateContract {
     data class DateViewState(
         val chosenTheme: PlanThemeType? = null,
         val title: String = "",
         val place: String = "",
-        val date: String = "",
+        val dates: String = "",
     ) : ViewState
 
     sealed class DateSideEffect : ViewSideEffect {
