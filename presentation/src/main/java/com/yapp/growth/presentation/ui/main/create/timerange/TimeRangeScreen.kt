@@ -188,6 +188,10 @@ fun TimeRangeText(
     onStartHourClick: () -> Unit,
     onEndHourClick: () -> Unit,
 ) {
+    /*
+        TODO: 밑줄 박스와 시간 텍스트 하나의 컴포넌트로 묶고 분리
+        현재 텍스트들이 baseline 기준으로 정렬되어 있어서 분리가 어려움...
+     */
     ConstraintLayout(
         modifier = modifier
             .padding(horizontal = 20.dp),
