@@ -2,7 +2,6 @@ package com.yapp.growth.presentation.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,7 +41,7 @@ import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
-import com.yapp.growth.presentation.ui.main.manageplan.promisingplan.PromisingPlanScreen
+import com.yapp.growth.presentation.ui.main.manageplan.respondplan.PromisingPlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 
 @Composable

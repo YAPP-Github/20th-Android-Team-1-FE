@@ -7,7 +7,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -121,7 +120,7 @@ fun KakaoLoginButton(
             )
 
             Text(
-                text = stringResource(id = R.string.icon_kakao_login),
+                text = stringResource(id = R.string.icon_kakao_login_title),
                 modifier = Modifier.padding(start = 6.dp),
                 color = Color.Black,
                 style = PlanzTypography.h3
