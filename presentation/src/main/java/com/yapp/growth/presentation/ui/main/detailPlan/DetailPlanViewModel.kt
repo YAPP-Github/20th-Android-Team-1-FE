@@ -1,7 +1,7 @@
-package com.yapp.growth.presentation.ui.main.plandetail
+package com.yapp.growth.presentation.ui.main.detailPlan
 
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.presentation.ui.main.plandetail.DetailPlanContract.*
+import com.yapp.growth.presentation.ui.main.detailPlan.DetailPlanContract.*
 import javax.inject.Inject
 
 class DetailPlanViewModel @Inject constructor(

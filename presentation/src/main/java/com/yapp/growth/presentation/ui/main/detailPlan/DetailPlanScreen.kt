@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.plandetail
+package com.yapp.growth.presentation.ui.main.detailPlan
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzExitAppBar
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.main.plandetail.DetailPlanContract.*
+import com.yapp.growth.presentation.ui.main.detailPlan.DetailPlanContract.*
 import kotlinx.coroutines.flow.collect
 
 @Composable
