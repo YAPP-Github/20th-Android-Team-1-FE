@@ -29,6 +29,9 @@
     <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
 
     <string name="detail_plan_app_bar_text">약속 상세보기</string>
+    <string name="detail_plan_info_when">날짜/시간</string>
+    <string name="detail_plan_info_place">장소</string>
+    <string name="detail_plan_info_member">참여자</string>
 
     <string name="icon_exit_content_description">Exit Icon</string>
     <string name="icon_create_content_description">Create Icon</string>

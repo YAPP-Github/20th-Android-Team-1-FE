@@ -70,44 +70,23 @@ fun DetailPlanScreen() {
                     modifier = Modifier
                         .padding(vertical = 24.dp, horizontal = 28.dp)
                 ) {
-                    // TODO : Row 는 분리하여 재사용성을 높이는게 더 좋을듯
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "날짜/시간", color = Gray700)
-                        Text(text = "5월 1일 오후 3시", color = Gray900)
-                    }
+                    // 날짜, 시간 (Date, Time)
+                    DetailItem(
+                        info = stringResource(id = R.string.detail_plan_info_when),
+                        content = "5월 1일 오후 3시"
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = "장소", color = Gray700)
-                        Text(text = "강남", color = Gray900)
-                    }
+                    // 장소 (Place)
+                    DetailItem(
+                        info = stringResource(id = R.string.detail_plan_info_place),
+                        content = "강남"
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(text = "참여자", color = Gray700)
-                        Spacer(modifier = Modifier.width(32.dp))
-                        Column {
-                            Text(
-                                text = "여윤정, 진희철, 권지명, 윤서연",
-                                textAlign = TextAlign.End,
-                                modifier = Modifier.fillMaxWidth(),
-                                color = Gray900
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "여윤정, 진희철, 권지명, 윤서연",
-                                textAlign = TextAlign.End,
-                                modifier = Modifier.fillMaxWidth(),
-                                color = Gray900
-                            )
-                        }
-                    }
+                    // 참여자 (Member)
+                    DetailItem(
+                        info = stringResource(id = R.string.detail_plan_info_member),
+                        content = "이성계, 이방원, 왕건, 을지문덕\n서희, 척준경, 을파소"
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(72.dp))
@@ -115,7 +94,30 @@ fun DetailPlanScreen() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+fun DetailItem(
+    info: String,
+    content: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = info,
+            style = PlanzTypography.body2,
+            color = Gray700,
+        )
+        Text(
+            text = content,
+            style = PlanzTypography.body2,
+            color = Gray900,
+            textAlign = TextAlign.End,
+        )
+    }
+}
+
+@Preview (showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun PreviewDetailPlanScreen() {
     DetailPlanScreen()
