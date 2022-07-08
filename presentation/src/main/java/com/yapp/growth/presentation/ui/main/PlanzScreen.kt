@@ -152,7 +152,9 @@ fun PlanzScreen(
             }
 
             composable(route = PlanzScreenRoute.DETAIL_PLAN.route) {
-                DetailPlanScreen()
+                DetailPlanScreen(exitDetailPlanScreen = {
+                     navController.popBackStack()
+                })
             }
         }
     }
