@@ -72,7 +72,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             when (viewState.loginState) {
                 HomeContract.LoginState.LOGIN -> HomeTodayPlan()
                 HomeContract.LoginState.NONE -> HomeInduceLogin()
@@ -131,7 +131,8 @@ fun HomeTodayPlan() {
             .advancedShadow(
                 alpha = 0.1f,
                 cornersRadius = 12.dp,
-                shadowBlurRadius = 10.dp
+                shadowBlurRadius = 10.dp,
+                offsetY = 7.dp
             ),
     ) {
         Box(
@@ -188,36 +189,47 @@ fun HomeTodayPlan() {
 
 @Composable
 fun HomeInduceLogin() {
-    Box(
+    Surface(
+        color = Color.Transparent,
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier
-            .height(60.dp)
-            .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(brush = MainGradient),
-        contentAlignment = Alignment.Center,
+            .advancedShadow(
+                alpha = 0.1f,
+                cornersRadius = 12.dp,
+                shadowBlurRadius = 10.dp,
+                offsetY = 7.dp
+            ),
     ) {
-        Row(
+        Box(
             modifier = Modifier
+                .height(60.dp)
                 .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .background(brush = MainGradient),
+            contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text = stringResource(id = R.string.home_induce_login),
-                color = Color.White,
-                style = MaterialTheme.typography.subtitle2,
-            )
-            IconButton(
-                modifier = Modifier.size(6.dp, 12.dp),
-                onClick = { /*TODO*/ },
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Icon(
-                    tint = Color.Unspecified,
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
-                    contentDescription = null,
+                Text(
+                    text = stringResource(id = R.string.home_induce_login),
+                    color = Color.White,
+                    style = MaterialTheme.typography.subtitle2,
                 )
+                IconButton(
+                    modifier = Modifier.size(6.dp, 12.dp),
+                    onClick = { /*TODO*/ },
+                ) {
+                    Icon(
+                        tint = Color.Unspecified,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
+                        contentDescription = null,
+                    )
+                }
             }
         }
     }
