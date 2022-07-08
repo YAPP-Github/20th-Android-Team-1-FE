@@ -13,6 +13,9 @@
     <string name="navigation_confirm_plan_text">약속확정</string>
     <string name="navigation_respond_plan_text">약속응답</string>
 
+    <string name="home_today_plan">오늘의 약속</string>
+    <string name="home_induce_login">회원가입하고, 편리한 약속잡기를 경험하세요!</string>
+
     <string name="create_plan_next_button_text">다음</string>
 
     <string name="create_plan_theme_title_text">약속 테마를 선택해 주세요!</string>
@@ -37,8 +40,18 @@
     <string name="icon_check_content_description">Check Icon</string>
     <string name="icon_clear_content_description">Clear Text Icon</string>
     <string name="icon_error_content_description">Error Icon</string>
+
     <string name="icon_share_content_description">Share Icon</string>
     <string name="icon_arrow_left_content_description">Left Icon</string>
     <string name="icon_arrow_box_left_24_content_description">Left Box Icon</string>
     <string name="icon_arrow_box_right_24_content_description">Right Box Icon</string>
+
+
+    <string name="manage_plan_app_bar_text">약속관리</string>
+    <string name="manage_plan_leader_badge">파티장</string>
+    <string name="manage_plan_follower_badge">파티원</string>
+    <string name="manage_plan_completed_member_count_text">명 응답 완료</string>
+    <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
+    <string name="manage_plan_fixed_plan_text">확정된 약속</string>
+
 </resources>

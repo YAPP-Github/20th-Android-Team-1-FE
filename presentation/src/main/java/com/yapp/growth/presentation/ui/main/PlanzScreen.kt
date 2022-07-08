@@ -40,8 +40,9 @@ import com.yapp.growth.presentation.ui.main.create.date.DateScreen
 import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
-import com.yapp.growth.presentation.ui.main.manageplan.ManagePlanScreen
+import com.yapp.growth.presentation.ui.main.manage.ManageScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
+import timber.log.Timber
 
 @Composable
 fun PlanzScreen(
@@ -139,7 +140,20 @@ fun PlanzScreen(
             }
 
             composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
-                ManagePlanScreen()
+                ManageScreen(navigateToCreateScreen = { navController.navigate(PlanzScreenRoute.CREATE_THEME.route) },
+                    navigateToFixPlanScreen = { planId ->
+                        /* TODO: 파티장 - 약속 확정 화면 이동(planId) */
+                        Timber.w("약속 확정 화면 이동: $planId")
+                    },
+                    navigateToMemberResponseScreen = { planId ->
+                        /* TODO: 멤버 - 현재까지의 응답 화면 이동(planId) */
+                        Timber.w("현재까지의 응답 화면 이동: $planId")
+                    },
+                    navigateToInvitationScreen = { planId ->
+                        /* TODO: 확정된 약속 초대장 화면 이동(planId) */
+                        Timber.w("확정된 약속 초대장 화면 이동: $planId")
+                    }
+                )
             }
 
             composable(route = PlanzScreenRoute.SAMPLE.route) {
