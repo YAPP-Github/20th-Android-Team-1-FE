@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.create.title
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleEven
 import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleSideEffect
 import kotlinx.coroutines.flow.collect
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TitleScreen(
     viewModel: TitleViewModel = hiltViewModel(),

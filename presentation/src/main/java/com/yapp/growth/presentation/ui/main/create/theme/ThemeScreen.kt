@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.create.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +25,7 @@ import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.theme.*
 import kotlinx.coroutines.flow.collect
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ThemeScreen(
     viewModel: ThemeViewModel = hiltViewModel(),

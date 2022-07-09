@@ -5,7 +5,7 @@ object Versions {
     const val ANDROID_BUILD_TOOL = "7.2.0"
     const val ANDROID_CORE = "1.7.0"
     const val COIL = "1.4.0"
-    const val COMPOSE = "1.1.1"
+    const val COMPOSE = "1.2.0-rc02"
     const val COMPOSE_ACTIVITY = "1.4.0"
     const val COMPOSE_CONSTRAINT_LAYOUT = "1.1.0-alpha02"
     const val CONSTRAINT_LAYOUT = "2.1.3"

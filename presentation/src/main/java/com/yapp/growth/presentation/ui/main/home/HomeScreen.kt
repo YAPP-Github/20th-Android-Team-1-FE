@@ -29,7 +29,6 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
-import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 
 
@@ -66,9 +65,10 @@ fun HomeScreen(
             )
         },
         modifier = Modifier.fillMaxSize(),
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
