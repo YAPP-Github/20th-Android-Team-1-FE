@@ -28,9 +28,9 @@ import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.R
 import timber.log.Timber
 
 @Composable
-fun PromisingPlanScreen(
+fun RespondPlanScreen(
     viewModel: RespondPlanViewModel = hiltViewModel(),
-    exitResponseScreen: () -> Unit,
+    exitRespondPlanScreen: () -> Unit,
 //    navigateToNextScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
@@ -41,7 +41,7 @@ fun PromisingPlanScreen(
         topBar = {
             PlanzBackAndClearAppBar(
                 title = stringResource(id = R.string.navigation_respond_plan_text),
-                onClickBackIcon = exitResponseScreen,
+                onClickBackIcon = exitRespondPlanScreen,
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 onClickClearIcon = { /*TODO */ }
             )
@@ -89,7 +89,7 @@ fun PromisingPlanScreen(
                 )
             }
 
-            PromisingLowButton(modifier = Modifier.constrainAs(button) {
+            RespondPlanLowButton(modifier = Modifier.constrainAs(button) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom)
@@ -103,7 +103,7 @@ fun PromisingPlanScreen(
 }
 
 @Composable
-fun PromisingLowButton(
+fun RespondPlanLowButton(
     modifier: Modifier,
     clickCount: Int,
     onClickSendPlanButton: () -> Unit,
