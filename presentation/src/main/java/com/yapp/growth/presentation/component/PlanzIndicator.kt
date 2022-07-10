@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,13 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.yapp.growth.domain.entity.RespondPlan
+import com.yapp.growth.domain.entity.RespondUsers
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 
 @Composable
 fun PromisingDateIndicator(
     modifier: Modifier = Modifier,
-    dates: List<RespondPlan>,
+    respondUsers: RespondUsers,
     onClickNextDayButton: () -> Unit,
     onClickPreviousDayButton: () -> Unit
 ) {
@@ -69,8 +71,8 @@ fun PromisingDateIndicator(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                items(dates.size) {
-                    PromisingPlanDayText(date = dates[it].date)
+                itemsIndexed(respondUsers.avaliableDate) { _, date ->
+                    PromisingPlanDayText(date = date)
                 }
             }
 
