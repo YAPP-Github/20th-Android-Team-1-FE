@@ -55,13 +55,6 @@ fun DetailPlanScreen(
         backgroundColor = BackgroundColor1,
     ) {
 
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_detail_plan_character),
-            contentDescription = null
-        )
-
         Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier.padding(horizontal = 21.dp)
@@ -77,7 +70,7 @@ fun DetailPlanScreen(
                 style = PlanzTypography.body2,
                 color = Gray500,
             )
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(24.dp))
             Box(
                 modifier = Modifier
                     .wrapContentHeight()
@@ -106,7 +99,6 @@ fun DetailPlanScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

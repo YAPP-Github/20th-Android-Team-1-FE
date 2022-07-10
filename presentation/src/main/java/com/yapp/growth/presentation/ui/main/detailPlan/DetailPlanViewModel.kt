@@ -45,7 +45,7 @@ class DetailPlanViewModel @Inject constructor() :
 
         updateState {
             copy(
-                title = "돼지파티 약속",
+                title = "스무자스무자스무자스무자스무자스무자스무",
                 category = "식사",
                 date = convertDate(date),
                 place = "스무자스무자스무자스무자스무자스무자스무",
