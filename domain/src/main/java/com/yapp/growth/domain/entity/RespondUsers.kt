@@ -1,12 +1,12 @@
 package com.yapp.growth.domain.entity
 
-import java.util.*
-
 data class RespondUsers(
-    val users: List<Users>,
-    val colors: List<String>,
-    val minTime: Date,
-    val maxTime: Date,
+    val avaliableDate: List<String>,
+    val users: List<User>,
+    val colors: List<Int>,
+    val totalCount: Int,
+    val minTime: String,
+    val maxTime: String,
     val timeTable: List<TimeTable>,
-    val avaliableDate: List<Date>
+    val hourList: List<String>
 )
