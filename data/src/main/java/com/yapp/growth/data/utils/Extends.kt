@@ -1,10 +1,9 @@
 package com.yapp.growth.data.utils
 
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
 
 //fun Date.toDay(): String {
 //    val dfDay: DateFormat = SimpleDateFormat("M/d", Locale.KOREA)

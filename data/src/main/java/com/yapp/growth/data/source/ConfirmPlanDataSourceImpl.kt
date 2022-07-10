@@ -15,7 +15,7 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
     private val retrofitApi: GrowthApi
 ) : ConfirmPlanDataSource {
 
-    private val parseFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+    private val parseFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
     private val hourFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 
     override suspend fun getRespondUsers(promisingKey: Long): NetworkResult<RespondUsers> {
@@ -25,18 +25,18 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
         val user3 = User(2317331838, "한지희")
         val user4 = User(2295332548, "김정호")
 
-        val minTime = "2022-07-09 13:00:00"
-        val maxTime = "2022-07-11 16:00:00"
+        val minTime = "2022-07-09T13:00:00"
+        val maxTime = "2022-07-11T16:00:00"
 
         val users = listOf(user1.copy(), user2.copy(), user3.copy(), user4.copy())
 
         val colors = listOf(442921462, 1298559478)
 
         val avaliableDate = listOf(
-            "2022-07-09 09:00:00".toDay(),
-            "2022-07-10 09:00:00".toDay(),
-            "2022-07-11 09:00:00".toDay(),
-            "2022-07-12 09:00:00".toDay(),
+            "2022-07-09T09:00:00".toDay(),
+            "2022-07-10T09:00:00".toDay(),
+            "2022-07-11T09:00:00".toDay(),
+            "2022-07-12T09:00:00".toDay(),
 //            "2022-07-13 09:00:00".toDay(),
 //            "2022-07-14 09:00:00".toDay(),
 //            "2022-07-15 09:00:00".toDay(),
@@ -64,7 +64,7 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
                 maxTime = maxTime,
                 timeTable = listOf(
                     TimeTable(
-                        date = "2022-07-09 09:00:00".toDay(),
+                        date = "2022-07-09T09:00:00".toDay(),
                         blocks = listOf(
                             Block(0, 1, listOf(user1.copy()), 1298559478),
                             Block(2, 1, listOf(user2.copy()), 1298559478)
@@ -72,7 +72,7 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
                     ),
 
                     TimeTable(
-                        date = "2022-07-10 09:00:00".toDay(),
+                        date = "2022-07-10T09:00:00".toDay(),
                         blocks = listOf(
                             Block(3, 1, listOf(user3.copy(), user4.copy()), 1298559478)
                         )
