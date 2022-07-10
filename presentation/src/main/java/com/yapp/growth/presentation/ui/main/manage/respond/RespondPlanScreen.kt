@@ -25,7 +25,6 @@ import com.yapp.growth.presentation.component.PromisingTimeTable
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
-import timber.log.Timber
 
 @Composable
 fun RespondPlanScreen(
@@ -35,6 +34,7 @@ fun RespondPlanScreen(
 ) {
     val uiState by viewModel.viewState.collectAsState()
     val dates by viewModel.dates.collectAsState()
+    val respondUsers by viewModel.respondUser.collectAsState()
     val clickCount by viewModel.clickCount.collectAsState()
 
     Scaffold(
@@ -75,16 +75,15 @@ fun RespondPlanScreen(
                 }
 
                 PromisingDateIndicator(
-                    dates = dates,
+                    respondUsers = respondUsers,
                     onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton)},
                     onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
                     )
 
                 PromisingTimeTable(
-                    list = dates,
+                    respondUsers = respondUsers,
                     onClickTimeTable = { dateIndex, minuteIndex ->
                         viewModel.setEvent(RespondPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
-                        Timber.tag("타임테이블").d("$dateIndex : $minuteIndex")
                     }
                 )
             }
