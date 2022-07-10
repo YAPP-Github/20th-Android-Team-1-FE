@@ -7,16 +7,19 @@ import com.yapp.growth.base.ViewState
 class ConfirmPlanContract {
     data class ConfirmPlanViewState(
         val state: Boolean = false
-    ): ViewState
+    ) : ViewState
 
-    sealed class ConfirmPlanSideEffect: ViewSideEffect {
-
+    sealed class ConfirmPlanSideEffect : ViewSideEffect {
+        object ChangedList : ConfirmPlanSideEffect()
+        object ShowBottomSheet : ConfirmPlanSideEffect()
+        object HideBottomSheet : ConfirmPlanSideEffect()
     }
 
-    sealed class ConfirmPlanEvent: ViewEvent {
-        object OnClickNextDayButton: ConfirmPlanEvent()
-        object OnClickPreviousDayButton: ConfirmPlanEvent()
-        data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int): ConfirmPlanEvent()
-        data class OnClickConfirmButton(val dateIndex: Int, val minuteIndex: Int): ConfirmPlanEvent()
+    sealed class ConfirmPlanEvent : ViewEvent {
+        object OnClickNextDayButton : ConfirmPlanEvent()
+        object OnClickPreviousDayButton : ConfirmPlanEvent()
+        data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : ConfirmPlanEvent()
+        data class OnClickConfirmButton(val dateIndex: Int, val minuteIndex: Int) :
+            ConfirmPlanEvent()
     }
 }
