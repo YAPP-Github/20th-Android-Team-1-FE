@@ -9,6 +9,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,6 +32,8 @@ fun DetailPlanScreen(
     viewModel: DetailPlanViewModel = hiltViewModel(),
     exitDetailPlanScreen: () -> Unit,
 ) {
+
+    val viewState by viewModel.viewState.collectAsState()
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -63,15 +67,13 @@ fun DetailPlanScreen(
             modifier = Modifier.padding(horizontal = 21.dp)
         ) {
             Text(
-                // TODO : 약속 테마
-                text = "식사 약속",
+                text = "${viewState.category} 약속",
                 style = PlanzTypography.h1,
                 color = MainPurple900,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                // TODO : 약속명
-                text = "돼지파티 약속",
+                text = "${viewState.title}",
                 style = PlanzTypography.body2,
                 color = Gray500,
             )
@@ -90,17 +92,17 @@ fun DetailPlanScreen(
                 ) {
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_when),
-                        content = "5월 1일 오후 3시"
+                        content = "${viewState.date}"
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_place),
-                        content = "스무자스무자스무자스무자스무자스무자스"
+                        content = "${viewState.place}"
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_member),
-                        content = "을릉도동남쪽, 뱃길따라이백, 리외로운섬하\n나새들의고향"
+                        content = "${viewState.member}"
                     )
                 }
             }
