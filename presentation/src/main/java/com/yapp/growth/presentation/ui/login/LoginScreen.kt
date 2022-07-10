@@ -19,7 +19,7 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
 
 @Composable
-fun LoginScreen(
+fun  LoginScreen(
     onClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {

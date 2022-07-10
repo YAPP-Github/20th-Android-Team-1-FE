@@ -7,19 +7,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.domain.entity.RespondUsers
-import com.yapp.growth.presentation.theme.Gray200
-import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.PlanzTypography
-import com.yapp.growth.presentation.theme.SubCoral
+import com.yapp.growth.presentation.R
+import com.yapp.growth.presentation.theme.*
 
 @Composable
 fun  ConfirmPlanTimeTable(
@@ -193,55 +196,86 @@ fun PromisingTimeTable(
 }
 
 @Composable
-fun AvailableColorBox(
+fun LocationAndAvailableColorBox(
     modifier: Modifier = Modifier,
     respondUsers: RespondUsers
 ) {
-    Row(
-        modifier = modifier.wrapContentWidth(),
-    ) {
-
-        Column {
-            Text(
-                text = "0/${respondUsers.colors.size}",
-                style = PlanzTypography.caption,
-                color = Color(0xFF94A3B8)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 8.dp, bottom = 16.dp, start = 14.dp, end = 20.dp)
+    )
+    {
+        Row(
+            modifier = Modifier
+                .wrapContentWidth()
+                .align(Alignment.CenterStart),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                tint = Color.Unspecified,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_location_icon),
+                contentDescription = null
             )
+
             Text(
-                text = "가능",
+                text = stringResource(id = R.string.respond_plan_location_text),
+                color = CoolGray500,
                 style = PlanzTypography.caption,
-                color = Color(0xFF94A3B8)
             )
         }
 
-        LazyRow(
+        Row(
             modifier = Modifier
-                .height(36.dp)
                 .wrapContentWidth()
-                .padding(start = 6.dp, end = 6.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .align(Alignment.CenterEnd),
         ) {
-            itemsIndexed(respondUsers.colors) { _, color ->
-                Box(
-                    modifier = Modifier
-                        .width(24.dp)
-                        .height(21.dp)
-                        .background(Color(color)),
+
+            Column {
+                Text(
+                    text = "0/${respondUsers.colors.size}",
+                    style = PlanzTypography.caption,
+                    color = Color(0xFF94A3B8)
+                )
+                Text(
+                    text = "가능",
+                    style = PlanzTypography.caption,
+                    color = Color(0xFF94A3B8)
+                )
+            }
+
+            LazyRow(
+                modifier = Modifier
+                    .height(36.dp)
+                    .wrapContentWidth()
+                    .padding(start = 6.dp, end = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                itemsIndexed(respondUsers.colors) { _, color ->
+                    Box(
+                        modifier = Modifier
+                            .width(24.dp)
+                            .height(21.dp)
+                            .background(Color(color)),
+                    )
+                }
+            }
+
+            Column {
+                Text(
+                    text = "${respondUsers.colors.size}/${respondUsers.colors.size}",
+                    style = PlanzTypography.caption,
+                    color = Color(0xFF94A3B8)
+                )
+                Text(
+                    text = "가능",
+                    style = PlanzTypography.caption,
+                    color = Color(0xFF94A3B8)
                 )
             }
         }
 
-        Column {
-            Text(
-                text = "${respondUsers.colors.size}/${respondUsers.colors.size}",
-                style = PlanzTypography.caption,
-                color = Color(0xFF94A3B8)
-            )
-            Text(
-                text = "가능",
-                style = PlanzTypography.caption,
-                color = Color(0xFF94A3B8)
-            )
-        }
     }
+
 }

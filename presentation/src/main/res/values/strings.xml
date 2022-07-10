@@ -30,7 +30,7 @@
     <string name="create_plan_title_place_label">장소(선택)</string>
     <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
 
-    <string name="respond_plan_time_with_team_text">팀원들과의 시간</string>
+    <string name="respond_plan_location_text">강남역카카오프렌즈강</string>
     <string name="respond_plan_clear_select_text">선택 해제</string>
     <string name="respond_plan_send_plan_title">약속시간 보내기</string>
     <string name="respond_plan_send_nothing_title">되는시간 없어요</string>

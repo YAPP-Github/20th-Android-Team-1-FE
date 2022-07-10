@@ -16,6 +16,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
+import com.yapp.growth.presentation.theme.CoolGray500
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
@@ -58,32 +59,8 @@ fun ConfirmPlanScreen(
                     bottom.linkTo(button.top)
                     height = Dimension.fillToConstraints
                 }) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White)
-                            .padding(start = 14.dp, end = 20.dp, bottom = 16.dp)
-                    ) {
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                        ) {
-
-                            Text(
-                                modifier = Modifier.align(Alignment.CenterStart),
-                                text = stringResource(id = R.string.respond_plan_time_with_team_text),
-                                color = Gray800,
-                                style = PlanzTypography.subtitle2,
-                            )
-
-                            AvailableColorBox(
-                                modifier = Modifier.align(Alignment.CenterEnd),
-                                respondUsers = respondUsers
-                            )
-                        }
-                    }
+                    LocationAndAvailableColorBox(respondUsers = respondUsers)
 
                     PromisingDateIndicator(
                         respondUsers = respondUsers,
