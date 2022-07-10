@@ -92,19 +92,19 @@ fun DetailPlanScreen(
                         info = stringResource(id = R.string.detail_plan_info_when),
                         content = "5월 1일 오후 3시"
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_place),
-                        content = "강남"
+                        content = "스무자스무자스무자스무자스무자스무자스"
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_member),
-                        content = "이성계, 이방원, 왕건, 을지문덕\n서희, 척준경, 을파소"
+                        content = "을릉도동남쪽, 뱃길따라이백, 리외로운섬하\n나새들의고향"
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(72.dp))
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
@@ -114,20 +114,19 @@ fun DetailItem(
     info: String,
     content: String
 ) {
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = info,
             style = PlanzTypography.body2,
             color = Gray700,
         )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = content,
             style = PlanzTypography.body2,
             color = Gray900,
-            textAlign = TextAlign.End,
         )
     }
 }
