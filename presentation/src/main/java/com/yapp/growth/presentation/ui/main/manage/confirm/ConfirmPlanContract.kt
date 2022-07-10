@@ -10,7 +10,6 @@ class ConfirmPlanContract {
     ) : ViewState
 
     sealed class ConfirmPlanSideEffect : ViewSideEffect {
-        object ChangedList : ConfirmPlanSideEffect()
         object ShowBottomSheet : ConfirmPlanSideEffect()
         object HideBottomSheet : ConfirmPlanSideEffect()
     }

@@ -2,23 +2,17 @@
 
 package com.yapp.growth.presentation.ui.main.manage.confirm
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.theme.CoolGray500
-import com.yapp.growth.presentation.theme.Gray800
-import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -34,10 +28,18 @@ fun ConfirmPlanScreen(
     val uiState by viewModel.viewState.collectAsState()
     val dates by viewModel.dates.collectAsState()
     val respondUsers by viewModel.respondUser.collectAsState()
+    val currentClickTimeIndex by viewModel.currentClickTimeIndex.collectAsState()
 
     PlanzBottomSheetLayout(
         sheetState = sheetState,
-        sheetContent = { /*TODO*/ }) {
+        scrimColor = Color.Transparent,
+        sheetContent = {
+            ConfirmPlanBottomSheet(
+                respondUsers = respondUsers,
+                currentClickTimeIndex = currentClickTimeIndex,
+                onClickSelectPlan = {  }
+            )
+        }) {
 
         Scaffold(
             topBar = {
@@ -69,16 +71,30 @@ fun ConfirmPlanScreen(
                     )
 
                     ConfirmPlanTimeTable(
-                        dates = dates,
                         respondUsers = respondUsers,
                         onClickTimeTable = { dateIndex, minuteIndex ->
                             viewModel.setEvent(ConfirmPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
-                        }
+                        },
+                        currentClickTimeIndex = currentClickTimeIndex
                     )
                 }
 
             }
 
+        }
+
+        LaunchedEffect(key1 = viewModel.effect) {
+            viewModel.effect.collect { event ->
+                when (event) {
+                    is ConfirmPlanSideEffect.ShowBottomSheet -> {
+                        coroutineScope.launch { sheetState.show() }
+                    }
+
+                    is ConfirmPlanSideEffect.HideBottomSheet -> {
+                        coroutineScope.launch { sheetState.hide() }
+                    }
+                }
+            }
         }
     }
 

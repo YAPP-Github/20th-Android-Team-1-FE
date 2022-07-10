@@ -19,16 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.domain.entity.RespondUsers
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 
 @Composable
-fun  ConfirmPlanTimeTable(
-    dates: List<RespondPlan>,
+fun ConfirmPlanTimeTable(
     respondUsers: RespondUsers,
-    onClickTimeTable: (Int, Int) -> Unit
+    onClickTimeTable: (Int, Int) -> Unit,
+    currentClickTimeIndex: Pair<Int, Int>
 ) {
     LazyColumn(
         modifier = Modifier
@@ -56,8 +55,9 @@ fun  ConfirmPlanTimeTable(
 
                 itemsIndexed(respondUsers.avaliableDate) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
-                    var upperTableClicked by remember { mutableStateOf(dates[dateIndex].timeList[hourIndex]) }
-                    var underTableClicked by remember { mutableStateOf(dates[dateIndex].timeList[hourIndex.plus(1)]) }
+
+                    val upperTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex == currentClickTimeIndex.second
+                    val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
 
                     val blockList = respondUsers.timeTable.find { it.date == date }?.blocks
                     val color = blockList?.let { block ->
@@ -75,7 +75,6 @@ fun  ConfirmPlanTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    upperTableClicked = !upperTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex)
                                 }
                                 .background(if (upperTableClicked) SubCoral else Color(color)),
@@ -94,7 +93,6 @@ fun  ConfirmPlanTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    underTableClicked = !underTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
                                 }
                                 .background(if (underTableClicked) SubCoral else Color(color)),
@@ -236,12 +234,12 @@ fun LocationAndAvailableColorBox(
                 Text(
                     text = "0/${respondUsers.colors.size}",
                     style = PlanzTypography.caption,
-                    color = Color(0xFF94A3B8)
+                    color = CoolGray300
                 )
                 Text(
                     text = "가능",
                     style = PlanzTypography.caption,
-                    color = Color(0xFF94A3B8)
+                    color = CoolGray300
                 )
             }
 
@@ -266,16 +264,71 @@ fun LocationAndAvailableColorBox(
                 Text(
                     text = "${respondUsers.colors.size}/${respondUsers.colors.size}",
                     style = PlanzTypography.caption,
-                    color = Color(0xFF94A3B8)
+                    color = CoolGray300
                 )
                 Text(
                     text = "가능",
                     style = PlanzTypography.caption,
-                    color = Color(0xFF94A3B8)
+                    color = CoolGray300
                 )
             }
         }
 
     }
 
+}
+
+@Composable
+fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pair<Int,Int>, onClickSelectPlan: () -> Unit) {
+    if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
+
+    val day = respondUsers.avaliableDate[currentClickTimeIndex.first]
+    var hour = respondUsers.hourList[currentClickTimeIndex.second/2]
+    if (currentClickTimeIndex.second % 2 != 0 ) hour += " 30분"
+
+    val respondUsers = respondUsers.users
+
+    Column(
+        modifier = Modifier.background(Color.White).padding(start = 20.dp, end = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = "약속 날짜",
+                style = PlanzTypography.subtitle2,
+                color = Gray700
+            )
+
+            Text(
+                text = "$day $hour",
+                style = PlanzTypography.subtitle2,
+                color = MainPurple900
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "응답자",
+                style = PlanzTypography.subtitle2,
+                color = Gray700
+            )
+
+            Text(
+                text = "가나다라마, 가나다라마, 가나다라마\n가나다라마, 가나다라마, 가나다라마, 가나다라마\n가나다라마, 가나다라마, 가나다라마",
+                style = PlanzTypography.caption,
+                color = Gray800,
+                textAlign = TextAlign.End
+            )
+        }
+
+        PlanzBasicButton(modifier = Modifier.fillMaxWidth(), text = "약속시간 선택", onClick = {
+            onClickSelectPlan()
+        })
+    }
 }

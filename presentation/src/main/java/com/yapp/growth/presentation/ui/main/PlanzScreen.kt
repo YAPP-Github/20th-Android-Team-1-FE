@@ -70,8 +70,8 @@ fun PlanzScreen(
             if (bottomBarState) {
                 CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
 //                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
-//                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route)
-                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route)
+                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route)
+//                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route)
                 }
             }
         },

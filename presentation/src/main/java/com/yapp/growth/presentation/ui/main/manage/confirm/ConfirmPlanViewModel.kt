@@ -12,6 +12,7 @@ import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -32,7 +33,10 @@ class ConfirmPlanViewModel @Inject constructor(
     val respondUser: StateFlow<RespondUsers>
         get() = _respondUser
 
-    private var cachedIndex = Pair(-1,-1)
+//    private var cachedIndex = Pair(-1,-1)
+    private val _currentClickTimeIndex = MutableStateFlow(-1 to -1)
+    val currentClickTimeIndex: StateFlow<Pair<Int, Int>>
+        get() = _currentClickTimeIndex.asStateFlow()
 
     init {
         loadRespondUsers(0L)
@@ -71,10 +75,10 @@ class ConfirmPlanViewModel @Inject constructor(
             is ConfirmPlanEvent.OnClickConfirmButton -> { }
             is ConfirmPlanEvent.OnClickTimeTable -> {
                 _dates.value[event.dateIndex].timeList[event.minuteIndex] = _dates.value[event.dateIndex].timeList[event.minuteIndex].not()
-                if (cachedIndex.first > 0 && cachedIndex.second > 0 && cachedIndex.first != event.dateIndex && cachedIndex.second != event.minuteIndex) {
-                  _dates.value[cachedIndex.first].timeList[cachedIndex.second] = false
-                }
-                cachedIndex = event.dateIndex to event.minuteIndex
+                _currentClickTimeIndex.value  = event.dateIndex to event.minuteIndex
+                sendEffect({
+                    ConfirmPlanSideEffect.ShowBottomSheet
+                })
             }
         }
     }
