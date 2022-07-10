@@ -19,6 +19,7 @@ object Versions {
     const val KAKAO_SDK = "2.10.0"
     const val KOTLIN = "1.6.10"
     const val KOTLIN_COROUTINES  = "1.5.1"
+    const val KOTLIN_DATETIMES = "0.4.0"
     const val MATERIAL_CALENDAR = "1.4.3"
     const val LIFECYCLE = "2.4.1"
     const val OKHTTP = "4.3.1"
