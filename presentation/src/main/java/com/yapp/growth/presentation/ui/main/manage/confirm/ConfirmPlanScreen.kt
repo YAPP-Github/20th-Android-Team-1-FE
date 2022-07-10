@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -61,17 +62,27 @@ fun ConfirmPlanScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.White)
-                            .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
+                            .padding(start = 14.dp, end = 20.dp, bottom = 16.dp)
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.respond_plan_time_with_team_text),
-                            color = Gray800,
-                            style = PlanzTypography.subtitle2,
-                        )
 
-                        /** TODO
-                         *  0/5 ~ 5/5 명 가능 UI 구현
-                         */
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                        ) {
+
+                            Text(
+                                modifier = Modifier.align(Alignment.CenterStart),
+                                text = stringResource(id = R.string.respond_plan_time_with_team_text),
+                                color = Gray800,
+                                style = PlanzTypography.subtitle2,
+                            )
+
+                            AvailableColorBox(
+                                modifier = Modifier.align(Alignment.CenterEnd),
+                                respondUsers = respondUsers
+                            )
+                        }
                     }
 
                     PromisingDateIndicator(
@@ -88,7 +99,6 @@ fun ConfirmPlanScreen(
                         }
                     )
                 }
-
 
             }
 

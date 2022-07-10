@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -18,10 +19,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzBackAndClearAppBar
-import com.yapp.growth.presentation.component.PlanzBottomBasicButton
-import com.yapp.growth.presentation.component.PromisingDateIndicator
-import com.yapp.growth.presentation.component.PromisingTimeTable
+import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
@@ -61,17 +59,27 @@ fun RespondPlanScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.White)
-                        .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
+                        .padding(start = 14.dp, end = 20.dp, bottom = 16.dp)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.respond_plan_time_with_team_text),
-                        color = Gray800,
-                        style = PlanzTypography.subtitle2,
-                    )
 
-                    /** TODO
-                     *  0/5 ~ 5/5 명 가능 UI 구현
-                     */
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()) {
+
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterStart),
+                            text = stringResource(id = R.string.respond_plan_time_with_team_text),
+                            color = Gray800,
+                            style = PlanzTypography.subtitle2,
+                        )
+
+                        AvailableColorBox(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd),
+                            respondUsers = respondUsers
+                        )
+                    }
+
                 }
 
                 PromisingDateIndicator(
@@ -95,7 +103,7 @@ fun RespondPlanScreen(
             }, clickCount = clickCount,
                onClickNothingPlanButton = { },
                onClickSendPlanButton = { }
-                )
+            )
         }
 
     }

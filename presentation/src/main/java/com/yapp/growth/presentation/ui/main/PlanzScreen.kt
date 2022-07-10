@@ -31,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
@@ -41,6 +42,8 @@ import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
+import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import timber.log.Timber
 
@@ -66,7 +69,9 @@ fun PlanzScreen(
         floatingActionButton = {
             if (bottomBarState) {
                 CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
+//                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
+                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route)
+//                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route)
                 }
             }
         },
@@ -95,6 +100,28 @@ fun PlanzScreen(
                             PlanzScreenRoute.CREATE_TITLE.route
                                 .plus("/$planThemeType")
                         )
+                    }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.RESPOND_PLAN.route) {
+                RespondPlanScreen(
+                    exitRespondPlanScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.CONFIRM_PLAN.route) {
+                ConfirmPlanScreen(
+                    exitConfirmPlanScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 )
             }
@@ -281,7 +308,8 @@ enum class PlanzScreenRoute(val route: String) {
     CREATE_DATE("create-date"),
     MANAGE_PLAN("manage-plan"),
     SAMPLE("sample"),
-    RESPOND_PLAN("respond-plan")
+    RESPOND_PLAN("respond-plan"),
+    CONFIRM_PLAN("confirm-plan")
 }
 
 const val KEY_PLAN_THEME_TYPE = "plan-theme-type"
