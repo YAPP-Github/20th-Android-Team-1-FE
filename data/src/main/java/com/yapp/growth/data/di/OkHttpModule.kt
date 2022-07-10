@@ -35,7 +35,7 @@ internal class OkHttpModule {
         tokenAuthenticator: Authenticator
     ): OkHttpClient.Builder {
         return OkHttpClient.Builder().apply {
-//            addNetworkInterceptor(interceptor)
+            addNetworkInterceptor(interceptor)
             if (networkSettings.isDebugMode) {
                 addNetworkInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
