@@ -5,6 +5,7 @@ import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.Date
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ class DetailPlanViewModel @Inject constructor() :
     private fun getPlanState(planId: Int) {
 
         // TODO : 테스트용 더미값입니다 (정호)
-        val date = "2022-11-28 11:30:00"
+        val date = "2022-11-28T11:30:00"
         val members = listOf(
             "을릉도동남쪽",
             "뱃길따라이백",
@@ -57,16 +58,9 @@ class DetailPlanViewModel @Inject constructor() :
     // 2022-11-28 11:30:00 -> 11월 28일 오전 11시
     @SuppressLint("SimpleDateFormat")
     private fun convertDate(date: String): String {
-        val tmp: Date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date) as Date
-        var result = SimpleDateFormat("M월 d일 aa h시").format(tmp)
+        val tmp: Date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date) as Date
 
-        if (result.contains("AM")) {
-            result = result.replace("AM", "오전")
-        } else {
-            result = result.replace("PM", "오후")
-        }
-
-        return result
+        return SimpleDateFormat("M월 d일 aa h시", Locale.KOREA).format(tmp)
     }
 
     private fun convertMemberList(members: List<String>): String {
