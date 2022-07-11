@@ -1,6 +1,5 @@
 package com.yapp.growth.presentation.ui.main.manage
 
-import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -33,9 +32,7 @@ import com.yapp.growth.presentation.component.PlanzCreateAppBar
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageEvent
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageSideEffect
-import kotlinx.coroutines.flow.collect
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ManageScreen(
@@ -60,9 +57,11 @@ fun ManageScreen(
                 onCreateClick = { viewModel.setEvent(ManageEvent.OnClickCreateButton) }
             )
         }
-    ) {
+    ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
         ) {
             ManageTabRow(
                 tabIndex = tabIndex,
