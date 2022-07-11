@@ -1,8 +1,8 @@
-package com.yapp.growth.presentation.ui.main.detailPlan
+package com.yapp.growth.presentation.ui.main.detail
 
 import android.annotation.SuppressLint
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.presentation.ui.main.detailPlan.DetailPlanContract.*
+import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.Date

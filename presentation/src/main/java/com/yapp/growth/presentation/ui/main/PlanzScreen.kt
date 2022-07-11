@@ -40,7 +40,7 @@ import com.yapp.growth.presentation.ui.main.create.date.DateScreen
 import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
-import com.yapp.growth.presentation.ui.main.detailPlan.DetailPlanScreen
+import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import timber.log.Timber

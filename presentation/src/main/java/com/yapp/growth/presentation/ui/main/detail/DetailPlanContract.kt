@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.detailPlan
+package com.yapp.growth.presentation.ui.main.detail
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
