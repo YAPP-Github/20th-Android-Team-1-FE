@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +30,7 @@ import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.BLANK_VALUE
 import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.TimeRangeEvent
 import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.TimeRangeSideEffect
+import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.TimeRangeViewState.DialogState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -43,6 +46,8 @@ fun TimeRangeScreen(
     val viewState by viewModel.viewState.collectAsState()
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scaffoldState = rememberScaffoldState()
+    val startHourListState = rememberLazyListState()
+    val endHourListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
     // TODO: 드래그로 시트가 닫히지 않도록 수정
@@ -51,9 +56,10 @@ fun TimeRangeScreen(
         sheetContent = {
             TimeRangeTimeBottomSheetContent(
                 timeOptions = TimeType.values(),
+                listState = if (viewState.dialogState == DialogState.START_HOUR) startHourListState else endHourListState,
                 onItemClick = {
                     viewModel.setEvent(TimeRangeEvent.OnSelectedHourChanged(it.ordinal))
-                }
+                },
             )
         }
     ) {
@@ -142,14 +148,16 @@ fun TimeRangeScreen(
 @Composable
 fun TimeRangeTimeBottomSheetContent(
     timeOptions: Array<TimeType>,
+    listState: LazyListState,
     onItemClick: (TimeType) -> Unit,
 ) {
     // TODO: Number Picker 형태로 수정
-    // TODO: 스크롤 상태 기억하지 않도록 수정(or 시작 시간은 시작 시간대로, 끝 시간은 끝 시간대로 위치 기억)
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .height(260.dp)
+            .height(260.dp),
+        state = listState
     ) {
         items(timeOptions) { timeOption ->
             TimeRangeTimeBottomSheetItem(
