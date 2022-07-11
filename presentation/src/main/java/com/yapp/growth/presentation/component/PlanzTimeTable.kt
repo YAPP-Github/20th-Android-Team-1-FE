@@ -20,6 +20,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.domain.entity.RespondUsers
+import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 
@@ -60,8 +61,13 @@ fun ConfirmPlanTimeTable(
                     val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
 
                     val blockList = respondUsers.timeTable.find { it.date == date }?.blocks
-                    val color = blockList?.let { block ->
-                        block.find { it.index == hourIndex }?.color ?: 0x00000000
+
+                    val upperTableColor = blockList?.let { block ->
+                        block.find { it.index == minuteIndex }?.color ?: 0x00000000
+                    } ?:  0x00000000
+
+                    val underTableColor = blockList?.let { block ->
+                        block.find { it.index == minuteIndex.plus(1) }?.color ?: 0x00000000
                     } ?:  0x00000000
 
                     Column {
@@ -77,7 +83,7 @@ fun ConfirmPlanTimeTable(
                                 .clickable {
                                     onClickTimeTable(dateIndex, minuteIndex)
                                 }
-                                .background(if (upperTableClicked) SubCoral else Color(color)),
+                                .background(if (upperTableClicked) SubCoral else Color(upperTableColor)),
                             contentAlignment = Alignment.Center
                         ) {
 
@@ -95,7 +101,7 @@ fun ConfirmPlanTimeTable(
                                 .clickable {
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
                                 }
-                                .background(if (underTableClicked) SubCoral else Color(color)),
+                                .background(if (underTableClicked) SubCoral else Color(underTableColor)),
                             contentAlignment = Alignment.Center
                         ) {
 
@@ -279,17 +285,30 @@ fun LocationAndAvailableColorBox(
 }
 
 @Composable
-fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pair<Int,Int>, onClickSelectPlan: () -> Unit) {
+fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
     val day = respondUsers.avaliableDate[currentClickTimeIndex.first]
     var hour = respondUsers.hourList[currentClickTimeIndex.second/2]
-    if (currentClickTimeIndex.second % 2 != 0 ) hour += " 30분"
+    if (currentClickTimeIndex.second % 2 != 0 ) hour += "분"
 
-    val respondUsers = respondUsers.users
+//    val blockList = respondUsers.timeTable.find { it.date == day }?.blocks
+//    val userList = blockList?.let { block ->
+//        block.find { it.index == currentClickTimeIndex.second }?.users
+//    }
+
+    val respondUserText = StringBuilder()
+    currentClickUserData.forEachIndexed { index, user ->
+        if (index == 3) respondUserText.append("\n")
+        if (index == 7) respondUserText.append("\n")
+        if (index == 0) respondUserText.append(user.userName)
+        else respondUserText.append(", ${user.userName}")
+    }
 
     Column(
-        modifier = Modifier.background(Color.White).padding(start = 20.dp, end = 20.dp)) {
+        modifier = Modifier
+            .background(Color.White)
+            .padding(start = 20.dp, end = 20.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -308,25 +327,31 @@ fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pa
             )
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "응답자",
-                style = PlanzTypography.subtitle2,
-                color = Gray700
-            )
+        if (respondUserText.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "응답자",
+                    style = PlanzTypography.subtitle2,
+                    color = Gray700
+                )
 
-            Text(
-                text = "가나다라마, 가나다라마, 가나다라마\n가나다라마, 가나다라마, 가나다라마, 가나다라마\n가나다라마, 가나다라마, 가나다라마",
-                style = PlanzTypography.caption,
-                color = Gray800,
-                textAlign = TextAlign.End
-            )
+                Text(
+                    text = respondUserText.toString(),
+                    style = PlanzTypography.caption,
+                    color = Gray800,
+                    textAlign = TextAlign.End
+                )
+            }
         }
 
-        PlanzBottomBasicButton(modifier = Modifier.fillMaxWidth().padding(top = 20.dp), text = "약속시간 선택", onClick = {
+        PlanzBottomBasicButton(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp), text = "약속시간 선택", onClick = {
             onClickSelectPlan()
         })
     }

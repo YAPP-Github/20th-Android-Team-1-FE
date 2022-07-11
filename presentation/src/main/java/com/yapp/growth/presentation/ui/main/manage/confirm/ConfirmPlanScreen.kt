@@ -29,6 +29,7 @@ fun ConfirmPlanScreen(
     val dates by viewModel.dates.collectAsState()
     val respondUsers by viewModel.respondUser.collectAsState()
     val currentClickTimeIndex by viewModel.currentClickTimeIndex.collectAsState()
+    val currentClickUserData by viewModel.currentClickUserData.collectAsState()
 
     PlanzBottomSheetLayout(
         sheetState = sheetState,
@@ -37,6 +38,7 @@ fun ConfirmPlanScreen(
             ConfirmPlanBottomSheet(
                 respondUsers = respondUsers,
                 currentClickTimeIndex = currentClickTimeIndex,
+                currentClickUserData = currentClickUserData,
                 onClickSelectPlan = {  }
             )
         }) {

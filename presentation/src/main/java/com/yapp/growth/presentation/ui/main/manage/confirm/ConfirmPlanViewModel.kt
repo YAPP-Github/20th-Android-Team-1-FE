@@ -5,10 +5,12 @@ import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.domain.entity.RespondUsers
+import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,6 +39,10 @@ class ConfirmPlanViewModel @Inject constructor(
     private val _currentClickTimeIndex = MutableStateFlow(-1 to -1)
     val currentClickTimeIndex: StateFlow<Pair<Int, Int>>
         get() = _currentClickTimeIndex.asStateFlow()
+
+    private val _currentClickUserData = MutableStateFlow<List<User>>(emptyList())
+    val currentClickUserData: StateFlow<List<User>>
+        get() = _currentClickUserData.asStateFlow()
 
     init {
         loadRespondUsers(0L)
@@ -68,6 +74,23 @@ class ConfirmPlanViewModel @Inject constructor(
         _dates.value = temp
     }
 
+    private fun filterBottomSheetData(dateIndex: Int, minuteIndex: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val day = respondUser.value.avaliableDate[dateIndex]
+            var hour = respondUser.value.hourList[minuteIndex/2]
+
+            val blockList = respondUser.value.timeTable.find { it.date == day }?.blocks
+            val userList = blockList?.let { block ->
+                block.find { it.index == minuteIndex }?.users
+            }
+            _currentClickUserData.value = userList ?: emptyList()
+
+            sendEffect({
+                ConfirmPlanSideEffect.ShowBottomSheet
+            })
+        }
+    }
+
     override fun handleEvents(event: ConfirmPlanEvent) {
         when (event) {
             is ConfirmPlanEvent.OnClickNextDayButton -> { }
@@ -76,9 +99,7 @@ class ConfirmPlanViewModel @Inject constructor(
             is ConfirmPlanEvent.OnClickTimeTable -> {
                 _dates.value[event.dateIndex].timeList[event.minuteIndex] = _dates.value[event.dateIndex].timeList[event.minuteIndex].not()
                 _currentClickTimeIndex.value  = event.dateIndex to event.minuteIndex
-                sendEffect({
-                    ConfirmPlanSideEffect.ShowBottomSheet
-                })
+                filterBottomSheetData(event.dateIndex, event.minuteIndex)
             }
         }
     }

@@ -3,6 +3,7 @@ package com.yapp.growth.presentation.ui.main.manage.confirm
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
+import com.yapp.growth.domain.entity.User
 
 class ConfirmPlanContract {
     data class ConfirmPlanViewState(
