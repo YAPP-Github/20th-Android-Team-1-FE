@@ -289,8 +289,7 @@ fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pa
     val respondUsers = respondUsers.users
 
     Column(
-        modifier = Modifier.background(Color.White).padding(start = 20.dp, end = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        modifier = Modifier.background(Color.White).padding(start = 20.dp, end = 20.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -310,7 +309,7 @@ fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pa
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
@@ -327,7 +326,7 @@ fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pa
             )
         }
 
-        PlanzBasicButton(modifier = Modifier.fillMaxWidth(), text = "약속시간 선택", onClick = {
+        PlanzBasicButton(modifier = Modifier.fillMaxWidth().padding(top = 20.dp), text = "약속시간 선택", onClick = {
             onClickSelectPlan()
         })
     }
