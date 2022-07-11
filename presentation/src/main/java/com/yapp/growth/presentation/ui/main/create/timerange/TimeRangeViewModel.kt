@@ -76,19 +76,12 @@ class TimeRangeViewModel @Inject constructor(
     }
 
     private fun checkRangeError(startHour: Int?, endHour: Int?) {
-        if (startHour == null) {
+        if (startHour == null || endHour == null) {
             showErrorState(isError = true)
             return
         }
-        val start: Int = startHour
 
-        if (endHour == null) {
-            showErrorState(isError = true)
-            return
-        }
-        val end: Int = endHour
-
-        if (start < end) {
+        if (startHour < endHour) {
             showErrorState(isError = false)
             return
         }
