@@ -56,7 +56,6 @@ fun ConfirmPlanTimeTable(
 
                 itemsIndexed(respondUsers.avaliableDate) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
-
                     val upperTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex == currentClickTimeIndex.second
                     val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
 
@@ -149,8 +148,13 @@ fun PlanzPlanTimeTable(
                     var underTableClicked by remember { mutableStateOf(false) }
 
                     val blockList = respondUsers.timeTable.find { it.date == date }?.blocks
-                    val color = blockList?.let { block ->
-                        block.find { it.index == hourIndex }?.color ?: 0x00000000
+
+                    val upperTableColor = blockList?.let { block ->
+                        block.find { it.index == minuteIndex }?.color ?: 0x00000000
+                    } ?:  0x00000000
+
+                    val underTableColor = blockList?.let { block ->
+                        block.find { it.index == minuteIndex.plus(1) }?.color ?: 0x00000000
                     } ?:  0x00000000
 
                     Column {
@@ -167,7 +171,7 @@ fun PlanzPlanTimeTable(
                                     upperTableClicked = !upperTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex)
                                 }
-                                .background(if (upperTableClicked) SubCoral else Color(color)),
+                                .background(if (upperTableClicked) SubCoral else Color(upperTableColor)),
                             contentAlignment = Alignment.Center
                         ) {
 
@@ -186,7 +190,7 @@ fun PlanzPlanTimeTable(
                                     underTableClicked = !underTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
                                 }
-                                .background(if (underTableClicked) SubCoral else Color(color)),
+                                .background(if (underTableClicked) SubCoral else Color(underTableColor)),
                             contentAlignment = Alignment.Center
                         ) {
 
