@@ -71,7 +71,7 @@ fun PlanzCreateStepTitle(
                         .clickable { onExitClick() },
                 )
             }
-            Spacer(modifier = Modifier.height(2.dp))
+
             Text(
                 text = title,
                 style = PlanzTypography.h2,
