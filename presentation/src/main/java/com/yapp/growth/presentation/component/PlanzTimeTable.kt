@@ -292,11 +292,6 @@ fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pa
     var hour = respondUsers.hourList[currentClickTimeIndex.second/2]
     if (currentClickTimeIndex.second % 2 != 0 ) hour += "분"
 
-//    val blockList = respondUsers.timeTable.find { it.date == day }?.blocks
-//    val userList = blockList?.let { block ->
-//        block.find { it.index == currentClickTimeIndex.second }?.users
-//    }
-
     val respondUserText = StringBuilder()
     currentClickUserData.forEachIndexed { index, user ->
         if (index == 3) respondUserText.append("\n")
