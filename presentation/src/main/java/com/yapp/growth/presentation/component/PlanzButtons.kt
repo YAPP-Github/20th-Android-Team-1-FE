@@ -124,7 +124,7 @@ fun PlanzBottomBasicButton(
         Text(
             text = text,
             color = textColor,
-            style = PlanzTypography.button
+            style = PlanzTypography.subtitle2
         )
     }
 }

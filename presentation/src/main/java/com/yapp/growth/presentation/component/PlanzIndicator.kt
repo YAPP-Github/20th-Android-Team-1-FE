@@ -18,13 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.domain.entity.RespondUsers
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 
 @Composable
-fun PromisingDateIndicator(
+fun PlanzPlanDateIndicator(
     modifier: Modifier = Modifier,
     respondUsers: RespondUsers,
     onClickNextDayButton: () -> Unit,
@@ -53,7 +52,7 @@ fun PromisingDateIndicator(
                     bottom.linkTo(parent.bottom)
                 }) {
 
-                PromisingPlanLeftButton(onClick = {
+                PlanzPlanPreviousDayButton(onClick = {
                     onClickPreviousDayButton()
                 })
             }
@@ -72,7 +71,7 @@ fun PromisingDateIndicator(
             ) {
 
                 itemsIndexed(respondUsers.avaliableDate) { _, date ->
-                    PromisingPlanDayText(date = date)
+                    PlanzPlanDayText(date = date)
                 }
             }
 
@@ -84,7 +83,7 @@ fun PromisingDateIndicator(
                     bottom.linkTo(parent.bottom)
                 }) {
 
-                PromisingPlanRightButton(onClick = {
+                PlanzPlanNextDayButton(onClick = {
                     onClickNextDayButton()
                 })
             }
@@ -94,7 +93,7 @@ fun PromisingDateIndicator(
 }
 
 @Composable
-fun PromisingPlanLeftButton(onClick: () -> Unit) {
+fun PlanzPlanPreviousDayButton(onClick: () -> Unit) {
     Icon(
         painter = painterResource(id = R.drawable.ic_arrow_box_left_24),
         contentDescription = stringResource(id = R.string.icon_arrow_box_left_24_content_description),
@@ -106,7 +105,7 @@ fun PromisingPlanLeftButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun PromisingPlanRightButton(onClick: () -> Unit) {
+fun PlanzPlanNextDayButton(onClick: () -> Unit) {
     Icon(
         painter = painterResource(id = R.drawable.ic_arrow_box_right_24),
         contentDescription = stringResource(id = R.string.icon_arrow_box_right_24_content_description),
@@ -118,7 +117,7 @@ fun PromisingPlanRightButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun PromisingPlanDayText(date: String) {
+fun PlanzPlanDayText(date: String) {
     Column {
         Text(
             text = "월",

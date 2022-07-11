@@ -109,7 +109,7 @@ fun ConfirmPlanTimeTable(
 }
 
 @Composable
-fun PromisingTimeTable(
+fun PlanzPlanTimeTable(
     respondUsers: RespondUsers,
     onClickTimeTable: (Int, Int) -> Unit
 ) {
@@ -326,7 +326,7 @@ fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pa
             )
         }
 
-        PlanzBasicButton(modifier = Modifier.fillMaxWidth().padding(top = 20.dp), text = "약속시간 선택", onClick = {
+        PlanzBottomBasicButton(modifier = Modifier.fillMaxWidth().padding(top = 20.dp), text = "약속시간 선택", onClick = {
             onClickSelectPlan()
         })
     }

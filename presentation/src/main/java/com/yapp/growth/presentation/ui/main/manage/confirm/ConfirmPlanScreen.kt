@@ -64,7 +64,7 @@ fun ConfirmPlanScreen(
 
                     LocationAndAvailableColorBox(respondUsers = respondUsers)
 
-                    PromisingDateIndicator(
+                    PlanzPlanDateIndicator(
                         respondUsers = respondUsers,
                         onClickPreviousDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickPreviousDayButton)},
                         onClickNextDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickNextDayButton) }

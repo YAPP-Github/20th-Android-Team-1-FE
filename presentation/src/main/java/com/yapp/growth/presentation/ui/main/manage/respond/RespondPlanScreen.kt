@@ -1,16 +1,13 @@
 package com.yapp.growth.presentation.ui.main.manage.respond
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -20,8 +17,6 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.theme.Gray800
-import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
 
 @Composable
@@ -58,13 +53,13 @@ fun RespondPlanScreen(
 
                 LocationAndAvailableColorBox(respondUsers = respondUsers)
 
-                PromisingDateIndicator(
+                PlanzPlanDateIndicator(
                     respondUsers = respondUsers,
                     onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton)},
                     onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
                     )
 
-                PromisingTimeTable(
+                PlanzPlanTimeTable(
                     respondUsers = respondUsers,
                     onClickTimeTable = { dateIndex, minuteIndex ->
                         viewModel.setEvent(RespondPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
