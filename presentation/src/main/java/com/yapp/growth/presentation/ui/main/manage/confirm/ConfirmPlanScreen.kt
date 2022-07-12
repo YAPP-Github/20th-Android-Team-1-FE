@@ -84,20 +84,7 @@ fun ConfirmPlanScreen(
             }
 
         }
-
-        LaunchedEffect(key1 = viewModel.effect) {
-            viewModel.effect.collect { event ->
-                when (event) {
-                    is ConfirmPlanSideEffect.ShowBottomSheet -> {
-                        coroutineScope.launch { sheetState.show() }
-                    }
-
-                    is ConfirmPlanSideEffect.HideBottomSheet -> {
-                        coroutineScope.launch { sheetState.hide() }
-                    }
-                }
-            }
-        }
+        
     }
 
 
