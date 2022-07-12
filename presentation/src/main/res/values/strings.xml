@@ -34,6 +34,8 @@
     <string name="icon_clear_content_description">Clear Text Icon</string>
     <string name="icon_error_content_description">Error Icon</string>
 
+    <string name="icon_arrow_left_content_description">Left Icon</string>
+
     <string name="manage_plan_app_bar_text">약속관리</string>
     <string name="manage_plan_leader_badge">파티장</string>
     <string name="manage_plan_follower_badge">파티원</string>

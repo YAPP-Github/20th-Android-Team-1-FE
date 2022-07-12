@@ -56,6 +56,20 @@ fun PlanzExitAppBar(
 }
 
 @Composable
+fun PlanzBackAppBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    onBackClick: () -> Unit,
+) {
+    PlanzAppBar(
+        modifier = modifier,
+        title = title,
+        menu = PlanzAppBarMenu.Back,
+        onClick = onBackClick,
+    )
+}
+
+@Composable
 private fun PlanzAppBar(
     modifier: Modifier = Modifier,
     title: String,
@@ -107,6 +121,11 @@ enum class PlanzAppBarMenu(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_exit,
         contentDescription = R.string.icon_exit_content_description
+    ),
+    Back(
+        horizontalPadding = 20.dp,
+        icon = R.drawable.ic_arrow_left_20,
+        contentDescription = R.string.icon_arrow_left_content_description
     )
 }
 
