@@ -141,7 +141,7 @@ private fun ErrorAndLengthCounter(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_error),
-                    contentDescription = stringResource(id = R.string.icon_clear_content_description),
+                    contentDescription = stringResource(id = R.string.icon_error_content_description),
                     tint = Color.Unspecified
                 )
 
