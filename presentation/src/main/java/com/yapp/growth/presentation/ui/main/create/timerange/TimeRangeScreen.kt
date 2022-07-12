@@ -77,8 +77,9 @@ fun TimeRangeScreen(
                     PlanzErrorSnackBar(message = snackbarData.message)
                 }
             }
-        ) {
-            Box(modifier = Modifier.fillMaxSize()) {
+        ) { padding ->
+
+            Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                 TimeRangeText(
                     modifier = Modifier.padding(top = 140.dp),
                     isError = viewState.isError,
