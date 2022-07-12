@@ -31,7 +31,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.yapp.growth.domain.entity.RespondPlan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
@@ -70,8 +69,8 @@ fun PlanzScreen(
             if (bottomBarState) {
                 CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
 //                    navController.navigate(PlanzScreenRoute.CREATE_THEME.route)
-                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route)
-//                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route)
+//                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route)
+                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route)
                 }
             }
         },

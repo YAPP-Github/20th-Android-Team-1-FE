@@ -18,14 +18,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.yapp.growth.domain.entity.RespondUsers
+import com.yapp.growth.domain.entity.ResponsePlan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 
 @Composable
 fun PlanzPlanDateIndicator(
     modifier: Modifier = Modifier,
-    respondUsers: RespondUsers,
+    responsePlan: ResponsePlan,
     onClickNextDayButton: () -> Unit,
     onClickPreviousDayButton: () -> Unit
 ) {
@@ -70,7 +70,7 @@ fun PlanzPlanDateIndicator(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                itemsIndexed(respondUsers.avaliableDate) { _, date ->
+                itemsIndexed(responsePlan.availableDate) { _, date ->
                     PlanzPlanDayText(date = date)
                 }
             }

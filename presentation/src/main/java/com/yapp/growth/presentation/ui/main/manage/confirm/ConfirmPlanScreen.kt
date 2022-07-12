@@ -26,8 +26,8 @@ fun ConfirmPlanScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.viewState.collectAsState()
-    val dates by viewModel.dates.collectAsState()
-    val respondUsers by viewModel.respondUser.collectAsState()
+    val sendResponsePlan by viewModel.sendResponsePlan.collectAsState()
+    val responsePlan by viewModel.responsePlan.collectAsState()
     val currentClickTimeIndex by viewModel.currentClickTimeIndex.collectAsState()
     val currentClickUserData by viewModel.currentClickUserData.collectAsState()
 
@@ -36,7 +36,7 @@ fun ConfirmPlanScreen(
         scrimColor = Color.Transparent,
         sheetContent = {
             ConfirmPlanBottomSheet(
-                respondUsers = respondUsers,
+                responsePlan = responsePlan,
                 currentClickTimeIndex = currentClickTimeIndex,
                 currentClickUserData = currentClickUserData,
                 onClickSelectPlan = {  }
@@ -64,16 +64,16 @@ fun ConfirmPlanScreen(
                     height = Dimension.fillToConstraints
                 }) {
 
-                    LocationAndAvailableColorBox(respondUsers = respondUsers)
+                    LocationAndAvailableColorBox(responsePlan = responsePlan)
 
                     PlanzPlanDateIndicator(
-                        respondUsers = respondUsers,
+                        responsePlan = responsePlan,
                         onClickPreviousDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickPreviousDayButton)},
                         onClickNextDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickNextDayButton) }
                     )
 
                     ConfirmPlanTimeTable(
-                        respondUsers = respondUsers,
+                        responsePlan = responsePlan,
                         onClickTimeTable = { dateIndex, minuteIndex ->
                             viewModel.setEvent(ConfirmPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         },
@@ -84,7 +84,7 @@ fun ConfirmPlanScreen(
             }
 
         }
-        
+
     }
 
 

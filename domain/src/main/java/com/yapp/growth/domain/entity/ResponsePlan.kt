@@ -1,7 +1,7 @@
 package com.yapp.growth.domain.entity
 
-data class RespondUsers(
-    val avaliableDate: List<String>,
+data class ResponsePlan(
+    val availableDate: List<String>,
     val users: List<User>,
     val colors: List<Int>,
     val totalCount: Int,

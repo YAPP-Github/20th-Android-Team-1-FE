@@ -25,9 +25,7 @@ fun RespondPlanScreen(
     exitRespondPlanScreen: () -> Unit,
 //    navigateToNextScreen: () -> Unit,
 ) {
-    val uiState by viewModel.viewState.collectAsState()
-    val dates by viewModel.dates.collectAsState()
-    val respondUsers by viewModel.respondUser.collectAsState()
+    val responsePlan by viewModel.responsePlan.collectAsState()
     val clickCount by viewModel.clickCount.collectAsState()
 
     Scaffold(
@@ -51,16 +49,16 @@ fun RespondPlanScreen(
                 height = Dimension.fillToConstraints
             }) {
 
-                LocationAndAvailableColorBox(respondUsers = respondUsers)
+                LocationAndAvailableColorBox(responsePlan = responsePlan)
 
                 PlanzPlanDateIndicator(
-                    respondUsers = respondUsers,
+                    responsePlan = responsePlan,
                     onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton)},
                     onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
                     )
 
                 PlanzPlanTimeTable(
-                    respondUsers = respondUsers,
+                    responsePlan = responsePlan,
                     onClickTimeTable = { dateIndex, minuteIndex ->
                         viewModel.setEvent(RespondPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                     }

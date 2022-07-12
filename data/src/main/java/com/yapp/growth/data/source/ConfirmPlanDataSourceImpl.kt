@@ -4,7 +4,7 @@ import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.utils.toDay
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.Block
-import com.yapp.growth.domain.entity.RespondUsers
+import com.yapp.growth.domain.entity.ResponsePlan
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 import java.text.SimpleDateFormat
@@ -18,8 +18,8 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
     private val parseFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
     private val hourFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 
-    override suspend fun getRespondUsers(promisingKey: Long): NetworkResult<RespondUsers> {
-        val list = listOf<RespondUsers>()
+    override suspend fun getRespondUsers(promisingKey: Long): NetworkResult<ResponsePlan> {
+        val list = listOf<ResponsePlan>()
         val user1 = User(2313644686, "민수빈")
         val user2 = User(2317332548, "문선영")
         val user3 = User(2317331838, "한지희")
@@ -55,8 +55,8 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
         }.toList()
 
         val result =
-            RespondUsers(
-                avaliableDate = avaliableDate,
+            ResponsePlan(
+                availableDate = avaliableDate,
                 users = users,
                 colors = colors,
                 totalCount = 10,

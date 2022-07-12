@@ -57,40 +57,6 @@ fun PlanzExitAppBar(
 }
 
 @Composable
-fun PlanzBackAndShareAppBar(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClickBackIcon: () -> Unit,
-    onClickShareIcon: () -> Unit
-) {
-    PlanzTwoIconAppBar(
-        modifier = modifier,
-        title = title,
-        leftMenu = PlanzAppBarMenu.Back,
-        rightMenu = PlanzAppBarMenu.SHARE,
-        onClickLeftIcon = onClickBackIcon,
-        onClickRightIcon = onClickShareIcon
-    )
-}
-
-@Composable
-fun PlanzBackAndClearAppBar(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClickBackIcon: () -> Unit,
-    textIconTitle: String,
-    onClickClearIcon: () -> Unit,
-) {
-    PlanzIconAndTextAppBar(
-        title = title,
-        menu = PlanzAppBarMenu.Back,
-        onClickIcon = onClickBackIcon,
-        textIconTitle = textIconTitle,
-        onclickTextIcon = onClickClearIcon
-    )
-}
-
-@Composable
 private fun PlanzAppBar(
     modifier: Modifier = Modifier,
     title: String,
@@ -124,108 +90,6 @@ private fun PlanzAppBar(
                 .clip(RoundedCornerShape(30.dp))
                 .clickable { onClick() }
                 .align(Alignment.CenterEnd),
-        )
-    }
-}
-
-@Composable
-private fun PlanzTwoIconAppBar(
-    modifier: Modifier = Modifier,
-    title: String,
-    leftMenu: PlanzAppBarMenu,
-    rightMenu: PlanzAppBarMenu,
-    onClickLeftIcon: () -> Unit,
-    onClickRightIcon: () -> Unit,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-    ) {
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = leftMenu.icon),
-            tint = Color.Unspecified,
-            contentDescription = stringResource(id = leftMenu.contentDescription),
-            modifier = Modifier
-                .padding(start = leftMenu.horizontalPadding)
-                .clip(RoundedCornerShape(30.dp))
-                .clickable { onClickLeftIcon() }
-                .align(Alignment.CenterStart),
-        )
-
-        Text(
-            text = title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            textAlign = TextAlign.Center,
-            style = PlanzTypography.h3,
-            color = Gray900,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = rightMenu.icon),
-            tint = Color.Unspecified,
-            contentDescription = stringResource(id = rightMenu.contentDescription),
-            modifier = Modifier
-                .padding(end = rightMenu.horizontalPadding)
-                .clip(RoundedCornerShape(30.dp))
-                .clickable { onClickRightIcon() }
-                .align(Alignment.CenterEnd),
-        )
-    }
-}
-
-@Composable
-private fun PlanzIconAndTextAppBar(
-    modifier: Modifier = Modifier,
-    title: String,
-    menu: PlanzAppBarMenu,
-    onClickIcon: () -> Unit,
-    textIconTitle: String,
-    onclickTextIcon: () -> Unit
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-    ) {
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = menu.icon),
-            tint = Color.Unspecified,
-            contentDescription = stringResource(id = menu.contentDescription),
-            modifier = Modifier
-                .padding(start = menu.horizontalPadding)
-                .clip(RoundedCornerShape(30.dp))
-                .clickable { onClickIcon() }
-                .align(Alignment.CenterStart),
-        )
-
-        Text(
-            text = title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = menu.horizontalPadding)
-                .align(Alignment.Center),
-            textAlign = TextAlign.Center,
-            style = PlanzTypography.h3,
-            color = Gray900,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        Text(
-            text = textIconTitle,
-            style = PlanzTypography.caption,
-            color = Gray500,
-            modifier = Modifier
-                .padding(end = 20.dp)
-                .align(Alignment.CenterEnd)
-                .clickable { onclickTextIcon() }
         )
     }
 }
@@ -274,29 +138,5 @@ fun PlanzExitAppBarPreview() {
     PlanzExitAppBar(
         title = "약속 잡기",
         onExitClick = {},
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlanzBackAppBarPreview() {
-    PlanzTwoIconAppBar(
-        title = "약속확정",
-        leftMenu = PlanzAppBarMenu.Back,
-        rightMenu = PlanzAppBarMenu.SHARE,
-        onClickLeftIcon = {},
-        onClickRightIcon = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PlanzIconAndTextAppBarPreview() {
-    PlanzIconAndTextAppBar(
-        title = "약속응답",
-        menu = PlanzAppBarMenu.Back,
-        onClickIcon = {},
-        textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
-        onclickTextIcon = {}
     )
 }

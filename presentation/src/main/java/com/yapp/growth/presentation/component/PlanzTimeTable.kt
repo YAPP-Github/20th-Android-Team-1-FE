@@ -19,14 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.yapp.growth.domain.entity.RespondUsers
+import com.yapp.growth.domain.entity.ResponsePlan
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 
 @Composable
 fun ConfirmPlanTimeTable(
-    respondUsers: RespondUsers,
+    responsePlan: ResponsePlan,
     onClickTimeTable: (Int, Int) -> Unit,
     currentClickTimeIndex: Pair<Int, Int>
 ) {
@@ -36,7 +36,7 @@ fun ConfirmPlanTimeTable(
             .fillMaxHeight()
             .padding(start = 16.dp)
     ) {
-        itemsIndexed(respondUsers.hourList) { hourIndex, hour ->
+        itemsIndexed(responsePlan.hourList) { hourIndex, hour ->
             LazyRow(modifier = Modifier.fillParentMaxWidth()) {
                 item(key = hourIndex) {
                     Column(
@@ -54,12 +54,12 @@ fun ConfirmPlanTimeTable(
                     }
                 }
 
-                itemsIndexed(respondUsers.avaliableDate) { dateIndex, date ->
+                itemsIndexed(responsePlan.availableDate) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
                     val upperTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex == currentClickTimeIndex.second
                     val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
 
-                    val blockList = respondUsers.timeTable.find { it.date == date }?.blocks
+                    val blockList = responsePlan.timeTable.find { it.date == date }?.blocks
 
                     val upperTableColor = blockList?.let { block ->
                         block.find { it.index == minuteIndex }?.color ?: 0x00000000
@@ -73,7 +73,7 @@ fun ConfirmPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (respondUsers.avaliableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
                                 .border(
                                     width = 0.5.dp,
                                     color = Gray200,
@@ -91,7 +91,7 @@ fun ConfirmPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (respondUsers.avaliableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
                                 .border(
                                     width = 0.5.dp,
                                     color = Gray200,
@@ -115,7 +115,7 @@ fun ConfirmPlanTimeTable(
 
 @Composable
 fun PlanzPlanTimeTable(
-    respondUsers: RespondUsers,
+    responsePlan: ResponsePlan,
     onClickTimeTable: (Int, Int) -> Unit
 ) {
     LazyColumn(
@@ -124,7 +124,7 @@ fun PlanzPlanTimeTable(
             .fillMaxHeight()
             .padding(start = 16.dp)
     ) {
-        itemsIndexed(respondUsers.hourList) { hourIndex, hour ->
+        itemsIndexed(responsePlan.hourList) { hourIndex, hour ->
             LazyRow(modifier = Modifier.fillParentMaxWidth()) {
                 item(key = hourIndex) {
                     Column(
@@ -142,12 +142,12 @@ fun PlanzPlanTimeTable(
                     }
                 }
 
-                itemsIndexed(respondUsers.avaliableDate) { dateIndex, date ->
+                itemsIndexed(responsePlan.availableDate) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
                     var upperTableClicked by remember { mutableStateOf(false) }
                     var underTableClicked by remember { mutableStateOf(false) }
 
-                    val blockList = respondUsers.timeTable.find { it.date == date }?.blocks
+                    val blockList = responsePlan.timeTable.find { it.date == date }?.blocks
 
                     val upperTableColor = blockList?.let { block ->
                         block.find { it.index == minuteIndex }?.color ?: 0x00000000
@@ -161,7 +161,7 @@ fun PlanzPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (respondUsers.avaliableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
                                 .border(
                                     width = 0.5.dp,
                                     color = Gray200,
@@ -180,7 +180,7 @@ fun PlanzPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (respondUsers.avaliableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
                                 .border(
                                     width = 0.5.dp,
                                     color = Gray200,
@@ -206,7 +206,7 @@ fun PlanzPlanTimeTable(
 @Composable
 fun LocationAndAvailableColorBox(
     modifier: Modifier = Modifier,
-    respondUsers: RespondUsers
+    responsePlan: ResponsePlan
 ) {
     Box(
         modifier = modifier
@@ -242,7 +242,7 @@ fun LocationAndAvailableColorBox(
 
             Column {
                 Text(
-                    text = "0/${respondUsers.colors.size}",
+                    text = "0/${responsePlan.colors.size}",
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -260,7 +260,7 @@ fun LocationAndAvailableColorBox(
                     .padding(start = 6.dp, end = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                itemsIndexed(respondUsers.colors) { _, color ->
+                itemsIndexed(responsePlan.colors) { _, color ->
                     Box(
                         modifier = Modifier
                             .width(24.dp)
@@ -272,7 +272,7 @@ fun LocationAndAvailableColorBox(
 
             Column {
                 Text(
-                    text = "${respondUsers.colors.size}/${respondUsers.colors.size}",
+                    text = "${responsePlan.colors.size}/${responsePlan.colors.size}",
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -289,11 +289,12 @@ fun LocationAndAvailableColorBox(
 }
 
 @Composable
-fun ConfirmPlanBottomSheet(respondUsers: RespondUsers, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
+fun ConfirmPlanBottomSheet(responsePlan: ResponsePlan, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
-    val day = respondUsers.avaliableDate[currentClickTimeIndex.first]
-    var hour = respondUsers.hourList[currentClickTimeIndex.second/2]
+    // TODO 시간노출 포맷 설정
+    val day = responsePlan.availableDate[currentClickTimeIndex.first]
+    var hour = responsePlan.hourList[currentClickTimeIndex.second/2]
     if (currentClickTimeIndex.second % 2 != 0 ) hour += "분"
 
     val respondUserText = StringBuilder()
