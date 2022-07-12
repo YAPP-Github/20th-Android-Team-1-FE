@@ -40,7 +40,7 @@ fun ThemeScreen(
                 onExitClick = { viewModel.setEvent(ThemeContract.ThemeEvent.OnClickExitButton) }
             )
         }
-    ) {
+    ) { padding ->
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {

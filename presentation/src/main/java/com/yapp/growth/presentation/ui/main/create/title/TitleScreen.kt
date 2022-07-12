@@ -20,7 +20,6 @@ import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.ui.main.BLANK_VALUE
 import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleEvent
 import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleSideEffect
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun TitleScreen(
@@ -39,7 +38,7 @@ fun TitleScreen(
                 onExitClick = { viewModel.setEvent(TitleEvent.OnClickExitButton) }
             )
         }
-    ) {
+    ) { padding ->
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {
