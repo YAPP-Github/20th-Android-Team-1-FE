@@ -37,8 +37,9 @@ fun RespondPlanScreen(
                 onClickClearIcon = { /*TODO */ }
             )
         }
-    ) {
-        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+    ) { padding ->
+
+        ConstraintLayout(modifier = Modifier.fillMaxSize().padding(padding)) {
             val (column, button) = createRefs()
 
             Column(modifier = Modifier.constrainAs(column) {

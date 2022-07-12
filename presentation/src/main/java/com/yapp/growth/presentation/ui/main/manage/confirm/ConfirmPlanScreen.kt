@@ -51,9 +51,9 @@ fun ConfirmPlanScreen(
                     onClickShareIcon = { /*TODO*/ }
                 )
             }
-        ) {
+        ) { padding ->
 
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            ConstraintLayout(modifier = Modifier.fillMaxSize().padding(padding)) {
                 val (column, button) = createRefs()
 
                 Column(modifier = Modifier.constrainAs(column) {
