@@ -28,6 +28,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
+import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.util.advancedShadow
 import timber.log.Timber
 
@@ -35,6 +36,7 @@ import timber.log.Timber
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    navigateToMyPageScreen: () -> Unit
 ) {
 
     val viewState by viewModel.viewState.collectAsState()
@@ -43,8 +45,8 @@ fun HomeScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is HomeSideEffect.NavigateToInfoScreen -> {
-                    // onUserIconClick()
+                is HomeSideEffect.NavigateToMyPageScreen -> {
+                    navigateToMyPageScreen()
                 }
                 is HomeSideEffect.NavigateDetailPlanScreen -> {
                     // onDetailPlanClick()
@@ -61,7 +63,7 @@ fun HomeScreen(
         topBar = {
             HomeUserProfile(
                 userName = "김정호",
-                onUserIconClick = { /* TODO */ }
+                onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
             )
         },
         modifier = Modifier.fillMaxSize(),
@@ -515,6 +517,6 @@ fun HomeMonthlyPlanItem(content: String) {
 @Composable
 fun PreviewHomeScreen() {
     PlanzTheme {
-        HomeScreen()
+        HomeScreen(navigateToMyPageScreen = {})
     }
 }

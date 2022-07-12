@@ -19,8 +19,8 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.OnPlanClicked -> {
                 sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
             }
-            is HomeEvent.OnUserImageButtonClicked -> {
-                sendEffect({ HomeSideEffect.NavigateToInfoScreen })
+            is HomeEvent.OnUserImageClicked -> {
+                sendEffect({ HomeSideEffect.NavigateToMyPageScreen })
             }
         }
     }

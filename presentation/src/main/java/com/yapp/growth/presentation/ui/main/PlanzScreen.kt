@@ -41,6 +41,7 @@ import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
+import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import timber.log.Timber
 
@@ -79,7 +80,9 @@ fun PlanzScreen(
             startDestination = PlanzScreenRoute.HOME.route
         ) {
             composable(route = PlanzScreenRoute.HOME.route) {
-                HomeScreen()
+                HomeScreen(navigateToMyPageScreen = {
+                    navController.navigate(PlanzScreenRoute.MY_PAGE.route)
+                })
             }
 
             composable(route = PlanzScreenRoute.CREATE_THEME.route) {
@@ -154,6 +157,10 @@ fun PlanzScreen(
                         Timber.w("확정된 약속 초대장 화면 이동: $planId")
                     }
                 )
+            }
+
+            composable(route = PlanzScreenRoute.MY_PAGE.route) {
+                MyPageScreen()
             }
 
             composable(route = PlanzScreenRoute.SAMPLE.route) {
@@ -280,6 +287,7 @@ enum class PlanzScreenRoute(val route: String) {
     CREATE_TITLE("create-title"),
     CREATE_DATE("create-date"),
     MANAGE_PLAN("manage-plan"),
+    MY_PAGE("my-page"),
     SAMPLE("sample")
 }
 
