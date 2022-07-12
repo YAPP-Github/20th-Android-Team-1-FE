@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -35,7 +34,6 @@ class ConfirmPlanViewModel @Inject constructor(
     val respondUser: StateFlow<RespondUsers>
         get() = _respondUser
 
-//    private var cachedIndex = Pair(-1,-1)
     private val _currentClickTimeIndex = MutableStateFlow(-1 to -1)
     val currentClickTimeIndex: StateFlow<Pair<Int, Int>>
         get() = _currentClickTimeIndex.asStateFlow()
@@ -74,7 +72,7 @@ class ConfirmPlanViewModel @Inject constructor(
         _dates.value = temp
     }
 
-    private fun filterBottomSheetData(dateIndex: Int, minuteIndex: Int) {
+    private fun filterCurrentSelectedUser(dateIndex: Int, minuteIndex: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val day = respondUser.value.avaliableDate[dateIndex]
             var hour = respondUser.value.hourList[minuteIndex/2]
@@ -99,7 +97,7 @@ class ConfirmPlanViewModel @Inject constructor(
             is ConfirmPlanEvent.OnClickTimeTable -> {
                 _dates.value[event.dateIndex].timeList[event.minuteIndex] = _dates.value[event.dateIndex].timeList[event.minuteIndex].not()
                 _currentClickTimeIndex.value  = event.dateIndex to event.minuteIndex
-                filterBottomSheetData(event.dateIndex, event.minuteIndex)
+                filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
         }
     }
