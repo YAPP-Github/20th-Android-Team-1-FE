@@ -78,9 +78,4 @@
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
 
-    <string name="icon_exit_content_description">Exit Icon</string>
-    <string name="icon_create_content_description">Create Icon</string>
-    <string name="icon_check_content_description">Check Icon</string>
-    <string name="icon_clear_content_description">Clear Text Icon</string>
-    <string name="icon_error_content_description">Error Icon</string>
 </resources>
