@@ -49,8 +49,7 @@ fun DetailPlanScreen(
             )
         },
         backgroundColor = BackgroundColor1,
-    ) {
-
+    ) { padding ->
         Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier.padding(horizontal = 21.dp)
@@ -77,18 +76,17 @@ fun DetailPlanScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 24.dp, horizontal = 28.dp)
+                        .padding(vertical = 24.dp, horizontal = 28.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_when),
                         content = "${viewState.date}"
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_place),
                         content = "${viewState.place}"
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
                     DetailItem(
                         info = stringResource(id = R.string.detail_plan_info_member),
                         content = "${viewState.member}"
