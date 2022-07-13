@@ -30,7 +30,6 @@ import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.util.advancedShadow
-import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 
 
@@ -69,13 +68,14 @@ fun HomeScreen(
             )
         },
         modifier = Modifier.fillMaxSize(),
-    ) {
+    ) { padding ->
         Column(
             modifier = Modifier
+                .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             when (viewState.loginState) {
                 HomeContract.LoginState.LOGIN -> HomeTodayPlan(
                     onPlanItemClick = {
@@ -141,7 +141,8 @@ fun HomeTodayPlan(
             .advancedShadow(
                 alpha = 0.1f,
                 cornersRadius = 12.dp,
-                shadowBlurRadius = 10.dp
+                shadowBlurRadius = 10.dp,
+                offsetY = 7.dp
             ),
     ) {
         Box(
@@ -201,36 +202,47 @@ fun HomeTodayPlan(
 
 @Composable
 fun HomeInduceLogin() {
-    Box(
+    Surface(
+        color = Color.Transparent,
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier
-            .height(60.dp)
-            .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(brush = MainGradient),
-        contentAlignment = Alignment.Center,
+            .advancedShadow(
+                alpha = 0.1f,
+                cornersRadius = 12.dp,
+                shadowBlurRadius = 10.dp,
+                offsetY = 7.dp
+            ),
     ) {
-        Row(
+        Box(
             modifier = Modifier
+                .height(60.dp)
                 .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .background(brush = MainGradient),
+            contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text = stringResource(id = R.string.home_induce_login),
-                color = Color.White,
-                style = MaterialTheme.typography.subtitle2,
-            )
-            IconButton(
-                modifier = Modifier.size(6.dp, 12.dp),
-                onClick = { /*TODO*/ },
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Icon(
-                    tint = Color.Unspecified,
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
-                    contentDescription = null,
+                Text(
+                    text = stringResource(id = R.string.home_induce_login),
+                    color = Color.White,
+                    style = MaterialTheme.typography.subtitle2,
                 )
+                IconButton(
+                    modifier = Modifier.size(6.dp, 12.dp),
+                    onClick = { /*TODO*/ },
+                ) {
+                    Icon(
+                        tint = Color.Unspecified,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
+                        contentDescription = null,
+                    )
+                }
             }
         }
     }
@@ -272,45 +284,55 @@ fun HomeMonthlyPlan() {
                 Spacer(modifier = Modifier.height(20.dp))
                 Box(
                     modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterStart
                 ) {
                     Text(
                         text = "${year}년 ${String.format("%02d", month)}월",
                         style = PlanzTypography.h3,
                     )
-                    HomeOutlinedButton(
-                        modifier = Modifier.padding(horizontal = 113.dp),
-                        onClick = {
-                            month--
-                            if (month == 0) {
-                                year--
-                                month = 12
-                            }
-                            currentDate = CalendarDay.from(year, month - 1, 1)
-                        },
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left),
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 112.dp)
+                            .clickable {
+                                month--
+                                if (month == 0) {
+                                    year--
+                                    month = 12
+                                }
+                                currentDate = CalendarDay.from(year, month - 1, 1)
+                            },
+                        tint = Color.Unspecified,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
+                        contentDescription = null,
                     )
-                    HomeOutlinedButton(
-                        modifier = Modifier.padding(horizontal = 139.dp),
-                        onClick = {
-                            month++
-                            if (month == 13) {
-                                year++
-                                month = 1
-                            }
-                            currentDate = CalendarDay.from(year, month - 1, 1)
-                        },
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right),
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 136.dp)
+                            .clickable {
+                                month++
+                                if (month == 13) {
+                                    year++
+                                    month = 1
+                                }
+                                currentDate = CalendarDay.from(year, month - 1, 1)
+                            },
+                        tint = Color.Unspecified,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
+                        contentDescription = null,
                     )
-                    HomeOutlinedButton(
-                        modifier = Modifier.align(alignment = Alignment.CenterEnd),
-                        onClick = {
-                            isCalendarMode = !isCalendarMode
-                        },
+                    Icon(
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterEnd)
+                            .clickable {
+                                isCalendarMode = !isCalendarMode
+                            },
+                        tint = Color.Unspecified,
                         imageVector = if (isCalendarMode) {
                             ImageVector.vectorResource(R.drawable.ic_list)
                         } else {
                             ImageVector.vectorResource(R.drawable.ic_calendar)
                         },
+                        contentDescription = null,
                     )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
@@ -501,30 +523,6 @@ fun HomeMonthlyPlanItem(content: String) {
             color = Gray500,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.align(Alignment.CenterEnd)
-        )
-    }
-}
-
-@Composable
-fun HomeOutlinedButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    imageVector: ImageVector,
-) {
-    OutlinedButton(
-        onClick = {
-            onClick()
-        },
-        modifier = modifier.size(25.dp),
-        shape = CircleShape,
-        border = BorderStroke(1.dp, Color.Transparent),
-        contentPadding = PaddingValues(0.dp),
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.DarkGray),
-    ) {
-        Icon(
-            tint = Color.Unspecified,
-            imageVector = imageVector,
-            contentDescription = null,
         )
     }
 }
