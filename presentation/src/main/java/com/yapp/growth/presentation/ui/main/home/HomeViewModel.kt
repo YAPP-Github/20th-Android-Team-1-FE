@@ -16,7 +16,7 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.OnCalendarDayClicked -> {
                 sendEffect({ HomeSideEffect.OpenBottomSheet })
             }
-            is HomeEvent.OnPlanClicked -> {
+            is HomeEvent.OnTodayPlanItemClicked -> {
                 sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
             }
             is HomeEvent.OnUserImageButtonClicked -> {

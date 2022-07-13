@@ -28,6 +28,17 @@
     <string name="create_plan_title_place_label">장소(선택)</string>
     <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
 
+    <string name="detail_plan_app_bar_text">약속 상세보기</string>
+    <string name="detail_plan_info_when">날짜/시간</string>
+    <string name="detail_plan_info_place">장소</string>
+    <string name="detail_plan_info_member">참여자</string>
+
+    <string name="icon_exit_content_description">Exit Icon</string>
+    <string name="icon_create_content_description">Create Icon</string>
+    <string name="icon_check_content_description">Check Icon</string>
+    <string name="icon_clear_content_description">Clear Text Icon</string>
+    <string name="icon_error_content_description">Error Icon</string>
+
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
     <string name="create_plan_date_max_day_text">* 최대 12일까지 선택 가능</string>
 
@@ -67,9 +78,4 @@
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
 
-    <string name="icon_exit_content_description">Exit Icon</string>
-    <string name="icon_create_content_description">Create Icon</string>
-    <string name="icon_check_content_description">Check Icon</string>
-    <string name="icon_clear_content_description">Clear Text Icon</string>
-    <string name="icon_error_content_description">Error Icon</string>
 </resources>
