@@ -54,7 +54,7 @@ class MyPageViewModel @Inject constructor(
                 if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
                 else updateState { copy(loginState = LoginState.NONE) }
             }.onError {
-                updateState { copy(loginState = LoginState.NONE) }
+                updateState { copy(loginState = LoginState.LOGIN) }
             }
         }
     }

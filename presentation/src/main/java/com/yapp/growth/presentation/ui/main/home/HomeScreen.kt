@@ -533,8 +533,8 @@ fun HomeMonthlyPlanItem(content: String) {
 fun PreviewHomeScreen() {
     PlanzTheme {
         HomeScreen(
-          navigateToMyPageScreen = { },
-          navigateToDetailPlanScreen = { },
+            navigateToMyPageScreen = { },
+            navigateToDetailPlanScreen = { },
         )
     }
 }
