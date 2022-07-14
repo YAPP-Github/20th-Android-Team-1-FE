@@ -13,13 +13,13 @@ class CreatePlanActivity : ComponentActivity() {
         setContent {
             PlanzTheme {
                 CreatePlanScreen(
-                    stopCreatePlan = { stopCreatePlan() }
+                    exitCreatePlan = { exitCreatePlan() }
                 )
             }
         }
     }
 
-    private fun stopCreatePlan() {
+    private fun exitCreatePlan() {
         finish()
     }
 }

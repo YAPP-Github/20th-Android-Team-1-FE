@@ -32,6 +32,7 @@ import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Co
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Companion.DEFAULT_START_HOUR
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeEvent
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeSideEffect
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeViewState.DialogState
 import com.yapp.growth.presentation.util.composableActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

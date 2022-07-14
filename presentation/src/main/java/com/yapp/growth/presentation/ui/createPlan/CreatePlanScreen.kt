@@ -16,7 +16,7 @@ import com.yapp.growth.presentation.ui.createPlan.title.TitleScreen
 @Composable
 fun CreatePlanScreen(
     navController: NavHostController = rememberNavController(),
-    stopCreatePlan: () -> Unit,
+    exitCreatePlan: () -> Unit,
 ) {
     Scaffold { innerPadding ->
         NavHost(
@@ -26,14 +26,14 @@ fun CreatePlanScreen(
         ) {
             composable(route = CreatePlanScreenRoute.THEME.route) {
                 ThemeScreen(
-                    exitCreateScreen = stopCreatePlan,
+                    exitCreateScreen = exitCreatePlan,
                     navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.TITLE.route) }
                 )
             }
 
             composable(route = CreatePlanScreenRoute.TITLE.route) {
                 TitleScreen(
-                    exitCreateScreen = stopCreatePlan,
+                    exitCreateScreen = exitCreatePlan,
                     navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.DATE.route) },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
@@ -41,7 +41,7 @@ fun CreatePlanScreen(
 
             composable(route = CreatePlanScreenRoute.DATE.route) {
                 DateScreen(
-                    exitCreateScreen = stopCreatePlan,
+                    exitCreateScreen = exitCreatePlan,
                     navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.TIME_RANGE.route) },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
@@ -49,7 +49,7 @@ fun CreatePlanScreen(
 
             composable(route = CreatePlanScreenRoute.TIME_RANGE.route) {
                 TimeRangeScreen(
-                    exitCreateScreen = stopCreatePlan,
+                    exitCreateScreen = exitCreatePlan,
                     navigateToNextScreen = { /* navController.navigate(CreatePlanScreenRoute.NEXT_SCREEN.route) */ },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
@@ -62,5 +62,5 @@ enum class CreatePlanScreenRoute(val route: String) {
     THEME("theme"),
     TITLE("title"),
     DATE("date"),
-    TIME_RANGE("time-range")
+    TIME_RANGE("time-range"),
 }
