@@ -1,13 +1,12 @@
-package com.yapp.growth.presentation.ui.main.create.date
+package com.yapp.growth.presentation.ui.createPlan.date
 
 import androidx.lifecycle.SavedStateHandle
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_PLACE
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_THEME_TYPE
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_TITLE
-import com.yapp.growth.presentation.ui.main.create.date.DateContract.*
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_PLACE
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_THEME_TYPE
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_TITLE
+import com.yapp.growth.presentation.ui.createPlan.date.DateContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.theme
+package com.yapp.growth.presentation.ui.createPlan.theme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*

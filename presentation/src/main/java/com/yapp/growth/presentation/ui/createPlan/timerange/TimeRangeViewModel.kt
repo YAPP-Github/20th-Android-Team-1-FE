@@ -1,13 +1,13 @@
-package com.yapp.growth.presentation.ui.main.create.timerange
+package com.yapp.growth.presentation.ui.createPlan.timerange
 
 import androidx.lifecycle.SavedStateHandle
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_DATES
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_PLACE
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_THEME_TYPE
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_TITLE
-import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.*
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_DATES
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_PLACE
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_THEME_TYPE
+import com.yapp.growth.presentation.ui.createPlan.KEY_PLAN_TITLE
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

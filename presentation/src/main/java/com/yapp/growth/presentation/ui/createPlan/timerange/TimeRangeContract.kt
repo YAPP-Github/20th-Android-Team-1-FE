@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.timerange
+package com.yapp.growth.presentation.ui.createPlan.timerange
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

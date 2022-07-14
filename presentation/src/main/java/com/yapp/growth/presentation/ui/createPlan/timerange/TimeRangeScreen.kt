@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.timerange
+package com.yapp.growth.presentation.ui.createPlan.timerange
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,9 +25,9 @@ import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.model.TimeType
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.main.BLANK_VALUE
-import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.TimeRangeEvent
-import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.TimeRangeSideEffect
+import com.yapp.growth.presentation.ui.createPlan.BLANK_VALUE
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeEvent
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeSideEffect
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

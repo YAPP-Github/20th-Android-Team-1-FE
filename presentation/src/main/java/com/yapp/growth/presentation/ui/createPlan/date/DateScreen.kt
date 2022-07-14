@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.date
+package com.yapp.growth.presentation.ui.createPlan.date
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,9 +18,9 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitleWithDescription
 import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.BLANK_VALUE
-import com.yapp.growth.presentation.ui.main.create.date.DateContract.DateEvent
-import com.yapp.growth.presentation.ui.main.create.date.DateContract.DateSideEffect
+import com.yapp.growth.presentation.ui.createPlan.BLANK_VALUE
+import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateEvent
+import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateSideEffect
 import kotlinx.coroutines.flow.collect
 
 @Composable

@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.title
+package com.yapp.growth.presentation.ui.createPlan.title
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -17,9 +17,9 @@ import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzTextField
 import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.BLANK_VALUE
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleEvent
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleSideEffect
+import com.yapp.growth.presentation.ui.createPlan.BLANK_VALUE
+import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleEvent
+import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleSideEffect
 import kotlinx.coroutines.flow.collect
 
 @Composable

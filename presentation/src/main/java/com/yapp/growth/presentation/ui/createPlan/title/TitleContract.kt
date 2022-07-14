@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.title
+package com.yapp.growth.presentation.ui.createPlan.title
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

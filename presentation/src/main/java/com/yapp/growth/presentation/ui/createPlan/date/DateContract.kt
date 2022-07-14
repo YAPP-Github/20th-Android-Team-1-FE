@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.date
+package com.yapp.growth.presentation.ui.createPlan.date
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun ManageScreen(
     viewModel: ManageViewModel = hiltViewModel(),
-    navigateToCreateScreen: () -> Unit,
+    intentToCreateScreen: () -> Unit,
     navigateToFixPlanScreen: (Int) -> Unit,
     navigateToMemberResponseScreen: (Int) -> Unit,
     navigateToInvitationScreen: (Int) -> Unit,
@@ -89,7 +89,7 @@ fun ManageScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is ManageSideEffect.NavigateToCreateScreen -> {
-                    navigateToCreateScreen()
+                    intentToCreateScreen()
                 }
                 is ManageSideEffect.NavigateToFixPlanScreen -> {
                     navigateToFixPlanScreen(effect.planId)
@@ -363,7 +363,7 @@ fun ManageLevelBadgePreview() {
 @Composable
 fun ManageScreenPreview() {
     ManageScreen(
-        navigateToCreateScreen = {},
+        intentToCreateScreen = {},
         navigateToFixPlanScreen = {},
         navigateToMemberResponseScreen = {},
         navigateToInvitationScreen = {}
