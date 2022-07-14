@@ -28,6 +28,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
+import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.util.advancedShadow
 import timber.log.Timber
 
@@ -35,6 +36,7 @@ import timber.log.Timber
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    navigateToDetailPlanScreen: () -> Unit,
 ) {
 
     val viewState by viewModel.viewState.collectAsState()
@@ -47,7 +49,8 @@ fun HomeScreen(
                     // onUserIconClick()
                 }
                 is HomeSideEffect.NavigateDetailPlanScreen -> {
-                    // onDetailPlanClick()
+                    // TODO : 해당 약속의 인덱스값을 함께 보내주어야 함 (정호)
+                    navigateToDetailPlanScreen()
                 }
                 is HomeSideEffect.OpenBottomSheet -> {
                     // sheet.show()
@@ -74,7 +77,12 @@ fun HomeScreen(
         ) {
             Spacer(modifier = Modifier.height(3.dp))
             when (viewState.loginState) {
-                HomeContract.LoginState.LOGIN -> HomeTodayPlan()
+                HomeContract.LoginState.LOGIN -> HomeTodayPlan(
+                    onPlanItemClick = {
+                        viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
+                        Timber.d("Plan Item Clicked")
+                    }
+                )
                 HomeContract.LoginState.NONE -> HomeInduceLogin()
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -121,7 +129,9 @@ private fun HomeUserProfile(
 
 // TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
-fun HomeTodayPlan() {
+fun HomeTodayPlan(
+    onPlanItemClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     Surface(
         color = Color.White,
@@ -163,7 +173,10 @@ fun HomeTodayPlan() {
                     HomeTodayPlanCountText(planCount = 5)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                HomeTodayPlanList(expanded = expanded)
+                HomeTodayPlanList(
+                    expanded = expanded,
+                    onPlanItemClick = onPlanItemClick
+                )
             }
             IconButton(
                 modifier = Modifier
@@ -391,7 +404,8 @@ fun HomeTodayPlanCountText(
 
 @Composable
 fun HomeTodayPlanList(
-    expanded: Boolean
+    expanded: Boolean,
+    onPlanItemClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(bottom = 36.dp),
@@ -400,10 +414,10 @@ fun HomeTodayPlanList(
         // TODO : API 연동
         if (expanded) {
             for (i in 0 until 3) {
-                HomeTodayPlanItem()
+                HomeTodayPlanItem(onPlanItemClick = onPlanItemClick)
             }
         } else {
-            HomeTodayPlanItem()
+            HomeTodayPlanItem(onPlanItemClick = onPlanItemClick)
         }
     }
 }
@@ -449,12 +463,14 @@ fun HomeMonthlyPlanList() {
 
 // TODO : API 연동 및 매개변수 추가(정호)
 @Composable
-fun HomeTodayPlanItem() {
+fun HomeTodayPlanItem(
+    onPlanItemClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                onClick = { /*TODO*/ }
+                onClick = onPlanItemClick
             ),
     ) {
         Row(
@@ -515,6 +531,6 @@ fun HomeMonthlyPlanItem(content: String) {
 @Composable
 fun PreviewHomeScreen() {
     PlanzTheme {
-        HomeScreen()
+        HomeScreen(navigateToDetailPlanScreen = { })
     }
 }
