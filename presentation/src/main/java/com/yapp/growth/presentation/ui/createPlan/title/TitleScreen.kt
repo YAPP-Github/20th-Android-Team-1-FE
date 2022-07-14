@@ -41,7 +41,7 @@ fun TitleScreen(
                 onExitClick = { viewModel.setEvent(TitleEvent.OnClickExitButton) }
             )
         }
-    ) {
+    ) { padding ->
         Box(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()) {

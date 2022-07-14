@@ -44,7 +44,7 @@ fun DateScreen(
                 onExitClick = { viewModel.setEvent(DateEvent.OnClickExitButton) }
             )
         }
-    ) {
+    ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxWidth()

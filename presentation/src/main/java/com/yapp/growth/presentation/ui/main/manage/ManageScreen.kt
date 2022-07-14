@@ -32,7 +32,6 @@ import com.yapp.growth.presentation.component.PlanzCreateAppBar
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageEvent
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageSideEffect
-import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -58,9 +57,11 @@ fun ManageScreen(
                 onCreateClick = { viewModel.setEvent(ManageEvent.OnClickCreateButton) }
             )
         }
-    ) {
+    ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
         ) {
             ManageTabRow(
                 tabIndex = tabIndex,

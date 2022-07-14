@@ -75,7 +75,11 @@ fun PlanzScreen(
             startDestination = PlanzScreenRoute.HOME.route
         ) {
             composable(route = PlanzScreenRoute.HOME.route) {
-                HomeScreen()
+                HomeScreen(
+                    navigateToDetailPlanScreen = {
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route)
+                    },
+                )
             }
 
             composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
@@ -98,6 +102,12 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.SAMPLE.route) {
                 SampleScreen()
+            }
+
+            composable(route = PlanzScreenRoute.DETAIL_PLAN.route) {
+                DetailPlanScreen(exitDetailPlanScreen = {
+                     navController.popBackStack()
+                })
             }
         }
     }
@@ -220,5 +230,6 @@ enum class PlanzScreenRoute(val route: String) {
     HOME("home"),
     MANAGE_PLAN("manage-plan"),
     CREATE_PLAN("create-plan"),
+    DETAIL_PLAN("detail-plan"),
     SAMPLE("sample")
 }
