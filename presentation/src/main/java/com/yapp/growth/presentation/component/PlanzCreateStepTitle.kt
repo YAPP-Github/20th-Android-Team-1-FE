@@ -14,8 +14,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.theme.Gray300
+import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.PlanzTypography
 
@@ -25,15 +27,18 @@ fun PlanzCreateStepTitle(
     currentStep: Int,
     title: String,
     onExitClick: () -> Unit,
+    type: PlanzCreateStepTitleType = PlanzCreateStepTitleType.ONLY_TITLE,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .wrapContentHeight()
             .padding(horizontal = 20.dp)
     ) {
         Column(
-            modifier = Modifier.align(Alignment.CenterStart),
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(top = 24.dp, bottom = type.bottomPadding),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Row(
@@ -73,9 +78,61 @@ fun PlanzCreateStepTitle(
                 color = Gray900
             )
         }
-
-
     }
+}
+
+@Composable
+fun PlanzCreateStepTitleWithDescription(
+    modifier: Modifier = Modifier,
+    currentStep: Int,
+    title: String,
+    description: String,
+    onExitClick: () -> Unit,
+) {
+    Column(modifier = modifier) {
+        PlanzCreateStepTitle(
+            currentStep = currentStep,
+            title = title,
+            onExitClick = onExitClick,
+            type = PlanzCreateStepTitleType.DESCRIPTION
+        )
+
+        Text(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            text = description,
+            style = PlanzTypography.body2,
+            color = Gray500
+        )
+    }
+
+}
+
+@Composable
+fun PlanzCreateStepTitleWithContents(
+    modifier: Modifier = Modifier,
+    currentStep: Int,
+    title: String,
+    onExitClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    Column(modifier = modifier) {
+        PlanzCreateStepTitle(
+            currentStep = currentStep,
+            title = title,
+            onExitClick = onExitClick,
+            type = PlanzCreateStepTitleType.CHIPS
+        )
+
+        content()
+    }
+}
+
+enum class PlanzCreateStepTitleType(
+    val bottomPadding: Dp,
+) {
+    ONLY_TITLE(bottomPadding = 24.dp),
+    DESCRIPTION(bottomPadding = 8.dp),
+    CHIPS(bottomPadding = 20.dp)
 }
 
 @Preview(showBackground = true)
@@ -85,5 +142,27 @@ fun PlanzCreateStepTitlePreview() {
         currentStep = 1,
         title = "약속 테마를 골라주세요!",
         onExitClick = { }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlanzCreateStepTitleAndDescriptionPreview() {
+    PlanzCreateStepTitleWithDescription(
+        currentStep = 1,
+        title = "약속 테마를 골라주세요!",
+        description = "* 최대 12일까지 선택 가능",
+        onExitClick = { }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlanzCreateStepTitleAndChipsPreview() {
+    PlanzCreateStepTitleWithContents(
+        currentStep = 1,
+        title = "약속 테마를 골라주세요!",
+        onExitClick = { },
+        content = @Composable { }
     )
 }

@@ -38,8 +38,10 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.ui.main.create.date.DateScreen
 import com.yapp.growth.presentation.ui.main.create.theme.ThemeScreen
+import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeScreen
 import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
+import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
@@ -80,9 +82,14 @@ fun PlanzScreen(
             startDestination = PlanzScreenRoute.HOME.route
         ) {
             composable(route = PlanzScreenRoute.HOME.route) {
-                HomeScreen(navigateToMyPageScreen = {
-                    navController.navigate(PlanzScreenRoute.MY_PAGE.route)
-                })
+                HomeScreen(
+                    navigateToMyPageScreen = {
+                        navController.navigate(PlanzScreenRoute.MY_PAGE.route)
+                    },
+                    navigateToDetailPlanScreen = {
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route)
+                    },
+                )
             }
 
             composable(route = PlanzScreenRoute.CREATE_THEME.route) {
@@ -139,7 +146,59 @@ fun PlanzScreen(
                     navArgument(KEY_PLAN_PLACE) { type = NavType.StringType },
                 )
             ) {
-                DateScreen()
+                DateScreen(
+                    exitCreateScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNextScreen = { theme, title, place, dates ->
+                        navController.navigate(
+                            PlanzScreenRoute.CREATE_TIME_RANGE.route
+                                .plus("/$theme")
+                                .plus("/$title")
+                                .plus("/$place")
+                                .plus("/$dates")
+                        )
+                    },
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = PlanzScreenRoute.CREATE_TIME_RANGE.route
+                    .plus("/{$KEY_PLAN_THEME_TYPE}")
+                    .plus("/{$KEY_PLAN_TITLE}")
+                    .plus("/{$KEY_PLAN_PLACE}")
+                    .plus("/{$KEY_PLAN_DATES}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_THEME_TYPE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_TITLE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_PLACE) { type = NavType.StringType },
+                    navArgument(KEY_PLAN_DATES) { type = NavType.StringType }
+                )
+            ) {
+                TimeRangeScreen(
+                    exitCreateScreen = {
+                        navController.navigate(PlanzScreenRoute.HOME.route) {
+                            popUpTo(PlanzScreenRoute.CREATE_THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToNextScreen = { theme, title, place, dates, startHour, endHour ->
+//                        navController.navigate(
+//                            PlanzScreenRoute.NEXT_SCREEN.route
+//                                .plus("/$theme")
+//                                .plus("/$title")
+//                                .plus("/$place")
+//                                .plus("/$dates")
+//                                .plus("/$startHour")
+//                                .plus("/$endHour")
+//                        )
+                    },
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
             }
 
             composable(route = PlanzScreenRoute.MANAGE_PLAN.route) {
@@ -170,6 +229,12 @@ fun PlanzScreen(
             composable(route = PlanzScreenRoute.SAMPLE.route) {
                 SampleScreen()
             }
+
+            composable(route = PlanzScreenRoute.DETAIL_PLAN.route) {
+                DetailPlanScreen(exitDetailPlanScreen = {
+                     navController.popBackStack()
+                })
+            }
         }
     }
 
@@ -198,7 +263,8 @@ fun PlanzBottomNavigation(
                         modifier = Modifier.padding(4.dp),
                         imageVector = ImageVector.vectorResource(id = navigationItem.icon),
                         contentDescription = null,
-                        tint = if (navigationItem.route == PlanzScreenRoute.CREATE_THEME.route) Color.Unspecified else LocalContentColor.current,
+                        tint = if (navigationItem.route == PlanzScreenRoute.CREATE_THEME.route) Color.Unspecified
+                        else LocalContentColor.current,
                     )
                 },
                 label = {
@@ -290,13 +356,16 @@ enum class PlanzScreenRoute(val route: String) {
     CREATE_THEME("create-theme"),
     CREATE_TITLE("create-title"),
     CREATE_DATE("create-date"),
+    CREATE_TIME_RANGE("create-time-range"),
     MANAGE_PLAN("manage-plan"),
     MY_PAGE("my-page"),
+    DETAIL_PLAN("detail-plan"),
     SAMPLE("sample")
 }
 
 const val KEY_PLAN_THEME_TYPE = "plan-theme-type"
 const val KEY_PLAN_TITLE = "plan-title"
 const val KEY_PLAN_PLACE = "plan-place"
+const val KEY_PLAN_DATES = "plan-dates"
 
 const val BLANK_VALUE = "@"

@@ -16,8 +16,8 @@ class HomeContract {
     }
 
     sealed class HomeEvent : ViewEvent {
-        object OnUserImageClicked : HomeEvent()
-        object OnPlanClicked : HomeEvent()
+        object OnUserImageButtonClicked : HomeEvent()
+        object OnTodayPlanItemClicked : HomeEvent()
         object OnCalendarDayClicked : HomeEvent()
     }
 
