@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,8 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,10 +38,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAppBar
 import com.yapp.growth.presentation.theme.BackgroundColor1
+import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray700
 import com.yapp.growth.presentation.theme.Gray900
@@ -100,9 +106,17 @@ fun MyPageScreen(
             if (viewState.loginState == LoginState.LOGIN) {
                 MyPageAccountManagement(
                     onLogoutClick = { viewModel.setEvent(MyPageEvent.OnLogoutClicked) },
+                    onWithDrawClick = { viewModel.setEvent(MyPageEvent.OnWithDrawClicked) }
                 )
             }
         }
+    }
+
+    if (viewState.isDialogVisible) {
+        MyPageDialog(
+            onCancelButtonClick = { viewModel.setEvent(MyPageEvent.OnNegativeButtonClicked) },
+            onPositiveButtonClick = { viewModel.setEvent(MyPageEvent.OnPositiveButtonClicked) },
+        )
     }
 }
 
@@ -190,11 +204,11 @@ fun MyPageCustomerService(
         Spacer(modifier = Modifier.height(12.dp))
         MyPageItem(
             content = stringResource(id = R.string.my_page_terms_text),
-            onClick = { }
+            onClick = { /* TODO */ }
         )
         MyPageItem(
             content = stringResource(id = R.string.my_page_privacy_policy_text),
-            onClick = { }
+            onClick = { /* TODO */ }
         )
         MyPageItem(
             content = stringResource(id = R.string.my_page_version_info_text) + " $versionName",
@@ -205,7 +219,8 @@ fun MyPageCustomerService(
 
 @Composable
 fun MyPageAccountManagement(
-    onLogoutClick : () -> Unit
+    onLogoutClick: () -> Unit,
+    onWithDrawClick: () -> Unit
 ) {
     Column {
         MyPageItemHeader(content = stringResource(id = R.string.my_page_account_management_text))
@@ -216,7 +231,7 @@ fun MyPageAccountManagement(
         )
         MyPageItem(
             content = stringResource(id = R.string.my_page_withdraw_text),
-            onClick = { }
+            onClick = { onWithDrawClick() }
         )
     }
 }
@@ -252,6 +267,64 @@ fun MyPageItem(
                 .align(alignment = Alignment.CenterStart)
                 .padding(horizontal = 20.dp)
         )
+    }
+}
+
+// TODO : 임시 다이얼로그
+@Composable
+fun MyPageDialog(
+    onCancelButtonClick: () -> Unit,
+    onPositiveButtonClick: () -> Unit
+) {
+    Dialog(onDismissRequest = { }) {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentHeight()
+                .padding(8.dp),
+            shape = RoundedCornerShape(10.dp),
+            color = Color.White
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "정말 탈퇴하시겠어요?",
+                    style = PlanzTypography.h2,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "더 이상 플랜즈의 편리한 기능을 누릴 수 없어요.",
+                    style = PlanzTypography.body2,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    onClick = { onCancelButtonClick() },
+                ) {
+                    Text(
+                        text = "다시 생각해볼게요",
+                        style = PlanzTypography.caption,
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    onClick = { onPositiveButtonClick() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Gray200),
+                ) {
+                    Text(
+                        text = "계정탈퇴",
+                        style = PlanzTypography.caption,
+                        color = Gray500
+                    )
+                }
+            }
+        }
     }
 }
 

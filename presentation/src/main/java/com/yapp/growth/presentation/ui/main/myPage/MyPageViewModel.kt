@@ -26,12 +26,23 @@ class MyPageViewModel @Inject constructor(
             // TODO : 이용약관, 개인정보 처리 방침, 탈퇴하기 (다이얼로그)
             is MyPageEvent.OnLogoutClicked -> {
                 sendEffect({ MyPageSideEffect.MoveToLogin })
+                // logout()
             }
             is MyPageEvent.OnSignUpClicked -> {
                 sendEffect({ MyPageSideEffect.MoveToLogin })
             }
+            is MyPageEvent.OnWithDrawClicked -> {
+                updateState { copy(isDialogVisible = true) }
+            }
             is MyPageEvent.OnBackButtonClicked -> {
                 sendEffect({ MyPageSideEffect.ExitMyPageScreen })
+            }
+            is MyPageEvent.OnNegativeButtonClicked -> {
+                updateState { copy(isDialogVisible = false) }
+            }
+            is MyPageEvent.OnPositiveButtonClicked -> {
+                sendEffect({ MyPageSideEffect.MoveToLogin })
+                // withdraw()
             }
         }
     }
