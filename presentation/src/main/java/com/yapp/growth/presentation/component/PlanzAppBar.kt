@@ -61,7 +61,7 @@ fun PlanzBackAppBar(
     title: String,
     onBackClick: () -> Unit,
 ) {
-    PlanzAppBar(
+    PlanzLeftIconAppBar(
         modifier = modifier,
         title = title,
         menu = PlanzAppBarMenu.Back,
@@ -107,6 +107,44 @@ private fun PlanzAppBar(
     }
 }
 
+@Composable
+private fun PlanzLeftIconAppBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    menu: PlanzAppBarMenu,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = menu.horizontalPadding)
+                .align(Alignment.Center),
+            textAlign = TextAlign.Center,
+            style = PlanzTypography.h3,
+            color = Gray900,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Icon(
+            imageVector = ImageVector.vectorResource(id = menu.icon),
+            tint = Color.Unspecified,
+            contentDescription = stringResource(id = menu.contentDescription),
+            modifier = Modifier
+                .padding(start = menu.horizontalPadding)
+                .clip(RoundedCornerShape(30.dp))
+                .clickable { onClick() }
+                .align(Alignment.CenterStart),
+        )
+    }
+}
+
 enum class PlanzAppBarMenu(
     val horizontalPadding: Dp,
     @DrawableRes val icon: Int,
@@ -144,5 +182,14 @@ fun PlanzExitAppBarPreview() {
     PlanzExitAppBar(
         title = "약속 잡기",
         onExitClick = {},
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlanzBackAppBarPreview() {
+    PlanzBackAppBar(
+        title = "약속 잡기",
+        onBackClick = {},
     )
 }
