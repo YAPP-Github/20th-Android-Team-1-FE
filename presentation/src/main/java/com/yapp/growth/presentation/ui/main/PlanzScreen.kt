@@ -160,7 +160,11 @@ fun PlanzScreen(
             }
 
             composable(route = PlanzScreenRoute.MY_PAGE.route) {
-                MyPageScreen()
+                MyPageScreen(
+                    exitMyPageScreen = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             composable(route = PlanzScreenRoute.SAMPLE.route) {

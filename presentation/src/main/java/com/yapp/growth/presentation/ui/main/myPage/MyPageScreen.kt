@@ -1,5 +1,7 @@
 package com.yapp.growth.presentation.ui.main.myPage
 
+import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,16 +20,21 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAppBar
 import com.yapp.growth.presentation.theme.BackgroundColor1
@@ -37,15 +44,40 @@ import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.ui.login.LoginActivity
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageEvent
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageSideEffect
 
 @Composable
-fun MyPageScreen() {
+fun MyPageScreen(
+    viewModel: MyPageViewModel = hiltViewModel(),
+    exitMyPageScreen: () -> Unit,
+) {
+
+    val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current as Activity
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MyPageSideEffect.MoveToLogin -> {
+                    LoginActivity.startActivity(context)
+                    context.finish()
+                }
+                is MyPageSideEffect.ExitMyPageScreen -> {
+                    exitMyPageScreen()
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             PlanzBackAppBar(
                 modifier = Modifier.background(color = BackgroundColor1),
                 title = stringResource(id = R.string.my_page_text),
-                onBackClick = { /* TODO */ },
+                onBackClick = { viewModel.setEvent(MyPageEvent.OnBackButtonClicked) },
             )
         }
     ) { padding ->
@@ -55,17 +87,29 @@ fun MyPageScreen() {
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            MyPageInduceLogin()
+            when (viewState.loginState) {
+                // TODO : UserName 을 SharedPreferences 로 관리할 것인지 . . .?
+                LoginState.LOGIN -> MyPageUserInfo(viewState.userName)
+                LoginState.NONE -> MyPageInduceLogin(
+                    onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
+                )
+            }
             Spacer(modifier = Modifier.height(20.dp))
-            MyPageCustomerService()
+            MyPageCustomerService(context = context)
             Spacer(modifier = Modifier.height(24.dp))
-            MyPageAccountManagement()
+            if (viewState.loginState == LoginState.LOGIN) {
+                MyPageAccountManagement(
+                    onLogoutClick = { viewModel.setEvent(MyPageEvent.OnLogoutClicked) },
+                )
+            }
         }
     }
 }
 
 @Composable
-fun MyPageInduceLogin() {
+fun MyPageInduceLogin(
+    onSingUpClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,13 +122,13 @@ fun MyPageInduceLogin() {
             Text(
                 text = stringResource(id = R.string.my_page_planz_sign_up_text),
                 color = MainPurple900,
-                style = PlanzTypography.h2
+                style = PlanzTypography.h2,
             )
             Spacer(modifier = Modifier.width(2.dp))
             Box(modifier = Modifier
                 .size(24.dp)
                 .clip(RoundedCornerShape(30.dp))
-                .clickable { /* TODO */ }) {
+                .clickable { onSingUpClick() }) {
                 Icon(
                     modifier = Modifier.align(Alignment.Center),
                     tint = Color.Unspecified,
@@ -97,13 +141,15 @@ fun MyPageInduceLogin() {
         Text(
             text = stringResource(id = R.string.my_page_induce_sign_up_text),
             color = Gray500,
-            style = PlanzTypography.body2
+            style = PlanzTypography.body2,
         )
     }
 }
 
 @Composable
-fun MyPageUserInfo() {
+fun MyPageUserInfo(
+    userName: String
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -113,7 +159,7 @@ fun MyPageUserInfo() {
     ) {
         Column {
             Text(
-                text = "김정호",
+                text = userName,
                 color = Gray900,
                 style = PlanzTypography.h2
             )
@@ -134,7 +180,11 @@ fun MyPageUserInfo() {
 }
 
 @Composable
-fun MyPageCustomerService() {
+fun MyPageCustomerService(
+    context: Context
+) {
+    val versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+
     Column {
         MyPageItemHeader(content = stringResource(id = R.string.my_page_customer_service_text))
         Spacer(modifier = Modifier.height(12.dp))
@@ -147,20 +197,22 @@ fun MyPageCustomerService() {
             onClick = { }
         )
         MyPageItem(
-            content = stringResource(id = R.string.my_page_version_info_text) + "1.0.1",
+            content = stringResource(id = R.string.my_page_version_info_text) + " $versionName",
             onClick = { /* Nothing */ }
         )
     }
 }
 
 @Composable
-fun MyPageAccountManagement() {
+fun MyPageAccountManagement(
+    onLogoutClick : () -> Unit
+) {
     Column {
         MyPageItemHeader(content = stringResource(id = R.string.my_page_account_management_text))
         Spacer(modifier = Modifier.height(12.dp))
         MyPageItem(
             content = stringResource(id = R.string.my_page_logout_text),
-            onClick = { }
+            onClick = { onLogoutClick() }
         )
         MyPageItem(
             content = stringResource(id = R.string.my_page_withdraw_text),
@@ -207,7 +259,7 @@ fun MyPageItem(
 @Composable
 fun PreviewMyPageScreen() {
     PlanzTheme {
-        MyPageScreen()
+        MyPageScreen(exitMyPageScreen = { })
     }
 }
 
@@ -215,7 +267,7 @@ fun PreviewMyPageScreen() {
 @Composable
 fun PreviewMyPageUserInfo() {
     PlanzTheme {
-        MyPageUserInfo()
+        MyPageUserInfo("김정호")
     }
 }
 
@@ -223,6 +275,8 @@ fun PreviewMyPageUserInfo() {
 @Composable
 fun PreviewMyPageInduceLogin() {
     PlanzTheme {
-        MyPageInduceLogin()
+        MyPageInduceLogin(
+            onSingUpClick = { }
+        )
     }
 }
