@@ -7,7 +7,6 @@ import com.yapp.growth.presentation.model.PlanThemeType
 
 class TitleContract {
     data class TitleViewState(
-        val chosenTheme: PlanThemeType? = null,
         val title: String = "",
         val place: String = "",
         val isError: Boolean = false,

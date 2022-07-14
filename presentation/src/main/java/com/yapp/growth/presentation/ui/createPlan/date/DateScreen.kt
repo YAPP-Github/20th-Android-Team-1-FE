@@ -17,17 +17,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitleWithDescription
-import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.createPlan.BLANK_VALUE
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideDates
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateEvent
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateSideEffect
+import com.yapp.growth.presentation.util.composableActivityViewModel
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun DateScreen(
+    sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: DateViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: (PlanThemeType, String, String, String) -> Unit,
+    navigateToNextScreen: () -> Unit,
     navigateToPreviousScreen: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -75,14 +78,8 @@ fun DateScreen(
                     exitCreateScreen()
                 }
                 is DateSideEffect.NavigateToNextScreen -> {
-                    viewState.chosenTheme?.let { theme ->
-                        navigateToNextScreen(
-                            theme,
-                            viewState.title.ifBlank { BLANK_VALUE },
-                            viewState.place.ifBlank { BLANK_VALUE },
-                            viewState.dates.ifBlank { BLANK_VALUE }
-                        )
-                    }
+                    sharedViewModel.setEvent(DecideDates(viewState.dates))
+                    navigateToNextScreen()
                 }
                 is DateSideEffect.NavigateToPreviousScreen -> {
                     navigateToPreviousScreen()
@@ -112,7 +109,7 @@ fun DateCalendar(
 fun DateScreenPreview() {
     DateScreen(
         exitCreateScreen = {},
-        navigateToNextScreen = { theme, title, place, time -> },
+        navigateToNextScreen = { },
         navigateToPreviousScreen = {}
     )
 }

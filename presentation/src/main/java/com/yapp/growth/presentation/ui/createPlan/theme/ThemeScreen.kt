@@ -22,13 +22,18 @@ import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzMainButton
 import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTheme
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
+import com.yapp.growth.presentation.util.composableActivityViewModel
 import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ThemeScreen(
+    sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: ThemeViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: (PlanThemeType) -> Unit,
+    navigateToNextScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
 
@@ -74,7 +79,10 @@ fun ThemeScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is ThemeContract.ThemeSideEffect.NavigateToNextScreen -> {
-                    uiState.chosenTheme?.let { navigateToNextScreen(it) }
+                    uiState.chosenTheme?.let {
+                        sharedViewModel.setEvent(DecideTheme(it))
+                        navigateToNextScreen()
+                    }
                 }
                 is ThemeContract.ThemeSideEffect.ExitCreateScreen -> {
                     exitCreateScreen()

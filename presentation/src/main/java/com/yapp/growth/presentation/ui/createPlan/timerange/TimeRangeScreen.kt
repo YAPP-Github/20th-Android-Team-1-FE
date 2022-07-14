@@ -22,21 +22,25 @@ import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
-import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.model.TimeType
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.createPlan.BLANK_VALUE
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTimeRange
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Companion.DEFAULT_END_HOUR
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Companion.DEFAULT_START_HOUR
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeEvent
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeSideEffect
+import com.yapp.growth.presentation.util.composableActivityViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TimeRangeScreen(
+    sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: TimeRangeViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: (PlanThemeType, String, String, String, Int, Int) -> Unit,
+    navigateToNextScreen: () -> Unit,
     navigateToPreviousScreen: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -102,16 +106,13 @@ fun TimeRangeScreen(
                     exitCreateScreen()
                 }
                 is TimeRangeSideEffect.NavigateToNextScreen -> {
-                    viewState.chosenTheme?.let { theme ->
-                        navigateToNextScreen(
-                            theme,
-                            viewState.title.ifBlank { BLANK_VALUE },
-                            viewState.place.ifBlank { BLANK_VALUE },
-                            viewState.dates.ifBlank { BLANK_VALUE },
-                            viewState.startHour ?: 0,
-                            viewState.endHour ?: 24,
+                    sharedViewModel.setEvent(
+                        DecideTimeRange(
+                            startHour = viewState.startHour ?: DEFAULT_START_HOUR,
+                            endHour = viewState.endHour ?: DEFAULT_END_HOUR
                         )
-                    }
+                    )
+                    navigateToNextScreen()
                 }
                 is TimeRangeSideEffect.NavigateToPreviousScreen -> {
                     navigateToPreviousScreen()
@@ -240,7 +241,7 @@ fun TimeRangeText(
                     baseline.linkTo(parent.baseline)
                 }
                 .clickable { onStartHourClick() },
-            text = String.format("%02d", (startHour ?: 0)),
+            text = String.format("%02d", (startHour ?: DEFAULT_START_HOUR)),
             style = PlanzTypography.h1.copy(
                 fontSize = 36.sp
             ),
@@ -269,7 +270,7 @@ fun TimeRangeText(
                     baseline.linkTo(parent.baseline)
                 }
                 .clickable { onEndHourClick() },
-            text = String.format("%02d", (endHour ?: 24)),
+            text = String.format("%02d", (endHour ?: DEFAULT_END_HOUR)),
             style = PlanzTypography.h1.copy(
                 fontSize = 36.sp
             ),
@@ -306,7 +307,7 @@ fun TimeRangeTimeBottomSheetItemPreview() {
 fun TimeRangeScreenPreview() {
     TimeRangeScreen(
         exitCreateScreen = {},
-        navigateToNextScreen = { theme, title, place, dates, startHour, endHour -> },
+        navigateToNextScreen = { },
         navigateToPreviousScreen = {}
     )
 }

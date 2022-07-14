@@ -7,9 +7,6 @@ import com.yapp.growth.presentation.model.PlanThemeType
 
 class DateContract {
     data class DateViewState(
-        val chosenTheme: PlanThemeType? = null,
-        val title: String = "",
-        val place: String = "",
         val dates: String = "",
     ) : ViewState
 
