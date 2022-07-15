@@ -25,17 +25,23 @@ class HomeViewModel @Inject constructor(
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
-            is HomeEvent.OnCalendarDayClicked -> {
-                sendEffect({ HomeSideEffect.ShowBottomSheet })
+            is HomeEvent.OnCalendarDayClicked -> { sendEffect({ HomeSideEffect.ShowBottomSheet }) }
+            is HomeEvent.OnBottomSheetExitClicked -> { sendEffect({ HomeSideEffect.HideBottomSheet }) }
+            is HomeEvent.OnTodayPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen }) }
+            is HomeEvent.OnUserImageButtonClicked -> { sendEffect({ HomeSideEffect.NavigateToInfoScreen }) }
+            is HomeEvent.OnTodayPlanExpandedClicked -> { updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) } }
+            is HomeEvent.OnMonthlyPlanExpandedClicked -> { updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) } }
+            is HomeEvent.OnMonthlyPlanModeClicked -> { updateMonthlyPlanModeState( viewState.value.monthlyPlanMode ) }
+        }
+    }
+
+    private fun updateMonthlyPlanModeState(monthlyPlanModeState: MonthlyPlanModeState) {
+        when (monthlyPlanModeState) {
+            MonthlyPlanModeState.CALENDAR -> {
+                updateState { copy( monthlyPlanMode = MonthlyPlanModeState.TEXT) }
             }
-            is HomeEvent.OnBottomSheetExitClicked -> {
-                sendEffect({ HomeSideEffect.HideBottomSheet })
-            }
-            is HomeEvent.OnTodayPlanItemClicked -> {
-                sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
-            }
-            is HomeEvent.OnUserImageButtonClicked -> {
-                sendEffect({ HomeSideEffect.NavigateToInfoScreen })
+            MonthlyPlanModeState.TEXT -> {
+                updateState { copy( monthlyPlanMode = MonthlyPlanModeState.CALENDAR) }
             }
         }
     }

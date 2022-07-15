@@ -6,7 +6,10 @@ import com.yapp.growth.base.ViewState
 
 class HomeContract {
     data class HomeViewState(
-        val loginState: LoginState = LoginState.LOGIN
+        val loginState: LoginState = LoginState.LOGIN,
+        val isTodayPlanExpanded: Boolean = false,
+        val isMonthlyPlanExpanded: Boolean = false,
+        val monthlyPlanMode: MonthlyPlanModeState = MonthlyPlanModeState.CALENDAR
     ) : ViewState
 
     // TODO : 유저 아이콘 클릭 시 내 정보 창으로 이동 (정호)
@@ -22,9 +25,16 @@ class HomeContract {
         object OnTodayPlanItemClicked : HomeEvent()
         object OnCalendarDayClicked : HomeEvent()
         object OnBottomSheetExitClicked : HomeEvent()
+        object OnTodayPlanExpandedClicked : HomeEvent()
+        object OnMonthlyPlanExpandedClicked : HomeEvent()
+        object OnMonthlyPlanModeClicked : HomeEvent()
     }
 
     enum class LoginState {
         NONE, LOGIN
+    }
+
+    enum class MonthlyPlanModeState {
+        CALENDAR, TEXT
     }
 }

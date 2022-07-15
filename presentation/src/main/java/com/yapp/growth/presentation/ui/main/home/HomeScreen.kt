@@ -81,13 +81,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToDetailPlanScreen: () -> Unit,
 ) {
-
-
-    var showSheetState by remember { mutableStateOf(false) }
     val viewState by viewModel.viewState.collectAsState()
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
     // TODO : 이벤트에 따라 사이드 이펙트 적용되게 설정 (정호)
@@ -144,16 +139,24 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(3.dp))
                 when (viewState.loginState) {
                     HomeContract.LoginState.LOGIN -> HomeTodayPlan(
+                        expanded = viewState.isTodayPlanExpanded,
                         onPlanItemClick = {
                             viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
                             Timber.d("Plan Item Clicked")
+                        },
+                        onExpandedClick = {
+                            viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked)
                         }
                     )
                     HomeContract.LoginState.NONE -> HomeInduceLogin()
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HomeMonthlyPlan(
-                    onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked) }
+                    expanded = viewState.isMonthlyPlanExpanded,
+                    mode = viewState.monthlyPlanMode,
+                    onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
+                    onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked) },
+                    onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }
@@ -199,9 +202,10 @@ private fun HomeUserProfile(
 // TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
 fun HomeTodayPlan(
-    onPlanItemClick: () -> Unit
+    expanded: Boolean,
+    onPlanItemClick: () -> Unit,
+    onExpandedClick: () -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
     Surface(
         color = Color.White,
         shape = RoundedCornerShape(12.dp),
@@ -252,7 +256,7 @@ fun HomeTodayPlan(
                     .padding(bottom = 8.dp)
                     .size(12.dp, 6.dp)
                     .align(Alignment.BottomCenter),
-                onClick = { expanded = !expanded }) {
+                onClick = { onExpandedClick() }) {
                 Icon(
                     tint = Color.Unspecified,
                     imageVector = (
@@ -319,9 +323,12 @@ fun HomeInduceLogin() {
 
 @Composable
 fun HomeMonthlyPlan(
-    onDateClick: () -> Unit
+    expanded: Boolean,
+    mode: HomeContract.MonthlyPlanModeState,
+    onModeClick: () -> Unit,
+    onDateClick: () -> Unit,
+    onExpandedClick: () -> Unit
 ) {
-    var isCalendarMode by remember { mutableStateOf(true) }
     var currentDate: CalendarDay by remember { mutableStateOf(CalendarDay.today()) }
     var year: Int by remember { mutableStateOf(currentDate.year) }
     var month: Int by remember { mutableStateOf(currentDate.month + 1) }
@@ -394,11 +401,9 @@ fun HomeMonthlyPlan(
                     Icon(
                         modifier = Modifier
                             .align(alignment = Alignment.CenterEnd)
-                            .clickable {
-                                isCalendarMode = !isCalendarMode
-                            },
+                            .clickable { onModeClick() },
                         tint = Color.Unspecified,
-                        imageVector = if (isCalendarMode) {
+                        imageVector = if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
                             ImageVector.vectorResource(R.drawable.ic_list)
                         } else {
                             ImageVector.vectorResource(R.drawable.ic_calendar)
@@ -408,11 +413,14 @@ fun HomeMonthlyPlan(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
-                if (isCalendarMode) {
+                if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
                     PlanzCalendar(currentDate, onDateClick = { onDateClick() })
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
-                    HomeMonthlyPlanList()
+                    HomeMonthlyPlanList(
+                        expanded = expanded,
+                        onExpandedClick = onExpandedClick,
+                    )
                 }
             }
         }
@@ -496,8 +504,10 @@ fun HomeTodayPlanList(
 }
 
 @Composable
-fun HomeMonthlyPlanList() {
-    var expanded by remember { mutableStateOf(false) }
+fun HomeMonthlyPlanList(
+    expanded: Boolean,
+    onExpandedClick: () -> Unit,
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
@@ -517,7 +527,7 @@ fun HomeMonthlyPlanList() {
         modifier = Modifier
             .padding(bottom = 9.dp)
             .size(12.dp, 6.dp),
-        onClick = { expanded = !expanded },
+        onClick = { onExpandedClick() },
     )
     {
         Icon(
