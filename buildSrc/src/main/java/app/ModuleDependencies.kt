@@ -150,15 +150,20 @@ object ModuleDependencies {
     )
 
     val materialCalendarView = arrayOf(
-        DependencyInfo("com.prolificinteractive:material-calendarview", Versions.MATERIAL_CALENDAR, Method.IMPLEMENTATION)
+        DependencyInfo("com.prolificinteractive:material-calendarview",
+            Versions.MATERIAL_CALENDAR,
+            Method.IMPLEMENTATION)
     )
 
     val kakaoSdk = arrayOf(
-        DependencyInfo("com.kakao.sdk:v2-user", Versions.KAKAO_SDK, Method.IMPLEMENTATION)
+        DependencyInfo("com.kakao.sdk:v2-user", Versions.KAKAO_SDK, Method.IMPLEMENTATION),
+        DependencyInfo("com.kakao.sdk:v2-share", Versions.KAKAO_SDK, Method.IMPLEMENTATION),
     )
 
     val accompanist = arrayOf(
-        DependencyInfo("com.google.accompanist:accompanist-pager", Versions.ACCOMPANIST_PAGER, Method.IMPLEMENTATION)
+        DependencyInfo("com.google.accompanist:accompanist-pager",
+            Versions.ACCOMPANIST_PAGER,
+            Method.IMPLEMENTATION)
     )
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
