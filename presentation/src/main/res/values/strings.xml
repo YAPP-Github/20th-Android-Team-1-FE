@@ -33,12 +33,6 @@
     <string name="detail_plan_info_place">장소</string>
     <string name="detail_plan_info_member">참여자</string>
 
-    <string name="icon_exit_content_description">Exit Icon</string>
-    <string name="icon_create_content_description">Create Icon</string>
-    <string name="icon_check_content_description">Check Icon</string>
-    <string name="icon_clear_content_description">Clear Text Icon</string>
-    <string name="icon_error_content_description">Error Icon</string>
-
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
     <string name="create_plan_date_max_day_text">* 최대 12일까지 선택 가능</string>
 
@@ -71,6 +65,12 @@
     <string name="create_plan_time_range_time_option_pm_11">오후 11시</string>
     <string name="create_plan_time_range_error_message">올바른 범위로 시간을 설정해 주세요</string>
 
+    <string name="share_plan_now_share_your_plan_text">이제 약속을 공유하세요!</string>
+    <string name="share_plan_max_member_count_text">최대 10명까지 응답 가능</string>
+    <string name="share_plan_copy_text">복사</string>
+    <string name="share_plan_kakao_button_text">카톡으로 약속 공유하기</string>
+    <string name="share_plan_copy_success_message">복사 성공!</string>
+
     <string name="manage_plan_app_bar_text">약속관리</string>
     <string name="manage_plan_leader_badge">파티장</string>
     <string name="manage_plan_follower_badge">파티원</string>
@@ -78,4 +78,10 @@
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
 
+    <string name="icon_exit_content_description">Exit Icon</string>
+    <string name="icon_create_content_description">Create Icon</string>
+    <string name="icon_check_content_description">Check Icon</string>
+    <string name="icon_clear_content_description">Clear Text Icon</string>
+    <string name="icon_error_content_description">Error Icon</string>
+    <string name="image_invitation_content_description">Invitation Image</string>
 </resources>
