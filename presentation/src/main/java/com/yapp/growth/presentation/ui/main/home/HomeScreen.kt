@@ -3,12 +3,45 @@ package com.yapp.growth.presentation.ui.main.home
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,20 +59,36 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
+import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
+import com.yapp.growth.presentation.theme.BackgroundColor1
+import com.yapp.growth.presentation.theme.Gray200
+import com.yapp.growth.presentation.theme.Gray500
+import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainGradient
+import com.yapp.growth.presentation.theme.MainPurple300
+import com.yapp.growth.presentation.theme.MainPurple900
+import com.yapp.growth.presentation.theme.PlanzTheme
+import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
+import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToDetailPlanScreen: () -> Unit,
 ) {
 
+
+    var showSheetState by remember { mutableStateOf(false) }
     val viewState by viewModel.viewState.collectAsState()
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+    val coroutineScope = rememberCoroutineScope()
 
     // TODO : 이벤트에 따라 사이드 이펙트 적용되게 설정 (정호)
     LaunchedEffect(key1 = viewModel.effect) {
@@ -52,42 +101,62 @@ fun HomeScreen(
                     // TODO : 해당 약속의 인덱스값을 함께 보내주어야 함 (정호)
                     navigateToDetailPlanScreen()
                 }
-                is HomeSideEffect.OpenBottomSheet -> {
-                    // sheet.show()
+                is HomeSideEffect.ShowBottomSheet -> {
+                    coroutineScope.launch { sheetState.show() }
+                }
+                is HomeSideEffect.HideBottomSheet -> {
+                    coroutineScope.launch { sheetState.hide() }
                 }
             }
         }
     }
 
-    Scaffold(
-        backgroundColor = BackgroundColor1,
-        topBar = {
-            HomeUserProfile(
-                userName = "김정호",
-                onUserIconClick = { /* TODO */ }
+    // TODO : 바텀시트가 다른 화면을 갔다 와도 유지되는 현상 해결해야 함
+    PlanzBottomSheetLayout(
+        sheetState = sheetState,
+        sheetContent = {
+            HomeBottomSheetContent(
+                onExitClick = {
+                    viewModel.setEvent(HomeEvent.OnBottomSheetExitClicked)
+                },
+                onPlanItemClick = {
+                    viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
+                }
             )
-        },
-        modifier = Modifier.fillMaxSize(),
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(3.dp))
-            when (viewState.loginState) {
-                HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                    onPlanItemClick = {
-                        viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
-                        Timber.d("Plan Item Clicked")
-                    }
+        }
+    ) {
+        Scaffold(
+            backgroundColor = BackgroundColor1,
+            topBar = {
+                HomeUserProfile(
+                    userName = "김정호",
+                    onUserIconClick = { /* TODO */ }
                 )
-                HomeContract.LoginState.NONE -> HomeInduceLogin()
+            },
+            modifier = Modifier.fillMaxSize(),
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(3.dp))
+                when (viewState.loginState) {
+                    HomeContract.LoginState.LOGIN -> HomeTodayPlan(
+                        onPlanItemClick = {
+                            viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
+                            Timber.d("Plan Item Clicked")
+                        }
+                    )
+                    HomeContract.LoginState.NONE -> HomeInduceLogin()
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                HomeMonthlyPlan(
+                    onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked) }
+                )
+                Spacer(modifier = Modifier.height(24.dp))
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            HomeMonthlyPlan()
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -249,7 +318,9 @@ fun HomeInduceLogin() {
 }
 
 @Composable
-fun HomeMonthlyPlan() {
+fun HomeMonthlyPlan(
+    onDateClick: () -> Unit
+) {
     var isCalendarMode by remember { mutableStateOf(true) }
     var currentDate: CalendarDay by remember { mutableStateOf(CalendarDay.today()) }
     var year: Int by remember { mutableStateOf(currentDate.year) }
@@ -338,7 +409,7 @@ fun HomeMonthlyPlan() {
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
                 if (isCalendarMode) {
-                    PlanzCalendar(currentDate)
+                    PlanzCalendar(currentDate, onDateClick = { onDateClick() })
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
                     HomeMonthlyPlanList()
@@ -351,7 +422,8 @@ fun HomeMonthlyPlan() {
 // TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
 fun PlanzCalendar(
-    currentDate: CalendarDay
+    currentDate: CalendarDay,
+    onDateClick: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -362,7 +434,8 @@ fun PlanzCalendar(
         update = { views ->
             views.apply {
                 this.setOnDateChangedListener { widget, date, selected ->
-                    Timber.d(date.toString())
+                    // Timber.d(date.toString())
+                    onDateClick()
                 }
                 this.selectionMode = MaterialCalendarView.SELECTION_MODE_SINGLE
                 this.selectedDate = CalendarDay.today()
@@ -523,6 +596,42 @@ fun HomeMonthlyPlanItem(content: String) {
             color = Gray500,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.align(Alignment.CenterEnd)
+        )
+    }
+}
+
+@Composable
+fun HomeBottomSheetContent(
+    onExitClick: () -> Unit,
+    onPlanItemClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "4월 3일 약속",
+                style = PlanzTypography.h3
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_exit),
+                tint = Color.Unspecified,
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(30.dp))
+                    .clickable { onExitClick() },
+            )
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        HomeTodayPlanList(
+            expanded = true,
+            onPlanItemClick = { onPlanItemClick() }
         )
     }
 }

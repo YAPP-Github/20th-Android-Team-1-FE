@@ -12,7 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(HomeViewState()) {
+) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
+    HomeViewState()
+) {
 
     init {
         checkValidLoginToken()
@@ -24,7 +26,10 @@ class HomeViewModel @Inject constructor(
     override fun handleEvents(event: HomeEvent) {
         when (event) {
             is HomeEvent.OnCalendarDayClicked -> {
-                sendEffect({ HomeSideEffect.OpenBottomSheet })
+                sendEffect({ HomeSideEffect.ShowBottomSheet })
+            }
+            is HomeEvent.OnBottomSheetExitClicked -> {
+                sendEffect({ HomeSideEffect.HideBottomSheet })
             }
             is HomeEvent.OnTodayPlanItemClicked -> {
                 sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
@@ -42,7 +47,7 @@ class HomeViewModel @Inject constructor(
                 if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
                 else updateState { copy(loginState = LoginState.NONE) }
             }.onError {
-                updateState { copy(loginState = LoginState.NONE) }
+                updateState { copy(loginState = LoginState.LOGIN) }
             }
         }
     }

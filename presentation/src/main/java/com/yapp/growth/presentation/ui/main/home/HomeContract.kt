@@ -13,13 +13,15 @@ class HomeContract {
     sealed class HomeSideEffect : ViewSideEffect {
         object NavigateToInfoScreen : HomeSideEffect()
         object NavigateDetailPlanScreen : HomeSideEffect()
-        object OpenBottomSheet : HomeSideEffect()
+        object ShowBottomSheet : HomeSideEffect()
+        object HideBottomSheet : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
         object OnUserImageButtonClicked : HomeEvent()
         object OnTodayPlanItemClicked : HomeEvent()
         object OnCalendarDayClicked : HomeEvent()
+        object OnBottomSheetExitClicked : HomeEvent()
     }
 
     enum class LoginState {
