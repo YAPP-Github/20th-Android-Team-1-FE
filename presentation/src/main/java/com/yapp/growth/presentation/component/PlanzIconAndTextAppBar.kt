@@ -36,7 +36,7 @@ fun PlanzBackAndClearAppBar(
 ) {
     PlanzIconAndTextAppBar(
         title = title,
-        menu = PlanzAppBarMenu.Back,
+        menu = PlanzAppBarMenu.BACK,
         onClickIcon = onClickBackIcon,
         textIconTitle = textIconTitle,
         onclickTextIcon = onClickClearIcon
@@ -99,7 +99,7 @@ private fun PlanzIconAndTextAppBar(
 fun PlanzIconAndTextAppBarPreview() {
     PlanzIconAndTextAppBar(
         title = "약속응답",
-        menu = PlanzAppBarMenu.Back,
+        menu = PlanzAppBarMenu.BACK,
         onClickIcon = {},
         textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
         onclickTextIcon = {}

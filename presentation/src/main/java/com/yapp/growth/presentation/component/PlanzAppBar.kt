@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.PlanzTypography
 
@@ -116,7 +115,7 @@ enum class PlanzAppBarMenu(
         contentDescription = R.string.icon_share_content_description
     ),
 
-    Back(
+    BACK(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_arrow_left_20,
         contentDescription = R.string.icon_arrow_left_content_description

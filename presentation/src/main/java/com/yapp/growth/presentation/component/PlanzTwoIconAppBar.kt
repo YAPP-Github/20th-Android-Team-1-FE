@@ -33,7 +33,7 @@ fun PlanzBackAndShareAppBar(
     PlanzTwoIconAppBar(
         modifier = modifier,
         title = title,
-        leftMenu = PlanzAppBarMenu.Back,
+        leftMenu = PlanzAppBarMenu.BACK,
         rightMenu = PlanzAppBarMenu.SHARE,
         onClickLeftIcon = onClickBackIcon,
         onClickRightIcon = onClickShareIcon
@@ -96,7 +96,7 @@ private fun PlanzTwoIconAppBar(
 fun PlanzBackAppBarPreview() {
     PlanzTwoIconAppBar(
         title = "약속확정",
-        leftMenu = PlanzAppBarMenu.Back,
+        leftMenu = PlanzAppBarMenu.BACK,
         rightMenu = PlanzAppBarMenu.SHARE,
         onClickLeftIcon = {},
         onClickRightIcon = {}
