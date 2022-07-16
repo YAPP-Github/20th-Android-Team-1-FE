@@ -1,13 +1,11 @@
-package com.yapp.growth.presentation.ui.main.create.title
+package com.yapp.growth.presentation.ui.createPlan.title
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
-import com.yapp.growth.presentation.model.PlanThemeType
 
 class TitleContract {
     data class TitleViewState(
-        val chosenTheme: PlanThemeType? = null,
         val title: String = "",
         val place: String = "",
         val isError: Boolean = false,
