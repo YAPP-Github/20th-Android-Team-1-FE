@@ -220,9 +220,7 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.MY_PAGE.route) {
                 MyPageScreen(
-                    exitMyPageScreen = {
-                        navController.popBackStack()
-                    }
+                    exitMyPageScreen = { navController.popBackStack() }
                 )
             }
 
@@ -231,9 +229,7 @@ fun PlanzScreen(
             }
 
             composable(route = PlanzScreenRoute.DETAIL_PLAN.route) {
-                DetailPlanScreen(exitDetailPlanScreen = {
-                     navController.popBackStack()
-                })
+                DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
             }
         }
     }

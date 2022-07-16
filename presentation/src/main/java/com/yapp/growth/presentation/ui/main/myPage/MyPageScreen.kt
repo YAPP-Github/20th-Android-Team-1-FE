@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -96,7 +97,7 @@ fun MyPageScreen(
             when (viewState.loginState) {
                 // TODO : UserName 을 SharedPreferences 로 관리할 것인지 . . .?
                 LoginState.LOGIN -> MyPageUserInfo(viewState.userName)
-                LoginState.NONE -> MyPageInduceLogin(
+                LoginState.NONE -> MyPageSignUp(
                     onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
                 )
             }
@@ -121,7 +122,7 @@ fun MyPageScreen(
 }
 
 @Composable
-fun MyPageInduceLogin(
+fun MyPageSignUp(
     onSingUpClick: () -> Unit
 ) {
     Column(
@@ -129,6 +130,7 @@ fun MyPageInduceLogin(
             .fillMaxWidth()
             .background(color = BackgroundColor1)
             .padding(start = 20.dp, end = 20.dp, bottom = 25.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -151,7 +153,6 @@ fun MyPageInduceLogin(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(id = R.string.my_page_induce_sign_up_text),
             color = Gray500,
@@ -171,13 +172,14 @@ fun MyPageUserInfo(
             .padding(start = 20.dp, end = 20.dp, bottom = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
             Text(
                 text = userName,
                 color = Gray900,
                 style = PlanzTypography.h2
             )
-            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(id = R.string.my_page_login_info_text),
                 color = Gray500,
@@ -348,7 +350,7 @@ fun PreviewMyPageUserInfo() {
 @Composable
 fun PreviewMyPageInduceLogin() {
     PlanzTheme {
-        MyPageInduceLogin(
+        MyPageSignUp(
             onSingUpClick = { }
         )
     }
