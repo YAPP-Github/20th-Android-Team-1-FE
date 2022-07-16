@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
                 todayPlans = listOf(
                     Plan.FixedPlan(
                         id = 0,
-                        title = "돼지파티",
+                        title = "돼지파티돼지파티돼지",
                         isLeader = false,
                         category = "식사",
                         members = listOf("안녕, 안녕, 안녕"),
@@ -92,7 +92,16 @@ class HomeViewModel @Inject constructor(
         val monthlyPlans = listOf(
             Plan.FixedPlan(
                 id = 0,
-                title = "돼지파티",
+                title = "돼지파티12312",
+                isLeader = false,
+                category = "식사",
+                members = listOf("안녕, 안녕, 안녕"),
+                place = "강남",
+                date = "2022-06-30T11:00:00"
+            ),
+            Plan.FixedPlan(
+                id = 0,
+                title = "돼지파티12312",
                 isLeader = false,
                 category = "식사",
                 members = listOf("안녕, 안녕, 안녕"),

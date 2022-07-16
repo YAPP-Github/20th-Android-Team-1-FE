@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -520,7 +521,7 @@ fun HomeTodayPlanList(
         } else {
             HomeTodayPlanItem(
                 date = todayPlans[0].date,
-                title = todayPlans[0].title,
+                title = "${todayPlans[0].title} 외 ${todayPlans.size - 1}건",
                 onPlanItemClick = onPlanItemClick
             )
         }
@@ -628,6 +629,8 @@ fun HomeTodayPlanItem(
                     text = title,
                     color = Color.Black,
                     style = MaterialTheme.typography.subtitle1,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
