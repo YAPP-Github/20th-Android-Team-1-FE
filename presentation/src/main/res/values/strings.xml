@@ -45,6 +45,7 @@
     <string name="icon_check_content_description">Check Icon</string>
     <string name="icon_clear_content_description">Clear Text Icon</string>
     <string name="icon_error_content_description">Error Icon</string>
+    <string name="icon_arrow_left_content_description">Left Icon</string>
 
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
     <string name="create_plan_date_max_day_text">* 최대 12일까지 선택 가능</string>
@@ -91,4 +92,15 @@
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
 
+    <string name="my_page_text">내 정보</string>
+    <string name="my_page_planz_sign_up_text">플랜즈 회원가입</string>
+    <string name="my_page_induce_sign_up_text">3초만에 회원가입하고 편리한 약속잡기 경험하세요.</string>
+    <string name="my_page_login_info_text">카카오톡 로그인 중</string>
+    <string name="my_page_customer_service_text">고객 센터</string>
+    <string name="my_page_terms_text">이용약관</string>
+    <string name="my_page_privacy_policy_text">개인정보 처리방침</string>
+    <string name="my_page_version_info_text">버전 정보 ver</string>
+    <string name="my_page_account_management_text">계정 관리</string>
+    <string name="my_page_logout_text">로그아웃</string>
+    <string name="my_page_withdraw_text">탈퇴하기</string>
 </resources>

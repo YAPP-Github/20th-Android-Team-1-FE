@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,8 +35,10 @@ fun PlanzCreateAppBar(
     PlanzAppBar(
         modifier = modifier,
         title = title,
+        back = null,
         menu = PlanzAppBarMenu.CREATE,
-        onClick = onCreateClick,
+        onMenuClick = onCreateClick,
+        onBackClick = { },
     )
 }
 
@@ -51,7 +52,23 @@ fun PlanzExitAppBar(
         modifier = modifier,
         title = title,
         menu = PlanzAppBarMenu.EXIT,
-        onClick = onExitClick,
+        onMenuClick = onExitClick,
+        onBackClick = { },
+    )
+}
+
+@Composable
+fun PlanzBackAppBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    onBackClick: () -> Unit,
+) {
+    PlanzAppBar(
+        modifier = modifier,
+        title = title,
+        back = PlanzAppBarMenu.BACK,
+        onMenuClick = { },
+        onBackClick = onBackClick,
     )
 }
 
@@ -59,8 +76,10 @@ fun PlanzExitAppBar(
 private fun PlanzAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    menu: PlanzAppBarMenu,
-    onClick: () -> Unit,
+    back: PlanzAppBarMenu? = null,
+    menu: PlanzAppBarMenu? = null,
+    onMenuClick: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -71,25 +90,37 @@ private fun PlanzAppBar(
             text = title,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = menu.horizontalPadding)
                 .align(Alignment.Center),
             textAlign = TextAlign.Center,
             style = PlanzTypography.h3,
             color = Gray900,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
         )
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = menu.icon),
-            tint = Color.Unspecified,
-            contentDescription = stringResource(id = menu.contentDescription),
-            modifier = Modifier
-                .padding(end = menu.horizontalPadding)
-                .clip(RoundedCornerShape(30.dp))
-                .clickable { onClick() }
-                .align(Alignment.CenterEnd),
-        )
+        if(back != null) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = back.icon),
+                tint = Color.Unspecified,
+                contentDescription = stringResource(id = back.contentDescription),
+                modifier = Modifier
+                    .padding(start = back.horizontalPadding)
+                    .clip(RoundedCornerShape(30.dp))
+                    .clickable { onBackClick() }
+                    .align(Alignment.CenterStart),
+            )
+        }
+        if(menu != null) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = menu.icon),
+                tint = Color.Unspecified,
+                contentDescription = stringResource(id = menu.contentDescription),
+                modifier = Modifier
+                    .padding(end = menu.horizontalPadding)
+                    .clip(RoundedCornerShape(30.dp))
+                    .clickable { onMenuClick() }
+                    .align(Alignment.CenterEnd),
+            )
+        }
     }
 }
 
@@ -108,7 +139,6 @@ enum class PlanzAppBarMenu(
         icon = R.drawable.ic_exit,
         contentDescription = R.string.icon_exit_content_description
     ),
-
     SHARE(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_share_box_24,
@@ -119,7 +149,7 @@ enum class PlanzAppBarMenu(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_arrow_left_20,
         contentDescription = R.string.icon_arrow_left_content_description
-    )
+    ),
 }
 
 @Preview(showBackground = true)

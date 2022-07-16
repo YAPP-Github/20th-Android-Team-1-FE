@@ -36,6 +36,7 @@ import timber.log.Timber
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    navigateToMyPageScreen: () -> Unit,
     navigateToDetailPlanScreen: () -> Unit,
 ) {
 
@@ -45,8 +46,8 @@ fun HomeScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is HomeSideEffect.NavigateToInfoScreen -> {
-                    // onUserIconClick()
+                is HomeSideEffect.NavigateToMyPageScreen -> {
+                    navigateToMyPageScreen()
                 }
                 is HomeSideEffect.NavigateDetailPlanScreen -> {
                     // TODO : 해당 약속의 인덱스값을 함께 보내주어야 함 (정호)
@@ -64,7 +65,7 @@ fun HomeScreen(
         topBar = {
             HomeUserProfile(
                 userName = "김정호",
-                onUserIconClick = { /* TODO */ }
+                onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
             )
         },
         modifier = Modifier.fillMaxSize(),
@@ -531,6 +532,9 @@ fun HomeMonthlyPlanItem(content: String) {
 @Composable
 fun PreviewHomeScreen() {
     PlanzTheme {
-        HomeScreen(navigateToDetailPlanScreen = { })
+        HomeScreen(
+            navigateToMyPageScreen = { },
+            navigateToDetailPlanScreen = { },
+        )
     }
 }
