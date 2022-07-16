@@ -96,7 +96,7 @@ fun RespondPlanLowButton(
         color = Color.White,
     ) {
         if (clickCount > 0) {
-            PlanzBottomBasicButton(
+            PlanzBasicBottomButton(
                 modifier = Modifier.wrapContentHeight(),
                 text = stringResource(id = R.string.respond_plan_send_plan_title),
                 enabled = true
@@ -104,7 +104,7 @@ fun RespondPlanLowButton(
                 onClickSendPlanButton()
             }
         } else {
-            PlanzBottomBasicButton(
+            PlanzBasicBottomButton(
                 modifier = Modifier.wrapContentHeight(),
                 text = stringResource(id = R.string.respond_plan_send_nothing_title),
                 enabled = false

@@ -349,7 +349,7 @@ fun ConfirmPlanBottomSheet(responsePlan: ResponsePlan, currentClickTimeIndex: Pa
             }
         }
 
-        PlanzBottomBasicButton(modifier = Modifier
+        PlanzBasicBottomButton(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp), text = "약속시간 선택", onClick = {
             onClickSelectPlan()

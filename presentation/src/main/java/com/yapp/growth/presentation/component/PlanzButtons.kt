@@ -103,7 +103,7 @@ fun PlanzBasicButton(
 }
 
 @Composable
-fun PlanzBottomBasicButton(
+fun PlanzBasicBottomButton(
     modifier: Modifier = Modifier,
     text: String,
     enabled: Boolean = true,
