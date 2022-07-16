@@ -70,50 +70,35 @@ fun ShareScreen(
             )
 
             Column(
-                modifier = Modifier
-                    .padding(top = 26.dp)
-                    .padding(start = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = stringResource(id = R.string.share_plan_now_share_your_plan_text),
-                    style = PlanzTypography.h2,
-                    color = Gray900
+                ShareTitle()
+
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    painter = painterResource(id = R.drawable.image_invitation),
+                    contentDescription = stringResource(id = R.string.image_invitation_content_description)
                 )
 
-                Text(
-                    text = stringResource(id = R.string.share_plan_max_member_count_text),
-                    style = PlanzTypography.body1,
-                    color = Gray900
+                ShareButtonColumn(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 32.dp),
+                    shareUrl = viewState.shareUrl,
+                    onCopyClick = {
+                        clipboardManager.setText(AnnotatedString(viewState.shareUrl))
+                        viewModel.setEvent(ShareContract.ShareEvent.OnClickCopy)
+                    },
+                    onShareButtonClick = {
+                        kakaoSocialShare(
+                            context = context,
+                            startShareActivity = { shareIntent -> startShareActivity(shareIntent) }
+                        )
+                    }
                 )
             }
-
-            // TODO: 이미지 교체 및 위치 조정
-            Image(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(width = 280.dp, 230.dp),
-                painter = painterResource(id = R.drawable.image_invitation),
-                contentDescription = stringResource(id = R.string.image_invitation_content_description)
-            )
-
-            ShareButtonColumn(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 32.dp),
-                shareUrl = viewState.shareUrl,
-                onCopyClick = {
-                    clipboardManager.setText(AnnotatedString(viewState.shareUrl))
-                    viewModel.setEvent(ShareContract.ShareEvent.OnClickCopy)
-                },
-                onShareButtonClick = {
-                    kakaoSocialShare(
-                        context = context,
-                        startShareActivity = { shareIntent -> startShareActivity(shareIntent) }
-                    )
-                }
-            )
         }
     }
 
@@ -165,6 +150,28 @@ fun kakaoSocialShare(
             Timber.w("Warning Msg: ${sharingResult.warningMsg}")
             Timber.w("Argument Msg: ${sharingResult.argumentMsg}")
         }
+    }
+}
+
+@Composable
+fun ShareTitle() {
+    Column(
+        modifier = Modifier
+            .padding(top = 26.dp)
+            .padding(start = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(id = R.string.share_plan_now_share_your_plan_text),
+            style = PlanzTypography.h2,
+            color = Gray900
+        )
+
+        Text(
+            text = stringResource(id = R.string.share_plan_max_member_count_text),
+            style = PlanzTypography.body1,
+            color = Gray900
+        )
     }
 }
 
