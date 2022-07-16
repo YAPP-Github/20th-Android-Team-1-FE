@@ -21,7 +21,6 @@ import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleEvent
 import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleSideEffect
 import com.yapp.growth.presentation.util.composableActivityViewModel
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun TitleScreen(

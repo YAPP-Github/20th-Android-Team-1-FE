@@ -14,7 +14,7 @@ class ThemeViewModel @Inject constructor(
         when (event) {
             is ThemeEvent.ChoosePlanTheme -> updateState { copy(chosenTheme = event.theme) }
             is ThemeEvent.OnClickNextButton -> sendEffect({ ThemeSideEffect.NavigateToNextScreen })
-            is ThemeEvent.OnClickExitButton -> sendEffect({ ThemeSideEffect.ExitCreateScreen } )
+            is ThemeEvent.OnClickExitButton -> sendEffect({ ThemeSideEffect.ExitCreateScreen })
         }
     }
 }

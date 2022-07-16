@@ -17,13 +17,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitleWithDescription
-import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideDates
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateEvent
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateSideEffect
 import com.yapp.growth.presentation.util.composableActivityViewModel
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun DateScreen(

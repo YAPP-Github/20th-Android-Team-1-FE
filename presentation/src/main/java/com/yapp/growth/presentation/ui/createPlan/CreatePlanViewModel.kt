@@ -9,15 +9,17 @@ import javax.inject.Inject
 class CreatePlanViewModel @Inject constructor(
 ) : BaseViewModel<CreatePlanViewState, CreatePlanSideEffect, CreatePlanEvent>(CreatePlanViewState()) {
     override fun handleEvents(event: CreatePlanEvent) {
-        when(event) {
+        when (event) {
             is CreatePlanEvent.DecideTheme -> updateState { copy(theme = event.theme) }
             is CreatePlanEvent.DecideTitle -> updateState { copy(title = event.title) }
             is CreatePlanEvent.DecidePlace -> updateState { copy(place = event.place) }
             is CreatePlanEvent.DecideDates -> updateState { copy(dates = event.dates) }
-            is CreatePlanEvent.DecideTimeRange -> updateState { copy(
-                startHour = event.startHour,
-                endHour = event.endHour
-            ) }
+            is CreatePlanEvent.DecideTimeRange -> updateState {
+                copy(
+                    startHour = event.startHour,
+                    endHour = event.endHour
+                )
+            }
         }
     }
 }
