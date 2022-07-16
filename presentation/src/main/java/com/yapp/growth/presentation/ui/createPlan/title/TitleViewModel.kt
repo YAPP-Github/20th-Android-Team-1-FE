@@ -1,24 +1,15 @@
-package com.yapp.growth.presentation.ui.main.create.title
+package com.yapp.growth.presentation.ui.createPlan.title
 
-import androidx.lifecycle.SavedStateHandle
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_THEME_TYPE
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract.*
+import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TitleViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TitleViewState, TitleSideEffect, TitleEvent>(
     TitleViewState()
 ) {
-    init {
-        val chosenTheme = savedStateHandle.get<String>(KEY_PLAN_THEME_TYPE)
-        chosenTheme?.let { updateState { copy(chosenTheme = PlanThemeType.valueOf(chosenTheme)) } }
-    }
-
     override fun handleEvents(event: TitleEvent) {
         when (event) {
             is TitleEvent.FillInTitle -> reflectUpdatedState(title = event.title)
@@ -33,7 +24,7 @@ class TitleViewModel @Inject constructor(
 
     private fun reflectUpdatedState(
         title: String = viewState.value.title,
-        place: String = viewState.value.place
+        place: String = viewState.value.place,
     ) {
         updateState {
             copy(

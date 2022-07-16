@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.theme
+package com.yapp.growth.presentation.ui.createPlan.theme
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

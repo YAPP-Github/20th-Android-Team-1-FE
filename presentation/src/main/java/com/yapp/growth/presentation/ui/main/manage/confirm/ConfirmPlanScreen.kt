@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConfirmPlanScreen(
     viewModel: ConfirmPlanViewModel = hiltViewModel(),
-    exitConfirmPlanScreen: () -> Unit
+    navigateToPreviousScreen: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -48,7 +48,7 @@ fun ConfirmPlanScreen(
             topBar = {
                 PlanzBackAndShareAppBar(
                     title = stringResource(id = R.string.navigation_confirm_plan_text),
-                    onClickBackIcon = exitConfirmPlanScreen,
+                    onClickBackIcon = navigateToPreviousScreen,
                     onClickShareIcon = { /*TODO*/ }
                 )
             }

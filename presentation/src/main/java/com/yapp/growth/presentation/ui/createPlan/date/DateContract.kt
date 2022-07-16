@@ -1,15 +1,11 @@
-package com.yapp.growth.presentation.ui.main.create.date
+package com.yapp.growth.presentation.ui.createPlan.date
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
-import com.yapp.growth.presentation.model.PlanThemeType
 
 class DateContract {
     data class DateViewState(
-        val chosenTheme: PlanThemeType? = null,
-        val title: String = "",
-        val place: String = "",
         val dates: String = "",
     ) : ViewState
 

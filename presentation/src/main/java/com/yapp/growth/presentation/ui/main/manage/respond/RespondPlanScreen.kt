@@ -22,7 +22,7 @@ import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.R
 @Composable
 fun RespondPlanScreen(
     viewModel: RespondPlanViewModel = hiltViewModel(),
-    exitRespondPlanScreen: () -> Unit,
+    navigateToPreviousScreen: () -> Unit,
 //    navigateToNextScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
@@ -31,7 +31,7 @@ fun RespondPlanScreen(
         topBar = {
             PlanzBackAndClearAppBar(
                 title = stringResource(id = R.string.navigation_respond_plan_text),
-                onClickBackIcon = exitRespondPlanScreen,
+                onClickBackIcon = navigateToPreviousScreen,
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 onClickClearIcon = { /*TODO */ }
             )

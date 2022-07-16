@@ -1,16 +1,11 @@
-package com.yapp.growth.presentation.ui.main.create.timerange
+package com.yapp.growth.presentation.ui.createPlan.timerange
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
-import com.yapp.growth.presentation.model.PlanThemeType
 
 class TimeRangeContract {
     data class TimeRangeViewState(
-        val chosenTheme: PlanThemeType? = null,
-        val title: String = "",
-        val place: String = "",
-        val dates: String = "",
         val startHour: Int? = null,
         val endHour: Int? = null,
         val dialogState: DialogState = DialogState.NONE,
@@ -39,5 +34,10 @@ class TimeRangeContract {
         object OnStartHourClicked : TimeRangeEvent()
         object OnEndHourClicked : TimeRangeEvent()
         data class OnSelectedHourChanged(val hour: Int) : TimeRangeEvent()
+    }
+
+    companion object {
+        const val DEFAULT_START_HOUR = 0
+        const val DEFAULT_END_HOUR = 0
     }
 }

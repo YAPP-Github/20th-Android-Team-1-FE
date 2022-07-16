@@ -1,37 +1,13 @@
-package com.yapp.growth.presentation.ui.main.create.timerange
+package com.yapp.growth.presentation.ui.createPlan.timerange
 
-import androidx.lifecycle.SavedStateHandle
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_DATES
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_PLACE
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_THEME_TYPE
-import com.yapp.growth.presentation.ui.main.KEY_PLAN_TITLE
-import com.yapp.growth.presentation.ui.main.create.timerange.TimeRangeContract.*
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TimeRangeViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TimeRangeViewState, TimeRangeSideEffect, TimeRangeEvent>(TimeRangeViewState()) {
-    init {
-        val chosenTheme = savedStateHandle.get<String>(KEY_PLAN_THEME_TYPE)
-        val title = savedStateHandle.get<String>(KEY_PLAN_TITLE)
-        val place = savedStateHandle.get<String>(KEY_PLAN_PLACE)
-        val dates = savedStateHandle.get<String>(KEY_PLAN_DATES)
-        chosenTheme?.let {
-            updateState {
-                copy(
-                    chosenTheme = PlanThemeType.valueOf(chosenTheme),
-                    title = if (title.isNullOrBlank()) "" else title,
-                    place = if (place.isNullOrBlank()) "" else place,
-                    dates = if (dates.isNullOrBlank()) "" else dates,
-                )
-            }
-        }
-    }
-
     override fun handleEvents(event: TimeRangeEvent) {
         when (event) {
             is TimeRangeEvent.OnClickExitButton -> sendEffect({ TimeRangeSideEffect.ExitCreateScreen })
