@@ -43,6 +43,7 @@ import com.yapp.growth.presentation.ui.main.create.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
+import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import timber.log.Timber
 
@@ -82,6 +83,9 @@ fun PlanzScreen(
         ) {
             composable(route = PlanzScreenRoute.HOME.route) {
                 HomeScreen(
+                    navigateToMyPageScreen = {
+                        navController.navigate(PlanzScreenRoute.MY_PAGE.route)
+                    },
                     navigateToDetailPlanScreen = {
                         navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route)
                     },
@@ -214,14 +218,18 @@ fun PlanzScreen(
                 )
             }
 
+            composable(route = PlanzScreenRoute.MY_PAGE.route) {
+                MyPageScreen(
+                    exitMyPageScreen = { navController.popBackStack() }
+                )
+            }
+
             composable(route = PlanzScreenRoute.SAMPLE.route) {
                 SampleScreen()
             }
 
             composable(route = PlanzScreenRoute.DETAIL_PLAN.route) {
-                DetailPlanScreen(exitDetailPlanScreen = {
-                     navController.popBackStack()
-                })
+                DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
             }
         }
     }
@@ -346,6 +354,7 @@ enum class PlanzScreenRoute(val route: String) {
     CREATE_DATE("create-date"),
     CREATE_TIME_RANGE("create-time-range"),
     MANAGE_PLAN("manage-plan"),
+    MY_PAGE("my-page"),
     DETAIL_PLAN("detail-plan"),
     SAMPLE("sample")
 }
