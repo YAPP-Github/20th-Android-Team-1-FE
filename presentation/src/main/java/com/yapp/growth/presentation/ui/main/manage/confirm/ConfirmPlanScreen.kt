@@ -2,8 +2,13 @@
 
 package com.yapp.growth.presentation.ui.main.manage.confirm
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,8 +18,8 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
-import kotlinx.coroutines.flow.collect
+import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.ConfirmPlanEvent
+import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.ConfirmPlanSideEffect
 import kotlinx.coroutines.launch
 
 
@@ -26,19 +31,15 @@ fun ConfirmPlanScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.viewState.collectAsState()
-    val sendResponsePlan by viewModel.sendResponsePlan.collectAsState()
-    val responsePlan by viewModel.responsePlan.collectAsState()
-    val currentClickTimeIndex by viewModel.currentClickTimeIndex.collectAsState()
-    val currentClickUserData by viewModel.currentClickUserData.collectAsState()
 
     PlanzBottomSheetLayout(
         sheetState = sheetState,
         scrimColor = Color.Transparent,
         sheetContent = {
             ConfirmPlanBottomSheet(
-                responsePlan = responsePlan,
-                currentClickTimeIndex = currentClickTimeIndex,
-                currentClickUserData = currentClickUserData,
+                responsePlan = uiState.responsePlan,
+                currentClickTimeIndex = uiState.currentClickTimeIndex,
+                currentClickUserData = uiState.currentClickUserData,
                 onClickSelectPlan = {  }
             )
         }) {
@@ -64,20 +65,20 @@ fun ConfirmPlanScreen(
                     height = Dimension.fillToConstraints
                 }) {
 
-                    LocationAndAvailableColorBox(responsePlan = responsePlan)
+                    LocationAndAvailableColorBox(responsePlan = uiState.responsePlan)
 
                     PlanzPlanDateIndicator(
-                        responsePlan = responsePlan,
+                        responsePlan = uiState.responsePlan,
                         onClickPreviousDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickPreviousDayButton)},
                         onClickNextDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickNextDayButton) }
                     )
 
                     ConfirmPlanTimeTable(
-                        responsePlan = responsePlan,
+                        responsePlan = uiState.responsePlan,
                         onClickTimeTable = { dateIndex, minuteIndex ->
                             viewModel.setEvent(ConfirmPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         },
-                        currentClickTimeIndex = currentClickTimeIndex
+                        currentClickTimeIndex = uiState.currentClickTimeIndex
                     )
                 }
 

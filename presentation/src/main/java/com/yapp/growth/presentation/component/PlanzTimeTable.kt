@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -281,6 +283,7 @@ fun LocationAndAvailableColorBox(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
+                modifier = Modifier.width(15.dp).height(18.dp),
                 tint = Color.Unspecified,
                 imageVector = ImageVector.vectorResource(R.drawable.ic_location_icon),
                 contentDescription = null

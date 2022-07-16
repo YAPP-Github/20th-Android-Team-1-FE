@@ -25,8 +25,7 @@ fun RespondPlanScreen(
     exitRespondPlanScreen: () -> Unit,
 //    navigateToNextScreen: () -> Unit,
 ) {
-    val responsePlan by viewModel.responsePlan.collectAsState()
-    val clickCount by viewModel.clickCount.collectAsState()
+    val uiState by viewModel.viewState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -39,7 +38,9 @@ fun RespondPlanScreen(
         }
     ) { padding ->
 
-        ConstraintLayout(modifier = Modifier.fillMaxSize().padding(padding)) {
+        ConstraintLayout(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)) {
             val (column, button) = createRefs()
 
             Column(modifier = Modifier.constrainAs(column) {
@@ -50,16 +51,16 @@ fun RespondPlanScreen(
                 height = Dimension.fillToConstraints
             }) {
 
-                LocationAndAvailableColorBox(responsePlan = responsePlan)
+                LocationAndAvailableColorBox(responsePlan = uiState.responsePlan)
 
                 PlanzPlanDateIndicator(
-                    responsePlan = responsePlan,
+                    responsePlan = uiState.responsePlan,
                     onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton)},
                     onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
                     )
 
                 PlanzPlanTimeTable(
-                    responsePlan = responsePlan,
+                    responsePlan = uiState.responsePlan,
                     onClickTimeTable = { dateIndex, minuteIndex ->
                         viewModel.setEvent(RespondPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                     }
@@ -70,7 +71,8 @@ fun RespondPlanScreen(
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom)
-            }, clickCount = clickCount,
+                width = Dimension.fillToConstraints
+            }, clickCount = uiState.clickCount,
                onClickNothingPlanButton = { },
                onClickSendPlanButton = { }
             )
@@ -90,14 +92,14 @@ fun RespondPlanLowButton(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp)
-            .padding(horizontal = 16.dp)
             .clickable(false) { },
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        elevation = 6.dp,
         color = Color.White,
     ) {
         if (clickCount > 0) {
             PlanzBasicBottomButton(
-                modifier = Modifier.wrapContentHeight(),
+                modifier = Modifier.wrapContentHeight().padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.respond_plan_send_plan_title),
                 enabled = true
             ) {
@@ -105,7 +107,7 @@ fun RespondPlanLowButton(
             }
         } else {
             PlanzBasicBottomButton(
-                modifier = Modifier.wrapContentHeight(),
+                modifier = Modifier.wrapContentHeight().padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.respond_plan_send_nothing_title),
                 enabled = false
             ) {

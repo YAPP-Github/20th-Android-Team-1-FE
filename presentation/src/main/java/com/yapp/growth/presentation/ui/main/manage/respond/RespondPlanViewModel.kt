@@ -24,19 +24,6 @@ class RespondPlanViewModel @Inject constructor(
     val sendResponsePlan: StateFlow<List<SendingResponsePlan>>
         get() = _sendResponsePlan.asStateFlow()
 
-    private val _responsePlan = MutableStateFlow<ResponsePlan>(
-        ResponsePlan(
-            emptyList(), emptyList(), emptyList(), 0, "", "", emptyList(), emptyList()
-        )
-    )
-
-    val responsePlan: StateFlow<ResponsePlan>
-        get() = _responsePlan
-
-    private val _clickCount = MutableStateFlow(0)
-    val clickCount: StateFlow<Int>
-        get() = _clickCount.asStateFlow()
-
     init {
         loadRespondUsers(0L)
     }
@@ -46,7 +33,9 @@ class RespondPlanViewModel @Inject constructor(
             val result = (getRespondUsersUseCase(promisingKey) as? NetworkResult.Success)?.data
             result?.let {
                 makeRespondList(it)
-                _responsePlan.value = it
+                updateState {
+                    copy(responsePlan = it)
+                }
             }
         }
     }
@@ -71,7 +60,11 @@ class RespondPlanViewModel @Inject constructor(
         when (event) {
             is RespondPlanEvent.OnClickTimeTable -> {
                 _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex] = _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex].not()
-                if (sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex]) _clickCount.value += 1 else _clickCount.value -= 1
+                if (sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex]) {
+                    updateState { copy(clickCount = viewState.value.clickCount.plus(1)) }
+                } else {
+                    updateState { copy(clickCount = viewState.value.clickCount.minus(1)) }
+                }
             }
             is RespondPlanEvent.OnClickNextDayButton -> {  }
             is RespondPlanEvent.OnClickPreviousDayButton -> {  }
