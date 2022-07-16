@@ -38,10 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,6 +55,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
 import com.yapp.growth.presentation.theme.BackgroundColor1
@@ -73,7 +71,8 @@ import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
 import kotlinx.coroutines.launch
-import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -111,6 +110,8 @@ fun HomeScreen(
         sheetState = sheetState,
         sheetContent = {
             HomeBottomSheetContent(
+                selectionDay = viewState.selectionDay,
+                selectDayPlans = viewState.selectDayPlans,
                 onExitClick = {
                     viewModel.setEvent(HomeEvent.OnBottomSheetExitClicked)
                 },
@@ -124,7 +125,7 @@ fun HomeScreen(
             backgroundColor = BackgroundColor1,
             topBar = {
                 HomeUserProfile(
-                    userName = "김정호",
+                    userName = viewState.userName,
                     onUserIconClick = { /* TODO */ }
                 )
             },
@@ -140,22 +141,23 @@ fun HomeScreen(
                 when (viewState.loginState) {
                     HomeContract.LoginState.LOGIN -> HomeTodayPlan(
                         expanded = viewState.isTodayPlanExpanded,
-                        onPlanItemClick = {
-                            viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
-                            Timber.d("Plan Item Clicked")
-                        },
-                        onExpandedClick = {
-                            viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked)
-                        }
+                        todayPlans = viewState.todayPlans,
+                        planCount = viewState.todayPlans.size,
+                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked) },
+                        onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
                     )
                     HomeContract.LoginState.NONE -> HomeInduceLogin()
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HomeMonthlyPlan(
                     expanded = viewState.isMonthlyPlanExpanded,
+                    monthlyPlans = viewState.monthlyPlans,
                     mode = viewState.monthlyPlanMode,
+                    currentDate = viewState.currentDate,
                     onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
-                    onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked) },
+                    onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
+                    onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
+                    onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
                     onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
@@ -203,6 +205,8 @@ private fun HomeUserProfile(
 @Composable
 fun HomeTodayPlan(
     expanded: Boolean,
+    todayPlans: List<Plan.FixedPlan>,
+    planCount: Int,
     onPlanItemClick: () -> Unit,
     onExpandedClick: () -> Unit,
 ) {
@@ -243,30 +247,34 @@ fun HomeTodayPlan(
                         style = MaterialTheme.typography.h3,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    HomeTodayPlanCountText(planCount = 5)
+                    HomeTodayPlanCountText(planCount)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                HomeTodayPlanList(
-                    expanded = expanded,
-                    onPlanItemClick = onPlanItemClick
-                )
+                if (todayPlans.isNotEmpty())
+                    HomeTodayPlanList(
+                        expanded = expanded,
+                        todayPlans = todayPlans,
+                        onPlanItemClick = onPlanItemClick
+                    )
             }
-            IconButton(
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .size(12.dp, 6.dp)
-                    .align(Alignment.BottomCenter),
-                onClick = { onExpandedClick() }) {
-                Icon(
-                    tint = Color.Unspecified,
-                    imageVector = (
-                            if (expanded) {
-                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
-                            } else {
-                                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
-                            }),
-                    contentDescription = null,
-                )
+            if (todayPlans.size >= 2) {
+                IconButton(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .size(12.dp, 6.dp)
+                        .align(Alignment.BottomCenter),
+                    onClick = { onExpandedClick() }) {
+                    Icon(
+                        tint = Color.Unspecified,
+                        imageVector = (
+                                if (expanded) {
+                                    ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
+                                } else {
+                                    ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
+                                }),
+                        contentDescription = null,
+                    )
+                }
             }
         }
     }
@@ -324,14 +332,17 @@ fun HomeInduceLogin() {
 @Composable
 fun HomeMonthlyPlan(
     expanded: Boolean,
+    monthlyPlans: List<Plan.FixedPlan>,
     mode: HomeContract.MonthlyPlanModeState,
+    currentDate: CalendarDay,
     onModeClick: () -> Unit,
-    onDateClick: () -> Unit,
+    onDateClick: (CalendarDay) -> Unit,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit,
     onExpandedClick: () -> Unit
 ) {
-    var currentDate: CalendarDay by remember { mutableStateOf(CalendarDay.today()) }
-    var year: Int by remember { mutableStateOf(currentDate.year) }
-    var month: Int by remember { mutableStateOf(currentDate.month + 1) }
+    val year: Int = currentDate.year
+    val month: Int = currentDate.month + 1
 
     Surface(
         color = Color.White,
@@ -371,14 +382,7 @@ fun HomeMonthlyPlan(
                     Icon(
                         modifier = Modifier
                             .padding(start = 112.dp)
-                            .clickable {
-                                month--
-                                if (month == 0) {
-                                    year--
-                                    month = 12
-                                }
-                                currentDate = CalendarDay.from(year, month - 1, 1)
-                            },
+                            .clickable { onPreviousClick() },
                         tint = Color.Unspecified,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
                         contentDescription = null,
@@ -386,14 +390,7 @@ fun HomeMonthlyPlan(
                     Icon(
                         modifier = Modifier
                             .padding(start = 136.dp)
-                            .clickable {
-                                month++
-                                if (month == 13) {
-                                    year++
-                                    month = 1
-                                }
-                                currentDate = CalendarDay.from(year, month - 1, 1)
-                            },
+                            .clickable { onNextClick() },
                         tint = Color.Unspecified,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
                         contentDescription = null,
@@ -414,13 +411,18 @@ fun HomeMonthlyPlan(
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
                 if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
-                    PlanzCalendar(currentDate, onDateClick = { onDateClick() })
+                    PlanzCalendar(
+                        currentDate = currentDate,
+                        monthlyPlans = monthlyPlans,
+                        onDateClick = { onDateClick(it) })
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
-                    HomeMonthlyPlanList(
-                        expanded = expanded,
-                        onExpandedClick = onExpandedClick,
-                    )
+                    if (monthlyPlans.isNotEmpty())
+                        HomeMonthlyPlanList(
+                            monthlyPlans = monthlyPlans,
+                            expanded = expanded,
+                            onExpandedClick = onExpandedClick,
+                        )
                 }
             }
         }
@@ -431,9 +433,14 @@ fun HomeMonthlyPlan(
 @Composable
 fun PlanzCalendar(
     currentDate: CalendarDay,
-    onDateClick: () -> Unit,
+    monthlyPlans: List<Plan.FixedPlan>,
+    onDateClick: (CalendarDay) -> Unit,
 ) {
     val context = LocalContext.current
+
+    val monthlyPlanDates = (monthlyPlans.groupingBy {
+        CalendarDay.from(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(it.date))
+    }.eachCount().filter { it.value >= 1 })
 
     AndroidView(
         modifier = Modifier
@@ -441,9 +448,9 @@ fun PlanzCalendar(
         factory = { MaterialCalendarView(it) },
         update = { views ->
             views.apply {
-                this.setOnDateChangedListener { widget, date, selected ->
-                    // Timber.d(date.toString())
-                    onDateClick()
+                this.setOnDateChangedListener { _, date, _ ->
+                    if (date != CalendarDay.today() && monthlyPlanDates.containsKey(date))
+                        onDateClick(date)
                 }
                 this.selectionMode = MaterialCalendarView.SELECTION_MODE_SINGLE
                 this.selectedDate = CalendarDay.today()
@@ -457,7 +464,16 @@ fun PlanzCalendar(
                 this.addDecorator(CalendarDecorator.SundayDecorator())
                 this.addDecorator(CalendarDecorator.OtherDayDecorator(context, this))
                 this.addDecorator(CalendarDecorator.TodayDecorator(context))
-                this.addDecorator(CalendarDecorator.DotDecorator())
+
+                monthlyPlanDates.forEach {
+                    if (it.key != CalendarDay.today()) {
+                        when (it.value) {
+                            1 -> this.addDecorator(CalendarDecorator.SingleDotDecorator(it.key))
+                            2 -> this.addDecorator(CalendarDecorator.DoubleDotDecorator(it.key))
+                            else -> this.addDecorator(CalendarDecorator.TripleDotDecorator(it.key))
+                        }
+                    }
+                }
             }
         }
     )
@@ -486,25 +502,34 @@ fun HomeTodayPlanCountText(
 @Composable
 fun HomeTodayPlanList(
     expanded: Boolean,
+    todayPlans: List<Plan.FixedPlan>,
     onPlanItemClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(bottom = 36.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        // TODO : API 연동
         if (expanded) {
-            for (i in 0 until 3) {
-                HomeTodayPlanItem(onPlanItemClick = onPlanItemClick)
+            for (todayPlan in todayPlans) {
+                HomeTodayPlanItem(
+                    date = todayPlan.date,
+                    title = todayPlan.title,
+                    onPlanItemClick = onPlanItemClick
+                )
             }
         } else {
-            HomeTodayPlanItem(onPlanItemClick = onPlanItemClick)
+            HomeTodayPlanItem(
+                date = todayPlans[0].date,
+                title = todayPlans[0].title,
+                onPlanItemClick = onPlanItemClick
+            )
         }
     }
 }
 
 @Composable
 fun HomeMonthlyPlanList(
+    monthlyPlans: List<Plan.FixedPlan>,
     expanded: Boolean,
     onExpandedClick: () -> Unit,
 ) {
@@ -512,34 +537,49 @@ fun HomeMonthlyPlanList(
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         if (expanded) {
-            // TODO : 예시 화면 (정호)
-            for (i in 0 until 10) {
-                HomeMonthlyPlanItem("그로스 회의회의")
+            for (monthlyPlan in monthlyPlans) {
+                HomeMonthlyPlanItem(
+                    date = monthlyPlan.date,
+                    title = monthlyPlan.title
+                )
             }
         } else {
-            for (i in 0 until 4) {
-                HomeMonthlyPlanItem("그로스 회의회의")
+            if (monthlyPlans.size < 5) {
+                for (monthlyPlan in monthlyPlans) {
+                    HomeMonthlyPlanItem(
+                        date = monthlyPlan.date,
+                        title = monthlyPlan.title
+                    )
+                }
+            } else {
+                for (i in 0 until 4) {
+                    HomeMonthlyPlanItem(
+                        date = monthlyPlans[i].date,
+                        title = monthlyPlans[i].title
+                    )
+                }
             }
         }
     }
     Spacer(modifier = Modifier.height(24.dp))
-    IconButton(
-        modifier = Modifier
-            .padding(bottom = 9.dp)
-            .size(12.dp, 6.dp),
-        onClick = { onExpandedClick() },
-    )
-    {
-        Icon(
-            tint = Color.Unspecified,
-            imageVector =
-            if (expanded) {
-                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
-            } else {
-                ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
-            },
-            contentDescription = null
-        )
+    if (monthlyPlans.size >= 5) {
+        IconButton(
+            modifier = Modifier
+                .padding(bottom = 9.dp)
+                .size(12.dp, 6.dp),
+            onClick = { onExpandedClick() },
+        ) {
+            Icon(
+                tint = Color.Unspecified,
+                imageVector =
+                if (expanded) {
+                    ImageVector.vectorResource(R.drawable.ic_transparent_arrow_top)
+                } else {
+                    ImageVector.vectorResource(R.drawable.ic_transparent_arrow_bottom)
+                },
+                contentDescription = null
+            )
+        }
     }
 }
 
@@ -547,14 +587,26 @@ fun HomeMonthlyPlanList(
 // TODO : API 연동 및 매개변수 추가(정호)
 @Composable
 fun HomeTodayPlanItem(
+    date: String,
+    title: String,
     onPlanItemClick: () -> Unit
 ) {
+    val tmp = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date) as Date
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.time = tmp
+
+    val minute = calendar.get(Calendar.MINUTE)
+
+    val time = if (minute == 0) {
+        SimpleDateFormat("aa h시", Locale.KOREA).format(tmp)
+    } else {
+        SimpleDateFormat("aa h시 m분", Locale.KOREA).format(tmp)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
-                onClick = onPlanItemClick
-            ),
+            .clickable(onClick = onPlanItemClick),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -568,12 +620,12 @@ fun HomeTodayPlanItem(
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
-                    text = "6시 30분",
+                    text = time,
                     color = Gray500,
                     style = MaterialTheme.typography.caption,
                 )
                 Text(
-                    text = "돼지파티 약속 외 1건",
+                    text = title,
                     color = Color.Black,
                     style = MaterialTheme.typography.subtitle1,
                 )
@@ -584,25 +636,37 @@ fun HomeTodayPlanItem(
 
 // TODO : API 연동 및 매개변수 추가 (정호)
 @Composable
-fun HomeMonthlyPlanItem(content: String) {
+fun HomeMonthlyPlanItem(
+    date: String,
+    title: String
+) {
+    val time = SimpleDateFormat(
+        "aa h시",
+        Locale.KOREA
+    ).format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date))
+    val dates = SimpleDateFormat(
+        "M/d",
+        Locale.KOREA
+    ).format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date))
+
     Box(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
         Text(
-            text = "7/15",
+            text = dates,
             color = MainPurple900,
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.padding(horizontal = 5.dp)
         )
         Text(
-            text = content,
+            text = title,
             color = Color.Black,
             style = MaterialTheme.typography.body2,
             modifier = Modifier.padding(horizontal = 54.dp)
         )
         Text(
-            text = "6시 30분",
+            text = time,
             color = Gray500,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.align(Alignment.CenterEnd)
@@ -612,9 +676,14 @@ fun HomeMonthlyPlanItem(content: String) {
 
 @Composable
 fun HomeBottomSheetContent(
+    selectionDay: CalendarDay,
+    selectDayPlans: List<Plan.FixedPlan>,
     onExitClick: () -> Unit,
     onPlanItemClick: () -> Unit
 ) {
+    val month = selectionDay.month + 1
+    val day = selectionDay.day
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -626,7 +695,7 @@ fun HomeBottomSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "4월 3일 약속",
+                text = "${month}월 ${day}일 약속",
                 style = PlanzTypography.h3
             )
             Icon(
@@ -641,6 +710,7 @@ fun HomeBottomSheetContent(
         Spacer(modifier = Modifier.height(24.dp))
         HomeTodayPlanList(
             expanded = true,
+            todayPlans = selectDayPlans,
             onPlanItemClick = { onPlanItemClick() }
         )
     }
