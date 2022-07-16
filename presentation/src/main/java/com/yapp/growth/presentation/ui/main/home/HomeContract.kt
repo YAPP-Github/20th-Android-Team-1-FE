@@ -30,7 +30,7 @@ class HomeContract {
 
     sealed class HomeEvent : ViewEvent {
         object OnUserImageButtonClicked : HomeEvent()
-        object OnTodayPlanItemClicked : HomeEvent()
+        object OnPlanItemClicked : HomeEvent()
         data class OnCalendarDayClicked(val selectionDay: CalendarDay) : HomeEvent()
         object OnBottomSheetExitClicked : HomeEvent()
         object OnTodayPlanExpandedClicked : HomeEvent()

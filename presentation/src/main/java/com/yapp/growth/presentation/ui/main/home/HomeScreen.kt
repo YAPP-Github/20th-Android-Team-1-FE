@@ -117,7 +117,7 @@ fun HomeScreen(
                     viewModel.setEvent(HomeEvent.OnBottomSheetExitClicked)
                 },
                 onPlanItemClick = {
-                    viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked)
+                    viewModel.setEvent(HomeEvent.OnPlanItemClicked)
                 }
             )
         }
@@ -144,7 +144,7 @@ fun HomeScreen(
                         expanded = viewState.isTodayPlanExpanded,
                         todayPlans = viewState.todayPlans,
                         planCount = viewState.todayPlans.size,
-                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnTodayPlanItemClicked) },
+                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked) },
                         onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
                     )
                     HomeContract.LoginState.NONE -> HomeInduceLogin()
@@ -159,6 +159,7 @@ fun HomeScreen(
                     onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
                     onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
                     onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
+                    onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked) },
                     onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
@@ -340,7 +341,8 @@ fun HomeMonthlyPlan(
     onDateClick: (CalendarDay) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
-    onExpandedClick: () -> Unit
+    onPlanItemClick: () -> Unit,
+    onExpandedClick: () -> Unit,
 ) {
     val year: Int = currentDate.year
     val month: Int = currentDate.month + 1
@@ -415,14 +417,16 @@ fun HomeMonthlyPlan(
                     PlanzCalendar(
                         currentDate = currentDate,
                         monthlyPlans = monthlyPlans,
-                        onDateClick = { onDateClick(it) })
+                        onDateClick = { onDateClick(it) }
+                    )
                 } else {
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     if (monthlyPlans.isNotEmpty())
                         HomeMonthlyPlanList(
                             monthlyPlans = monthlyPlans,
                             expanded = expanded,
                             onExpandedClick = onExpandedClick,
+                            onPlanItemClick = onPlanItemClick
                         )
                 }
             }
@@ -532,16 +536,18 @@ fun HomeTodayPlanList(
 fun HomeMonthlyPlanList(
     monthlyPlans: List<Plan.FixedPlan>,
     expanded: Boolean,
+    onPlanItemClick: () -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+//        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         if (expanded) {
             for (monthlyPlan in monthlyPlans) {
                 HomeMonthlyPlanItem(
                     date = monthlyPlan.date,
-                    title = monthlyPlan.title
+                    title = monthlyPlan.title,
+                    onPlanItemClick = onPlanItemClick
                 )
             }
         } else {
@@ -549,20 +555,22 @@ fun HomeMonthlyPlanList(
                 for (monthlyPlan in monthlyPlans) {
                     HomeMonthlyPlanItem(
                         date = monthlyPlan.date,
-                        title = monthlyPlan.title
+                        title = monthlyPlan.title,
+                        onPlanItemClick = onPlanItemClick
                     )
                 }
             } else {
                 for (i in 0 until 4) {
                     HomeMonthlyPlanItem(
                         date = monthlyPlans[i].date,
-                        title = monthlyPlans[i].title
+                        title = monthlyPlans[i].title,
+                        onPlanItemClick = onPlanItemClick
                     )
                 }
             }
         }
     }
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(20.dp))
     if (monthlyPlans.size >= 5) {
         IconButton(
             modifier = Modifier
@@ -641,7 +649,8 @@ fun HomeTodayPlanItem(
 @Composable
 fun HomeMonthlyPlanItem(
     date: String,
-    title: String
+    title: String,
+    onPlanItemClick: () -> Unit
 ) {
     val time = SimpleDateFormat(
         "aa h시",
@@ -654,7 +663,10 @@ fun HomeMonthlyPlanItem(
 
     Box(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .height(40.dp)
+            .clickable { onPlanItemClick() },
+        contentAlignment = Alignment.CenterStart
     ) {
         Text(
             text = dates,

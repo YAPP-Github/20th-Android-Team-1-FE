@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
                 fetchSelectDayPlanList(event.selectionDay)
             }
             is HomeEvent.OnBottomSheetExitClicked -> { sendEffect({ HomeSideEffect.HideBottomSheet }) }
-            is HomeEvent.OnTodayPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen }) }
+            is HomeEvent.OnPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen }) }
             is HomeEvent.OnUserImageButtonClicked -> { sendEffect({ HomeSideEffect.NavigateToInfoScreen }) }
             is HomeEvent.OnTodayPlanExpandedClicked -> { updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) } }
             is HomeEvent.OnMonthlyPlanExpandedClicked -> { updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) } }
