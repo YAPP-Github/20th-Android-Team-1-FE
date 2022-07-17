@@ -16,7 +16,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,8 +38,7 @@ class HomeViewModel @Inject constructor(
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
-    val currentDate: Flow<CalendarDay>
-        get() = _currentDate.asStateFlow().debounce(300)
+    val currentDate = _currentDate.asStateFlow().debounce(300)
 
     @Inject
     lateinit var kakaoLoginSdk: LoginSdk

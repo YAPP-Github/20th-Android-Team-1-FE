@@ -72,18 +72,15 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    navigateToMyPageScreen: () -> Unit,
     navigateToDetailPlanScreen: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -96,8 +93,8 @@ fun HomeScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is HomeSideEffect.NavigateToInfoScreen -> {
-                    // onUserIconClick()
+                is HomeSideEffect.NavigateToMyPageScreen -> {
+                    navigateToMyPageScreen()
                 }
                 is HomeSideEffect.NavigateDetailPlanScreen -> {
                     // TODO : 해당 약속의 인덱스값을 함께 보내주어야 함 (정호)
@@ -134,7 +131,7 @@ fun HomeScreen(
             topBar = {
                 HomeUserProfile(
                     userName = viewState.userName,
-                    onUserIconClick = { /* TODO */ }
+                    onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
                 )
             },
             modifier = Modifier.fillMaxSize(),
@@ -742,6 +739,9 @@ fun HomeBottomSheetContent(
 @Composable
 fun PreviewHomeScreen() {
     PlanzTheme {
-        HomeScreen(navigateToDetailPlanScreen = { })
+        HomeScreen(
+            navigateToDetailPlanScreen = { },
+            navigateToMyPageScreen = { },
+        )
     }
 }

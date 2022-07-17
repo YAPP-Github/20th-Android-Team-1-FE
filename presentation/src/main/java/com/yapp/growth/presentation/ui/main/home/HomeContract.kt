@@ -21,14 +21,14 @@ class HomeContract {
 
     // TODO : 유저 아이콘 클릭 시 내 정보 창으로 이동 (정호)
     sealed class HomeSideEffect : ViewSideEffect {
-        object NavigateToInfoScreen : HomeSideEffect()
+        object NavigateToMyPageScreen : HomeSideEffect()
         object NavigateDetailPlanScreen : HomeSideEffect()
         object ShowBottomSheet : HomeSideEffect()
         object HideBottomSheet : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
-        object OnUserImageButtonClicked : HomeEvent()
+        object OnUserImageClicked : HomeEvent()
         object OnPlanItemClicked : HomeEvent()
         data class OnCalendarDayClicked(val selectionDay: CalendarDay) : HomeEvent()
         object OnBottomSheetExitClicked : HomeEvent()
