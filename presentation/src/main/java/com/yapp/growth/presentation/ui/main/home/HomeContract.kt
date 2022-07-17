@@ -14,7 +14,6 @@ class HomeContract {
         val monthlyPlans: List<Plan.FixedPlan> = emptyList(),
         val selectDayPlans: List<Plan.FixedPlan> = emptyList(),
         val selectionDay: CalendarDay = CalendarDay.today(),
-        val currentDate: CalendarDay = CalendarDay.today(),
         val isTodayPlanExpanded: Boolean = false,
         val isMonthlyPlanExpanded: Boolean = false,
         val monthlyPlanMode: MonthlyPlanModeState = MonthlyPlanModeState.CALENDAR

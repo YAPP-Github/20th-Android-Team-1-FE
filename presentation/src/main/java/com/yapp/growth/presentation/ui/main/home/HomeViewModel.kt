@@ -13,6 +13,10 @@ import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.LoginState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,6 +34,11 @@ class HomeViewModel @Inject constructor(
         fetchMonthPlanList()
     }
 
+    // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
+    private val _currentDate = MutableStateFlow(CalendarDay.today())
+    val currentDate: Flow<CalendarDay>
+        get() = _currentDate.asStateFlow().debounce(300)
+
     @Inject
     lateinit var kakaoLoginSdk: LoginSdk
 
@@ -39,14 +48,30 @@ class HomeViewModel @Inject constructor(
                 sendEffect({ HomeSideEffect.ShowBottomSheet })
                 fetchSelectDayPlanList(event.selectionDay)
             }
-            is HomeEvent.OnBottomSheetExitClicked -> { sendEffect({ HomeSideEffect.HideBottomSheet }) }
-            is HomeEvent.OnPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen }) }
-            is HomeEvent.OnUserImageButtonClicked -> { sendEffect({ HomeSideEffect.NavigateToInfoScreen }) }
-            is HomeEvent.OnTodayPlanExpandedClicked -> { updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) } }
-            is HomeEvent.OnMonthlyPlanExpandedClicked -> { updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) } }
-            is HomeEvent.OnMonthlyPlanModeClicked -> { updateMonthlyPlanModeState(viewState.value.monthlyPlanMode) }
-            is HomeEvent.OnMonthlyPreviousClicked -> { updateDateState(HomeEvent.OnMonthlyPreviousClicked) }
-            is HomeEvent.OnMonthlyNextClicked -> { updateDateState(HomeEvent.OnMonthlyNextClicked) }
+            is HomeEvent.OnBottomSheetExitClicked -> {
+                sendEffect({ HomeSideEffect.HideBottomSheet })
+            }
+            is HomeEvent.OnPlanItemClicked -> {
+                sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
+            }
+            is HomeEvent.OnUserImageButtonClicked -> {
+                sendEffect({ HomeSideEffect.NavigateToInfoScreen })
+            }
+            is HomeEvent.OnTodayPlanExpandedClicked -> {
+                updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) }
+            }
+            is HomeEvent.OnMonthlyPlanExpandedClicked -> {
+                updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) }
+            }
+            is HomeEvent.OnMonthlyPlanModeClicked -> {
+                updateMonthlyPlanModeState(viewState.value.monthlyPlanMode)
+            }
+            is HomeEvent.OnMonthlyPreviousClicked -> {
+                updateDateState(HomeEvent.OnMonthlyPreviousClicked)
+            }
+            is HomeEvent.OnMonthlyNextClicked -> {
+                updateDateState(HomeEvent.OnMonthlyNextClicked)
+            }
         }
     }
 
@@ -155,9 +180,7 @@ class HomeViewModel @Inject constructor(
             ),
         )
 
-        updateState {
-            copy( monthlyPlans = monthlyPlans )
-        }
+        updateState { copy(monthlyPlans = monthlyPlans) }
     }
 
     private fun fetchSelectDayPlanList(
@@ -184,10 +207,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateDateState(event: HomeEvent) {
-        var month = viewState.value.currentDate.month + 1
-        var year = viewState.value.currentDate.year
+        var month = _currentDate.value.month + 1
+        var year = _currentDate.value.year
 
-        when(event) {
+        when (event) {
             HomeEvent.OnMonthlyPreviousClicked -> {
                 month--
                 if (month == 0) {
@@ -203,7 +226,8 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
-        updateState { copy(currentDate = CalendarDay.from(year, month - 1, 1)) }
+
+        _currentDate.value = CalendarDay.from(year, month - 1, 1)
     }
 
     private fun checkValidLoginToken() {

@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.home
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -71,10 +72,14 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
@@ -82,6 +87,8 @@ fun HomeScreen(
     navigateToDetailPlanScreen: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val currentDate by viewModel.currentDate.collectAsState(initial = CalendarDay.today())
+
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
@@ -154,7 +161,7 @@ fun HomeScreen(
                     expanded = viewState.isMonthlyPlanExpanded,
                     monthlyPlans = viewState.monthlyPlans,
                     mode = viewState.monthlyPlanMode,
-                    currentDate = viewState.currentDate,
+                    currentDate = currentDate,
                     onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
                     onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
                     onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
