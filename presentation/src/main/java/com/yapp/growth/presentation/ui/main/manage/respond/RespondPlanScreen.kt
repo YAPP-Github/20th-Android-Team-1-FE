@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -26,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.theme.Gray100
-import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
@@ -50,9 +48,11 @@ fun RespondPlanScreen(
         }
     ) { padding ->
 
-        ConstraintLayout(modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
             val (column, button) = createRefs()
 
             Column(modifier = Modifier.constrainAs(column) {
@@ -68,7 +68,7 @@ fun RespondPlanScreen(
                 if (uiState.availableResponse) {
                     PlanzPlanDateIndicator(
                         responsePlan = uiState.responsePlan,
-                        onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton)},
+                        onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton) },
                         onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
                     )
 
@@ -79,33 +79,12 @@ fun RespondPlanScreen(
                         }
                     )
                 } else {
-                    Column(modifier = Modifier
-                        .fillMaxSize()
-                        .background(Gray100),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center){
-                        Image(
-                            modifier = Modifier
-                                .wrapContentWidth(),
-                            painter = painterResource(id = R.drawable.icon_respond_plan_fulled),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth
-                        )
-
-                        Spacer(modifier = Modifier.height(18.dp))
-
-                        Text(
-                            text = "해당 약속 정원이 다 찼습니다!",
-                            style = PlanzTypography.body2,
-                            color = Gray800,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                    PlanFulled()
                 }
             }
 
             if (uiState.availableResponse) {
-                RespondPlanLowButton(modifier = Modifier.constrainAs(button) {
+                RespondPlanBottomButton(modifier = Modifier.constrainAs(button) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
@@ -128,7 +107,7 @@ fun RespondPlanScreen(
                 ) {
                     PlanzBasicButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "홈으로 돌아가기",
+                        text = stringResource(id = R.string.respond_plan_fulled_button_text),
                         onClick = { }
                     )
                 }
@@ -140,7 +119,7 @@ fun RespondPlanScreen(
 }
 
 @Composable
-fun RespondPlanLowButton(
+fun RespondPlanBottomButton(
     modifier: Modifier,
     clickCount: Int,
     onClickSendPlanButton: () -> Unit,
@@ -176,5 +155,33 @@ fun RespondPlanLowButton(
                 onClickNothingPlanButton()
             }
         }
+    }
+}
+
+@Composable
+fun PlanFulled() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Gray100),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .wrapContentWidth(),
+            painter = painterResource(id = R.drawable.icon_respond_plan_fulled),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth
+        )
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        Text(
+            text = stringResource(id = R.string.respond_plan_fulled_title_text),
+            style = PlanzTypography.body2,
+            color = Gray800,
+            textAlign = TextAlign.Center
+        )
     }
 }
