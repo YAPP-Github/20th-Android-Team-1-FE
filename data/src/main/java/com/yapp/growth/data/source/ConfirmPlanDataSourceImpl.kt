@@ -3,14 +3,8 @@ package com.yapp.growth.data.source
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.mapper.toResponsePlan
-import com.yapp.growth.data.utils.toDay
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.TimeTableUnit
 import com.yapp.growth.domain.entity.ResponsePlan
-import com.yapp.growth.domain.entity.TimeTableDate
-import com.yapp.growth.domain.entity.User
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 internal class ConfirmPlanDataSourceImpl @Inject constructor(

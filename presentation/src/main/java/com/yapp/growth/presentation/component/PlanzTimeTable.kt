@@ -26,6 +26,10 @@ import com.yapp.growth.domain.entity.ResponsePlan
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.util.getCurrentBlockDate
+import com.yapp.growth.presentation.util.toDay
+import com.yapp.growth.presentation.util.toHour
+import com.yapp.growth.presentation.util.toPlanDate
 
 @Composable
 fun ConfirmPlanTimeTable(
@@ -288,7 +292,7 @@ fun LocationAndAvailableColorBox(
             )
 
             Text(
-                text = stringResource(id = R.string.respond_plan_location_text),
+                text = responsePlan.placeName,
                 color = CoolGray500,
                 style = PlanzTypography.caption,
             )
@@ -352,10 +356,9 @@ fun LocationAndAvailableColorBox(
 fun ConfirmPlanBottomSheet(responsePlan: ResponsePlan, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
-    // TODO 시간노출 포맷 설정
-    val day = responsePlan.availableDates[currentClickTimeIndex.first]
-    var hour = responsePlan.hourList[currentClickTimeIndex.second/2]
-    if (currentClickTimeIndex.second % 2 != 0 ) hour += "분"
+    val day = responsePlan.availableDates[currentClickTimeIndex.first].split('T').first()
+    val hour = responsePlan.minTime.toHour()
+    val time = "${day}T${hour}:00"
 
     val respondUserText = StringBuilder()
     currentClickUserData.forEachIndexed { index, user ->
@@ -381,7 +384,7 @@ fun ConfirmPlanBottomSheet(responsePlan: ResponsePlan, currentClickTimeIndex: Pa
             )
 
             Text(
-                text = "$day $hour",
+                text = time.getCurrentBlockDate(currentClickTimeIndex.second).toPlanDate(),
                 style = PlanzTypography.subtitle2,
                 color = MainPurple900
             )

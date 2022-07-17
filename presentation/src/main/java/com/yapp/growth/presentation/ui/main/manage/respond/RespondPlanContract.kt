@@ -20,18 +20,20 @@ class RespondPlanContract {
             "",
             "",
             emptyList(),
-            emptyList()
-        ),        val clickCount: Int = 0
-    ): ViewState
+            emptyList(),
+            ""
+        ),
+        val clickCount: Int = 0
+    ) : ViewState
 
-    sealed class RespondPlanSideEffect: ViewSideEffect {
+    sealed class RespondPlanSideEffect : ViewSideEffect {
 
     }
 
-    sealed class RespondPlanEvent: ViewEvent {
-        data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int): RespondPlanEvent()
-        object OnClickNextDayButton: RespondPlanEvent()
-        object OnClickPreviousDayButton: RespondPlanEvent()
-        object OnClickRespondButton: RespondPlanEvent()
+    sealed class RespondPlanEvent : ViewEvent {
+        data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : RespondPlanEvent()
+        object OnClickNextDayButton : RespondPlanEvent()
+        object OnClickPreviousDayButton : RespondPlanEvent()
+        object OnClickRespondButton : RespondPlanEvent()
     }
 }

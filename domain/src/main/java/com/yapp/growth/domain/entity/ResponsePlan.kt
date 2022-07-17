@@ -11,5 +11,6 @@ data class ResponsePlan(
     val minTime: String,
     val maxTime: String,
     val availableDates: List<String>,
-    val hourList: List<String>
+    val hourList: List<String>,
+    val placeName: String,
 )

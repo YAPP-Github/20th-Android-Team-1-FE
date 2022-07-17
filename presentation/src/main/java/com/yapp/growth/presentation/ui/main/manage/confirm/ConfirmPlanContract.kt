@@ -19,7 +19,8 @@ class ConfirmPlanContract {
             "",
             "",
             emptyList(),
-            emptyList()
+            emptyList(),
+            ""
         ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
         val currentClickUserData: List<User> = emptyList()

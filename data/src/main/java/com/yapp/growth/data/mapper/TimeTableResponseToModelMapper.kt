@@ -27,7 +27,8 @@ fun PromisingTimeTableResponse.toResponsePlan(): ResponsePlan {
         minTime = response.minTime,
         maxTime = response.maxTime,
         availableDates = response.availableDates,
-        hourList = makeHourList(response.minTime, response.totalCount)
+        hourList = makeHourList(response.minTime, response.totalCount),
+        placeName = response.placeName
     )
 }
 
