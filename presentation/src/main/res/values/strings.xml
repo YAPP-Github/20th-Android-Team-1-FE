@@ -65,11 +65,20 @@
     <string name="create_plan_time_range_time_option_pm_11">오후 11시</string>
     <string name="create_plan_time_range_error_message">올바른 범위로 시간을 설정해 주세요</string>
 
-    <string name="share_plan_now_share_your_plan_text">이제 약속을 공유하세요!</string>
+    <string name="share_plan_now_share_your_plan_now_text">이제 약속을&#160;</string>
+    <string name="share_plan_now_share_your_plan_share_text">공유</string>
+    <string name="share_plan_now_share_your_plan_do_text">하세요!</string>
     <string name="share_plan_max_member_count_text">최대 10명까지 응답 가능</string>
+    <string name="share_plan_max_member_including_yourself_text">* 본인 포함</string>
     <string name="share_plan_copy_text">복사</string>
     <string name="share_plan_kakao_button_text">카톡으로 약속 공유하기</string>
     <string name="share_plan_copy_success_message">복사 성공!</string>
+    <string name="share_plan_share_fail_message">공유 실패! 링크로 복사해 주세요</string>
+    <string name="share_plan_share_feed_template_title">약속 요청이 도착했어요!</string>
+    <string name="share_plan_share_feed_template_description">가능한 약속 날짜와 시간을 응답해 주세요!</string>
+    <string name="share_plan_share_feed_template_image_url">/images/share-feed.png</string>
+    <string name="share_plan_share_feed_template_web_url">/images/share-feed.png</string> <!-- 임시 URL -->
+    <string name="share_plan_share_feed_template_mobile_url">/images/share-feed.png</string> <!-- 임시 URL -->
 
     <string name="manage_plan_app_bar_text">약속관리</string>
     <string name="manage_plan_leader_badge">파티장</string>

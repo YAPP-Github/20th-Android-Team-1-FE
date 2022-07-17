@@ -20,19 +20,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.share.WebSharerClient
 import com.kakao.sdk.template.model.Content
 import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.template.model.Link
 import com.yapp.growth.presentation.R
+import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.component.PlanzSnackBar
 import com.yapp.growth.presentation.theme.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
+import com.yapp.growth.presentation.BuildConfig
 
 @Composable
 fun ShareScreen(
@@ -50,14 +56,19 @@ fun ShareScreen(
         scaffoldState = scaffoldState,
         snackbarHost = { snackbarHostState ->
             SnackbarHost(hostState = snackbarHostState) { snackbarData ->
-                PlanzSnackBar(message = snackbarData.message)
+                when (viewState.snackBarType) {
+                    ShareContract.ShareViewState.SnackBarType.SUCCESS -> PlanzSnackBar(message = snackbarData.message)
+                    else -> PlanzErrorSnackBar(message = snackbarData.message)
+                }
             }
         }
     ) { innerPadding ->
-        Box(modifier = Modifier
+        Box(
+            modifier = Modifier
             .padding(innerPadding)
             .fillMaxSize()
-            .background(BackgroundColor1)) {
+            .background(BackgroundColor1)
+        ) {
             Icon(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -73,7 +84,7 @@ fun ShareScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                ShareTitle()
+                ShareTitle(modifier = Modifier.padding(top = 26.dp))
 
                 Image(
                     modifier = Modifier
@@ -88,15 +99,11 @@ fun ShareScreen(
                         .padding(bottom = 32.dp),
                     shareUrl = viewState.shareUrl,
                     onCopyClick = {
-                        clipboardManager.setText(AnnotatedString(viewState.shareUrl))
                         viewModel.setEvent(ShareContract.ShareEvent.OnClickCopy)
                     },
                     onShareButtonClick = {
-                        kakaoSocialShare(
-                            context = context,
-                            startShareActivity = { shareIntent -> startShareActivity(shareIntent) }
-                        )
-                    }
+                        viewModel.setEvent(ShareContract.ShareEvent.OnClickShare)
+                    },
                 )
             }
         }
@@ -108,7 +115,31 @@ fun ShareScreen(
                 is ShareContract.ShareSideEffect.FinishCreatePlan -> {
                     finishCreatePlan()
                 }
-                is ShareContract.ShareSideEffect.ShowSnackBar -> {
+                is ShareContract.ShareSideEffect.CopyShareUrl -> {
+                    clipboardManager.setText(AnnotatedString(viewState.shareUrl))
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            context.getString(R.string.share_plan_copy_success_message)
+                        )
+                    }
+                }
+                is ShareContract.ShareSideEffect.SendKakaoShareMessage -> {
+                    kakaoSocialShare(
+                        context = context,
+                        startShareActivity = { shareIntent -> startShareActivity(shareIntent) },
+                        failToShareWithKakaoTalk = {
+                            viewModel.setEvent(ShareContract.ShareEvent.FailToShare)
+                        }
+                    )
+                }
+                is ShareContract.ShareSideEffect.ShowFailToShareSnackBar -> {
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            context.getString(R.string.share_plan_share_fail_message)
+                        )
+                    }
+                }
+                is ShareContract.ShareSideEffect.ShowSuccessSnackBar -> {
                     coroutineScope.launch {
                         scaffoldState.snackbarHostState.showSnackbar(
                             context.getString(R.string.share_plan_copy_success_message)
@@ -120,49 +151,72 @@ fun ShareScreen(
     }
 }
 
-// TODO: 요구사항에 맞게 공유 기능 구현 필요(현재 임시 구현 상태)
 fun kakaoSocialShare(
     context: Context,
     startShareActivity: (Intent) -> Unit,
+    failToShareWithKakaoTalk: () -> Unit,
 ) {
-    // TODO: 서버로부터 약속 공유 이미지 받아오기
+    val shareFeedImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
     // TODO: URL 설정
-    // TODO: 이미지 크기 설정
     val sharePlanFeedTemplate = FeedTemplate(
         content = Content(
-            title = "약속 초대 링크",
-            description = "가능한 약속 날짜와 시간을 응답해 주세요!",
-            imageUrl = "https://picsum.photos/300/200",
+            title = context.getString(R.string.share_plan_share_feed_template_title),
+            description = context.getString(R.string.share_plan_share_feed_template_description),
+            imageUrl = shareFeedImageUrl,
             link = Link(
-                webUrl = "https://developers.kakao.com",
-                mobileWebUrl = "https://developers.kakao.com"
-            )
+                webUrl = shareFeedImageUrl, /* 임시 URL */
+                mobileWebUrl = shareFeedImageUrl /* 임시 URL */
+            ),
+            imageWidth = 800,
+            imageHeight = 400
         )
     )
 
-    ShareClient.instance.shareDefault(context, sharePlanFeedTemplate) { sharingResult, error ->
-        if (error != null) {
-            Timber.w("공유 실패", error)
-        } else if (sharingResult != null) {
-            Timber.w("카카오링크 보내기 성공 ${sharingResult.intent}")
-            startShareActivity(sharingResult.intent)
+    if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
+        ShareClient.instance.shareDefault(context, sharePlanFeedTemplate) { sharingResult, error ->
+            if (error != null) {
+                failToShareWithKakaoTalk()
+            } else if (sharingResult != null) {
+                startShareActivity(sharingResult.intent)
 
-            Timber.w("Warning Msg: ${sharingResult.warningMsg}")
-            Timber.w("Argument Msg: ${sharingResult.argumentMsg}")
+                Timber.w("Warning Msg: ${sharingResult.warningMsg}")
+                Timber.w("Argument Msg: ${sharingResult.argumentMsg}")
+            }
+        }
+    } else {
+        val sharerUrl = WebSharerClient.instance.makeDefaultUrl(sharePlanFeedTemplate)
+
+        runCatching {
+            KakaoCustomTabsClient.openWithDefault(context, sharerUrl)
+        }.onFailure {
+            failToShareWithKakaoTalk()
+        }
+
+        runCatching {
+            KakaoCustomTabsClient.open(context, sharerUrl)
+        }.onFailure {
+            failToShareWithKakaoTalk()
         }
     }
 }
 
 @Composable
-fun ShareTitle() {
+fun ShareTitle(
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = Modifier
-            .padding(top = 26.dp)
+        modifier = modifier
             .padding(start = 20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = stringResource(id = R.string.share_plan_now_share_your_plan_text),
+            text = buildAnnotatedString {
+                append(stringResource(id = R.string.share_plan_now_share_your_plan_now_text))
+                withStyle(SpanStyle(color = MainPurple900)) {
+                    append(stringResource(id = R.string.share_plan_now_share_your_plan_share_text))
+                }
+                append(stringResource(id = R.string.share_plan_now_share_your_plan_do_text))
+            },
             style = PlanzTypography.h2,
             color = Gray900
         )
@@ -171,6 +225,12 @@ fun ShareTitle() {
             text = stringResource(id = R.string.share_plan_max_member_count_text),
             style = PlanzTypography.body1,
             color = Gray900
+        )
+
+        Text(
+            text = stringResource(id = R.string.share_plan_max_member_including_yourself_text),
+            style = PlanzTypography.caption,
+            color = CoolGray500
         )
     }
 }
@@ -187,7 +247,7 @@ fun ShareButtonColumn(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         ShareUrl(shareUrl = shareUrl, onCopyClick = onCopyClick)
-        ShareKaKaoButton(onShareButtonClick = onShareButtonClick)
+        ShareKakaoButton(onShareButtonClick = onShareButtonClick)
     }
 }
 
@@ -226,7 +286,7 @@ fun ShareUrl(
 }
 
 @Composable
-fun ShareKaKaoButton(
+fun ShareKakaoButton(
     onShareButtonClick: () -> Unit,
 ) {
     Button(
@@ -261,5 +321,5 @@ fun ShareKaKaoButton(
 @Preview(showBackground = true)
 @Composable
 fun ShareKaKaoButtonPreview() {
-    ShareKaKaoButton {}
+    ShareKakaoButton {}
 }

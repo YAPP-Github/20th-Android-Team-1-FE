@@ -18,6 +18,7 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.theme.SubCoral
 
+// TODO: PlanzSnackBar, PlanzErrorSnackBar 높이 통일
 @Composable
 fun PlanzSnackBar(
     message: String,

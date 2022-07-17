@@ -12,7 +12,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -24,7 +23,7 @@ internal class DataModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         jsonAdapterFactory: Converter.Factory,
-        baseUrl: String = BuildConfig.BASE_URL
+        baseUrl: String = BuildConfig.BASE_URL,
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
@@ -35,14 +34,15 @@ internal class DataModule {
     @Singleton
     @Provides
     fun provideGrowthApi(
-        retrofit: Retrofit
+        retrofit: Retrofit,
     ): GrowthApi =
         retrofit.create(GrowthApi::class.java)
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     fun provideJsonAdapterFactory(): Converter.Factory =
         MoshiConverterFactory.create(
             Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build())
+                .add(KotlinJsonAdapterFactory())
+                .build())
 }
