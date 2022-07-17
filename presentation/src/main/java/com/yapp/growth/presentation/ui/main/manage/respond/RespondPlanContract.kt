@@ -23,7 +23,8 @@ class RespondPlanContract {
             emptyList(),
             ""
         ),
-        val clickCount: Int = 0
+        val clickCount: Int = 0,
+        val availableResponse: Boolean = true,
     ) : ViewState
 
     sealed class RespondPlanSideEffect : ViewSideEffect {
