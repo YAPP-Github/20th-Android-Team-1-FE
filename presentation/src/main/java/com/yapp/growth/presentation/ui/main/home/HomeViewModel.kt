@@ -13,12 +13,11 @@ import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.LoginState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,7 +37,12 @@ class HomeViewModel @Inject constructor(
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
-    val currentDate = _currentDate.asStateFlow().debounce(300)
+    @OptIn(FlowPreview::class)
+    val currentDate = _currentDate.debounce(300).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = _currentDate.value
+    )
 
     @Inject
     lateinit var kakaoLoginSdk: LoginSdk

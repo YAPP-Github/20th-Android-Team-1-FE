@@ -76,6 +76,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
@@ -84,7 +85,7 @@ fun HomeScreen(
     navigateToDetailPlanScreen: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val currentDate by viewModel.currentDate.collectAsState(initial = CalendarDay.today())
+    val currentDate by viewModel.currentDate.collectAsState()
 
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
