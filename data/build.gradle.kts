@@ -35,6 +35,7 @@ dependencies {
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.timber.implement(this)
     app.ModuleDependencies.kakaoSdk.implement(this)
+    app.ModuleDependencies.kotlinDateTime.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)

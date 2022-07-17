@@ -54,8 +54,8 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.OnPlanItemClicked -> {
                 sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
             }
-            is HomeEvent.OnUserImageButtonClicked -> {
-                sendEffect({ HomeSideEffect.NavigateToInfoScreen })
+            is HomeEvent.OnUserImageClicked -> {
+                sendEffect({ HomeSideEffect.NavigateToMyPageScreen })
             }
             is HomeEvent.OnTodayPlanExpandedClicked -> {
                 updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) }

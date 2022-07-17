@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.create.title
+package com.yapp.growth.presentation.ui.createPlan.title
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -16,19 +16,21 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzTextField
-import com.yapp.growth.presentation.model.PlanThemeType
-import com.yapp.growth.presentation.ui.main.BLANK_VALUE
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleEvent
-import com.yapp.growth.presentation.ui.main.create.title.TitleContract.TitleSideEffect
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTitle
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
+import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleEvent
+import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleSideEffect
+import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @Composable
 fun TitleScreen(
+    sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: TitleViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: (PlanThemeType, String, String) -> Unit,
+    navigateToNextScreen: () -> Unit,
     navigateToPreviousScreen: () -> Unit,
 ) {
-    val uiState by viewModel.viewState.collectAsState()
+    val viewState by viewModel.viewState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -50,7 +52,7 @@ fun TitleScreen(
                     label = stringResource(id = R.string.create_plan_title_title_label),
                     hint = stringResource(id = R.string.create_plan_title_title_hint),
                     maxLength = MAX_LENGTH_TITLE,
-                    text = uiState.title,
+                    text = viewState.title,
                     onInputChanged = { viewModel.setEvent(TitleEvent.FillInTitle(it)) },
                     onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInTitle("")) }
                 )
@@ -59,7 +61,7 @@ fun TitleScreen(
                     label = stringResource(id = R.string.create_plan_title_place_label),
                     hint = stringResource(id = R.string.create_plan_title_place_hint),
                     maxLength = MAX_LENGTH_PLACE,
-                    text = uiState.place,
+                    text = viewState.place,
                     onInputChanged = { viewModel.setEvent(TitleEvent.FillInPlace(it)) },
                     onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInPlace("")) }
                 )
@@ -67,7 +69,7 @@ fun TitleScreen(
 
             PlanzButtonWithBack(
                 text = stringResource(id = R.string.create_plan_next_button_text),
-                enabled = !uiState.isError,
+                enabled = !viewState.isError,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 32.dp),
@@ -84,13 +86,8 @@ fun TitleScreen(
                     exitCreateScreen()
                 }
                 is TitleSideEffect.NavigateToNextScreen -> {
-                    uiState.chosenTheme?.let { theme ->
-                        navigateToNextScreen(
-                            theme,
-                            uiState.title.ifBlank { BLANK_VALUE },
-                            uiState.place.ifBlank { BLANK_VALUE }
-                        )
-                    }
+                    sharedViewModel.setEvent(DecideTitle(viewState.title))
+                    navigateToNextScreen()
                 }
                 is TitleSideEffect.NavigateToPreviousScreen -> {
                     navigateToPreviousScreen()
@@ -105,7 +102,7 @@ fun TitleScreen(
 fun TitleScreenPreview() {
     TitleScreen(
         exitCreateScreen = {},
-        navigateToNextScreen = { theme, title, place -> },
+        navigateToNextScreen = { },
         navigateToPreviousScreen = {}
     )
 }

@@ -1,4 +1,4 @@
-package com.kakao.beauty.data.api.response
+package com.yapp.growth.data.response
 
 interface ErrorResponse {
     val timestamp: Long?

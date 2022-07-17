@@ -24,11 +24,10 @@ internal class DataModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         jsonAdapterFactory: Converter.Factory,
-        baseUrl: String = BuildConfig.BASE_URL
     ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(baseUrl)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(jsonAdapterFactory)
             .build()
 

@@ -103,6 +103,33 @@ fun PlanzBasicButton(
 }
 
 @Composable
+fun PlanzBasicBottomButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    enabled: Boolean = true,
+    buttonColor: Color = MainPurple900,
+    textColor: Color = Color.White,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier.height(44.dp),
+        shape = RoundedCornerShape(6.dp),
+        onClick = { if (enabled) onClick() },
+        colors = when (enabled) {
+            true -> ButtonDefaults.buttonColors(backgroundColor = buttonColor)
+            else -> ButtonDefaults.buttonColors(backgroundColor = Gray300)
+        },
+        elevation = null,
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = PlanzTypography.subtitle2
+        )
+    }
+}
+
+@Composable
 private fun BackButton(
     onBackClick: () -> Unit,
 ) {
