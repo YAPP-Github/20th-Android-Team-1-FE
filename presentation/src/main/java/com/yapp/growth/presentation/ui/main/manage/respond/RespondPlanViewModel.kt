@@ -25,12 +25,12 @@ class RespondPlanViewModel @Inject constructor(
         get() = _sendResponsePlan.asStateFlow()
 
     init {
-        loadRespondUsers(0L)
+        loadRespondUsers(14)
     }
 
     private fun loadRespondUsers(promisingKey: Long) {
         viewModelScope.launch {
-            val result = (getRespondUsersUseCase(promisingKey) as? NetworkResult.Success)?.data
+            val result = (getRespondUsersUseCase.invoke(promisingKey) as? NetworkResult.Success)?.data
             result?.let {
                 makeRespondList(it)
                 updateState {
@@ -44,9 +44,9 @@ class RespondPlanViewModel @Inject constructor(
         val booleanArray = Array(data.totalCount*2) { false }
 
         val temp = mutableListOf<SendingResponsePlan>().also { list ->
-            repeat(data.availableDate.size) {
+            repeat(data.availableDates.size) {
                 list.add(SendingResponsePlan(
-                    date = data.availableDate[it],
+                    date = data.availableDates[it],
                     hours = data.hourList,
                     timeList = booleanArray.copyOf().toMutableList()
                 ))

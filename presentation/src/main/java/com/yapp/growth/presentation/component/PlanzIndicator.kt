@@ -70,7 +70,7 @@ fun PlanzPlanDateIndicator(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                itemsIndexed(responsePlan.availableDate) { _, date ->
+                itemsIndexed(responsePlan.availableDates) { _, date ->
                     PlanzPlanDayText(date = date)
                 }
             }

@@ -4,10 +4,10 @@ import com.yapp.growth.data.response.*
 
 data class PromisingTimeTableResponseImpl(
     override val users: List<UserResponseImpl>,
-    override val colors: List<Int>,
+    override val colors: List<Long>,
     override val totalCount: Int,
-    override val unit: Int,
-    override val timeTable: List<TimeTableDateImpl>,
+    override val unit: Float,
+    override val timeTable: List<TimeTableDateResponseImpl>,
     override val id: Long,
     override val promisingName: String,
     override val owner: UserResponseImpl,
@@ -19,14 +19,21 @@ data class PromisingTimeTableResponseImpl(
 ): PromisingTimeTableResponse
 
 data class UserResponseImpl (
-    override val id: Int,
+    override val id: Long,
     override val userName: String
 ): UserResponse
 
-data class TimeTableDateImpl (
+data class TimeTableDateResponseImpl (
     override val date: String,
-    override val blocks: List<TimeTableUnit>
-): TimeTableDate
+    override val blocks: List<TimeTableUnitResponseImpl>
+): TimeTableDateResponse
+
+data class TimeTableUnitResponseImpl (
+    override val index: Int,
+    override val count: Int,
+    override val color: Long,
+    override val users: List<UserResponseImpl>
+): TimeTableUnitResponse
 
 data class CategoryResponseImpl (
     override val id: Long,

@@ -2,10 +2,10 @@ package com.yapp.growth.data.response
 
 interface PromisingTimeTableResponse {
     val users: List<UserResponse>
-    val colors: List<Int>
+    val colors: List<Long>
     val totalCount: Int
-    val unit: Int
-    val timeTable: List<TimeTableDate>
+    val unit: Float
+    val timeTable: List<TimeTableDateResponse>
     val id: Long
     val promisingName: String
     val owner: UserResponse
@@ -17,19 +17,19 @@ interface PromisingTimeTableResponse {
 }
 
 interface UserResponse {
-    val id: Int
+    val id: Long
     val userName: String
 }
 
-interface TimeTableDate {
+interface TimeTableDateResponse {
     val date: String
-    val blocks: List<TimeTableUnit>
+    val blocks: List<TimeTableUnitResponse>
 }
 
-interface TimeTableUnit {
+interface TimeTableUnitResponse {
     val index: Int
     val count: Int
-    val color: Int
+    val color: Long
     val users: List<UserResponse>
 }
 

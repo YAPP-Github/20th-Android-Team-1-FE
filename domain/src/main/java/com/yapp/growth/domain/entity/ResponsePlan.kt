@@ -2,7 +2,7 @@ package com.yapp.growth.domain.entity
 
 data class ResponsePlan(
     val users: List<User>,
-    val colors: List<Int>,
+    val colors: List<Long>,
     val totalCount: Int,
     val timeTableDate: List<TimeTableDate>,
     val id: Long,
@@ -10,6 +10,6 @@ data class ResponsePlan(
     val owner: User,
     val minTime: String,
     val maxTime: String,
-    val availableDate: List<String>,
+    val availableDates: List<String>,
     val hourList: List<String>
 )

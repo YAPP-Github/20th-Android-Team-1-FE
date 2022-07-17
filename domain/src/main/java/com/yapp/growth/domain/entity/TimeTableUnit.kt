@@ -4,5 +4,5 @@ data class TimeTableUnit(
     val index: Int,
     val count: Int,
     val users: List<User>,
-    val color: Int
+    val color: Long
 )

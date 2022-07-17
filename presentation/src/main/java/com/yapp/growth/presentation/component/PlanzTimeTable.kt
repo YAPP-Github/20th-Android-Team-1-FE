@@ -57,7 +57,7 @@ fun ConfirmPlanTimeTable(
                     }
                 }
 
-                itemsIndexed(responsePlan.availableDate) { dateIndex, date ->
+                itemsIndexed(responsePlan.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
                     val upperTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex == currentClickTimeIndex.second
                     val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
@@ -83,7 +83,7 @@ fun ConfirmPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
                                 .border(
                                     width = if (upperTableClicked) 3.dp else 0.dp,
                                     color = if (upperTableClicked) SubCoral else Color.Transparent,
@@ -104,7 +104,7 @@ fun ConfirmPlanTimeTable(
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                         Canvas(Modifier
-                            .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
+                            .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
                             .height(1.dp)
                         ) {
                             drawLine(
@@ -118,7 +118,7 @@ fun ConfirmPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
                                 .border(
                                     width = if (underTableClicked) 3.dp else 0.5.dp,
                                     color = if (underTableClicked) SubCoral else Gray200,
@@ -173,7 +173,7 @@ fun PlanzPlanTimeTable(
                     }
                 }
 
-                itemsIndexed(responsePlan.availableDate) { dateIndex, date ->
+                itemsIndexed(responsePlan.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
                     var upperTableClicked by remember { mutableStateOf(false) }
                     var underTableClicked by remember { mutableStateOf(false) }
@@ -199,7 +199,7 @@ fun PlanzPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
                                 .border(
                                     width = if (upperTableClicked) 3.dp else 0.dp,
                                     color = if (upperTableClicked) SubCoral else Color.Transparent,
@@ -221,7 +221,7 @@ fun PlanzPlanTimeTable(
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                         Canvas(Modifier
-                            .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
+                            .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
                             .height(1.dp)
                         ) {
                             drawLine(
@@ -235,7 +235,7 @@ fun PlanzPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDate.size + 1))
+                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
                                 .border(
                                     width = if (underTableClicked) 3.dp else 0.dp,
                                     color = if (underTableClicked) SubCoral else Color.Transparent,
@@ -353,7 +353,7 @@ fun ConfirmPlanBottomSheet(responsePlan: ResponsePlan, currentClickTimeIndex: Pa
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
     // TODO 시간노출 포맷 설정
-    val day = responsePlan.availableDate[currentClickTimeIndex.first]
+    val day = responsePlan.availableDates[currentClickTimeIndex.first]
     var hour = responsePlan.hourList[currentClickTimeIndex.second/2]
     if (currentClickTimeIndex.second % 2 != 0 ) hour += "분"
 

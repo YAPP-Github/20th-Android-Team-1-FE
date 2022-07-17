@@ -24,7 +24,7 @@ fun CreatePlanScreen(
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = CreatePlanScreenRoute.THEME.route
+            startDestination = CreatePlanScreenRoute.CONFIRM_PLAN.route
         ) {
             composable(route = CreatePlanScreenRoute.THEME.route) {
                 ThemeScreen(
