@@ -47,7 +47,7 @@ fun ConfirmPlanScreen(
         Scaffold(
             topBar = {
                 PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.navigation_confirm_plan_text),
+                    title = stringResource(id = R.string.confirm_plan_title_text),
                     onClickBackIcon = navigateToPreviousScreen,
                     onClickShareIcon = { /*TODO*/ }
                 )

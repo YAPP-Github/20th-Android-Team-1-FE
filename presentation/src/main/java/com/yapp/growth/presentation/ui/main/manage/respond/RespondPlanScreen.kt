@@ -30,7 +30,7 @@ fun RespondPlanScreen(
     Scaffold(
         topBar = {
             PlanzBackAndClearAppBar(
-                title = stringResource(id = R.string.navigation_respond_plan_text),
+                title = stringResource(id = R.string.respond_plan_title_text),
                 onClickBackIcon = navigateToPreviousScreen,
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 onClickClearIcon = { /*TODO */ }
