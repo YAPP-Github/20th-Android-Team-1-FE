@@ -63,7 +63,7 @@ class ConfirmPlanViewModel @Inject constructor(
             val day = viewState.value.responsePlan.availableDate[dateIndex]
             var hour = viewState.value.responsePlan.hourList[minuteIndex/2]
 
-            val blockList = viewState.value.responsePlan.timeTable.find { it.date == day }?.blocks
+            val blockList = viewState.value.responsePlan.timeTableDate.find { it.date == day }?.timeTableUnits
             val userList = blockList?.let { block ->
                 block.find { it.index == minuteIndex }?.users
             }

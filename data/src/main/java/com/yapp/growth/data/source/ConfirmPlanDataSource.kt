@@ -5,5 +5,5 @@ import com.yapp.growth.domain.entity.ResponsePlan
 
 interface ConfirmPlanDataSource {
 
-    suspend fun getRespondUsers(promisingKey: Long): NetworkResult<ResponsePlan>
+    suspend fun getRespondUsers(promisingId: Long): NetworkResult<ResponsePlan>
 }

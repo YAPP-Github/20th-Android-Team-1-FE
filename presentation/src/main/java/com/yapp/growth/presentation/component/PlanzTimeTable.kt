@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -64,7 +62,7 @@ fun ConfirmPlanTimeTable(
                     val upperTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex == currentClickTimeIndex.second
                     val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
 
-                    val blockList = responsePlan.timeTable.find { it.date == date }?.blocks
+                    val blockList = responsePlan.timeTableDate.find { it.date == date }?.timeTableUnits
 
                     val upperTableColor = blockList?.let { block ->
                         block.find { it.index == minuteIndex }?.color ?: 0x00000000
@@ -180,7 +178,7 @@ fun PlanzPlanTimeTable(
                     var upperTableClicked by remember { mutableStateOf(false) }
                     var underTableClicked by remember { mutableStateOf(false) }
 
-                    val blockList = responsePlan.timeTable.find { it.date == date }?.blocks
+                    val blockList = responsePlan.timeTableDate.find { it.date == date }?.timeTableUnits
 
                     val upperTableColor = blockList?.let { block ->
                         block.find { it.index == minuteIndex }?.color ?: 0x00000000

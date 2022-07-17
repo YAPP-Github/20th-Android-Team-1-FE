@@ -3,9 +3,9 @@ package com.yapp.growth.data.source
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.utils.toDay
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.Block
+import com.yapp.growth.domain.entity.TimeTableUnit
 import com.yapp.growth.domain.entity.ResponsePlan
-import com.yapp.growth.domain.entity.TimeTable
+import com.yapp.growth.domain.entity.TimeTableDate
 import com.yapp.growth.domain.entity.User
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,19 +62,19 @@ internal class ConfirmPlanDataSourceImpl @Inject constructor(
                 totalCount = 10,
                 minTime = minTime,
                 maxTime = maxTime,
-                timeTable = listOf(
-                    TimeTable(
+                timeTableDate = listOf(
+                    TimeTableDate(
                         date = "2022-07-09T09:00:00".toDay(),
-                        blocks = listOf(
-                            Block(0, 1, listOf(user1.copy()), 1298559478),
-                            Block(2, 1, listOf(user2.copy()), 1298559478)
+                        timeTableUnits = listOf(
+                            TimeTableUnit(0, 1, listOf(user1.copy()), 1298559478),
+                            TimeTableUnit(2, 1, listOf(user2.copy()), 1298559478)
                         )
                     ),
 
-                    TimeTable(
+                    TimeTableDate(
                         date = "2022-07-10T09:00:00".toDay(),
-                        blocks = listOf(
-                            Block(3, 1, listOf(user3.copy(), user4.copy()), 1298559478)
+                        timeTableUnits = listOf(
+                            TimeTableUnit(3, 1, listOf(user3.copy(), user4.copy()), 1298559478)
                         )
                     )
                 ),

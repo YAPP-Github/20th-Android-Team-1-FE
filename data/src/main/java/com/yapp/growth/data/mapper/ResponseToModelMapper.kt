@@ -1,9 +1,9 @@
 package com.yapp.growth.data.mapper
 
-import com.yapp.growth.data.response.UserResponse
+import com.yapp.growth.data.response.UserResponse222
 import com.yapp.growth.domain.entity.TestingUser
 
-fun mapUserDto(input: UserResponse): TestingUser {
+fun mapUserDto(input: UserResponse222): TestingUser {
     return TestingUser(
         login = input.login,
         nodeId = input.nodeId,
