@@ -32,13 +32,13 @@ import com.kakao.sdk.share.WebSharerClient
 import com.kakao.sdk.template.model.Content
 import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.template.model.Link
+import com.yapp.growth.presentation.BuildConfig
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.component.PlanzSnackBar
 import com.yapp.growth.presentation.theme.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import com.yapp.growth.presentation.BuildConfig
 
 @Composable
 fun ShareScreen(
@@ -65,9 +65,9 @@ fun ShareScreen(
     ) { innerPadding ->
         Box(
             modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize()
-            .background(BackgroundColor1)
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(BackgroundColor1)
         ) {
             Icon(
                 modifier = Modifier
@@ -134,6 +134,7 @@ fun ShareScreen(
                 }
                 is ShareContract.ShareSideEffect.ShowFailToShareSnackBar -> {
                     coroutineScope.launch {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                         scaffoldState.snackbarHostState.showSnackbar(
                             context.getString(R.string.share_plan_share_fail_message)
                         )
@@ -141,6 +142,7 @@ fun ShareScreen(
                 }
                 is ShareContract.ShareSideEffect.ShowSuccessSnackBar -> {
                     coroutineScope.launch {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                         scaffoldState.snackbarHostState.showSnackbar(
                             context.getString(R.string.share_plan_copy_success_message)
                         )
@@ -156,7 +158,8 @@ fun kakaoSocialShare(
     startShareActivity: (Intent) -> Unit,
     failToShareWithKakaoTalk: () -> Unit,
 ) {
-    val shareFeedImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
+    val shareFeedImageUrl =
+        BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
     // TODO: URL 설정
     val sharePlanFeedTemplate = FeedTemplate(
         content = Content(
