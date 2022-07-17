@@ -81,7 +81,8 @@ fun TimeRangeScreen(
                 }
             }
         ) { padding ->
-            Box(modifier = Modifier.fillMaxSize()) {
+
+            Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                 TimeRangeText(
                     modifier = Modifier.padding(top = 140.dp),
                     isError = viewState.isError,

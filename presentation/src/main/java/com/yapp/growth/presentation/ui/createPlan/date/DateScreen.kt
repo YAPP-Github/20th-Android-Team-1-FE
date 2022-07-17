@@ -47,6 +47,7 @@ fun DateScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .padding(padding)
         ) {
             Column {
                 Spacer(modifier = Modifier.height(36.dp))

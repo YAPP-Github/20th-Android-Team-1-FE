@@ -1,6 +1,4 @@
-package com.kakao.beauty.data.api.internal.response
-
-import com.kakao.beauty.data.api.response.ErrorResponse
+package com.yapp.growth.data.response
 
 data class ErrorResponseImpl(
     override val timestamp: Long?,

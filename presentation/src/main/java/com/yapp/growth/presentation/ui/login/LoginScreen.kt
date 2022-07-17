@@ -7,10 +7,10 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -87,8 +87,10 @@ fun PlanzImage() {
             .padding(top = 30.dp, bottom = 54.dp)
     ) {
         Image(
+            modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = R.drawable.ic_login_image),
-            contentDescription = null
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth
         )
     }
 }
@@ -118,7 +120,7 @@ fun KakaoLoginButton(
             )
 
             Text(
-                text = stringResource(id = R.string.icon_kakao_login),
+                text = stringResource(id = R.string.icon_kakao_login_title),
                 modifier = Modifier.padding(start = 6.dp),
                 color = Color.Black,
                 style = PlanzTypography.h3

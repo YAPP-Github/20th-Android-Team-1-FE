@@ -139,11 +139,17 @@ enum class PlanzAppBarMenu(
         icon = R.drawable.ic_exit,
         contentDescription = R.string.icon_exit_content_description
     ),
+    SHARE(
+        horizontalPadding = 20.dp,
+        icon = R.drawable.ic_share_box_24,
+        contentDescription = R.string.icon_share_content_description
+    ),
+
     BACK(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_arrow_left_20,
-        contentDescription = R.string.icon_exit_content_description
-    )
+        contentDescription = R.string.icon_arrow_left_content_description
+    ),
 }
 
 @Preview(showBackground = true)

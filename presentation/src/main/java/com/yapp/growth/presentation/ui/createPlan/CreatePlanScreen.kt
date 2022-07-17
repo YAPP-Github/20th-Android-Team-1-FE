@@ -12,6 +12,8 @@ import com.yapp.growth.presentation.ui.createPlan.date.DateScreen
 import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeScreen
 import com.yapp.growth.presentation.ui.createPlan.title.TitleScreen
+import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 
 @Composable
 fun CreatePlanScreen(
@@ -54,6 +56,18 @@ fun CreatePlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
+
+            composable(route = CreatePlanScreenRoute.RESPOND_PLAN.route) {
+                RespondPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = CreatePlanScreenRoute.CONFIRM_PLAN.route) {
+                ConfirmPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
         }
     }
 }
@@ -63,4 +77,6 @@ enum class CreatePlanScreenRoute(val route: String) {
     TITLE("title"),
     DATE("date"),
     TIME_RANGE("time-range"),
+    RESPOND_PLAN("respond-plan"),
+    CONFIRM_PLAN("confirm-plan"),
 }

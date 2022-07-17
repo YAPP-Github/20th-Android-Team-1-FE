@@ -241,5 +241,5 @@ enum class PlanzScreenRoute(val route: String) {
     CREATE_PLAN("create-plan"),
     MY_PAGE("my-page"),
     DETAIL_PLAN("detail-plan"),
-    SAMPLE("sample")
+    SAMPLE("sample"),
 }
