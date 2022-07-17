@@ -22,11 +22,9 @@ import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzMainButton
 import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTheme
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.util.composableActivityViewModel
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ThemeScreen(

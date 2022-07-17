@@ -46,6 +46,7 @@ dependencies {
     app.ModuleDependencies.timber.implement(this)
     app.ModuleDependencies.materialCalendarView.implement(this)
     app.ModuleDependencies.accompanist.implement(this)
+    app.ModuleDependencies.kotlinDateTime.implement(this)
     app.ModuleDependencies.kakaoSdk.implement(this) // Share 부분만 의존성 추가하는 것이 좋은가..?
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))

@@ -3,7 +3,6 @@ package com.yapp.growth.presentation.ui.createPlan.date
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
-import com.yapp.growth.presentation.model.PlanThemeType
 
 class DateContract {
     data class DateViewState(

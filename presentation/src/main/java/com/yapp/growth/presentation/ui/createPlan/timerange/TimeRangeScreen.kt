@@ -34,7 +34,6 @@ import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Ti
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeSideEffect
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.TimeRangeViewState.DialogState
 import com.yapp.growth.presentation.util.composableActivityViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -82,7 +81,8 @@ fun TimeRangeScreen(
                 }
             }
         ) { padding ->
-            Box(modifier = Modifier.fillMaxSize()) {
+
+            Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                 TimeRangeText(
                     modifier = Modifier.padding(top = 140.dp),
                     isError = viewState.isError,

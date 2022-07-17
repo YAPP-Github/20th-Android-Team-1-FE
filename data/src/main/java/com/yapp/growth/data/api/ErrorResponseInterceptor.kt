@@ -1,9 +1,8 @@
 package com.yapp.growth.data.api
 
-import com.kakao.beauty.data.api.internal.response.ErrorResponseImpl
-import com.kakao.beauty.data.api.response.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.yapp.growth.data.response.*
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

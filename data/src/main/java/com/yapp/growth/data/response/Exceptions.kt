@@ -1,4 +1,4 @@
-package com.kakao.beauty.data.api.response
+package com.yapp.growth.data.response
 
 import java.io.IOException
 import java.lang.Exception

@@ -1,6 +1,6 @@
 package com.yapp.growth.data.api
 
-import com.kakao.beauty.data.api.response.*
+import com.yapp.growth.data.response.*
 import com.yapp.growth.domain.NetworkResult
 
 internal inline fun <T> handleApi(transform: () -> T): NetworkResult<T> = try {

@@ -166,6 +166,10 @@ object ModuleDependencies {
             Method.IMPLEMENTATION)
     )
 
+    val kotlinDateTime = arrayOf(
+        DependencyInfo("org.jetbrains.kotlinx:kotlinx-datetime", Versions.KOTLIN_DATETIMES, Method.IMPLEMENTATION)
+    )
+
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics-ktx"

@@ -86,16 +86,6 @@ inline fun <T> NetworkResult<T>.runCatchingWith(consumer: (T) -> Unit): NetworkR
         is NetworkResult.Loading -> NetworkResult.Loading
     }
 
-inline fun <R, T> NetworkResult<T>.fold(
-    onSuccess: (value: T) -> R,
-    onError: (exception: Exception) -> R
-): R =
-    when (this) {
-        is NetworkResult.Success -> onSuccess(data)
-        is NetworkResult.Error -> onError(this.exception)
-        is NetworkResult.Loading -> Any() as R // TODO Loading Type 삭제 dan.d와 말하기
-    }
-
 suspend fun <T, R> NetworkResult<T>.flatMap(transform: suspend (T) -> NetworkResult<R>) =
     when (this) {
         is NetworkResult.Success -> transform(data)

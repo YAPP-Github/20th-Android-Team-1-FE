@@ -1,9 +1,9 @@
 package com.yapp.growth.domain.repository
 
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.User
+import com.yapp.growth.domain.entity.TestingUser
 
 interface UserRepository {
 
-    suspend fun getUsers(): NetworkResult<List<User>>
+    suspend fun getUsers(): NetworkResult<List<TestingUser>>
 }

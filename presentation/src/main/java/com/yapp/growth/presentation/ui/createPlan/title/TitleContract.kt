@@ -3,7 +3,6 @@ package com.yapp.growth.presentation.ui.createPlan.title
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
-import com.yapp.growth.presentation.model.PlanThemeType
 
 class TitleContract {
     data class TitleViewState(
