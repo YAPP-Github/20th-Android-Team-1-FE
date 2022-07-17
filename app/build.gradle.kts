@@ -58,10 +58,6 @@ android {
     }
 }
 
-fun getProperty(propertyKey: String): String? {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
-
 dependencies {
     implementation(project(Modules.PRESENTATION))
     implementation(project(Modules.DOMAIN))
