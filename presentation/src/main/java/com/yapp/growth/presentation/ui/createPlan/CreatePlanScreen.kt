@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan
 
+import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.yapp.growth.presentation.ui.createPlan.date.DateScreen
+import com.yapp.growth.presentation.ui.createPlan.share.ShareScreen
 import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeScreen
 import com.yapp.growth.presentation.ui.createPlan.title.TitleScreen
@@ -19,6 +21,7 @@ import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 fun CreatePlanScreen(
     navController: NavHostController = rememberNavController(),
     exitCreatePlan: () -> Unit,
+    startShareActivity: (Intent) -> Unit,
 ) {
     Scaffold { innerPadding ->
         NavHost(
@@ -68,6 +71,13 @@ fun CreatePlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
+
+            composable(route = CreatePlanScreenRoute.SHARE.route) {
+                ShareScreen(
+                    finishCreatePlan = exitCreatePlan,
+                    startShareActivity = { shareIntent -> startShareActivity(shareIntent) }
+                )
+            }
         }
     }
 }
@@ -79,4 +89,5 @@ enum class CreatePlanScreenRoute(val route: String) {
     TIME_RANGE("time-range"),
     RESPOND_PLAN("respond-plan"),
     CONFIRM_PLAN("confirm-plan"),
+    SHARE("share-plan"),
 }

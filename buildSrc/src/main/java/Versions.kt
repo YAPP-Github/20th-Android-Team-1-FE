@@ -16,7 +16,7 @@ object Versions {
     const val HILT = "2.42"
     const val HILT_ANDROID = "1.0.0-beta01"
     const val JUNIT = "4.13.2"
-    const val KAKAO_SDK = "2.10.0"
+    const val KAKAO_SDK = "2.11.0"
     const val KOTLIN = "1.6.21"
     const val KOTLIN_COROUTINES  = "1.5.1"
     const val KOTLIN_DATETIMES = "0.4.0"
