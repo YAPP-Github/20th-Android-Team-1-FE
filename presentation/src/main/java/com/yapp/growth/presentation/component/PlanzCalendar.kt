@@ -12,11 +12,11 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import com.yapp.growth.presentation.ui.main.home.CalendarDecorator
 
-// TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
 fun PlanzCalendar(
     currentDate: CalendarDay,
     selectMode: PlanzCalendarSelectMode,
+    selectedDates: List<CalendarDay> = emptyList(),
     onDateSelectedListener: OnDateSelectedListener,
 ) {
     val context = LocalContext.current
@@ -47,6 +47,13 @@ fun PlanzCalendar(
         update = { views ->
             views.apply {
                 this.currentDate = currentDate
+
+                if(selectedDates.isNotEmpty()) {
+                    for(selectDate in selectedDates) {
+                        this.setDateSelected(selectDate, true)
+                    }
+                }
+
                 this.addDecorator(CalendarDecorator.SelectDecorator(context, this))
                 this.addDecorator(CalendarDecorator.SundayDecorator())
 
