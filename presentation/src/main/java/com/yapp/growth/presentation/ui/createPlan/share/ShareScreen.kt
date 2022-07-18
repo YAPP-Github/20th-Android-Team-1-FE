@@ -194,12 +194,6 @@ fun kakaoSocialShare(
         }.onFailure {
             failToShareWithKakaoTalk()
         }
-
-        runCatching {
-            KakaoCustomTabsClient.open(context, sharerUrl)
-        }.onFailure {
-            failToShareWithKakaoTalk()
-        }
     }
 }
 
