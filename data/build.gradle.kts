@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import common.GradleUtil.implement
 
 plugins {
@@ -34,7 +33,7 @@ dependencies {
     app.ModuleDependencies.okhttp.implement(this)
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.timber.implement(this)
-    app.ModuleDependencies.kakaoSdk.implement(this)
+    app.ModuleDependencies.kakaoOAuth.implement(this)
     app.ModuleDependencies.kotlinDateTime.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))

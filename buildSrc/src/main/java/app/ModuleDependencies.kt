@@ -155,10 +155,10 @@ object ModuleDependencies {
             Method.IMPLEMENTATION)
     )
 
-    val kakaoSdk = arrayOf(
-        DependencyInfo("com.kakao.sdk:v2-user", Versions.KAKAO_SDK, Method.IMPLEMENTATION),
-        DependencyInfo("com.kakao.sdk:v2-share", Versions.KAKAO_SDK, Method.IMPLEMENTATION),
-    )
+    val kakaoOAuth =
+        arrayOf(DependencyInfo("com.kakao.sdk:v2-user", Versions.KAKAO_SDK, Method.IMPLEMENTATION))
+    val kakaoShare =
+        arrayOf(DependencyInfo("com.kakao.sdk:v2-share", Versions.KAKAO_SDK, Method.IMPLEMENTATION))
 
     val accompanist = arrayOf(
         DependencyInfo("com.google.accompanist:accompanist-pager",
@@ -167,7 +167,9 @@ object ModuleDependencies {
     )
 
     val kotlinDateTime = arrayOf(
-        DependencyInfo("org.jetbrains.kotlinx:kotlinx-datetime", Versions.KOTLIN_DATETIMES, Method.IMPLEMENTATION)
+        DependencyInfo("org.jetbrains.kotlinx:kotlinx-datetime",
+            Versions.KOTLIN_DATETIMES,
+            Method.IMPLEMENTATION)
     )
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
