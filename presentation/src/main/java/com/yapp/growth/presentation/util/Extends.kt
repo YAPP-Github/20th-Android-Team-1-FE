@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.util
 
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,6 +15,10 @@ internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.
 //    val dfHour: DateFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 //    return dfHour.format(this)
 //}
+
+fun CalendarDay.toFormatDate(): String {
+    return PARSE_DATE_FORMAT.format(this.date)
+}
 
 fun Date.toCalculateDiffDay(other: Date): Long {
     return (other.time - this.time) / (60 * 60 * 24 * 1000)
