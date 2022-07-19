@@ -3,9 +3,11 @@ package com.yapp.growth.presentation.ui.createPlan.date
 import androidx.lifecycle.viewModelScope
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateEvent
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateSideEffect
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateViewState
+import com.yapp.growth.presentation.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DateViewModel @Inject constructor(
+    private val resourcesProvider: ResourceProvider,
 ) : BaseViewModel<DateViewState, DateSideEffect, DateEvent>(
     DateViewState()
 ) {
@@ -44,8 +47,16 @@ class DateViewModel @Inject constructor(
                     updateState { this.copy(isDatesEmpty = true) }
                 }
             }
-            is DateEvent.OnPreviousDateClicked -> sendEffect({ DateSideEffect.ShowSnackBar("이전 날짜는 선택이 불가합니다.") })
-            is DateEvent.OnDateOverSelected -> sendEffect({ DateSideEffect.ShowSnackBar("최대 12일까지 선택이 가능합니다.") })
+            is DateEvent.OnPreviousDateClicked -> sendEffect({
+                DateSideEffect.ShowSnackBar(
+                    resourcesProvider.getString(R.string.create_plan_date_previous_select_text)
+                )
+            })
+            is DateEvent.OnDateOverSelected -> sendEffect({
+                DateSideEffect.ShowSnackBar(
+                    resourcesProvider.getString(R.string.create_plan_date_maximum_select_text)
+                )
+            })
             is DateEvent.OnMonthlyPreviousClicked -> { updateDateState(DateEvent.OnMonthlyPreviousClicked) }
             is DateEvent.OnMonthlyNextClicked -> { updateDateState(DateEvent.OnMonthlyNextClicked) }
         }
