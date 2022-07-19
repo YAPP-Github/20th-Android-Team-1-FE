@@ -10,7 +10,7 @@ class CreatePlanContract {
         val theme: PlanThemeType? = null,
         val title: String = "",
         val place: String = "",
-        val dates: String = "",
+        val dates: List<String> = emptyList(),
         val startHour: Int = -1,
         val endHour: Int = -1,
     ) : ViewState
@@ -23,7 +23,7 @@ class CreatePlanContract {
         data class DecideTheme(val theme: PlanThemeType) : CreatePlanEvent()
         data class DecideTitle(val title: String) : CreatePlanEvent()
         data class DecidePlace(val place: String) : CreatePlanEvent()
-        data class DecideDates(val dates: String) : CreatePlanEvent() // TODO: 전달받는 타입에 맞춰 변경
+        data class DecideDates(val dates: List<String>) : CreatePlanEvent()
         data class DecideTimeRange(val startHour: Int, val endHour: Int) : CreatePlanEvent()
     }
 }
