@@ -49,26 +49,6 @@
     <string name="create_plan_title_place_label">장소(선택)</string>
     <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
 
-    <string name="respond_plan_title_text">약속응답</string>
-    <string name="respond_plan_location_text">강남역카카오프렌즈강</string>
-    <string name="respond_plan_clear_select_text">선택 해제</string>
-    <string name="respond_plan_send_plan_title">약속시간 보내기</string>
-    <string name="respond_plan_send_nothing_title">되는시간 없어요</string>
-    <string name="respond_plan_fulled_title_text">해당 약속 정원이 다 찼습니다!</string>
-    <string name="respond_plan_fulled_button_text">홈으로 돌아가기</string>
-
-    <string name="respond_plan_complete_title_text1">가능한 약속시간</string>
-    <string name="respond_plan_complete_title_text2">보내기&#160;</string>
-    <string name="respond_plan_complete_title_text3">성공</string>
-    <string name="respond_plan_complete_button_text">확인하기</string>
-
-    <string name="respond_plan_reject_title_text">확인하기</string>
-    <string name="respond_plan_reject_title_text2">다음에 만나요:)</string>
-    <string name="respond_plan_reject_info_text">약속을 거절했습니다</string>
-    <string name="respond_plan_reject_button_text">확인하기</string>
-
-    <string name="confirm_plan_title_text">약속확정</string>
-
     <string name="detail_plan_app_bar_text">약속 상세보기</string>
     <string name="detail_plan_info_when">날짜/시간</string>
     <string name="detail_plan_info_place">장소</string>
@@ -109,6 +89,8 @@
     <string name="create_plan_time_range_error_message">올바른 범위로 시간을 설정해 주세요</string>
 
     <!-- 약속 생성 STEP 5 -->
+    <string name="create_plan_time_table_title_text">가능한 시간을 선택해주세요!</string>
+    <string name="create_plan_time_table_button_text">약속 생성</string>
 
     <!-- 약속 생성 완료 -->
     <string name="share_plan_now_share_your_plan_now_text">이제 약속을&#160;</string>
@@ -125,6 +107,28 @@
     <string name="share_plan_share_feed_template_image_url">/images/share-feed.png</string>
     <string name="share_plan_share_feed_template_web_url">/images/share-feed.png</string> <!-- 임시 URL -->
     <string name="share_plan_share_feed_template_mobile_url">/images/share-feed.png</string> <!-- 임시 URL -->
+
+    <!-- 약속 응답 -->
+    <string name="respond_plan_title_text">약속응답</string>
+    <string name="respond_plan_location_text">강남역카카오프렌즈강</string>
+    <string name="respond_plan_clear_select_text">선택 해제</string>
+    <string name="respond_plan_send_plan_title">약속시간 보내기</string>
+    <string name="respond_plan_send_nothing_title">되는시간 없어요</string>
+    <string name="respond_plan_fulled_title_text">해당 약속 정원이 다 찼습니다!</string>
+    <string name="respond_plan_fulled_button_text">홈으로 돌아가기</string>
+
+    <string name="respond_plan_complete_title_text1">가능한 약속시간</string>
+    <string name="respond_plan_complete_title_text2">보내기&#160;</string>
+    <string name="respond_plan_complete_title_text3">성공</string>
+    <string name="respond_plan_complete_button_text">확인하기</string>
+
+    <string name="respond_plan_reject_title_text">확인하기</string>
+    <string name="respond_plan_reject_title_text2">다음에 만나요:)</string>
+    <string name="respond_plan_reject_info_text">약속을 거절했습니다</string>
+    <string name="respond_plan_reject_button_text">확인하기</string>
+
+    <!-- 약속 확정 -->
+    <string name="confirm_plan_title_text">약속확정</string>
 
     <string name="icon_exit_content_description">Exit Icon</string>
     <string name="icon_create_content_description">Create Icon</string>

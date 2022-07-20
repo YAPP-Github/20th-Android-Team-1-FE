@@ -1,12 +1,12 @@
-package com.yapp.growth.presentation.ui.main.manage.respond
+package com.yapp.growth.presentation.ui.createPlan.timetable
 
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.SendingResponsePlan
-import com.yapp.growth.domain.entity.TimeTable
-import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.*
+import com.yapp.growth.domain.usecase.GetCreateTimeTableUseCase
+import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,32 +15,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RespondPlanViewModel @Inject constructor(
-    private val getRespondUsersUseCase: GetRespondUsersUseCase
-): BaseViewModel<RespondPlanViewState, RespondPlanSideEffect, RespondPlanEvent>(
-    RespondPlanViewState()
-) {
+class CreateTimeTableViewModel @Inject constructor(
+    private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase
+): BaseViewModel<CreateTimeTableViewState, CreateTimeTableSideEffect, CreateTimeTableEvent>(CreateTimeTableViewState()) {
+
     private val _sendResponsePlan = MutableStateFlow<List<SendingResponsePlan>>(emptyList())
     val sendResponsePlan: StateFlow<List<SendingResponsePlan>>
         get() = _sendResponsePlan.asStateFlow()
 
     init {
-        loadRespondUsers(14)
+        loadCreateTimeTable("860fe8ec-55c4-43b1-81d6-ccb2549f9d51")
     }
 
-    private fun loadRespondUsers(promisingKey: Long) {
-        viewModelScope.launch {
-            val result = (getRespondUsersUseCase.invoke(promisingKey) as? NetworkResult.Success)?.data
-            result?.let {
-                makeRespondList(it)
-                updateState {
-                    copy(timeTable = it)
-                }
+    fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
+        val result = (getCreateTimeTableUseCase.invoke(uuid) as? NetworkResult.Success)?.data
+        result?.let {
+            makeRespondList(it)
+            updateState {
+                copy(createTimeTable = it)
             }
         }
     }
 
-    private fun makeRespondList(data: TimeTable) {
+    private fun makeRespondList(data: CreateTimeTable) {
         val booleanArray = Array(data.totalCount*2) { false }
 
         val temp = mutableListOf<SendingResponsePlan>().also { list ->
@@ -55,9 +52,14 @@ class RespondPlanViewModel @Inject constructor(
         _sendResponsePlan.value = temp
     }
 
-    override fun handleEvents(event: RespondPlanEvent) {
+    override fun handleEvents(event: CreateTimeTableEvent) {
         when (event) {
-            is RespondPlanEvent.OnClickTimeTable -> {
+            CreateTimeTableEvent.OnClickBackButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToPreviousScreen })
+            CreateTimeTableEvent.OnClickExitButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
+            CreateTimeTableEvent.OnClickNextButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
+            CreateTimeTableEvent.OnClickNextDayButton -> TODO()
+            CreateTimeTableEvent.OnClickPreviousDayButton -> TODO()
+            is CreateTimeTableEvent.OnClickTimeTable -> {
                 _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex] = _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex].not()
                 if (sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex]) {
                     updateState { copy(clickCount = viewState.value.clickCount.plus(1)) }
@@ -65,9 +67,6 @@ class RespondPlanViewModel @Inject constructor(
                     updateState { copy(clickCount = viewState.value.clickCount.minus(1)) }
                 }
             }
-            is RespondPlanEvent.OnClickNextDayButton -> {  }
-            is RespondPlanEvent.OnClickPreviousDayButton -> {  }
-            is RespondPlanEvent.OnClickRespondButton -> {  }
         }
     }
 }

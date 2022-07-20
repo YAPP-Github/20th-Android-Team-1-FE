@@ -14,7 +14,7 @@ import java.util.*
 private val parseFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
 private val hourFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 
-fun PromisingTimeTableResponse.toResponsePlan(): TimeTable {
+fun PromisingTimeTableResponse.toTimeTable(): TimeTable {
     val response = this
     return TimeTable(
         users = response.members.toUserList(),

@@ -49,7 +49,6 @@ class ConfirmPlanViewModel @Inject constructor(
             repeat(data.availableDates.size) {
                 list.add(SendingResponsePlan(
                     date = data.availableDates[it],
-                    hours = data.hourList,
                     timeList = booleanArray.copyOf().toMutableList()
                 ))
             }

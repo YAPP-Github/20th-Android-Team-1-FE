@@ -13,6 +13,7 @@ import com.yapp.growth.presentation.ui.createPlan.date.DateScreen
 import com.yapp.growth.presentation.ui.createPlan.share.ShareScreen
 import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeScreen
+import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableScreen
 import com.yapp.growth.presentation.ui.createPlan.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
@@ -29,7 +30,7 @@ fun CreatePlanScreen(
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = CreatePlanScreenRoute.THEME.route
+            startDestination = CreatePlanScreenRoute.CREATE_TIMETABLE.route
         ) {
             composable(route = CreatePlanScreenRoute.THEME.route) {
                 ThemeScreen(
@@ -56,6 +57,14 @@ fun CreatePlanScreen(
 
             composable(route = CreatePlanScreenRoute.TIME_RANGE.route) {
                 TimeRangeScreen(
+                    exitCreateScreen = exitCreatePlan,
+                    navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route) },
+                    navigateToPreviousScreen = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = CreatePlanScreenRoute.CREATE_TIMETABLE.route) {
+                CreateTimeTableScreen(
                     exitCreateScreen = exitCreatePlan,
                     navigateToNextScreen = { /* navController.navigate(CreatePlanScreenRoute.NEXT_SCREEN.route) */ },
                     navigateToPreviousScreen = { navController.popBackStack() }
@@ -103,6 +112,7 @@ enum class CreatePlanScreenRoute(val route: String) {
     TITLE("title"),
     DATE("date"),
     TIME_RANGE("time-range"),
+    CREATE_TIMETABLE("create-timetable"),
     RESPOND_PLAN("respond-plan"),
     CONFIRM_PLAN("confirm-plan"),
     RESPOND_PLAN_COMPLETE("respond-plan-complete"),
