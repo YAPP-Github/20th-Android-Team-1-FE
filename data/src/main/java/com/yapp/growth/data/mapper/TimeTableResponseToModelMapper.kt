@@ -4,7 +4,7 @@ import com.yapp.growth.data.response.PromisingTimeTableResponse
 import com.yapp.growth.data.response.TimeTableDateResponse
 import com.yapp.growth.data.response.TimeTableUnitResponse
 import com.yapp.growth.data.response.UserResponse
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.TimeTableDate
 import com.yapp.growth.domain.entity.TimeTableUnit
 import com.yapp.growth.domain.entity.User
@@ -14,9 +14,9 @@ import java.util.*
 private val parseFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
 private val hourFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 
-fun PromisingTimeTableResponse.toResponsePlan(): ResponsePlan {
+fun PromisingTimeTableResponse.toResponsePlan(): TimeTable {
     val response = this
-    return ResponsePlan(
+    return TimeTable(
         users = response.users.toUserList(),
         colors = response.colors,
         totalCount = response.totalCount,

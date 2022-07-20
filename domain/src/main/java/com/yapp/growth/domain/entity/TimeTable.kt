@@ -1,6 +1,6 @@
 package com.yapp.growth.domain.entity
 
-data class ResponsePlan(
+data class TimeTable(
     val users: List<User>,
     val colors: List<Long>,
     val totalCount: Int,
@@ -13,4 +13,16 @@ data class ResponsePlan(
     val availableDates: List<String>,
     val hourList: List<String>,
     val placeName: String,
+)
+
+data class TimeTableDate(
+    val date: String,
+    val timeTableUnits: List<TimeTableUnit>
+)
+
+data class TimeTableUnit(
+    val index: Int,
+    val count: Int,
+    val users: List<User>,
+    val color: Long
 )

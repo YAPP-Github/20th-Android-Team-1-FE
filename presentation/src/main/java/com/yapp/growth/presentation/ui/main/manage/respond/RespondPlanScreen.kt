@@ -63,17 +63,17 @@ fun RespondPlanScreen(
                 height = Dimension.fillToConstraints
             }) {
 
-                LocationAndAvailableColorBox(responsePlan = uiState.responsePlan)
+                LocationAndAvailableColorBox(timeTable = uiState.timeTable)
 
                 if (uiState.availableResponse) {
                     PlanzPlanDateIndicator(
-                        responsePlan = uiState.responsePlan,
+                        timeTable = uiState.timeTable,
                         onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton) },
                         onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
                     )
 
                     PlanzPlanTimeTable(
-                        responsePlan = uiState.responsePlan,
+                        timeTable = uiState.timeTable,
                         onClickTimeTable = { dateIndex, minuteIndex ->
                             viewModel.setEvent(RespondPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         }

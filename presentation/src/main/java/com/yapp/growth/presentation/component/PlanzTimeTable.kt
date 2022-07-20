@@ -18,22 +18,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.util.getCurrentBlockDate
-import com.yapp.growth.presentation.util.toDay
 import com.yapp.growth.presentation.util.toHour
 import com.yapp.growth.presentation.util.toPlanDate
 
 @Composable
 fun ConfirmPlanTimeTable(
-    responsePlan: ResponsePlan,
+    timeTable: TimeTable,
     onClickTimeTable: (Int, Int) -> Unit,
     currentClickTimeIndex: Pair<Int, Int>
 ) {
@@ -43,7 +41,7 @@ fun ConfirmPlanTimeTable(
             .fillMaxHeight()
             .padding(start = 16.dp)
     ) {
-        itemsIndexed(responsePlan.hourList) { hourIndex, hour ->
+        itemsIndexed(timeTable.hourList) { hourIndex, hour ->
             LazyRow(modifier = Modifier.fillParentMaxWidth()) {
                 item(key = hourIndex) {
                     Column(
@@ -61,12 +59,12 @@ fun ConfirmPlanTimeTable(
                     }
                 }
 
-                itemsIndexed(responsePlan.availableDates) { dateIndex, date ->
+                itemsIndexed(timeTable.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
                     val upperTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex == currentClickTimeIndex.second
                     val underTableClicked = dateIndex == currentClickTimeIndex.first && minuteIndex.plus(1) == currentClickTimeIndex.second
 
-                    val blockList = responsePlan.timeTableDate.find { it.date == date }?.timeTableUnits
+                    val blockList = timeTable.timeTableDate.find { it.date == date }?.timeTableUnits
 
                     val upperTableColor = blockList?.let { block ->
                         block.find { it.index == minuteIndex }?.color ?: 0x00000000
@@ -87,7 +85,7 @@ fun ConfirmPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
+                                .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
                                 .border(
                                     width = if (upperTableClicked) 3.dp else 0.dp,
                                     color = if (upperTableClicked) SubCoral else Color.Transparent,
@@ -108,7 +106,7 @@ fun ConfirmPlanTimeTable(
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                         Canvas(Modifier
-                            .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
+                            .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
                             .height(1.dp)
                         ) {
                             drawLine(
@@ -122,7 +120,7 @@ fun ConfirmPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
+                                .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
                                 .border(
                                     width = if (underTableClicked) 3.dp else 0.5.dp,
                                     color = if (underTableClicked) SubCoral else Gray200,
@@ -150,7 +148,7 @@ fun ConfirmPlanTimeTable(
 
 @Composable
 fun PlanzPlanTimeTable(
-    responsePlan: ResponsePlan,
+    timeTable: TimeTable,
     onClickTimeTable: (Int, Int) -> Unit
 ) {
     LazyColumn(
@@ -159,7 +157,7 @@ fun PlanzPlanTimeTable(
             .fillMaxHeight()
             .padding(start = 16.dp)
     ) {
-        itemsIndexed(responsePlan.hourList) { hourIndex, hour ->
+        itemsIndexed(timeTable.hourList) { hourIndex, hour ->
             LazyRow(modifier = Modifier.fillParentMaxWidth()) {
                 item(key = hourIndex) {
                     Column(
@@ -177,12 +175,12 @@ fun PlanzPlanTimeTable(
                     }
                 }
 
-                itemsIndexed(responsePlan.availableDates) { dateIndex, date ->
+                itemsIndexed(timeTable.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
                     var upperTableClicked by remember { mutableStateOf(false) }
                     var underTableClicked by remember { mutableStateOf(false) }
 
-                    val blockList = responsePlan.timeTableDate.find { it.date == date }?.timeTableUnits
+                    val blockList = timeTable.timeTableDate.find { it.date == date }?.timeTableUnits
 
                     val upperTableColor = blockList?.let { block ->
                         block.find { it.index == minuteIndex }?.color ?: 0x00000000
@@ -203,7 +201,7 @@ fun PlanzPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
+                                .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
                                 .border(
                                     width = if (upperTableClicked) 3.dp else 0.dp,
                                     color = if (upperTableClicked) SubCoral else Color.Transparent,
@@ -225,7 +223,7 @@ fun PlanzPlanTimeTable(
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                         Canvas(Modifier
-                            .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
+                            .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
                             .height(1.dp)
                         ) {
                             drawLine(
@@ -239,7 +237,7 @@ fun PlanzPlanTimeTable(
                         Box(
                             modifier = Modifier
                                 .height(26.dp)
-                                .fillParentMaxWidth(1f / (responsePlan.availableDates.size + 1))
+                                .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
                                 .border(
                                     width = if (underTableClicked) 3.dp else 0.dp,
                                     color = if (underTableClicked) SubCoral else Color.Transparent,
@@ -269,7 +267,7 @@ fun PlanzPlanTimeTable(
 @Composable
 fun LocationAndAvailableColorBox(
     modifier: Modifier = Modifier,
-    responsePlan: ResponsePlan
+    timeTable: TimeTable
 ) {
     Box(
         modifier = modifier
@@ -292,7 +290,7 @@ fun LocationAndAvailableColorBox(
             )
 
             Text(
-                text = responsePlan.placeName,
+                text = timeTable.placeName,
                 color = CoolGray500,
                 style = PlanzTypography.caption,
             )
@@ -306,7 +304,7 @@ fun LocationAndAvailableColorBox(
 
             Column {
                 Text(
-                    text = "0/${responsePlan.colors.size}",
+                    text = "0/${timeTable.colors.size}",
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -324,7 +322,7 @@ fun LocationAndAvailableColorBox(
                     .padding(start = 6.dp, end = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                itemsIndexed(responsePlan.colors) { _, color ->
+                itemsIndexed(timeTable.colors) { _, color ->
                     Box(
                         modifier = Modifier
                             .width(24.dp)
@@ -336,7 +334,7 @@ fun LocationAndAvailableColorBox(
 
             Column {
                 Text(
-                    text = "${responsePlan.colors.size}/${responsePlan.colors.size}",
+                    text = "${timeTable.colors.size}/${timeTable.colors.size}",
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -353,11 +351,11 @@ fun LocationAndAvailableColorBox(
 }
 
 @Composable
-fun ConfirmPlanBottomSheet(responsePlan: ResponsePlan, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
+fun ConfirmPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
-    val day = responsePlan.availableDates[currentClickTimeIndex.first].split('T').first()
-    val hour = responsePlan.minTime.toHour()
+    val day = timeTable.availableDates[currentClickTimeIndex.first].split('T').first()
+    val hour = timeTable.minTime.toHour()
     val time = "${day}T${hour}:00"
 
     val respondUserText = StringBuilder()

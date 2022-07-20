@@ -4,14 +4,14 @@ import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.mapper.toResponsePlan
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 import javax.inject.Inject
 
 internal class ConfirmPlanDataSourceImpl @Inject constructor(
     private val retrofitApi: GrowthApi
 ) : ConfirmPlanDataSource {
 
-    override suspend fun getRespondUsers(promisingId: Long): NetworkResult<ResponsePlan> =
+    override suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable> =
         handleApi {
             retrofitApi.getResponseTimeTable(promisingId.toString()).toResponsePlan()
         }

@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.SendingResponsePlan
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,13 +34,13 @@ class RespondPlanViewModel @Inject constructor(
             result?.let {
                 makeRespondList(it)
                 updateState {
-                    copy(responsePlan = it)
+                    copy(timeTable = it)
                 }
             }
         }
     }
 
-    private fun makeRespondList(data: ResponsePlan) {
+    private fun makeRespondList(data: TimeTable) {
         val booleanArray = Array(data.totalCount*2) { false }
 
         val temp = mutableListOf<SendingResponsePlan>().also { list ->

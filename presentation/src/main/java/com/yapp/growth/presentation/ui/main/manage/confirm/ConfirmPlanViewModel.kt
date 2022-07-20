@@ -3,7 +3,7 @@ package com.yapp.growth.presentation.ui.main.manage.confirm
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.SendingResponsePlan
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
@@ -36,13 +36,13 @@ class ConfirmPlanViewModel @Inject constructor(
             result?.let {
                 makeRespondList(it)
                 updateState {
-                    copy(responsePlan = it)
+                    copy(timeTable = it)
                 }
             }
         }
     }
 
-    private fun makeRespondList(data: ResponsePlan) {
+    private fun makeRespondList(data: TimeTable) {
         val booleanArray = Array(data.totalCount*2) { false }
 
         val temp = mutableListOf<SendingResponsePlan>().also { list ->
@@ -60,10 +60,10 @@ class ConfirmPlanViewModel @Inject constructor(
 
     private fun filterCurrentSelectedUser(dateIndex: Int, minuteIndex: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            val day = viewState.value.responsePlan.availableDates[dateIndex]
-            var hour = viewState.value.responsePlan.hourList[minuteIndex/2]
+            val day = viewState.value.timeTable.availableDates[dateIndex]
+            var hour = viewState.value.timeTable.hourList[minuteIndex/2]
 
-            val blockList = viewState.value.responsePlan.timeTableDate.find { it.date == day }?.timeTableUnits
+            val blockList = viewState.value.timeTable.timeTableDate.find { it.date == day }?.timeTableUnits
             val userList = blockList?.let { block ->
                 block.find { it.index == minuteIndex }?.users
             }
