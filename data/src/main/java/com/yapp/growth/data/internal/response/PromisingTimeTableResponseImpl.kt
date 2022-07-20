@@ -3,7 +3,7 @@ package com.yapp.growth.data.internal.response
 import com.yapp.growth.data.response.*
 
 data class PromisingTimeTableResponseImpl(
-    override val users: List<UserResponseImpl>,
+    override val members: List<UserResponseImpl>,
     override val colors: List<Long>,
     override val totalCount: Int,
     override val unit: Float,

@@ -1,9 +1,9 @@
 package com.yapp.growth.domain.repository
 
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 
 interface ConfirmPlanRepository {
 
-    suspend fun getRespondUsers(promisingKey: Long): NetworkResult<ResponsePlan>
+    suspend fun getRespondUsers(promisingKey: Long): NetworkResult<TimeTable>
 }

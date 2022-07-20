@@ -50,7 +50,7 @@ fun String.toDayOfWeek(): String {
     return DayOfWeek.values()[calendar.get(Calendar.DAY_OF_WEEK)].dayOfWeek
 }
 
-fun String.toAM_PM(): String {
+fun String.to12HourClock(): String {
     val currentTime = this
     val calendar = Calendar.getInstance().apply {
         time = PARSE_DATE_FORMAT.parse(currentTime) ?: Date()
@@ -66,9 +66,9 @@ fun String.toPlanDate(): String {
     }
 
     dateTimeFormat = if (calendar.get(Calendar.MINUTE) == 0) {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.toAM_PM()}HH시", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시", Locale.KOREA)
     } else {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.toAM_PM()}HH시 mm분", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시 mm분", Locale.KOREA)
     }
 
     val displayText = PARSE_DATE_FORMAT.parse(currentTime) ?: ""

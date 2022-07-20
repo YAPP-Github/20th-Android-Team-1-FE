@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.yapp.growth.domain.entity.ResponsePlan
+import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.util.toDay
@@ -27,7 +27,7 @@ import com.yapp.growth.presentation.util.toDayOfWeek
 @Composable
 fun PlanzPlanDateIndicator(
     modifier: Modifier = Modifier,
-    responsePlan: ResponsePlan,
+    timeTable: TimeTable,
     onClickNextDayButton: () -> Unit,
     onClickPreviousDayButton: () -> Unit
 ) {
@@ -72,7 +72,7 @@ fun PlanzPlanDateIndicator(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                itemsIndexed(responsePlan.availableDates) { _, date ->
+                itemsIndexed(timeTable.availableDates) { _, date ->
                     PlanzPlanDayText(date = date)
                 }
             }

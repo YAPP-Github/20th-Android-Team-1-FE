@@ -14,22 +14,12 @@
     <string name="home_today_plan">오늘의 약속</string>
     <string name="home_induce_login">회원가입하고, 편리한 약속잡기를 경험하세요!</string>
 
-    <string name="detail_plan_app_bar_text">약속 상세보기</string>
-    <string name="detail_plan_info_when">날짜/시간</string>
-    <string name="detail_plan_info_place">장소</string>
-    <string name="detail_plan_info_member">참여자</string>
-
     <string name="manage_plan_app_bar_text">약속관리</string>
     <string name="manage_plan_leader_badge">파티장</string>
     <string name="manage_plan_follower_badge">파티원</string>
     <string name="manage_plan_completed_member_count_text">명 응답 완료</string>
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
-
-    <string name="respond_plan_location_text">강남역카카오프렌즈강</string>
-    <string name="respond_plan_clear_select_text">선택 해제</string>
-    <string name="respond_plan_send_plan_title">약속시간 보내기</string>
-    <string name="respond_plan_send_nothing_title">되는시간 없어요</string>
 
     <string name="my_page_text">내 정보</string>
     <string name="my_page_planz_sign_up_text">플랜즈 회원가입</string>
@@ -83,12 +73,6 @@
     <string name="detail_plan_info_when">날짜/시간</string>
     <string name="detail_plan_info_place">장소</string>
     <string name="detail_plan_info_member">참여자</string>
-
-    <string name="icon_exit_content_description">Exit Icon</string>
-    <string name="icon_create_content_description">Create Icon</string>
-    <string name="icon_check_content_description">Check Icon</string>
-    <string name="icon_clear_content_description">Clear Text Icon</string>
-    <string name="icon_error_content_description">Error Icon</string>
 
     <!-- 약속 생성 STEP 3 -->
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>

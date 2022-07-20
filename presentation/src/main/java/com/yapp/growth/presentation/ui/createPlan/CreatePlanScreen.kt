@@ -85,6 +85,8 @@ fun CreatePlanScreen(
                 RespondPlanRejectScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
                     onClickCheckButton = {  }
+                )
+            }
 
             composable(route = CreatePlanScreenRoute.SHARE.route) {
                 ShareScreen(
