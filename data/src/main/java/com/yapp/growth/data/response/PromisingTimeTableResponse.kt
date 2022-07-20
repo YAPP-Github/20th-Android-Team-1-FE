@@ -1,7 +1,7 @@
 package com.yapp.growth.data.response
 
 interface PromisingTimeTableResponse {
-    val users: List<UserResponse>
+    val members: List<UserResponse>
     val colors: List<Long>
     val totalCount: Int
     val unit: Float

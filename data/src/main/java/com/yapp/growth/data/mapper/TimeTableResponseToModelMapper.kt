@@ -17,7 +17,7 @@ private val hourFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 fun PromisingTimeTableResponse.toResponsePlan(): TimeTable {
     val response = this
     return TimeTable(
-        users = response.users.toUserList(),
+        users = response.members.toUserList(),
         colors = response.colors,
         totalCount = response.totalCount,
         timeTableDate = response.timeTable.toTimeTableDateList(),
