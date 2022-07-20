@@ -8,7 +8,20 @@ import com.yapp.growth.domain.entity.User
 
 class ConfirmPlanContract {
     data class ConfirmPlanViewState(
-        val responsePlan: ResponsePlan = ResponsePlan(emptyList(), emptyList(), emptyList(),0,"","", emptyList(), emptyList()),
+        val responsePlan: ResponsePlan = ResponsePlan(
+            emptyList(),
+            emptyList(),
+            0,
+            emptyList(),
+            0,
+            "",
+            User(0, ""),
+            "",
+            "",
+            emptyList(),
+            emptyList(),
+            ""
+        ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
         val currentClickUserData: List<User> = emptyList()
     ) : ViewState

@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetRespondUsersUseCase @Inject constructor(
     private val repository: ConfirmPlanRepository
 ) {
-    operator suspend fun invoke(promisingKey: Long): NetworkResult<ResponsePlan> {
+    suspend operator fun invoke(promisingKey: Long): NetworkResult<ResponsePlan> {
         return repository.getRespondUsers(promisingKey)
     }
 

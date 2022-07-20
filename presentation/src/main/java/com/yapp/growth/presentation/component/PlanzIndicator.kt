@@ -21,6 +21,8 @@ import androidx.constraintlayout.compose.Dimension
 import com.yapp.growth.domain.entity.ResponsePlan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.util.toDay
+import com.yapp.growth.presentation.util.toDayOfWeek
 
 @Composable
 fun PlanzPlanDateIndicator(
@@ -70,7 +72,7 @@ fun PlanzPlanDateIndicator(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                itemsIndexed(responsePlan.availableDate) { _, date ->
+                itemsIndexed(responsePlan.availableDates) { _, date ->
                     PlanzPlanDayText(date = date)
                 }
             }
@@ -120,14 +122,14 @@ fun PlanzPlanNextDayButton(onClick: () -> Unit) {
 fun PlanzPlanDayText(date: String) {
     Column {
         Text(
-            text = "월",
+            text = date.toDayOfWeek(),
             color = Gray700,
             style = PlanzTypography.caption,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
         Text(
-            text = date,
+            text = date.toDay(),
             color = Gray800,
             style = PlanzTypography.body2
         )
