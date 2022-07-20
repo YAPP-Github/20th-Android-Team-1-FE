@@ -10,10 +10,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class CreatePlanActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             PlanzTheme {
                 CreatePlanScreen(
-                    exitCreatePlan = { exitCreatePlan() }
+                    exitCreatePlan = { exitCreatePlan() },
+                    startShareActivity = { intent -> startActivity(intent) }
                 )
             }
         }

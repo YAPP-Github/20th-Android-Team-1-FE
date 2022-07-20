@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import common.GradleUtil.implement
 
 plugins {
@@ -58,10 +57,6 @@ android {
     }
 }
 
-fun getProperty(propertyKey: String): String? {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
-}
-
 dependencies {
     implementation(project(Modules.PRESENTATION))
     implementation(project(Modules.DOMAIN))
@@ -70,7 +65,7 @@ dependencies {
     app.ModuleDependencies.hilt.implement(this)
     app.ModuleDependencies.hiltAndroid.implement(this)
     app.ModuleDependencies.timber.implement(this)
-    app.ModuleDependencies.kakaoSdk.implement(this)
+    app.ModuleDependencies.kakaoOAuth.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)

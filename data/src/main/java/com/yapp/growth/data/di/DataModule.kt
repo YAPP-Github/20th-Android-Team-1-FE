@@ -34,14 +34,15 @@ internal class DataModule {
     @Singleton
     @Provides
     fun provideGrowthApi(
-        retrofit: Retrofit
+        retrofit: Retrofit,
     ): GrowthApi =
         retrofit.create(GrowthApi::class.java)
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     fun provideJsonAdapterFactory(): Converter.Factory =
         MoshiConverterFactory.create(
             Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build())
+                .add(KotlinJsonAdapterFactory())
+                .build())
 }
