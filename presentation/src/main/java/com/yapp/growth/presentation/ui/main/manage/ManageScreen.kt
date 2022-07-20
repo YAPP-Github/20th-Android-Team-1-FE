@@ -38,9 +38,9 @@ import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageSideEffe
 fun ManageScreen(
     viewModel: ManageViewModel = hiltViewModel(),
     intentToCreateScreen: () -> Unit,
-    navigateToFixPlanScreen: (Int) -> Unit,
-    navigateToMemberResponseScreen: (Int) -> Unit,
-    navigateToInvitationScreen: (Int) -> Unit,
+    navigateToFixPlanScreen: (Long) -> Unit,
+    navigateToMemberResponseScreen: (Long) -> Unit,
+    navigateToInvitationScreen: (Long) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -158,8 +158,8 @@ fun ManagePager(
     pagerState: PagerState,
     waitingPlans: List<Plan.WaitingPlan>,
     fixedPlans: List<Plan.FixedPlan>,
-    onWaitingItemClick: (Int) -> Unit,
-    onFixedItemClick: (Int) -> Unit,
+    onWaitingItemClick: (Long) -> Unit,
+    onFixedItemClick: (Long) -> Unit,
 ) {
     HorizontalPager(
         state = pagerState,
@@ -188,7 +188,7 @@ fun ManagePager(
 fun ManagePlansList(
     plans: List<Plan>,
     type: ManageTapMenu,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -218,7 +218,7 @@ fun ManagePlansList(
 fun ManagePlansItem(
     plan: Plan,
     type: ManageTapMenu,
-    onItemClick: (Int) -> Unit,
+    onItemClick: (Long) -> Unit,
 ) {
     Card(
         modifier = Modifier
