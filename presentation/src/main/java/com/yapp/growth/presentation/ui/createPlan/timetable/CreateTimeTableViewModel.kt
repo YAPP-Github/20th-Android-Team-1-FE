@@ -23,18 +23,54 @@ class CreateTimeTableViewModel @Inject constructor(
     val sendResponsePlan: StateFlow<List<SendingResponsePlan>>
         get() = _sendResponsePlan.asStateFlow()
 
+    private var originalTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList())
+
+    private var currentIndex = 0
+
     init {
-        loadCreateTimeTable("860fe8ec-55c4-43b1-81d6-ccb2549f9d51")
+        loadCreateTimeTable("6d60dac6-2b1d-4b8f-8a06-5766a90c559c")
     }
 
     fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
         val result = (getCreateTimeTableUseCase.invoke(uuid) as? NetworkResult.Success)?.data
         result?.let {
+            originalTable = it
             makeRespondList(it)
+            val temp: CreateTimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
             updateState {
-                copy(createTimeTable = it)
+                copy(createTimeTable = temp)
             }
         }
+    }
+
+    private fun nextDay() {
+        currentIndex += 1
+        val fromIndex = currentIndex.times(4)
+        if (fromIndex >= originalTable.availableDates.size) {
+            currentIndex -= 1
+            return
+        }
+
+        var toIndex = -1
+        toIndex = if (originalTable.availableDates.size < fromIndex.plus(4)) {
+            originalTable.availableDates.size
+        } else {
+            fromIndex.plus(4)
+        }
+        val temp: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
+        updateState {
+            copy(createTimeTable = temp)
+        }
+    }
+
+    private fun previousDay() {
+        currentIndex -= 1
+        val fromIndex = currentIndex.times(4)
+        if (fromIndex <= 0) {
+            currentIndex += 1
+            return
+        }
+
     }
 
     private fun makeRespondList(data: CreateTimeTable) {
@@ -57,11 +93,11 @@ class CreateTimeTableViewModel @Inject constructor(
             CreateTimeTableEvent.OnClickBackButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToPreviousScreen })
             CreateTimeTableEvent.OnClickExitButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
             CreateTimeTableEvent.OnClickNextButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
-            CreateTimeTableEvent.OnClickNextDayButton -> TODO()
-            CreateTimeTableEvent.OnClickPreviousDayButton -> TODO()
+            CreateTimeTableEvent.OnClickNextDayButton -> { nextDay() }
+            CreateTimeTableEvent.OnClickPreviousDayButton -> { previousDay() }
             is CreateTimeTableEvent.OnClickTimeTable -> {
-                _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex] = _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex].not()
-                if (sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex]) {
+                _sendResponsePlan.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex] = _sendResponsePlan.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex].not()
+                if (sendResponsePlan.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex]) {
                     updateState { copy(clickCount = viewState.value.clickCount.plus(1)) }
                 } else {
                     updateState { copy(clickCount = viewState.value.clickCount.minus(1)) }

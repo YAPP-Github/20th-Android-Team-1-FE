@@ -11,7 +11,7 @@ private val hourFormat = SimpleDateFormat("HH:mm", Locale.KOREA)
 fun CreateTimeTableResponse.toCreateTimeTable(): CreateTimeTable {
     val response = this
     return CreateTimeTable(
-        totalCount = response.totalCount,
+        totalCount = response.totalCount/2,
         minTime = response.minTime,
         maxTime = response.maxTime,
         availableDates = response.availableDates,
