@@ -31,6 +31,7 @@ fun CreateTimeTableScreen(
     navigateToPreviousScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
+    val clickedList by viewModel.sendResponsePlan.collectAsState()
 
     Scaffold(
         topBar = {
@@ -66,6 +67,7 @@ fun CreateTimeTableScreen(
 
                 CreateTimeTable(
                     createTimeTable = uiState.createTimeTable,
+                    clickedList = clickedList,
                     onClickTimeTable = { dateIndex, minuteIndex ->
                         viewModel.setEvent(CreateTimeTableEvent.OnClickTimeTable(dateIndex, minuteIndex))
                     }

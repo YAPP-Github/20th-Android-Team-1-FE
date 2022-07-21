@@ -139,7 +139,7 @@ fun CreateTimeTableDateIndicator(
                         end.linkTo(rightArrowBox.start)
                         width = Dimension.fillToConstraints
                     },
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 

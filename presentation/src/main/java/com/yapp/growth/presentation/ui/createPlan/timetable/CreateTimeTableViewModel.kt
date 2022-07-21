@@ -51,8 +51,7 @@ class CreateTimeTableViewModel @Inject constructor(
             return
         }
 
-        var toIndex = -1
-        toIndex = if (originalTable.availableDates.size < fromIndex.plus(4)) {
+        val toIndex: Int = if (originalTable.availableDates.size < fromIndex.plus(4)) {
             originalTable.availableDates.size
         } else {
             fromIndex.plus(4)
@@ -64,13 +63,15 @@ class CreateTimeTableViewModel @Inject constructor(
     }
 
     private fun previousDay() {
+        if (currentIndex == 0) return
         currentIndex -= 1
         val fromIndex = currentIndex.times(4)
-        if (fromIndex <= 0) {
-            currentIndex += 1
-            return
-        }
+        val toIndex = fromIndex.plus(4)
 
+        val temp: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
+        updateState {
+            copy(createTimeTable = temp)
+        }
     }
 
     private fun makeRespondList(data: CreateTimeTable) {
