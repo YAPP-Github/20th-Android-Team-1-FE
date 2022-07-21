@@ -31,7 +31,7 @@ fun CreateTimeTableScreen(
     navigateToPreviousScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
-    val clickedList by viewModel.sendResponsePlan.collectAsState()
+    val timeCheckedOfDays by viewModel.timeCheckedOfDays.collectAsState()
 
     Scaffold(
         topBar = {
@@ -67,7 +67,7 @@ fun CreateTimeTableScreen(
 
                 CreateTimeTable(
                     createTimeTable = uiState.createTimeTable,
-                    clickedList = clickedList,
+                    timeCheckedOfDays = timeCheckedOfDays,
                     onClickTimeTable = { dateIndex, minuteIndex ->
                         viewModel.setEvent(CreateTimeTableEvent.OnClickTimeTable(dateIndex, minuteIndex))
                     }
@@ -82,7 +82,7 @@ fun CreateTimeTableScreen(
                 bottom.linkTo(parent.bottom)
                 width = Dimension.fillToConstraints
             }, clickCount = uiState.clickCount,
-                onClickSendPlanButton = { }
+                onClickSendPlanButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickSendButton) }
             )
 
         }

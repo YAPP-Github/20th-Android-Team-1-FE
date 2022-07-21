@@ -1,10 +1,11 @@
-package com.yapp.growth.domain.repository
+package com.yapp.growth.data.source
 
+import com.yapp.growth.data.internal.response.TimeRequestResponseImpl
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 
-interface CreateTimeTableRepository {
+interface CreateTimeTableDataSource {
 
     suspend fun getCreateTimeTable(uuid: String): NetworkResult<CreateTimeTable>
 

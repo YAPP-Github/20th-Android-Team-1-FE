@@ -4,8 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.CreateTimeTable
-import com.yapp.growth.domain.entity.SendingResponsePlan
+import com.yapp.growth.domain.entity.TimeCheckedOfDay
+import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetCreateTimeTableUseCase
+import com.yapp.growth.domain.usecase.SendTimeCheckedOfDayUseCase
 import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,19 +19,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTimeTableViewModel @Inject constructor(
-    private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase
+    private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase,
+    private val sendTimeCheckedOfDayUseCase: SendTimeCheckedOfDayUseCase,
 ): BaseViewModel<CreateTimeTableViewState, CreateTimeTableSideEffect, CreateTimeTableEvent>(CreateTimeTableViewState()) {
 
-    private val _sendResponsePlan = MutableStateFlow<List<SendingResponsePlan>>(emptyList())
-    val sendResponsePlan: StateFlow<List<SendingResponsePlan>>
-        get() = _sendResponsePlan.asStateFlow()
+    private val _timeCheckedOfDays = MutableStateFlow<List<TimeCheckedOfDay>>(emptyList())
+    val timeCheckedOfDays: StateFlow<List<TimeCheckedOfDay>>
+        get() = _timeCheckedOfDays.asStateFlow()
 
     private var originalTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList())
 
     private var currentIndex = 0
 
+    private val uuid = "43edb859-5892-42a4-b797-fab399ed4e34"
+
     init {
-        loadCreateTimeTable("6d60dac6-2b1d-4b8f-8a06-5766a90c559c")
+        loadCreateTimeTable(uuid)
     }
 
     fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
@@ -77,28 +83,39 @@ class CreateTimeTableViewModel @Inject constructor(
     private fun makeRespondList(data: CreateTimeTable) {
         val booleanArray = Array(data.totalCount*2) { false }
 
-        val temp = mutableListOf<SendingResponsePlan>().also { list ->
+        val temp = mutableListOf<TimeCheckedOfDay>().also { list ->
             repeat(data.availableDates.size) {
-                list.add(SendingResponsePlan(
+                list.add(TimeCheckedOfDay(
                     date = data.availableDates[it],
                     timeList = booleanArray.copyOf().toMutableList()
                 ))
             }
         }.toList()
 
-        _sendResponsePlan.value = temp
+        _timeCheckedOfDays.value = temp
     }
+
+    private fun sendTimeCheckedOfDays(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
+        viewModelScope.launch {
+            sendTimeCheckedOfDayUseCase.invoke(uuid, timeCheckedOfDays)
+                .onSuccess {
+                    TODO()
+                }
+                .onError {
+                    TODO()
+                }
+        }
 
     override fun handleEvents(event: CreateTimeTableEvent) {
         when (event) {
             CreateTimeTableEvent.OnClickBackButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToPreviousScreen })
             CreateTimeTableEvent.OnClickExitButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
-            CreateTimeTableEvent.OnClickNextButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
+            CreateTimeTableEvent.OnClickSendButton -> sendTimeCheckedOfDays(uuid, timeCheckedOfDays.value)
             CreateTimeTableEvent.OnClickNextDayButton -> { nextDay() }
             CreateTimeTableEvent.OnClickPreviousDayButton -> { previousDay() }
             is CreateTimeTableEvent.OnClickTimeTable -> {
-                _sendResponsePlan.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex] = _sendResponsePlan.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex].not()
-                if (sendResponsePlan.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex]) {
+                _timeCheckedOfDays.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex] = _timeCheckedOfDays.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex].not()
+                if (timeCheckedOfDays.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex]) {
                     updateState { copy(clickCount = viewState.value.clickCount.plus(1)) }
                 } else {
                     updateState { copy(clickCount = viewState.value.clickCount.minus(1)) }

@@ -19,7 +19,7 @@ class CreateTimeTableContract {
 
     sealed class CreateTimeTableEvent: ViewEvent {
         object OnClickExitButton : CreateTimeTableEvent()
-        object OnClickNextButton : CreateTimeTableEvent()
+        object OnClickSendButton : CreateTimeTableEvent()
         object OnClickBackButton : CreateTimeTableEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : CreateTimeTableEvent()
         object OnClickNextDayButton : CreateTimeTableEvent()

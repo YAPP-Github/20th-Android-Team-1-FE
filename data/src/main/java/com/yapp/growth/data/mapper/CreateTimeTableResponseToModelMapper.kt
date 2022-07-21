@@ -1,7 +1,9 @@
 package com.yapp.growth.data.mapper
 
 import com.yapp.growth.data.response.CreateTimeTableResponse
+import com.yapp.growth.data.response.TimeRequestResponse
 import com.yapp.growth.domain.entity.CreateTimeTable
+import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,4 +19,8 @@ fun CreateTimeTableResponse.toCreateTimeTable(): CreateTimeTable {
         availableDates = response.availableDates,
         hourList = makeHourList(response.minTime, response.totalCount/2),
     )
+}
+
+fun TimeRequestResponse.toLong(): Long {
+    return this.id
 }

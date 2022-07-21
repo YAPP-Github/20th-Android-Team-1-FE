@@ -22,7 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.domain.entity.CreateTimeTable
-import com.yapp.growth.domain.entity.SendingResponsePlan
+import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
@@ -271,7 +271,7 @@ fun PlanzPlanTimeTable(
 @Composable
 fun CreateTimeTable(
     createTimeTable: CreateTimeTable,
-    clickedList: List<SendingResponsePlan>,
+    timeCheckedOfDays: List<TimeCheckedOfDay>,
     onClickTimeTable: (Int, Int) -> Unit
 ) {
     LazyColumn(
@@ -301,8 +301,8 @@ fun CreateTimeTable(
 
                 itemsIndexed(createTimeTable.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
-                    var upperTableClicked = clickedList.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
-                    var underTableClicked = clickedList.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
+                    var upperTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
+                    var underTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
 
                     Column(modifier = Modifier
                         .fillMaxWidth()
@@ -316,11 +316,6 @@ fun CreateTimeTable(
                             modifier = Modifier
                                 .height(26.dp)
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
-//                                .border(
-//                                    width = if (upperTableClicked) 3.dp else 0.dp,
-//                                    color = if (upperTableClicked) SubCoral else Color.Transparent,
-//                                    shape = RectangleShape
-//                                )
                                 .clickable {
                                     upperTableClicked = !upperTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex)
@@ -346,11 +341,6 @@ fun CreateTimeTable(
                             modifier = Modifier
                                 .height(26.dp)
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
-//                                .border(
-//                                    width = if (underTableClicked) 3.dp else 0.dp,
-//                                    color = if (underTableClicked) SubCoral else Color.Transparent,
-//                                    shape = RectangleShape
-//                                )
                                 .clickable {
                                     underTableClicked = !underTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
