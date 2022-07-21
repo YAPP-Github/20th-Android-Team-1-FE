@@ -8,6 +8,7 @@ plugins {
     id(app.Plugins.GOOGLE_SERVICE)
     id(app.Plugins.FIREBASE_CRASHLYTICS)
     id(app.Plugins.HILT_ANDROID)
+    id(app.Plugins.SECRETS_GRADLE)
 }
 
 android {
@@ -46,6 +47,8 @@ dependencies {
     app.ModuleDependencies.materialCalendarView.implement(this)
     app.ModuleDependencies.accompanist.implement(this)
     app.ModuleDependencies.kotlinDateTime.implement(this)
+    app.ModuleDependencies.kakaoOAuth.implement(this)
+    app.ModuleDependencies.kakaoShare.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)

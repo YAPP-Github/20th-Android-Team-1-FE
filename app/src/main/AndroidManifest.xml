@@ -50,8 +50,17 @@
 
         <activity
             android:name=".presentation.ui.createPlan.CreatePlanActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Growth" />
+            android:exported="true"
+            android:theme="@style/Theme.Growth">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="kakaolink"
+                    android:scheme="kakao${KAKAO_APP_KEY}" />
+            </intent-filter>
+        </activity>
 
     </application>
 

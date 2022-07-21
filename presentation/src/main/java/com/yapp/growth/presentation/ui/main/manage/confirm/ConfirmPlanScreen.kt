@@ -37,7 +37,7 @@ fun ConfirmPlanScreen(
         scrimColor = Color.Transparent,
         sheetContent = {
             ConfirmPlanBottomSheet(
-                responsePlan = uiState.responsePlan,
+                timeTable = uiState.timeTable,
                 currentClickTimeIndex = uiState.currentClickTimeIndex,
                 currentClickUserData = uiState.currentClickUserData,
                 onClickSelectPlan = {  }
@@ -47,7 +47,7 @@ fun ConfirmPlanScreen(
         Scaffold(
             topBar = {
                 PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.navigation_confirm_plan_text),
+                    title = stringResource(id = R.string.confirm_plan_title_text),
                     onClickBackIcon = navigateToPreviousScreen,
                     onClickShareIcon = { /*TODO*/ }
                 )
@@ -65,16 +65,16 @@ fun ConfirmPlanScreen(
                     height = Dimension.fillToConstraints
                 }) {
 
-                    LocationAndAvailableColorBox(responsePlan = uiState.responsePlan)
+                    LocationAndAvailableColorBox(timeTable = uiState.timeTable)
 
                     PlanzPlanDateIndicator(
-                        responsePlan = uiState.responsePlan,
+                        timeTable = uiState.timeTable,
                         onClickPreviousDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickPreviousDayButton)},
                         onClickNextDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickNextDayButton) }
                     )
 
                     ConfirmPlanTimeTable(
-                        responsePlan = uiState.responsePlan,
+                        timeTable = uiState.timeTable,
                         onClickTimeTable = { dateIndex, minuteIndex ->
                             viewModel.setEvent(ConfirmPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         },

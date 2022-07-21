@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan
 
+import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -9,16 +10,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.yapp.growth.presentation.ui.createPlan.date.DateScreen
+import com.yapp.growth.presentation.ui.createPlan.share.ShareScreen
 import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeScreen
 import com.yapp.growth.presentation.ui.createPlan.title.TitleScreen
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 
 @Composable
 fun CreatePlanScreen(
     navController: NavHostController = rememberNavController(),
     exitCreatePlan: () -> Unit,
+    startShareActivity: (Intent) -> Unit,
 ) {
     Scaffold { innerPadding ->
         NavHost(
@@ -68,6 +73,27 @@ fun CreatePlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
+
+            composable(route = CreatePlanScreenRoute.RESPOND_PLAN_COMPLETE.route) {
+                RespondPlanCompleteScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    onClickCheckButton = {  }
+                )
+            }
+
+            composable(route = CreatePlanScreenRoute.RESPOND_PLAN_REJECT.route) {
+                RespondPlanRejectScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    onClickCheckButton = {  }
+                )
+            }
+
+            composable(route = CreatePlanScreenRoute.SHARE.route) {
+                ShareScreen(
+                    finishCreatePlan = exitCreatePlan,
+                    startShareActivity = { shareIntent -> startShareActivity(shareIntent) }
+                )
+            }
         }
     }
 }
@@ -79,4 +105,7 @@ enum class CreatePlanScreenRoute(val route: String) {
     TIME_RANGE("time-range"),
     RESPOND_PLAN("respond-plan"),
     CONFIRM_PLAN("confirm-plan"),
+    RESPOND_PLAN_COMPLETE("respond-plan-complete"),
+    RESPOND_PLAN_REJECT("respond-plan-reject"),
+    SHARE("share-plan"),
 }

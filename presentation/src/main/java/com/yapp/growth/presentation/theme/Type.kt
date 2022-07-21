@@ -60,7 +60,7 @@ val PlanzTypography = Typography(
     ),
     button = TextStyle(
         fontFamily = Pretendard,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),

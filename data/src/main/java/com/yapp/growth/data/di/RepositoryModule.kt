@@ -8,6 +8,7 @@ import com.yapp.growth.domain.repository.AllFixedPlanRepository
 import com.yapp.growth.domain.repository.ConfirmPlanRepository
 import com.yapp.growth.domain.repository.MonthlyFixedPlanRepository
 import com.yapp.growth.domain.repository.OneDayFixedPlanRepository
+import com.yapp.growth.domain.repository.ConfirmPlanRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
