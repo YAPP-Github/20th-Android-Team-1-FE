@@ -80,7 +80,6 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
@@ -217,7 +216,6 @@ private fun HomeUserProfile(
     }
 }
 
-// TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
 fun HomeTodayPlan(
     isError: Boolean,
@@ -504,7 +502,6 @@ fun HomeMonthlyPlan(
     }
 }
 
-// TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
 fun HomeCalendar(
     currentDate: CalendarDay,
