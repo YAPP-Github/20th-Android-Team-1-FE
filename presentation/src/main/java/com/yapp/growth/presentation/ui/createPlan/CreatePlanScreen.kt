@@ -30,7 +30,7 @@ fun CreatePlanScreen(
         NavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = CreatePlanScreenRoute.CREATE_TIMETABLE.route
+            startDestination = CreatePlanScreenRoute.THEME.route
         ) {
             composable(route = CreatePlanScreenRoute.THEME.route) {
                 ThemeScreen(

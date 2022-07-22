@@ -28,7 +28,6 @@ class CreateTimeTableViewModel @Inject constructor(
         get() = _timeCheckedOfDays.asStateFlow()
 
     private var originalTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList())
-
     private var currentIndex = 0
 
     private val uuid = "43edb859-5892-42a4-b797-fab399ed4e34"
@@ -42,9 +41,9 @@ class CreateTimeTableViewModel @Inject constructor(
         result?.let {
             originalTable = it
             makeRespondList(it)
-            val temp: CreateTimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
+            val sliceCreateTimeTable: CreateTimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
             updateState {
-                copy(createTimeTable = temp)
+                copy(createTimeTable = sliceCreateTimeTable)
             }
         }
     }
@@ -62,9 +61,9 @@ class CreateTimeTableViewModel @Inject constructor(
         } else {
             fromIndex.plus(4)
         }
-        val temp: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
+        val sliceCreateTimeTable: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
         updateState {
-            copy(createTimeTable = temp)
+            copy(createTimeTable = sliceCreateTimeTable)
         }
     }
 
