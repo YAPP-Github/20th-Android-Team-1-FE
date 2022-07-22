@@ -57,6 +57,8 @@
     <!-- 약속 생성 STEP 3 -->
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
     <string name="create_plan_date_max_day_text">* 최대 12일까지 선택 가능</string>
+    <string name="create_plan_date_previous_select_text">이전 날짜는 선택이 불가합니다.</string>
+    <string name="create_plan_date_maximum_select_text">최대 12일까지 선택이 가능합니다.</string>
 
     <!-- 약속 생성 STEP 4 -->
     <string name="create_plan_time_range_title_text">약속 후보 시간대를 정해 주세요!</string>
