@@ -54,10 +54,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
@@ -156,6 +154,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(3.dp))
                 when (viewState.loginState) {
                     HomeContract.LoginState.LOGIN -> HomeTodayPlan(
+                        isError = true,
                         expanded = viewState.isTodayPlanExpanded,
                         todayPlans = viewState.todayPlans,
                         planCount = viewState.todayPlans.size,
@@ -168,6 +167,7 @@ fun HomeScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HomeMonthlyPlan(
+                    isError = true,
                     expanded = viewState.isMonthlyPlanExpanded,
                     monthlyPlans = viewState.monthlyPlans,
                     mode = viewState.monthlyPlanMode,
@@ -221,6 +221,7 @@ private fun HomeUserProfile(
 // TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
 fun HomeTodayPlan(
+    isError: Boolean,
     expanded: Boolean,
     todayPlans: List<Plan.FixedPlan>,
     planCount: Int,
@@ -264,7 +265,15 @@ fun HomeTodayPlan(
                         style = MaterialTheme.typography.h3,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    HomeTodayPlanCountText(planCount)
+                    if (isError) {
+                        Icon(
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_blue_error),
+                            contentDescription = null,
+                        )
+                    } else {
+                        HomeTodayPlanCountText(planCount)
+                    }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 if (todayPlans.isNotEmpty())
@@ -350,6 +359,7 @@ fun HomeInduceLogin(
 
 @Composable
 fun HomeMonthlyPlan(
+    isError: Boolean,
     expanded: Boolean,
     monthlyPlans: List<Plan.FixedPlan>,
     mode: HomeContract.MonthlyPlanModeState,
@@ -390,75 +400,99 @@ fun HomeMonthlyPlan(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Text(
-                        text = "${year}년 ${String.format("%02d", month)}월",
-                        style = PlanzTypography.h3,
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 112.dp)
-                            .clickable { onPreviousClick() },
-                        tint = Color.Unspecified,
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
-                        contentDescription = null,
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 136.dp)
-                            .clickable { onNextClick() },
-                        tint = Color.Unspecified,
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
-                        contentDescription = null,
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .align(alignment = Alignment.CenterEnd)
-                            .clickable { onModeClick() },
-                        tint = Color.Unspecified,
-                        imageVector = if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
-                            ImageVector.vectorResource(R.drawable.ic_list)
-                        } else {
-                            ImageVector.vectorResource(R.drawable.ic_calendar)
-                        },
-                        contentDescription = null,
-                    )
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Divider(color = Gray200, thickness = 1.dp)
-                if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
-                    HomeCalendar(
-                        currentDate = currentDate,
-                        monthlyPlans = monthlyPlans,
-                        onDateClick = onDateClick
-                    )
-                } else {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    if (monthlyPlans.isNotEmpty()) {
-                        HomeMonthlyPlanList(
-                            monthlyPlans = monthlyPlans,
-                            expanded = expanded,
-                            onExpandedClick = onExpandedClick,
-                            onPlanItemClick = onPlanItemClick
-                        )
-                    } else {
-                        Spacer(modifier = Modifier.height(40.dp))
+                if (isError) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 102.dp, vertical = 76.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
                         Image(
-                            painter = painterResource(R.drawable.ic_calendar_with_chracter),
-                            contentScale = ContentScale.Crop,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
                             contentDescription = null,
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = stringResource(id = R.string.home_no_plan),
+                            text = "문제가 발생했습니다.",
                             color = Gray500,
-                            style = MaterialTheme.typography.body2,
+                            style = PlanzTypography.body2,
                         )
-                        Spacer(modifier = Modifier.height(52.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "다시 시도해주세요.",
+                            color = Gray500,
+                            style = PlanzTypography.body2,
+                        )
+                    }
+                } else {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = "${year}년 ${String.format("%02d", month)}월",
+                            style = PlanzTypography.h3,
+                        )
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = 112.dp)
+                                .clickable { onPreviousClick() },
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
+                            contentDescription = null,
+                        )
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = 136.dp)
+                                .clickable { onNextClick() },
+                            tint = Color.Unspecified,
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
+                            contentDescription = null,
+                        )
+                        Icon(
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterEnd)
+                                .clickable { onModeClick() },
+                            tint = Color.Unspecified,
+                            imageVector = if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
+                                ImageVector.vectorResource(R.drawable.ic_list)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_calendar)
+                            },
+                            contentDescription = null,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Divider(color = Gray200, thickness = 1.dp)
+                    if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
+                        HomeCalendar(
+                            currentDate = currentDate,
+                            monthlyPlans = monthlyPlans,
+                            onDateClick = onDateClick
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        if (monthlyPlans.isNotEmpty()) {
+                            HomeMonthlyPlanList(
+                                monthlyPlans = monthlyPlans,
+                                expanded = expanded,
+                                onExpandedClick = onExpandedClick,
+                                onPlanItemClick = onPlanItemClick
+                            )
+                        } else {
+                            Spacer(modifier = Modifier.height(40.dp))
+                            Image(
+                                painter = painterResource(R.drawable.ic_calendar_with_chracter),
+                                contentScale = ContentScale.Crop,
+                                contentDescription = null,
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_no_plan),
+                                color = Gray500,
+                                style = MaterialTheme.typography.body2,
+                            )
+                            Spacer(modifier = Modifier.height(52.dp))
+                        }
                     }
                 }
             }

@@ -8,6 +8,7 @@ import com.yapp.growth.domain.entity.Plan
 
 class HomeContract {
     data class HomeViewState(
+        val loadState: LoadState = LoadState.Idle,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "김정호",
         val allPlans: List<Plan.FixedPlan> = emptyList(),
@@ -18,7 +19,11 @@ class HomeContract {
         val isTodayPlanExpanded: Boolean = false,
         val isMonthlyPlanExpanded: Boolean = false,
         val monthlyPlanMode: MonthlyPlanModeState = MonthlyPlanModeState.CALENDAR
-    ) : ViewState
+    ) : ViewState {
+        enum class LoadState {
+            Loading, Idle, Error
+        }
+    }
 
     // TODO : 유저 아이콘 클릭 시 내 정보 창으로 이동 (정호)
     sealed class HomeSideEffect : ViewSideEffect {
