@@ -24,4 +24,7 @@ interface GrowthApi {
     @POST("/api/promisings/{promisingId}/confirmation")
     suspend fun sendConfirmPlan(@Path("promisingId") promisingId: String, @Body confirmPlanParameter: ConfirmPlanParameter): Any
 
+    @POST("/api/promisings/{promisingId}/time-response")
+    suspend fun sendRespondPlan(@Path("promisingId") promisingId: String, @Body timeCheckedOfDaysParameter: TimeCheckedOfDaysParameter): Unit
+
 }
