@@ -16,11 +16,6 @@ interface PromisingTimeTableResponse {
     val placeName: String
 }
 
-interface UserResponse {
-    val id: Long
-    val userName: String
-}
-
 interface TimeTableDateResponse {
     val date: String
     val blocks: List<TimeTableUnitResponse>
@@ -32,9 +27,3 @@ interface TimeTableUnitResponse {
     val color: Long
     val users: List<UserResponse>
 }
-
-interface CategoryResponse {
-    val id: Long
-    val keyword: String
-}
-
