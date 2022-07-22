@@ -170,7 +170,7 @@ fun PlanFulled() {
         Image(
             modifier = Modifier
                 .wrapContentWidth(),
-            painter = painterResource(id = R.drawable.icon_respond_plan_fulled),
+            painter = painterResource(id = R.drawable.ic_failed_character_64),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
         )

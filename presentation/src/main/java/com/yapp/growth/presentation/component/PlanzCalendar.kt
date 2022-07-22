@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import com.yapp.growth.presentation.ui.main.home.CalendarDecorator
@@ -17,6 +18,7 @@ fun PlanzCalendar(
     currentDate: CalendarDay,
     selectMode: PlanzCalendarSelectMode,
     selectedDates: List<CalendarDay> = emptyList(),
+    monthlyDates: Map<CalendarDay, Int> = emptyMap(),
     onDateSelectedListener: OnDateSelectedListener,
 ) {
     val context = LocalContext.current
@@ -29,7 +31,6 @@ fun PlanzCalendar(
                 this.isDynamicHeightEnabled = true
                 this.topbarVisible = false
                 this.isPagingEnabled = false
-                this.setOnDateChangedListener(onDateSelectedListener)
 
                 when(selectMode) {
                     PlanzCalendarSelectMode.SINGLE -> {
@@ -47,6 +48,7 @@ fun PlanzCalendar(
         update = { views ->
             views.apply {
                 this.currentDate = currentDate
+                this.setOnDateChangedListener(onDateSelectedListener)
 
                 if(selectedDates.isNotEmpty()) {
                     for(selectDate in selectedDates) {
@@ -61,7 +63,15 @@ fun PlanzCalendar(
                     PlanzCalendarSelectMode.SINGLE -> {
                         this.addDecorator(CalendarDecorator.OtherMonthDisableSelectionDecorator(context, this))
                         this.addDecorator(CalendarDecorator.TodayDecorator(context))
-                        this.addDecorator(CalendarDecorator.DotDecorator())
+                        monthlyDates.forEach {
+                            if (it.key != CalendarDay.today()) {
+                                when (it.value) {
+                                    1 -> this.addDecorator(CalendarDecorator.SingleDotDecorator(it.key))
+                                    2 -> this.addDecorator(CalendarDecorator.DoubleDotDecorator(it.key))
+                                    else -> this.addDecorator(CalendarDecorator.TripleDotDecorator(it.key))
+                                }
+                            }
+                        }
                     }
                     PlanzCalendarSelectMode.MULTIPLE -> {
                         this.addDecorator(CalendarDecorator.SelectedDatesDecorator(context, this.selectedDates))

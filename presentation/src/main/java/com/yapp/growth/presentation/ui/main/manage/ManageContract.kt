@@ -13,16 +13,16 @@ class ManageContract {
 
     sealed class ManageSideEffect : ViewSideEffect {
         object NavigateToCreateScreen : ManageSideEffect()
-        data class NavigateToFixPlanScreen(val planId: Int) : ManageSideEffect()
-        data class NavigateToMemberResponseScreen(val planId: Int) : ManageSideEffect()
-        data class NavigateToInvitationScreen(val planId: Int) : ManageSideEffect()
+        data class NavigateToFixPlanScreen(val planId: Long) : ManageSideEffect()
+        data class NavigateToMemberResponseScreen(val planId: Long) : ManageSideEffect()
+        data class NavigateToInvitationScreen(val planId: Long) : ManageSideEffect()
         data class SwitchTab(val tabIndex: Int) : ManageSideEffect()
     }
 
     sealed class ManageEvent : ViewEvent {
         object OnClickCreateButton : ManageEvent()
-        data class OnClickWaitingPlan(val planId: Int) : ManageEvent()
-        data class OnClickFixedPlan(val planId: Int) : ManageEvent()
+        data class OnClickWaitingPlan(val planId: Long) : ManageEvent()
+        data class OnClickFixedPlan(val planId: Long) : ManageEvent()
         data class OnClickTab(val tabIndex: Int) : ManageEvent()
     }
 }

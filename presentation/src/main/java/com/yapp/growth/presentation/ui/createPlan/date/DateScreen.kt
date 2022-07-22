@@ -46,7 +46,7 @@ import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateEvent
 import com.yapp.growth.presentation.ui.createPlan.date.DateContract.DateSideEffect
 import com.yapp.growth.presentation.ui.main.home.CalendarDecorator
 import com.yapp.growth.presentation.util.composableActivityViewModel
-import com.yapp.growth.presentation.util.toFormatDate
+import com.yapp.growth.presentation.util.toParseFormatDate
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -118,7 +118,7 @@ fun DateScreen(
                 is DateSideEffect.ExitCreateScreen -> { exitCreateScreen() }
                 is DateSideEffect.NavigateToNextScreen -> {
                     sharedViewModel.setEvent(
-                        DecideDates(viewState.dates.map { it.toFormatDate() })
+                        DecideDates(viewState.dates.map { it.toParseFormatDate() })
                     )
                     navigateToNextScreen()
                 }
