@@ -1,10 +1,12 @@
 package com.yapp.growth.presentation.ui.main.detail
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetFixedPlanUseCase
+import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanEvent
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanSideEffect
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanViewState
@@ -17,16 +19,17 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailPlanViewModel @Inject constructor(
     private val getFixedPlanUseCase: GetFixedPlanUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) :
     BaseViewModel<DetailPlanViewState, DetailPlanSideEffect, DetailPlanEvent>(
         DetailPlanViewState()
     ) {
     companion object {
-        const val DEFAULT_PLAN_ID = 1
+        const val DEFAULT_PLAN_ID : Long = 1
     }
 
     init {
-        fetchPlan(DEFAULT_PLAN_ID)
+        fetchPlan(savedStateHandle.get<Long>(KEY_PLAN_ID) ?: DEFAULT_PLAN_ID)
     }
 
     override fun handleEvents(event: DetailPlanEvent) {
@@ -34,9 +37,9 @@ class DetailPlanViewModel @Inject constructor(
             is DetailPlanEvent.OnClickExitButton -> sendEffect({ DetailPlanSideEffect.ExitDetailPlanScreen })
         }
     }
-    
+
     @SuppressLint("SimpleDateFormat")
-    private fun fetchPlan(planId: Int) {
+    private fun fetchPlan(planId: Long) {
         viewModelScope.launch {
             val result = (getFixedPlanUseCase.invoke(planId))
 
