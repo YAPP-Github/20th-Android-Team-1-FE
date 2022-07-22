@@ -427,13 +427,28 @@ fun HomeMonthlyPlan(
                     )
                 } else {
                     Spacer(modifier = Modifier.height(10.dp))
-                    if (monthlyPlans.isNotEmpty())
+                    if (monthlyPlans.isNotEmpty()) {
                         HomeMonthlyPlanList(
                             monthlyPlans = monthlyPlans,
                             expanded = expanded,
                             onExpandedClick = onExpandedClick,
                             onPlanItemClick = onPlanItemClick
                         )
+                    } else {
+                        Spacer(modifier = Modifier.height(40.dp))
+                        Image(
+                            painter = painterResource(R.drawable.ic_calendar_with_chracter),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = stringResource(id = R.string.home_no_plan),
+                            color = Gray500,
+                            style = MaterialTheme.typography.body2,
+                        )
+                        Spacer(modifier = Modifier.height(52.dp))
+                    }
                 }
             }
         }
