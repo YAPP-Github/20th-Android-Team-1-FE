@@ -1,7 +1,8 @@
-package com.yapp.growth.data.source
+package com.yapp.growth.data.internal.source
 
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
+import com.yapp.growth.data.source.HomeDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.Plan.FixedPlan
 import toFixedPlan

@@ -1,7 +1,6 @@
 package com.yapp.growth.data.api
 
-import com.yapp.growth.data.response.FixedPlanResponseImpl
-import com.yapp.growth.data.response.UserResponse
+import com.yapp.growth.data.internal.response.FixedPlanResponseImpl
 import com.yapp.growth.data.internal.response.CreateTimeTableResponseImpl
 import com.yapp.growth.data.internal.response.PromisingTimeTableResponseImpl
 import com.yapp.growth.data.internal.response.TimeRequestResponseImpl
