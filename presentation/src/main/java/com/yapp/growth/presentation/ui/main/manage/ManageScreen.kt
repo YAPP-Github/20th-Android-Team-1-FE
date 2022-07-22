@@ -339,7 +339,7 @@ fun ManageEmptyView(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "약속이 없습니다.\n친구들과 약속을 잡아보세요.",
+            text = stringResource(id = R.string.manage_plan_empty_view_text),
             style = PlanzTypography.body2,
             color = CoolGray300,
             textAlign = TextAlign.Center,
@@ -362,7 +362,7 @@ fun ManageCreateButton(
         onClick = onCreateButtonClick
     ) {
         Text(
-            text = "약속잡기",
+            text = stringResource(id = R.string.manage_plan_empty_view_create_button_text),
             style = PlanzTypography.caption,
             color = MainPurple900
         )
