@@ -5,10 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,15 +27,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.theme.Gray100
+import com.yapp.growth.presentation.theme.Gray300
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
+import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanSideEffect
 
 @Composable
 fun RespondPlanScreen(
     viewModel: RespondPlanViewModel = hiltViewModel(),
     navigateToPreviousScreen: () -> Unit,
-//    navigateToNextScreen: () -> Unit,
+    navigateToSendCompleteScreen: () -> Unit,
+    navigateToSendRejectedScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
     val timeCheckedOfDays by viewModel.timeCheckedOfDays.collectAsState()
@@ -92,8 +97,8 @@ fun RespondPlanScreen(
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
                 }, clickCount = uiState.clickCount,
-                    onClickNothingPlanButton = { },
-                    onClickSendPlanButton = { viewModel.setEvent(RespondPlanEvent.OnClickRespondButton) }
+                    onClickRejectPlanButton = { viewModel.setEvent(RespondPlanEvent.OnClickRejectPlanButton) },
+                    onClickSendPlanButton = { viewModel.setEvent(RespondPlanEvent.OnClickSendPlanButton) }
                 )
             } else {
                 Box(
@@ -118,6 +123,16 @@ fun RespondPlanScreen(
         }
 
     }
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                RespondPlanSideEffect.NavigateToSendCompleteScreen -> navigateToSendCompleteScreen()
+                RespondPlanSideEffect.NavigateToSendRejectedScreen -> navigateToSendRejectedScreen()
+                RespondPlanSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
+            }
+        }
+    }
 }
 
 @Composable
@@ -125,7 +140,7 @@ fun RespondPlanBottomButton(
     modifier: Modifier,
     clickCount: Int,
     onClickSendPlanButton: () -> Unit,
-    onClickNothingPlanButton: () -> Unit
+    onClickRejectPlanButton: () -> Unit
 ) {
     Surface(
         modifier = modifier
@@ -142,7 +157,6 @@ fun RespondPlanBottomButton(
                     .wrapContentHeight()
                     .padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.respond_plan_send_plan_title),
-                enabled = true
             ) {
                 onClickSendPlanButton()
             }
@@ -151,10 +165,10 @@ fun RespondPlanBottomButton(
                 modifier = Modifier
                     .wrapContentHeight()
                     .padding(horizontal = 16.dp),
+                buttonColor = Gray300,
                 text = stringResource(id = R.string.respond_plan_send_nothing_title),
-                enabled = false
             ) {
-                onClickNothingPlanButton()
+                onClickRejectPlanButton()
             }
         }
     }

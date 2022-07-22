@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +34,7 @@ class RespondPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
     private var currentIndex = 0
-    private val promisingId: Long = 1
+    private val promisingId: Long = 8
 
     init {
         loadRespondUsers(promisingId)
@@ -109,10 +110,10 @@ class RespondPlanViewModel @Inject constructor(
         viewModelScope.launch {
             sendRespondPlanUseCase.invoke(promisingId, timeCheckedOfDays)
                 .onSuccess {
-                    println("Success Respond")
+                    sendEffect({ RespondPlanSideEffect.NavigateToSendCompleteScreen })
                 }
                 .onError {
-                    println("Failed Respond")
+                    Timber.tag("API ERROR").e(it)
                 }
         }
 
@@ -126,9 +127,10 @@ class RespondPlanViewModel @Inject constructor(
                     updateState { copy(clickCount = viewState.value.clickCount.minus(1)) }
                 }
             }
-            is RespondPlanEvent.OnClickNextDayButton -> { nextDay() }
-            is RespondPlanEvent.OnClickPreviousDayButton -> { previousDay() }
-            is RespondPlanEvent.OnClickRespondButton -> { sendRespondPlan(promisingId, timeCheckedOfDays.value) }
+            is RespondPlanEvent.OnClickNextDayButton -> nextDay()
+            is RespondPlanEvent.OnClickPreviousDayButton -> previousDay()
+            is RespondPlanEvent.OnClickSendPlanButton -> sendRespondPlan(promisingId, timeCheckedOfDays.value)
+            is RespondPlanEvent.OnClickRejectPlanButton -> sendEffect({ RespondPlanSideEffect.NavigateToSendRejectedScreen })
         }
     }
 }
