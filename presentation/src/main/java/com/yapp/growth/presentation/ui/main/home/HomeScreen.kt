@@ -189,11 +189,10 @@ private fun HomeUserProfile(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            modifier = Modifier
-                .size(30.dp, 30.dp),
+            modifier = Modifier.size(32.dp),
             onClick = { onUserIconClick() }) {
             Image(
-                painter = painterResource(R.drawable.ic_default_user_image),
+                painter = painterResource(R.drawable.ic_default_user_image_32),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(CircleShape)
