@@ -1,11 +1,13 @@
 package com.yapp.growth.data.di
 
 import com.yapp.growth.data.repository.ConfirmPlanRepositoryImpl
+import com.yapp.growth.data.repository.CreateTimeTableRepositoryImpl
+import com.yapp.growth.data.repository.DetailRepositoryImpl
 import com.yapp.growth.data.repository.HomeRepositoryImpl
 import com.yapp.growth.domain.repository.ConfirmPlanRepository
-import com.yapp.growth.domain.repository.HomeRepository
-import com.yapp.growth.data.repository.CreateTimeTableRepositoryImpl
 import com.yapp.growth.domain.repository.CreateTimeTableRepository
+import com.yapp.growth.domain.repository.DetailRepository
+import com.yapp.growth.domain.repository.HomeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,7 +24,11 @@ internal abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindHomeRepository(AllPlanDataSource: HomeRepositoryImpl): HomeRepository
+    abstract fun bindHomeRepository(homeRepository: HomeRepositoryImpl): HomeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDetailRepository(detailRepository: DetailRepositoryImpl): DetailRepository
 
     @Binds
     @Singleton

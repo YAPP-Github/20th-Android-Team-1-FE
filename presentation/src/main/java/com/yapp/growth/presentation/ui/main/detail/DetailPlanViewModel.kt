@@ -1,16 +1,23 @@
 package com.yapp.growth.presentation.ui.main.detail
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.*
+import com.yapp.growth.domain.onSuccess
+import com.yapp.growth.domain.usecase.GetFixedPlanUseCase
+import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanEvent
+import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanSideEffect
+import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailPlanViewModel @Inject constructor() :
+class DetailPlanViewModel @Inject constructor(
+    private val getFixedPlanUseCase: GetFixedPlanUseCase,
+) :
     BaseViewModel<DetailPlanViewState, DetailPlanSideEffect, DetailPlanEvent>(
         DetailPlanViewState()
     ) {
@@ -19,7 +26,7 @@ class DetailPlanViewModel @Inject constructor() :
     }
 
     init {
-        getPlanState(DEFAULT_PLAN_ID)
+        fetchPlan(DEFAULT_PLAN_ID)
     }
 
     override fun handleEvents(event: DetailPlanEvent) {
@@ -27,31 +34,23 @@ class DetailPlanViewModel @Inject constructor() :
             is DetailPlanEvent.OnClickExitButton -> sendEffect({ DetailPlanSideEffect.ExitDetailPlanScreen })
         }
     }
-
-    // TODO : GET /api/promises/<promiseId>
+    
     @SuppressLint("SimpleDateFormat")
-    private fun getPlanState(planId: Int) {
+    private fun fetchPlan(planId: Int) {
+        viewModelScope.launch {
+            val result = (getFixedPlanUseCase.invoke(planId))
 
-        // TODO : 테스트용 더미값입니다 (정호)
-        val date = "2022-11-28T11:30:00"
-        val members = listOf(
-            "을릉도동남쪽",
-            "뱃길따라이백",
-            "리외로운섬하",
-            "나새들의고향",
-            "김갑수",
-            "김울먹",
-            "제발목숨만은",
-        )
-
-        updateState {
-            copy(
-                title = "스무자스무자스무자스무자스무자스무자스무",
-                category = "식사",
-                date = convertDate(date),
-                place = "스무자스무자스무자스무자스무자스무자스무",
-                member = convertMemberList(members)
-            )
+            result.onSuccess {
+                updateState {
+                    copy(
+                        title = it.title,
+                        category = it.category,
+                        date = convertDate(it.date),
+                        place = it.place,
+                        member = convertMemberList(it.members)
+                    )
+                }
+            }
         }
     }
 
