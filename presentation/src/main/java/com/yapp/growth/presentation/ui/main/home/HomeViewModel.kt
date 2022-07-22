@@ -8,8 +8,6 @@ import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
 import com.yapp.growth.domain.usecase.GetAllFixedPlanListUseCase
-import com.yapp.growth.domain.usecase.GetMonthlyFixedPlanListUseCase
-import com.yapp.growth.domain.usecase.GetOneDayFixedPlanListUseCase
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
@@ -30,8 +28,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getMonthlyFixedPlanListUseCase: GetMonthlyFixedPlanListUseCase,
-    private val getOneDayFixedPlanListUseCase: GetOneDayFixedPlanListUseCase,
     private val getAllFixedPlanListUseCase: GetAllFixedPlanListUseCase,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(

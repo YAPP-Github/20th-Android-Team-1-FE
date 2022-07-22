@@ -7,9 +7,9 @@ import com.yapp.growth.domain.entity.Plan.FixedPlan
 import toFixedPlan
 import javax.inject.Inject
 
-internal class AllFixedPlanDataSourceImpl @Inject constructor(
+internal class HomeDataSourceImpl @Inject constructor(
     private val retrofitApi: GrowthApi
-) : AllFixedPlanDataSource {
+) : HomeDataSource {
 
     override suspend fun getAllFixedPlanList(): NetworkResult<List<FixedPlan>> =
         handleApi {
