@@ -1,6 +1,7 @@
 package com.yapp.growth.presentation.ui.main.home
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -69,6 +70,7 @@ import com.yapp.growth.presentation.theme.MainPurple300
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
@@ -88,6 +90,7 @@ fun HomeScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
+    val context = LocalContext.current as Activity
 
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -95,6 +98,10 @@ fun HomeScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                is HomeSideEffect.MoveToLogin -> {
+                    LoginActivity.startActivity(context)
+                    context.finish()
+                }
                 is HomeSideEffect.NavigateToMyPageScreen -> {
                     navigateToMyPageScreen()
                 }
@@ -153,7 +160,9 @@ fun HomeScreen(
                         onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked) },
                         onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
                     )
-                    HomeContract.LoginState.NONE -> HomeInduceLogin()
+                    HomeContract.LoginState.NONE -> HomeInduceLogin(
+                        OnInduceLoginClick = { viewModel.setEvent(HomeEvent.OnInduceLoginClicked) }
+                    )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HomeMonthlyPlan(
@@ -288,7 +297,9 @@ fun HomeTodayPlan(
 
 
 @Composable
-fun HomeInduceLogin() {
+fun HomeInduceLogin(
+    OnInduceLoginClick: () -> Unit
+) {
     Surface(
         color = Color.Transparent,
         shape = RoundedCornerShape(12.dp),
@@ -322,7 +333,7 @@ fun HomeInduceLogin() {
                 )
                 IconButton(
                     modifier = Modifier.size(6.dp, 12.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = { OnInduceLoginClick() },
                 ) {
                     Icon(
                         tint = Color.Unspecified,

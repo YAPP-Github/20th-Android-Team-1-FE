@@ -49,28 +49,17 @@ class HomeViewModel @Inject constructor(
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
+            is HomeEvent.OnInduceLoginClicked -> { sendEffect({ HomeSideEffect.MoveToLogin }) }
             is HomeEvent.OnCalendarDayClicked -> {
                 sendEffect({ HomeSideEffect.ShowBottomSheet })
                 updateSelectionDaysState(event.selectionDay)
             }
-            is HomeEvent.OnBottomSheetExitClicked -> {
-                sendEffect({ HomeSideEffect.HideBottomSheet })
-            }
-            is HomeEvent.OnPlanItemClicked -> {
-                sendEffect({ HomeSideEffect.NavigateDetailPlanScreen })
-            }
-            is HomeEvent.OnUserImageClicked -> {
-                sendEffect({ HomeSideEffect.NavigateToMyPageScreen })
-            }
-            is HomeEvent.OnTodayPlanExpandedClicked -> {
-                updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) }
-            }
-            is HomeEvent.OnMonthlyPlanExpandedClicked -> {
-                updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) }
-            }
-            is HomeEvent.OnMonthlyPlanModeClicked -> {
-                updateMonthlyPlanModeState(viewState.value.monthlyPlanMode)
-            }
+            is HomeEvent.OnBottomSheetExitClicked -> { sendEffect({ HomeSideEffect.HideBottomSheet }) }
+            is HomeEvent.OnPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen }) }
+            is HomeEvent.OnUserImageClicked -> { sendEffect({ HomeSideEffect.NavigateToMyPageScreen }) }
+            is HomeEvent.OnTodayPlanExpandedClicked -> { updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) } }
+            is HomeEvent.OnMonthlyPlanExpandedClicked -> { updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) } }
+            is HomeEvent.OnMonthlyPlanModeClicked -> { updateMonthlyPlanModeState(viewState.value.monthlyPlanMode) }
             is HomeEvent.OnMonthlyPreviousClicked -> {
                 updateCurrentDateState(HomeEvent.OnMonthlyPreviousClicked)
                 updateMonthlyPlansState()
