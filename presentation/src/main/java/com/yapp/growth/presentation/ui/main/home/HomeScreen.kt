@@ -154,7 +154,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(3.dp))
                 when (viewState.loginState) {
                     HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                        isError = true,
+                        isError = viewState.loadState == HomeContract.HomeViewState.LoadState.Error,
                         expanded = viewState.isTodayPlanExpanded,
                         todayPlans = viewState.todayPlans,
                         planCount = viewState.todayPlans.size,
@@ -167,7 +167,7 @@ fun HomeScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HomeMonthlyPlan(
-                    isError = true,
+                    isError = viewState.loadState == HomeContract.HomeViewState.LoadState.Error,
                     expanded = viewState.isMonthlyPlanExpanded,
                     monthlyPlans = viewState.monthlyPlans,
                     mode = viewState.monthlyPlanMode,
