@@ -36,6 +36,7 @@ fun RespondPlanScreen(
 //    navigateToNextScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
+    val timeCheckedOfDays by viewModel.timeCheckedOfDays.collectAsState()
 
     Scaffold(
         topBar = {
@@ -74,6 +75,7 @@ fun RespondPlanScreen(
 
                     PlanzPlanTimeTable(
                         timeTable = uiState.timeTable,
+                        timeCheckedOfDays = timeCheckedOfDays,
                         onClickTimeTable = { dateIndex, minuteIndex ->
                             viewModel.setEvent(RespondPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         }
@@ -91,7 +93,7 @@ fun RespondPlanScreen(
                     width = Dimension.fillToConstraints
                 }, clickCount = uiState.clickCount,
                     onClickNothingPlanButton = { },
-                    onClickSendPlanButton = { }
+                    onClickSendPlanButton = { viewModel.setEvent(RespondPlanEvent.OnClickRespondButton) }
                 )
             } else {
                 Box(
@@ -108,7 +110,7 @@ fun RespondPlanScreen(
                     PlanzBasicButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(id = R.string.respond_plan_fulled_button_text),
-                        onClick = { }
+                        onClick = { navigateToPreviousScreen() }
                     )
                 }
             }

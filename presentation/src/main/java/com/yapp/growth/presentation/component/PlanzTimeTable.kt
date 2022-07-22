@@ -152,6 +152,7 @@ fun ConfirmPlanTimeTable(
 @Composable
 fun PlanzPlanTimeTable(
     timeTable: TimeTable,
+    timeCheckedOfDays: List<TimeCheckedOfDay>,
     onClickTimeTable: (Int, Int) -> Unit
 ) {
     LazyColumn(
@@ -181,8 +182,8 @@ fun PlanzPlanTimeTable(
 
                 itemsIndexed(timeTable.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
-                    var upperTableClicked by remember { mutableStateOf(false) }
-                    var underTableClicked by remember { mutableStateOf(false) }
+                    val upperTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
+                    val underTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
 
                     val blockList = timeTable.timeTableDate.find { it.date == date }?.timeTableUnits
 
@@ -212,7 +213,6 @@ fun PlanzPlanTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    upperTableClicked = !upperTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex)
                                 }
                                 .background(if (upperTableClicked) SubCoral.copy(0.5f) else Color.Transparent),
@@ -248,7 +248,6 @@ fun PlanzPlanTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    underTableClicked = !underTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
                                 }
                                 .background(if (underTableClicked) SubCoral.copy(0.5f) else Color.Transparent),

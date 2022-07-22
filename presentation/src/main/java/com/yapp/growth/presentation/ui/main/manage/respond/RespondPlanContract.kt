@@ -5,6 +5,7 @@ import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
+import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract
 
 class RespondPlanContract {
     data class RespondPlanViewState(
@@ -27,7 +28,8 @@ class RespondPlanContract {
     ) : ViewState
 
     sealed class RespondPlanSideEffect : ViewSideEffect {
-
+        object NavigateToNextScreen : RespondPlanSideEffect()
+        object NavigateToPreviousScreen : RespondPlanSideEffect()
     }
 
     sealed class RespondPlanEvent : ViewEvent {
