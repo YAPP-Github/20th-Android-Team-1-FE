@@ -7,4 +7,6 @@ interface ConfirmPlanDataSource {
 
     suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable>
 
+    suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any>
+
 }
