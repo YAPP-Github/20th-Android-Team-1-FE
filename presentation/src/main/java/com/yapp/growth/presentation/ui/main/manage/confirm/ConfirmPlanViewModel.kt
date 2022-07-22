@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.TimeTable
-import com.yapp.growth.domain.entity.SendingResponsePlan
+import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +22,8 @@ class ConfirmPlanViewModel @Inject constructor(
     ConfirmPlanViewState()
 ) {
 
-    private val _sendResponsePlan = MutableStateFlow<List<SendingResponsePlan>>(emptyList())
-    val sendResponsePlan: StateFlow<List<SendingResponsePlan>>
+    private val _sendResponsePlan = MutableStateFlow<List<TimeCheckedOfDay>>(emptyList())
+    val sendResponsePlan: StateFlow<List<TimeCheckedOfDay>>
         get() = _sendResponsePlan.asStateFlow()
 
     init {
@@ -45,11 +45,10 @@ class ConfirmPlanViewModel @Inject constructor(
     private fun makeRespondList(data: TimeTable) {
         val booleanArray = Array(data.totalCount*2) { false }
 
-        val temp = mutableListOf<SendingResponsePlan>().also { list ->
+        val temp = mutableListOf<TimeCheckedOfDay>().also { list ->
             repeat(data.availableDates.size) {
-                list.add(SendingResponsePlan(
+                list.add(TimeCheckedOfDay(
                     date = data.availableDates[it],
-                    hours = data.hourList,
                     timeList = booleanArray.copyOf().toMutableList()
                 ))
             }
