@@ -92,7 +92,6 @@ fun HomeScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    // TODO : 이벤트에 따라 사이드 이펙트 적용되게 설정 (정호)
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -175,7 +174,6 @@ fun HomeScreen(
     }
 }
 
-// TODO : 클릭 시 내 정보 화면으로 네비게이션 (정호)
 @Composable
 private fun HomeUserProfile(
     userName: String,
@@ -259,9 +257,9 @@ fun HomeTodayPlan(
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 if (todayPlans.isNotEmpty())
-                    HomeTodayPlanList(
+                    HomeDayPlanList(
                         expanded = expanded,
-                        todayPlans = todayPlans,
+                        dayPlans = todayPlans,
                         onPlanItemClick = onPlanItemClick
                     )
             }
@@ -526,9 +524,9 @@ fun HomeTodayPlanCountText(
 }
 
 @Composable
-fun HomeTodayPlanList(
+fun HomeDayPlanList(
     expanded: Boolean,
-    todayPlans: List<Plan.FixedPlan>,
+    dayPlans: List<Plan.FixedPlan>,
     onPlanItemClick: () -> Unit,
 ) {
     Column(
@@ -536,21 +534,23 @@ fun HomeTodayPlanList(
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         if (expanded) {
-            for (todayPlan in todayPlans) {
+            for (todayPlan in dayPlans) {
                 HomeTodayPlanItem(
                     date = todayPlan.date,
+                    category = todayPlan.category,
                     title = todayPlan.title,
                     onPlanItemClick = onPlanItemClick
                 )
             }
         } else {
             HomeTodayPlanItem(
-                date = todayPlans[0].date,
-                title = (if (todayPlans.size == 1) {
-                    todayPlans[0].title
+                date = dayPlans[0].date,
+                title = (if (dayPlans.size == 1) {
+                    dayPlans[0].title
                 } else {
-                    "${todayPlans[0].title} 외 ${todayPlans.size - 1}건"
+                    "${dayPlans[0].title} 외 ${dayPlans.size - 1}건"
                 }),
+                category = dayPlans[0].category,
                 onPlanItemClick = onPlanItemClick
             )
         }
@@ -617,10 +617,10 @@ fun HomeMonthlyPlanList(
 }
 
 
-// TODO : API 연동 및 매개변수 추가(정호)
 @Composable
 fun HomeTodayPlanItem(
     date: String,
+    category: String,
     title: String,
     onPlanItemClick: () -> Unit
 ) {
@@ -644,10 +644,15 @@ fun HomeTodayPlanItem(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // TODO : 약속 종류에 따라 아이콘 변경 (정호)
             Icon(
                 tint = Color.Unspecified,
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_plan_meal),
+                imageVector = (
+                        when(category) {
+                            "식사" -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
+                            "여행" -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
+                            "미팅" -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)
+                            else -> ImageVector.vectorResource(id = R.drawable.ic_plan_etc)
+                        }),
                 contentDescription = null,
             )
             Spacer(modifier = Modifier.width(16.dp))
@@ -740,9 +745,9 @@ fun HomeBottomSheetContent(
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        HomeTodayPlanList(
+        HomeDayPlanList(
             expanded = true,
-            todayPlans = selectDayPlans,
+            dayPlans = selectDayPlans,
             onPlanItemClick = { onPlanItemClick() }
         )
     }
