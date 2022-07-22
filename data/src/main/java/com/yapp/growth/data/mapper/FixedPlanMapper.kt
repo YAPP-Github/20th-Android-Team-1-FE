@@ -1,3 +1,5 @@
+package com.yapp.growth.data.mapper
+
 import com.yapp.growth.data.response.FixedPlanResponse
 import com.yapp.growth.domain.entity.Plan.FixedPlan
 

@@ -5,7 +5,7 @@ import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.source.HomeDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.Plan.FixedPlan
-import toFixedPlan
+import com.yapp.growth.data.mapper.toFixedPlan
 import javax.inject.Inject
 
 internal class HomeDataSourceImpl @Inject constructor(
