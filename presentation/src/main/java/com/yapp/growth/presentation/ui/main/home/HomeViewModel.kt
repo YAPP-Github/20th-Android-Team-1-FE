@@ -4,54 +4,58 @@ import androidx.lifecycle.viewModelScope
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
+import com.yapp.growth.domain.usecase.GetAllFixedPlanListUseCase
+import com.yapp.growth.domain.usecase.GetMonthlyFixedPlanListUseCase
+import com.yapp.growth.domain.usecase.GetOneDayFixedPlanListUseCase
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.LoginState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeState
+import com.yapp.growth.presentation.util.toDate
+import com.yapp.growth.presentation.util.toFormatDate
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val getMonthlyFixedPlanListUseCase: GetMonthlyFixedPlanListUseCase,
+    private val getOneDayFixedPlanListUseCase: GetOneDayFixedPlanListUseCase,
+    private val getAllFixedPlanListUseCase: GetAllFixedPlanListUseCase,
+    private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
 ) {
 
     init {
         checkValidLoginToken()
-        fetchDayPlanList()
-        fetchMonthPlanList()
+        fetchPlans()
     }
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
-    @OptIn(FlowPreview::class)
-    val currentDate = _currentDate.debounce(300).stateIn(
+    val currentDate: StateFlow<CalendarDay> = _currentDate.debounce(300).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
         initialValue = _currentDate.value
     )
 
-    @Inject
-    lateinit var kakaoLoginSdk: LoginSdk
-
     override fun handleEvents(event: HomeEvent) {
         when (event) {
             is HomeEvent.OnCalendarDayClicked -> {
                 sendEffect({ HomeSideEffect.ShowBottomSheet })
-                fetchSelectDayPlanList(event.selectionDay)
+                updateSelectionDaysState(event.selectionDay)
             }
             is HomeEvent.OnBottomSheetExitClicked -> {
                 sendEffect({ HomeSideEffect.HideBottomSheet })
@@ -72,129 +76,43 @@ class HomeViewModel @Inject constructor(
                 updateMonthlyPlanModeState(viewState.value.monthlyPlanMode)
             }
             is HomeEvent.OnMonthlyPreviousClicked -> {
-                updateDateState(HomeEvent.OnMonthlyPreviousClicked)
+                updateCurrentDateState(HomeEvent.OnMonthlyPreviousClicked)
+                updateMonthlyPlansState()
             }
             is HomeEvent.OnMonthlyNextClicked -> {
-                updateDateState(HomeEvent.OnMonthlyNextClicked)
+                updateCurrentDateState(HomeEvent.OnMonthlyNextClicked)
+                updateMonthlyPlansState()
             }
         }
     }
 
-    // TODO : /api/promises/date/<date>
-    private fun fetchDayPlanList() {
-        updateState {
-            copy(
-                todayPlans = listOf(
-                    Plan.FixedPlan(
-                        id = 0,
-                        title = "돼지파티돼지파티돼지",
-                        isLeader = false,
-                        category = "식사",
-                        members = listOf("안녕, 안녕, 안녕"),
-                        place = "강남",
-                        date = "2022-07-10T11:30:00"
-                    ),
-                    Plan.FixedPlan(
-                        id = 1,
-                        title = "돼지파티 123",
-                        isLeader = false,
-                        category = "식사",
-                        members = listOf("안녕, 안녕, 안녕"),
-                        place = "강남",
-                        date = "2022-07-10T11:00:00"
-                    ),
-                    Plan.FixedPlan(
-                        id = 2,
-                        title = "돼지파티 1234",
-                        isLeader = false,
-                        category = "식사",
-                        members = listOf("안녕, 안녕, 안녕"),
-                        place = "강남",
-                        date = "2022-07-10T11:30:00"
-                    ),
-                )
-            )
+    private fun fetchPlans() {
+        viewModelScope.launch {
+            val result = (getAllFixedPlanListUseCase.invoke())
+
+            result.onSuccess { plans ->
+                val todayPlans = plans.filter { plan ->
+                    CalendarDay.from(plan.date.toDate()) == CalendarDay.today()
+                }
+                val monthlyPlans = plans.filter { plan ->
+                    CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
+                }
+                updateState {
+                    copy(allPlans = plans, monthlyPlans = monthlyPlans, todayPlans = todayPlans)
+                }
+            }
+
+            result.onError {
+                Timber.e(it)
+            }
         }
     }
 
-    // TODO : GET /api/promises/month/<month>
-    private fun fetchMonthPlanList() {
-        val monthlyPlans = listOf(
-            Plan.FixedPlan(
-                id = 0,
-                title = "돼지파티12312",
-                isLeader = false,
-                category = "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-06-30T11:00:00"
-            ),
-            Plan.FixedPlan(
-                id = 0,
-                title = "돼지파티12312",
-                isLeader = false,
-                category = "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-07-10T11:30:00"
-            ),
-            Plan.FixedPlan(
-                0,
-                "돼지파티",
-                false,
-                "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-07-10T11:30:00"
-            ),
-            Plan.FixedPlan(
-                0,
-                "돼지파티",
-                false,
-                "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-07-08T11:30:00"
-            ),
-            Plan.FixedPlan(
-                id = 0,
-                title = "돼지파티",
-                isLeader = false,
-                category = "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-07-10T11:35:00"
-            ),
-            Plan.FixedPlan(
-                id = 0,
-                title = "돼지파티321312",
-                isLeader = false,
-                category = "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-07-15T11:30:00"
-            ),
-            Plan.FixedPlan(
-                id = 0,
-                title = "돼지파티312312",
-                isLeader = false,
-                category = "식사",
-                members = listOf("안녕, 안녕, 안녕"),
-                place = "강남",
-                date = "2022-07-15T11:30:00"
-            ),
-        )
-
-        updateState { copy(monthlyPlans = monthlyPlans) }
-    }
-
-    private fun fetchSelectDayPlanList(
-        selectionDay: CalendarDay,
-    ) {
+    private fun updateSelectionDaysState(selectionDay: CalendarDay) {
         updateState { copy(selectionDay = selectionDay) }
+
         val selectionDays = viewState.value.monthlyPlans.filter {
-            val tmp = SimpleDateFormat("yyyy-MM-dd").parse(it.date) as Date
-            selectionDay.date == tmp
+            selectionDay.date.toFormatDate() == it.date.toDate().toFormatDate()
         }
 
         updateState { copy(selectDayPlans = selectionDays) }
@@ -211,7 +129,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateDateState(event: HomeEvent) {
+    private fun updateCurrentDateState(event: HomeEvent) {
         var month = _currentDate.value.month + 1
         var year = _currentDate.value.year
 
@@ -233,6 +151,19 @@ class HomeViewModel @Inject constructor(
         }
 
         _currentDate.value = CalendarDay.from(year, month - 1, 1)
+    }
+
+    private fun updateMonthlyPlansState() {
+        viewModelScope.launch {
+            currentDate.collectLatest { currentDate ->
+                val monthlyPlans = viewState.value.allPlans.filter {
+                    CalendarDay.from(it.date.toDate()).month == currentDate.month
+                }
+                updateState {
+                    copy(monthlyPlans = monthlyPlans)
+                }
+            }
+        }
     }
 
     private fun checkValidLoginToken() {

@@ -10,6 +10,7 @@ class HomeContract {
     data class HomeViewState(
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "김정호",
+        val allPlans: List<Plan.FixedPlan> = emptyList(),
         val todayPlans: List<Plan.FixedPlan> = emptyList(),
         val monthlyPlans: List<Plan.FixedPlan> = emptyList(),
         val selectDayPlans: List<Plan.FixedPlan> = emptyList(),

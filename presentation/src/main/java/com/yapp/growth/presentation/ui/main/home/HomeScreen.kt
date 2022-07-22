@@ -72,7 +72,9 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
+import com.yapp.growth.presentation.util.toDate
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -449,7 +451,7 @@ fun PlanzCalendar(
     val context = LocalContext.current
 
     val monthlyPlanDates = (monthlyPlans.groupingBy {
-        CalendarDay.from(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(it.date))
+        CalendarDay.from(it.date.toDate())
     }.eachCount().filter { it.value >= 1 })
 
     AndroidView(
@@ -530,7 +532,11 @@ fun HomeTodayPlanList(
         } else {
             HomeTodayPlanItem(
                 date = todayPlans[0].date,
-                title = "${todayPlans[0].title} 외 ${todayPlans.size - 1}건",
+                title = (if (todayPlans.size == 1) {
+                    todayPlans[0].title
+                } else {
+                    "${todayPlans[0].title} 외 ${todayPlans.size - 1}건"
+                }),
                 onPlanItemClick = onPlanItemClick
             )
         }
@@ -544,11 +550,10 @@ fun HomeMonthlyPlanList(
     onPlanItemClick: () -> Unit,
     onExpandedClick: () -> Unit,
 ) {
-    Column(
-//        verticalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
+    Column {
         if (expanded) {
             for (monthlyPlan in monthlyPlans) {
+                Timber.d(monthlyPlan.toString())
                 HomeMonthlyPlanItem(
                     date = monthlyPlan.date,
                     title = monthlyPlan.title,
@@ -605,7 +610,7 @@ fun HomeTodayPlanItem(
     title: String,
     onPlanItemClick: () -> Unit
 ) {
-    val tmp = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date) as Date
+    val tmp = date.toDate()
     val calendar: Calendar = Calendar.getInstance()
     calendar.time = tmp
 
@@ -650,21 +655,14 @@ fun HomeTodayPlanItem(
     }
 }
 
-// TODO : API 연동 및 매개변수 추가 (정호)
 @Composable
 fun HomeMonthlyPlanItem(
     date: String,
     title: String,
     onPlanItemClick: () -> Unit
 ) {
-    val time = SimpleDateFormat(
-        "aa h시",
-        Locale.KOREA
-    ).format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date))
-    val dates = SimpleDateFormat(
-        "M/d",
-        Locale.KOREA
-    ).format(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date))
+    val time = SimpleDateFormat("aa h시", Locale.KOREA).format(date.toDate())
+    val dates = SimpleDateFormat("M/d", Locale.KOREA).format(date.toDate())
 
     Box(
         modifier = Modifier
