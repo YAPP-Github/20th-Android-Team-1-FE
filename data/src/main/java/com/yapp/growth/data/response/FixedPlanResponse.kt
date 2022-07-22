@@ -10,13 +10,3 @@ interface FixedPlanResponse {
     val members: List<UserResponse>
     val placeName: String
 }
-
-interface UserResponse {
-    val id: Long
-    val userName: String
-}
-
-interface CategoryResponse {
-    val id: Long
-    val keyword: String
-}
