@@ -16,16 +16,6 @@ interface GrowthApi {
     @GET("/api/promisings/{promisingId}/time-table")
     suspend fun getResponseTimeTable(@Path("promisingId") promisingId: String): PromisingTimeTableResponseImpl
 
-    @GET("/api/promises/date/{dateTime}")
-    suspend fun getOneDayFixedPlanList(
-        @Path("dateTime") dateTime: String
-    ): List<FixedPlanResponseImpl>
-
-    @GET("/api/promises/month/{dateTime}")
-    suspend fun getMonthlyFixedPlanList(
-        @Path("dateTime") dateTime: String
-    ): List<FixedPlanResponseImpl>
-
     @GET("/api/promises/user")
     suspend fun getAllFixedPlanList(): List<FixedPlanResponseImpl>
 
