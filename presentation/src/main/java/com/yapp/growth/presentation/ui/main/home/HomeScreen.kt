@@ -410,13 +410,13 @@ fun HomeMonthlyPlan(
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "문제가 발생했습니다.",
+                            text = stringResource(id = R.string.home_error_text_01),
                             color = Gray500,
                             style = PlanzTypography.body2,
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "다시 시도해주세요.",
+                            text = stringResource(id = R.string.home_error_text_02),
                             color = Gray500,
                             style = PlanzTypography.body2,
                         )
