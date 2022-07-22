@@ -5,7 +5,7 @@ import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.mapper.toCreateTimeTable
 import com.yapp.growth.data.mapper.toLong
 import com.yapp.growth.data.parameter.TimeCheckedOfDayParameter
-import com.yapp.growth.data.parameter.TimeRequestParameter
+import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
 import com.yapp.growth.data.source.CreateTimeTableDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.CreateTimeTable
@@ -26,7 +26,7 @@ internal class CreateTimeTableDataSourceImpl @Inject constructor(
         timeCheckedOfDays: List<TimeCheckedOfDay>
     ): NetworkResult<Long> =
         handleApi {
-            val parameter = TimeRequestParameter(
+            val parameter = TimeCheckedOfDaysParameter(
                 unit = 0.5f,
                 timeTable = timeCheckedOfDays.map {
                     TimeCheckedOfDayParameter(
