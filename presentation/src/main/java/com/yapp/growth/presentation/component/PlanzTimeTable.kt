@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.yapp.growth.domain.entity.CreateTimeTable
+import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
@@ -39,6 +41,7 @@ fun ConfirmPlanTimeTable(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(BackgroundColor2)
             .padding(start = 16.dp)
     ) {
         itemsIndexed(timeTable.hourList) { hourIndex, hour ->
@@ -155,6 +158,7 @@ fun PlanzPlanTimeTable(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(BackgroundColor2)
             .padding(start = 16.dp)
     ) {
         itemsIndexed(timeTable.hourList) { hourIndex, hour ->
@@ -256,6 +260,94 @@ fun PlanzPlanTimeTable(
                                 .background(Color(underTableColor))
                             )
                         }
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CreateTimeTable(
+    createTimeTable: CreateTimeTable,
+    timeCheckedOfDays: List<TimeCheckedOfDay>,
+    onClickTimeTable: (Int, Int) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(BackgroundColor2)
+            .padding(start = 16.dp)
+    ) {
+        itemsIndexed(createTimeTable.hourList) { hourIndex, hour ->
+            LazyRow(modifier = Modifier.fillParentMaxWidth()) {
+                item(key = hourIndex) {
+                    Column(
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .height(26.dp)
+                            .width(40.dp),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        Text(
+                            text = hour,
+                            color = Gray500,
+                            style = PlanzTypography.caption
+                        )
+                    }
+                }
+
+                itemsIndexed(createTimeTable.availableDates) { dateIndex, date ->
+                    val minuteIndex = 2 * hourIndex
+                    var upperTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
+                    var underTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
+
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 0.5.dp,
+                            color = Gray200,
+                            shape = RectangleShape
+                        )
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(26.dp)
+                                .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
+                                .clickable {
+                                    upperTableClicked = !upperTableClicked
+                                    onClickTimeTable(dateIndex, minuteIndex)
+                                    println(date)
+                                }
+                                .background(if (upperTableClicked) MainPurple900 else Color.Transparent),
+                        )
+
+                        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                        Canvas(Modifier
+                            .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
+                            .height(1.dp)
+                        ) {
+                            drawLine(
+                                color = Gray200,
+                                start = Offset(0f, 0f),
+                                end = Offset(size.width, 0f),
+                                pathEffect = pathEffect
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .height(26.dp)
+                                .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
+                                .clickable {
+                                    underTableClicked = !underTableClicked
+                                    onClickTimeTable(dateIndex, minuteIndex.plus(1))
+                                    println(date)
+                                }
+                                .background(if (underTableClicked) MainPurple900 else Color.Transparent),
+                        )
                     }
 
                 }
