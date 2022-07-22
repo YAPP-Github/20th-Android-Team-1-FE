@@ -2,10 +2,10 @@ package com.yapp.growth.data.di
 
 import com.yapp.growth.data.repository.ConfirmPlanRepositoryImpl
 import com.yapp.growth.data.repository.CreateTimeTableRepositoryImpl
-import com.yapp.growth.data.repository.WaitingPlanRepositoryImpl
+import com.yapp.growth.data.repository.LoadPlanRepositoryImpl
 import com.yapp.growth.domain.repository.ConfirmPlanRepository
 import com.yapp.growth.domain.repository.CreateTimeTableRepository
-import com.yapp.growth.domain.repository.WaitingPlanRepository
+import com.yapp.growth.domain.repository.LoadPlanRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,9 +17,9 @@ import javax.inject.Singleton
 internal abstract class RepositoryModule {
 
     @Binds
-    abstract fun provideWaitingPlanRepository(
-        repository: WaitingPlanRepositoryImpl,
-    ): WaitingPlanRepository
+    abstract fun bindLoadPlanRepository(
+        repository: LoadPlanRepositoryImpl,
+    ): LoadPlanRepository
 
     @Binds
     abstract fun bindConfirmPlanRepository(

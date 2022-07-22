@@ -5,10 +5,10 @@ import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.domain.repository.LoadPlanRepository
 import javax.inject.Inject
 
-class GetWaitingPlansUseCase @Inject constructor(
+class GetFixedPlansUseCase @Inject constructor(
     private val loadPlanRepository: LoadPlanRepository,
 ) {
-    suspend operator fun invoke(): NetworkResult<List<Plan.WaitingPlan>> {
-        return loadPlanRepository.getWaitingPlans()
+    suspend operator fun invoke(): NetworkResult<List<Plan.FixedPlan>> {
+        return loadPlanRepository.getFixedPlans()
     }
 }

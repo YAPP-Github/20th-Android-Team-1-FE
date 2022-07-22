@@ -1,10 +1,7 @@
 package com.yapp.growth.data.api
 
-import com.yapp.growth.data.internal.response.CreateTimeTableResponseImpl
-import com.yapp.growth.data.internal.response.PromisingTimeTableResponseImpl
-import com.yapp.growth.data.internal.response.TimeRequestResponseImpl
+import com.yapp.growth.data.internal.response.*
 import com.yapp.growth.data.parameter.TimeRequestParameter
-import com.yapp.growth.data.response.WaitingPlanResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -29,5 +26,8 @@ interface GrowthApi {
     ): TimeRequestResponseImpl
 
     @GET("/api/promisings/user")
-    suspend fun getWaitingPlans(): List<WaitingPlanResponse>
+    suspend fun getWaitingPlans(): List<WaitingPlanResponseImpl>
+
+    @GET("/api/promises/user")
+    suspend fun getFixedPlans(): List<FixedPlanResponseImpl>
 }

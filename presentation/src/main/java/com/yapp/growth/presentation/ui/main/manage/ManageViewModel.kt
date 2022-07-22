@@ -3,6 +3,7 @@ package com.yapp.growth.presentation.ui.main.manage
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.usecase.GetFixedPlansUseCase
 import com.yapp.growth.domain.usecase.GetWaitingPlansUseCase
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,12 +14,14 @@ import javax.inject.Inject
 @HiltViewModel
 class ManageViewModel @Inject constructor(
     private val getWaitingPlansUseCase: GetWaitingPlansUseCase,
+    private val getFixedPlansUseCase: GetFixedPlansUseCase,
 ) : BaseViewModel<ManageViewState, ManageSideEffect, ManageEvent>(
     ManageViewState()
 ) {
     init {
         viewModelScope.launch {
             getWaitingPlans()
+            getFixedPlans()
         }
     }
 
@@ -45,6 +48,22 @@ class ManageViewModel @Inject constructor(
             is NetworkResult.Success -> {
                 updateState {
                     copy(waitingPlans = result.data)
+                }
+            }
+            is NetworkResult.Error -> {
+
+            }
+            is NetworkResult.Loading -> {
+
+            }
+        }
+    }
+
+    private suspend fun getFixedPlans() {
+        when(val result = getFixedPlansUseCase()) {
+            is NetworkResult.Success -> {
+                updateState {
+                    copy(fixedPlans = result.data)
                 }
             }
             is NetworkResult.Error -> {
