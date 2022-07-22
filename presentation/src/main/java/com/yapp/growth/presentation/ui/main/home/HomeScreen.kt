@@ -400,26 +400,31 @@ fun HomeMonthlyPlan(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isError) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 102.dp, vertical = 76.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(264.dp)
                     ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
-                            contentDescription = null,
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = stringResource(id = R.string.home_error_text_01),
-                            color = Gray500,
-                            style = PlanzTypography.body2,
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(id = R.string.home_error_text_02),
-                            color = Gray500,
-                            style = PlanzTypography.body2,
-                        )
+                        Column(
+                            modifier = Modifier.align(Alignment.Center),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Image(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
+                                contentDescription = null,
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_error_text_01),
+                                color = Gray500,
+                                style = PlanzTypography.body2,
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_error_text_02),
+                                color = Gray500,
+                                style = PlanzTypography.body2,
+                            )
+                        }
                     }
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
