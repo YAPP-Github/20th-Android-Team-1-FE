@@ -5,7 +5,6 @@ import com.yapp.growth.data.repository.ConfirmPlanRepositoryImpl
 import com.yapp.growth.data.repository.MonthlyFixedPlanRepositoryImpl
 import com.yapp.growth.data.repository.OneDayFixedPlanRepositoryImpl
 import com.yapp.growth.domain.repository.AllFixedPlanRepository
-import com.yapp.growth.domain.repository.ConfirmPlanRepository
 import com.yapp.growth.domain.repository.MonthlyFixedPlanRepository
 import com.yapp.growth.domain.repository.OneDayFixedPlanRepository
 import com.yapp.growth.domain.repository.ConfirmPlanRepository
