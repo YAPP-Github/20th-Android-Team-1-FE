@@ -47,14 +47,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -71,6 +69,10 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.login.LoginActivity
+import com.yapp.growth.presentation.R
+import com.yapp.growth.presentation.component.PlanzCalendar
+import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
+import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
@@ -428,12 +430,8 @@ fun HomeMonthlyPlan(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
-                if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
-                    PlanzCalendar(
-                        currentDate = currentDate,
-                        monthlyPlans = monthlyPlans,
-                        onDateClick = { onDateClick(it) }
-                    )
+                if (isCalendarMode) {
+                    HomeCalendar(currentDate)
                 } else {
                     Spacer(modifier = Modifier.height(10.dp))
                     if (monthlyPlans.isNotEmpty()) {
@@ -466,50 +464,14 @@ fun HomeMonthlyPlan(
 
 // TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
-fun PlanzCalendar(
-    currentDate: CalendarDay,
-    monthlyPlans: List<Plan.FixedPlan>,
-    onDateClick: (CalendarDay) -> Unit,
+fun HomeCalendar(
+    currentDate: CalendarDay
 ) {
-    val context = LocalContext.current
-
-    val monthlyPlanDates = (monthlyPlans.groupingBy {
-        CalendarDay.from(it.date.toDate())
-    }.eachCount().filter { it.value >= 1 })
-
-    AndroidView(
-        modifier = Modifier
-            .padding(bottom = 12.dp),
-        factory = { MaterialCalendarView(it) },
-        update = { views ->
-            views.apply {
-                this.setOnDateChangedListener { _, date, _ ->
-                    if (date != CalendarDay.today() && monthlyPlanDates.containsKey(date))
-                        onDateClick(date)
-                }
-                this.selectionMode = MaterialCalendarView.SELECTION_MODE_SINGLE
-                this.selectedDate = CalendarDay.today()
-                this.showOtherDates = MaterialCalendarView.SHOW_OTHER_MONTHS
-                this.setAllowClickDaysOutsideCurrentMonth(false)
-                this.currentDate = currentDate
-                this.isDynamicHeightEnabled = true
-                this.topbarVisible = false
-                this.isPagingEnabled = false
-                this.addDecorator(CalendarDecorator.SelectDecorator(context, this))
-                this.addDecorator(CalendarDecorator.SundayDecorator())
-                this.addDecorator(CalendarDecorator.OtherDayDecorator(context, this))
-                this.addDecorator(CalendarDecorator.TodayDecorator(context))
-
-                monthlyPlanDates.forEach {
-                    if (it.key != CalendarDay.today()) {
-                        when (it.value) {
-                            1 -> this.addDecorator(CalendarDecorator.SingleDotDecorator(it.key))
-                            2 -> this.addDecorator(CalendarDecorator.DoubleDotDecorator(it.key))
-                            else -> this.addDecorator(CalendarDecorator.TripleDotDecorator(it.key))
-                        }
-                    }
-                }
-            }
+    PlanzCalendar(
+        currentDate = currentDate,
+        selectMode = PlanzCalendarSelectMode.SINGLE,
+        onDateSelectedListener = { widget, date, selected ->
+            Timber.d(date.toString())
         }
     )
 }

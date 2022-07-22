@@ -16,6 +16,10 @@ fun Date.toFormatDate(): String {
     return DATE_FORMAT.format(this)
 }
 
+fun CalendarDay.toFormatDate(): String {
+    return PARSE_DATE_FORMAT.format(this.date)
+}
+
 fun Date.toCalculateDiffDay(other: Date): Long {
     return (other.time - this.time) / (60 * 60 * 24 * 1000)
 }
