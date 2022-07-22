@@ -4,6 +4,7 @@ import com.yapp.growth.data.internal.response.CreateTimeTableResponseImpl
 import com.yapp.growth.data.internal.response.PromisingTimeTableResponseImpl
 import com.yapp.growth.data.internal.response.TimeRequestResponseImpl
 import com.yapp.growth.data.parameter.TimeRequestParameter
+import com.yapp.growth.data.response.WaitingPlanResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -12,12 +13,21 @@ import retrofit2.http.Path
 interface GrowthApi {
 
     @GET("/api/promisings/{promisingId}/time-table")
-    suspend fun getResponseTimeTable(@Path("promisingId") promisingId: String): PromisingTimeTableResponseImpl
+    suspend fun getResponseTimeTable(
+        @Path("promisingId") promisingId: String,
+    ): PromisingTimeTableResponseImpl
 
     @GET("/api/promisings/session/{uuid}")
-    suspend fun getCreateTimeTable(@Path("uuid") uuid: String): CreateTimeTableResponseImpl
+    suspend fun getCreateTimeTable(
+        @Path("uuid") uuid: String,
+    ): CreateTimeTableResponseImpl
 
     @POST("/api/promisings/session/{uuid}/time-response")
-    suspend fun sendTimeCheckedOfDay(@Path("uuid") uuid: String, @Body timeRequestParameter: TimeRequestParameter): TimeRequestResponseImpl
+    suspend fun sendTimeCheckedOfDay(
+        @Path("uuid") uuid: String,
+        @Body timeRequestParameter: TimeRequestParameter,
+    ): TimeRequestResponseImpl
 
+    @GET("/api/promisings/user")
+    suspend fun getWaitingPlans(): List<WaitingPlanResponse>
 }

@@ -1,9 +1,11 @@
 package com.yapp.growth.data.di
 
-import com.yapp.growth.data.source.ConfirmPlanDataSource
 import com.yapp.growth.data.internal.source.ConfirmPlanDataSourceImpl
 import com.yapp.growth.data.internal.source.CreateTimeTableDataSourceImpl
+import com.yapp.growth.data.source.ConfirmPlanDataSource
 import com.yapp.growth.data.source.CreateTimeTableDataSource
+import com.yapp.growth.data.source.WaitingPlanDataSource
+import com.yapp.growth.data.internal.source.WaitingPlanDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,4 +23,10 @@ internal abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindCreateTimeTableDataSource(createTimeTableDataSource: CreateTimeTableDataSourceImpl): CreateTimeTableDataSource
+
+    @Binds
+    abstract fun provideWaitingPlanDataSource(
+        dataSource: WaitingPlanDataSourceImpl,
+    ): WaitingPlanDataSource
 }
+

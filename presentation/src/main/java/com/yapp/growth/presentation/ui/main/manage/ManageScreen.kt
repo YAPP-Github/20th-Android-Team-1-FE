@@ -328,8 +328,8 @@ fun WaitingPlanItemPreview() {
             isLeader = true,
             category = "식사",
             members = listOf("member1", "member2", "member3", "member4"),
-            startTime = "",
-            endTime = "",
+            startTime = 0,
+            endTime = 24,
         ),
         type = ManageTapMenu.WAITING_PLAN,
         onItemClick = {}
