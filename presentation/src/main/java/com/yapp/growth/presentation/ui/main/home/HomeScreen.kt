@@ -47,18 +47,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
+import com.yapp.growth.presentation.component.PlanzCalendar
+import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
@@ -69,10 +73,6 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.login.LoginActivity
-import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzCalendar
-import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
-import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
@@ -430,8 +430,12 @@ fun HomeMonthlyPlan(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(color = Gray200, thickness = 1.dp)
-                if (isCalendarMode) {
-                    HomeCalendar(currentDate)
+                if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
+                    HomeCalendar(
+                        currentDate = currentDate,
+                        monthlyPlans = monthlyPlans,
+                        onDateClick = onDateClick
+                    )
                 } else {
                     Spacer(modifier = Modifier.height(10.dp))
                     if (monthlyPlans.isNotEmpty()) {
@@ -465,14 +469,23 @@ fun HomeMonthlyPlan(
 // TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
 fun HomeCalendar(
-    currentDate: CalendarDay
+    currentDate: CalendarDay,
+    monthlyPlans: List<Plan.FixedPlan>,
+    onDateClick: (CalendarDay) -> Unit,
 ) {
+
+    val monthlyPlanDates = (monthlyPlans.groupingBy {
+        CalendarDay.from(it.date.toDate())
+    }.eachCount().filter { it.value >= 1 })
+
     PlanzCalendar(
         currentDate = currentDate,
         selectMode = PlanzCalendarSelectMode.SINGLE,
         onDateSelectedListener = { widget, date, selected ->
-            Timber.d(date.toString())
-        }
+            if (date != CalendarDay.today() && monthlyPlanDates.containsKey(date))
+                onDateClick(date)
+        },
+        monthlyDates = monthlyPlanDates
     )
 }
 
@@ -620,7 +633,7 @@ fun HomeTodayPlanItem(
             Icon(
                 tint = Color.Unspecified,
                 imageVector = (
-                        when(category) {
+                        when (category) {
                             "식사" -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
                             "여행" -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
                             "미팅" -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)

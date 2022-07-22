@@ -16,7 +16,7 @@ fun Date.toFormatDate(): String {
     return DATE_FORMAT.format(this)
 }
 
-fun CalendarDay.toFormatDate(): String {
+fun CalendarDay.toParseFormatDate(): String {
     return PARSE_DATE_FORMAT.format(this.date)
 }
 
