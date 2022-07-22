@@ -5,7 +5,14 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,10 +32,12 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
@@ -56,7 +65,11 @@ fun PlanzScreen(
                 PlanzBottomNavigation(
                     currentDestination = currentDestination,
                     navigateToScreen = { navigationItem ->
-                        navigateBottomNavigationScreen(navController, navigationItem, intentToCreatePlan)
+                        navigateBottomNavigationScreen(
+                            navController,
+                            navigationItem,
+                            intentToCreatePlan
+                        )
                     }
                 )
             }
@@ -81,8 +94,11 @@ fun PlanzScreen(
                     navigateToMyPageScreen = {
                         navController.navigate(PlanzScreenRoute.MY_PAGE.route)
                     },
-                    navigateToDetailPlanScreen = {
-                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route)
+                    navigateToDetailPlanScreen = { planId ->
+                        navController.navigate(
+                            PlanzScreenRoute.DETAIL_PLAN.route
+                                .plus("/${planId}")
+                        )
                     },
                 )
             }
@@ -115,7 +131,13 @@ fun PlanzScreen(
                 SampleScreen()
             }
 
-            composable(route = PlanzScreenRoute.DETAIL_PLAN.route) {
+            composable(
+                route = PlanzScreenRoute.DETAIL_PLAN.route
+                    .plus("/{$KEY_PLAN_ID}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_ID) { type = NavType.LongType }
+                )
+            ) {
                 DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
             }
         }
@@ -243,3 +265,5 @@ enum class PlanzScreenRoute(val route: String) {
     DETAIL_PLAN("detail-plan"),
     SAMPLE("sample"),
 }
+
+const val KEY_PLAN_ID = "plan-id"

@@ -21,7 +21,6 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzExitAppBar
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.*
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun DetailPlanScreen(

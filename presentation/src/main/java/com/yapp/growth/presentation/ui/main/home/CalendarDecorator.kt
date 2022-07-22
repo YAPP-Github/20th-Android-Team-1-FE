@@ -163,7 +163,6 @@ class CalendarDecorator {
         }
     }
 
-    // TODO : 일정이 있는 날만 점 데코레이터 찍기
     class SingleDotDecorator(private val calendarDay: CalendarDay) : DayViewDecorator {
 
         override fun shouldDecorate(day: CalendarDay): Boolean {
@@ -186,7 +185,6 @@ class CalendarDecorator {
         }
     }
 
-    // TODO : 일정이 있는 날만 점 데코레이터 찍기
     class TripleDotDecorator(private val calendarDay: CalendarDay) : DayViewDecorator {
 
         override fun shouldDecorate(day: CalendarDay): Boolean {

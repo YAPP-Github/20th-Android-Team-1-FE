@@ -49,6 +49,7 @@ fun PlanzCalendar(
             views.apply {
                 this.currentDate = currentDate
                 this.setOnDateChangedListener(onDateSelectedListener)
+                this.removeDecorators()
 
                 if(selectedDates.isNotEmpty()) {
                     for(selectDate in selectedDates) {
@@ -61,8 +62,6 @@ fun PlanzCalendar(
 
                 when(selectMode) {
                     PlanzCalendarSelectMode.SINGLE -> {
-                        this.addDecorator(CalendarDecorator.OtherMonthDisableSelectionDecorator(context, this))
-                        this.addDecorator(CalendarDecorator.TodayDecorator(context))
                         monthlyDates.forEach {
                             if (it.key != CalendarDay.today()) {
                                 when (it.value) {
@@ -72,6 +71,8 @@ fun PlanzCalendar(
                                 }
                             }
                         }
+                        this.addDecorator(CalendarDecorator.TodayDecorator(context))
+                        this.addDecorator(CalendarDecorator.OtherMonthDisableSelectionDecorator(context, this))
                     }
                     PlanzCalendarSelectMode.MULTIPLE -> {
                         this.addDecorator(CalendarDecorator.SelectedDatesDecorator(context, this.selectedDates))

@@ -80,13 +80,12 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMyPageScreen: () -> Unit,
-    navigateToDetailPlanScreen: () -> Unit,
+    navigateToDetailPlanScreen: (Long) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
@@ -106,8 +105,7 @@ fun HomeScreen(
                     navigateToMyPageScreen()
                 }
                 is HomeSideEffect.NavigateDetailPlanScreen -> {
-                    // TODO : 해당 약속의 인덱스값을 함께 보내주어야 함 (정호)
-                    navigateToDetailPlanScreen()
+                    navigateToDetailPlanScreen(effect.planId)
                 }
                 is HomeSideEffect.ShowBottomSheet -> {
                     coroutineScope.launch { sheetState.show() }
@@ -130,7 +128,7 @@ fun HomeScreen(
                     viewModel.setEvent(HomeEvent.OnBottomSheetExitClicked)
                 },
                 onPlanItemClick = {
-                    viewModel.setEvent(HomeEvent.OnPlanItemClicked)
+                    viewModel.setEvent(HomeEvent.OnPlanItemClicked(it))
                 }
             )
         }
@@ -158,7 +156,7 @@ fun HomeScreen(
                         expanded = viewState.isTodayPlanExpanded,
                         todayPlans = viewState.todayPlans,
                         planCount = viewState.todayPlans.size,
-                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked) },
+                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
                         onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
                     )
                     HomeContract.LoginState.NONE -> HomeInduceLogin(
@@ -176,7 +174,7 @@ fun HomeScreen(
                     onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
                     onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
                     onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
-                    onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked) },
+                    onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
                     onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
@@ -218,14 +216,13 @@ private fun HomeUserProfile(
     }
 }
 
-// TODO : 약속 수 들어가는 로직 넣기 (정호)
 @Composable
 fun HomeTodayPlan(
     isError: Boolean,
     expanded: Boolean,
     todayPlans: List<Plan.FixedPlan>,
     planCount: Int,
-    onPlanItemClick: () -> Unit,
+    onPlanItemClick: (Long) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Surface(
@@ -368,7 +365,7 @@ fun HomeMonthlyPlan(
     onDateClick: (CalendarDay) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
-    onPlanItemClick: () -> Unit,
+    onPlanItemClick: (Long) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     val year: Int = currentDate.year
@@ -401,26 +398,31 @@ fun HomeMonthlyPlan(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isError) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 102.dp, vertical = 76.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(264.dp)
                     ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
-                            contentDescription = null,
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = "문제가 발생했습니다.",
-                            color = Gray500,
-                            style = PlanzTypography.body2,
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "다시 시도해주세요.",
-                            color = Gray500,
-                            style = PlanzTypography.body2,
-                        )
+                        Column(
+                            modifier = Modifier.align(Alignment.Center),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Image(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
+                                contentDescription = null,
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_error_text_01),
+                                color = Gray500,
+                                style = PlanzTypography.body2,
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_error_text_02),
+                                color = Gray500,
+                                style = PlanzTypography.body2,
+                            )
+                        }
                     }
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
@@ -500,7 +502,6 @@ fun HomeMonthlyPlan(
     }
 }
 
-// TODO : 추후 공통 컴포넌트로 이동 (정호)
 @Composable
 fun HomeCalendar(
     currentDate: CalendarDay,
@@ -547,7 +548,7 @@ fun HomeTodayPlanCountText(
 fun HomeDayPlanList(
     expanded: Boolean,
     dayPlans: List<Plan.FixedPlan>,
-    onPlanItemClick: () -> Unit,
+    onPlanItemClick: (Long) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(bottom = 36.dp),
@@ -556,6 +557,7 @@ fun HomeDayPlanList(
         if (expanded) {
             for (todayPlan in dayPlans) {
                 HomeTodayPlanItem(
+                    id = todayPlan.id,
                     date = todayPlan.date,
                     category = todayPlan.category,
                     title = todayPlan.title,
@@ -564,6 +566,7 @@ fun HomeDayPlanList(
             }
         } else {
             HomeTodayPlanItem(
+                id = dayPlans[0].id,
                 date = dayPlans[0].date,
                 title = (if (dayPlans.size == 1) {
                     dayPlans[0].title
@@ -581,7 +584,7 @@ fun HomeDayPlanList(
 fun HomeMonthlyPlanList(
     monthlyPlans: List<Plan.FixedPlan>,
     expanded: Boolean,
-    onPlanItemClick: () -> Unit,
+    onPlanItemClick: (Long) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Column {
@@ -589,6 +592,7 @@ fun HomeMonthlyPlanList(
             for (monthlyPlan in monthlyPlans) {
                 Timber.d(monthlyPlan.toString())
                 HomeMonthlyPlanItem(
+                    id = monthlyPlan.id,
                     date = monthlyPlan.date,
                     title = monthlyPlan.title,
                     onPlanItemClick = onPlanItemClick
@@ -598,6 +602,7 @@ fun HomeMonthlyPlanList(
             if (monthlyPlans.size < 5) {
                 for (monthlyPlan in monthlyPlans) {
                     HomeMonthlyPlanItem(
+                        id = monthlyPlan.id,
                         date = monthlyPlan.date,
                         title = monthlyPlan.title,
                         onPlanItemClick = onPlanItemClick
@@ -606,6 +611,7 @@ fun HomeMonthlyPlanList(
             } else {
                 for (i in 0 until 4) {
                     HomeMonthlyPlanItem(
+                        id = monthlyPlans[i].id,
                         date = monthlyPlans[i].date,
                         title = monthlyPlans[i].title,
                         onPlanItemClick = onPlanItemClick
@@ -639,10 +645,11 @@ fun HomeMonthlyPlanList(
 
 @Composable
 fun HomeTodayPlanItem(
+    id: Long,
     date: String,
     category: String,
     title: String,
-    onPlanItemClick: () -> Unit
+    onPlanItemClick: (Long) -> Unit
 ) {
     val tmp = date.toDate()
     val calendar: Calendar = Calendar.getInstance()
@@ -659,7 +666,7 @@ fun HomeTodayPlanItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onPlanItemClick),
+            .clickable(onClick = { onPlanItemClick(id) }),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -696,9 +703,10 @@ fun HomeTodayPlanItem(
 
 @Composable
 fun HomeMonthlyPlanItem(
+    id: Long,
     date: String,
     title: String,
-    onPlanItemClick: () -> Unit
+    onPlanItemClick: (Long) -> Unit
 ) {
     val time = SimpleDateFormat("aa h시", Locale.KOREA).format(date.toDate())
     val dates = SimpleDateFormat("M/d", Locale.KOREA).format(date.toDate())
@@ -707,7 +715,7 @@ fun HomeMonthlyPlanItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(40.dp)
-            .clickable { onPlanItemClick() },
+            .clickable { onPlanItemClick(id) },
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
@@ -736,7 +744,7 @@ fun HomeBottomSheetContent(
     selectionDay: CalendarDay,
     selectDayPlans: List<Plan.FixedPlan>,
     onExitClick: () -> Unit,
-    onPlanItemClick: () -> Unit
+    onPlanItemClick: (Long) -> Unit
 ) {
     val month = selectionDay.month + 1
     val day = selectionDay.day
@@ -768,7 +776,7 @@ fun HomeBottomSheetContent(
         HomeDayPlanList(
             expanded = true,
             dayPlans = selectDayPlans,
-            onPlanItemClick = { onPlanItemClick() }
+            onPlanItemClick = onPlanItemClick
         )
     }
 }

@@ -25,11 +25,10 @@ class HomeContract {
         }
     }
 
-    // TODO : 유저 아이콘 클릭 시 내 정보 창으로 이동 (정호)
     sealed class HomeSideEffect : ViewSideEffect {
         object MoveToLogin : HomeSideEffect()
         object NavigateToMyPageScreen : HomeSideEffect()
-        object NavigateDetailPlanScreen : HomeSideEffect()
+        data class NavigateDetailPlanScreen(val planId: Long) : HomeSideEffect()
         object ShowBottomSheet : HomeSideEffect()
         object HideBottomSheet : HomeSideEffect()
     }
@@ -37,7 +36,7 @@ class HomeContract {
     sealed class HomeEvent : ViewEvent {
         object OnInduceLoginClicked : HomeEvent()
         object OnUserImageClicked : HomeEvent()
-        object OnPlanItemClicked : HomeEvent()
+        data class OnPlanItemClicked(val planId: Long) : HomeEvent()
         data class OnCalendarDayClicked(val selectionDay: CalendarDay) : HomeEvent()
         object OnBottomSheetExitClicked : HomeEvent()
         object OnTodayPlanExpandedClicked : HomeEvent()
