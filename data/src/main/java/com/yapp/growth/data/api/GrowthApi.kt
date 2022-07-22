@@ -19,7 +19,7 @@ interface GrowthApi {
     suspend fun getAllFixedPlanList(): List<FixedPlanResponseImpl>
 
     @GET("/api/promises/{promiseId}")
-    suspend fun getFixedPlan(@Path("promiseId") pId: Int): FixedPlanResponseImpl
+    suspend fun getFixedPlan(@Path("promiseId") pId: Long): FixedPlanResponseImpl
 
     @GET("/api/promisings/session/{uuid}")
     suspend fun getCreateTimeTable(@Path("uuid") uuid: String): CreateTimeTableResponseImpl

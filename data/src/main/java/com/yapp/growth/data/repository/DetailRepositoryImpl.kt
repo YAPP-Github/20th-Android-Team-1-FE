@@ -12,7 +12,7 @@ internal class DetailRepositoryImpl @Inject constructor(
     private val dataSource: DetailDataSource
 ) : DetailRepository {
 
-    override suspend fun getFixedPlan(planId: Int): NetworkResult<FixedPlan> {
+    override suspend fun getFixedPlan(planId: Long): NetworkResult<FixedPlan> {
         return dataSource.getFixedPlan(planId)
     }
 }

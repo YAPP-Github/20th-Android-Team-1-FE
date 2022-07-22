@@ -5,5 +5,5 @@ import com.yapp.growth.domain.entity.Plan
 
 interface DetailRepository {
 
-    suspend fun getFixedPlan(planId: Int): NetworkResult<Plan.FixedPlan>
+    suspend fun getFixedPlan(planId: Long): NetworkResult<Plan.FixedPlan>
 }

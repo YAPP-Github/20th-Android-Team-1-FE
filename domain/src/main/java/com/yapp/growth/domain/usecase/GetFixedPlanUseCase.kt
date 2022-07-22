@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetFixedPlanUseCase @Inject constructor(
     private val repository: DetailRepository
 ) {
-    suspend operator fun invoke(planId: Int): NetworkResult<Plan.FixedPlan> {
+    suspend operator fun invoke(planId: Long): NetworkResult<Plan.FixedPlan> {
         return repository.getFixedPlan(planId)
     }
 }

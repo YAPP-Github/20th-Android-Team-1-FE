@@ -12,7 +12,7 @@ internal class DetailDataSourceImpl @Inject constructor(
     private val retrofitApi: GrowthApi
 ) : DetailDataSource {
 
-    override suspend fun getFixedPlan(planId: Int): NetworkResult<FixedPlan> =
+    override suspend fun getFixedPlan(planId: Long): NetworkResult<FixedPlan> =
         handleApi {
             retrofitApi.getFixedPlan(planId).toFixedPlan()
         }
