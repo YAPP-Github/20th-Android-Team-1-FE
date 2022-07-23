@@ -6,4 +6,5 @@ import com.yapp.growth.domain.entity.User
 interface UserRepository {
     suspend fun signUp(): NetworkResult<User>
     suspend fun getUserInfo(): NetworkResult<User>
+    suspend fun getCachedUserInfo(): User?
 }

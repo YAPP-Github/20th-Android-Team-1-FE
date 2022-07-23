@@ -62,9 +62,9 @@ interface GrowthApi {
 
     // User
 
-    @POST
-    suspend fun signUp(): UserResponse
+    @POST("/api/users/sign-up")
+    suspend fun signUp(): UserResponseImpl
 
-    @GET
-    suspend fun getUserInfo(): UserResponse
+    @GET("/api/users/info")
+    suspend fun getUserInfo(): UserResponseImpl
 }

@@ -11,4 +11,6 @@ class GetUserInfoUseCase @Inject constructor(
     suspend operator fun invoke(): NetworkResult<User> {
         return repository.getUserInfo()
     }
+
+    suspend fun getCachedUserInfo(): User? = repository.getCachedUserInfo()
 }
