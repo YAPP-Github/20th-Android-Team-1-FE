@@ -6,9 +6,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yapp.growth.presentation.ui.createPlan.date.DateScreen
 import com.yapp.growth.presentation.ui.createPlan.share.ShareScreen
 import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
@@ -58,44 +60,21 @@ fun CreatePlanScreen(
             composable(route = CreatePlanScreenRoute.TIME_RANGE.route) {
                 TimeRangeScreen(
                     exitCreateScreen = exitCreatePlan,
-                    navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route) },
+                    navigateToNextScreen = { uuid ->
+                        navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/${uuid}"))
+                    },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
 
-            composable(route = CreatePlanScreenRoute.CREATE_TIMETABLE.route) {
+            composable(route = CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/{uuid}"),
+                arguments = listOf(
+                    navArgument("uuid") { type = NavType.StringType }
+                )) {
                 CreateTimeTableScreen(
                     exitCreateScreen = exitCreatePlan,
-                    navigateToNextScreen = { /* navController.navigate(CreatePlanScreenRoute.NEXT_SCREEN.route) */ },
+                    navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.SHARE.route) },
                     navigateToPreviousScreen = { navController.popBackStack() }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.RESPOND_PLAN.route) {
-                RespondPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToSendCompleteScreen = { navController.navigate(CreatePlanScreenRoute.RESPOND_PLAN_COMPLETE.route) },
-                    navigateToSendRejectedScreen = { navController.navigate(CreatePlanScreenRoute.RESPOND_PLAN_REJECT.route) }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.CONFIRM_PLAN.route) {
-                ConfirmPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.RESPOND_PLAN_COMPLETE.route) {
-                RespondPlanCompleteScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = {  }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.RESPOND_PLAN_REJECT.route) {
-                RespondPlanRejectScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = {  }
                 )
             }
 
@@ -115,9 +94,5 @@ enum class CreatePlanScreenRoute(val route: String) {
     DATE("date"),
     TIME_RANGE("time-range"),
     CREATE_TIMETABLE("create-timetable"),
-    RESPOND_PLAN("respond-plan"),
-    CONFIRM_PLAN("confirm-plan"),
-    RESPOND_PLAN_COMPLETE("respond-plan-complete"),
-    RESPOND_PLAN_REJECT("respond-plan-reject"),
     SHARE("share-plan"),
 }

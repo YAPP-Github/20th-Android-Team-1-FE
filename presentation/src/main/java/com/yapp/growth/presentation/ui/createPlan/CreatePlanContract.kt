@@ -4,6 +4,7 @@ import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 import com.yapp.growth.presentation.model.PlanThemeType
+import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract
 
 class CreatePlanContract {
     data class CreatePlanViewState(
@@ -13,10 +14,11 @@ class CreatePlanContract {
         val dates: List<String> = emptyList(),
         val startHour: Int = -1,
         val endHour: Int = -1,
+        val tempPlanUuid: String = "",
     ) : ViewState
 
     sealed class CreatePlanSideEffect : ViewSideEffect {
-
+        object NavigateToNextScreen : CreatePlanSideEffect()
     }
 
     sealed class CreatePlanEvent : ViewEvent {

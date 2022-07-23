@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.manage.confirm
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfirmPlanViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getRespondUsersUseCase: GetRespondUsersUseCase,
     private val sendConfirmPlanUseCase: SendConfirmPlanUseCase
 ) : BaseViewModel<ConfirmPlanViewState, ConfirmPlanSideEffect, ConfirmPlanEvent>(
@@ -26,7 +28,7 @@ class ConfirmPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
     private var currentIndex = 0
-    private val promisingId: Long = 25
+    private val promisingId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
 
     init {
         loadRespondUsers(promisingId)
@@ -38,7 +40,11 @@ class ConfirmPlanViewModel @Inject constructor(
             result?.let {
                 originalTable = it
                 makeRespondList(it)
-                val sliceTimeTable: TimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
+                val sliceTimeTable: TimeTable = if (it.availableDates.size >= 4) {
+                    it.copy(availableDates = it.availableDates.subList(0, 4))
+                } else {
+                    it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+                }
                 updateState {
                     copy(timeTable = sliceTimeTable)
                 }

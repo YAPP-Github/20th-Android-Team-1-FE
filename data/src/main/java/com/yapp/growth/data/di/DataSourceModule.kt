@@ -1,5 +1,13 @@
 package com.yapp.growth.data.di
 
+import com.yapp.growth.data.internal.source.ConfirmPlanDataSourceImpl
+import com.yapp.growth.data.internal.source.TemporaryPlanDataSourceImpl
+import com.yapp.growth.data.internal.source.CreateTimeTableDataSourceImpl
+import com.yapp.growth.data.source.ConfirmPlanDataSource
+import com.yapp.growth.data.source.CreateTimeTableDataSource
+import com.yapp.growth.data.source.LoadPlanDataSource
+import com.yapp.growth.data.internal.source.LoadPlanDataSourceImpl
+import com.yapp.growth.data.source.TemporaryPlanDataSource
 import com.yapp.growth.data.internal.source.*
 import com.yapp.growth.data.source.*
 import dagger.Binds
@@ -35,5 +43,10 @@ internal abstract class DataSourceModule {
     abstract fun bindLoadPlanDataSource(
         dataSource: LoadPlanDataSourceImpl,
     ): LoadPlanDataSource
+
+    @Binds
+    abstract fun bindTemporaryPlanDataSource(
+        dataSource: TemporaryPlanDataSourceImpl,
+    ): TemporaryPlanDataSource
 }
 

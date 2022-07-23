@@ -11,7 +11,7 @@ class TimeRangeViewModel @Inject constructor(
     override fun handleEvents(event: TimeRangeEvent) {
         when (event) {
             is TimeRangeEvent.OnClickExitButton -> sendEffect({ TimeRangeSideEffect.ExitCreateScreen })
-            is TimeRangeEvent.OnClickNextButton -> sendEffect({ TimeRangeSideEffect.NavigateToNextScreen })
+            is TimeRangeEvent.OnClickNextButton -> sendEffect({ TimeRangeSideEffect.CreateTemporaryPlan })
             is TimeRangeEvent.OnClickBackButton -> sendEffect({ TimeRangeSideEffect.NavigateToPreviousScreen })
             is TimeRangeEvent.OnSelectedHourChanged -> {
                 updateHourState(viewState.value.dialogState, event.hour)
