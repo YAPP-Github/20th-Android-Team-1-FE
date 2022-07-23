@@ -3,11 +3,11 @@ package com.yapp.growth.data.di
 import com.yapp.growth.data.repository.ConfirmPlanRepositoryImpl
 import com.yapp.growth.data.repository.CreateTimeTableRepositoryImpl
 import com.yapp.growth.data.repository.RespondPlanRepositoryImpl
-import com.yapp.growth.domain.repository.RespondPlanRepository
 import com.yapp.growth.data.repository.DetailRepositoryImpl
 import com.yapp.growth.data.repository.HomeRepositoryImpl
 import com.yapp.growth.domain.repository.ConfirmPlanRepository
 import com.yapp.growth.domain.repository.CreateTimeTableRepository
+import com.yapp.growth.domain.repository.RespondPlanRepository
 import com.yapp.growth.domain.repository.DetailRepository
 import com.yapp.growth.domain.repository.HomeRepository
 import dagger.Binds
