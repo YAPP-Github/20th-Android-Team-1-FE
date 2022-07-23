@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan.timetable
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTimeTableViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase,
     private val sendTimeCheckedOfDayUseCase: SendTimeCheckedOfDayUseCase,
 ): BaseViewModel<CreateTimeTableViewState, CreateTimeTableSideEffect, CreateTimeTableEvent>(CreateTimeTableViewState()) {
@@ -30,13 +32,13 @@ class CreateTimeTableViewModel @Inject constructor(
     private var originalTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList())
     private var currentIndex = 0
 
-    private val uuid = "43edb859-5892-42a4-b797-fab399ed4e34"
+    private var uuid: String = savedStateHandle.get<String>("uuid") ?: ""
 
     init {
         loadCreateTimeTable(uuid)
     }
 
-    fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
+    private fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
         val result = (getCreateTimeTableUseCase.invoke(uuid) as? NetworkResult.Success)?.data
         result?.let {
             originalTable = it
@@ -103,7 +105,7 @@ class CreateTimeTableViewModel @Inject constructor(
         viewModelScope.launch {
             sendTimeCheckedOfDayUseCase.invoke(uuid, timeCheckedOfDays)
                 .onSuccess {
-                    TODO()
+                    sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
                 }
                 .onError {
                     TODO()

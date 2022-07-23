@@ -6,9 +6,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yapp.growth.presentation.ui.createPlan.date.DateScreen
 import com.yapp.growth.presentation.ui.createPlan.share.ShareScreen
 import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
@@ -58,15 +60,20 @@ fun CreatePlanScreen(
             composable(route = CreatePlanScreenRoute.TIME_RANGE.route) {
                 TimeRangeScreen(
                     exitCreateScreen = exitCreatePlan,
-                    navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route) },
+                    navigateToNextScreen = { uuid ->
+                        navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/${uuid}"))
+                    },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
 
-            composable(route = CreatePlanScreenRoute.CREATE_TIMETABLE.route) {
+            composable(route = CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/{uuid}"),
+                arguments = listOf(
+                    navArgument("uuid") { type = NavType.StringType }
+                )) {
                 CreateTimeTableScreen(
                     exitCreateScreen = exitCreatePlan,
-                    navigateToNextScreen = { /* navController.navigate(CreatePlanScreenRoute.NEXT_SCREEN.route) */ },
+                    navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.SHARE.route) },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }

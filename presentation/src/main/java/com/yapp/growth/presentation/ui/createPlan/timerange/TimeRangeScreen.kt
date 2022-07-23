@@ -43,7 +43,7 @@ fun TimeRangeScreen(
     sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: TimeRangeViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: () -> Unit,
+    navigateToNextScreen: (String) -> Unit,
     navigateToPreviousScreen: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -149,7 +149,7 @@ fun TimeRangeScreen(
         sharedViewModel.effect.collect { effect ->
             when (effect) {
                 is CreatePlanContract.CreatePlanSideEffect.NavigateToNextScreen -> {
-                    navigateToNextScreen()
+                    navigateToNextScreen(sharedViewModel.viewState.value.tempPlanUuid)
                 }
             }
         }

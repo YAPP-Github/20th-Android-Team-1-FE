@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.TemporaryPlan
+import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.CreateTemporaryPlanUseCase
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,42 +35,21 @@ class CreatePlanViewModel @Inject constructor(
         }
     }
 
-    private fun createTemporaryPlan() {
-        viewModelScope.launch {
-            val result = createTemporaryPlanUseCase(
-                TemporaryPlan(
-                    title = viewState.value.title,
-                    startHour = viewState.value.startHour,
-                    endHour = viewState.value.endHour,
-                    categoryId = viewState.value.theme?.ordinal ?: 0,
-                    availableDates = viewState.value.dates,
-                    place = viewState.value.place
-                )
+    private fun createTemporaryPlan() = viewModelScope.launch {
+        createTemporaryPlanUseCase(
+            TemporaryPlan(
+                title = viewState.value.title,
+                startHour = viewState.value.startHour,
+                endHour = viewState.value.endHour,
+                categoryId = viewState.value.theme?.ordinal?.plus(1) ?: 0,
+                availableDates = viewState.value.dates,
+                place = viewState.value.place
             )
+        ).onSuccess {
+            updateState { copy(tempPlanUuid = it.uuid) }
+            sendEffect({ CreatePlanSideEffect.NavigateToNextScreen })
+        }.onError {
 
-            Timber.w("titles = ${viewState.value.title}")
-            Timber.w("startHour = ${viewState.value.startHour}")
-            Timber.w("endHour = ${viewState.value.endHour}")
-            Timber.w("categoryId = ${viewState.value.theme?.ordinal ?: 0}")
-            Timber.w("availableDates = ${viewState.value.dates}")
-            Timber.w("place = ${viewState.value.place}")
-
-            when (result) {
-                is NetworkResult.Success -> {
-                    updateState {
-                        copy(tempPlanUuid = result.data.uuid)
-                    }
-                    Timber.w("uuid: ${result.data}")
-                    sendEffect({ CreatePlanSideEffect.NavigateToNextScreen })
-                }
-                is NetworkResult.Error -> {
-
-                    Timber.w("exception: ${result.exception}")
-                }
-                is NetworkResult.Loading -> {
-
-                }
-            }
         }
     }
 }

@@ -24,7 +24,6 @@ import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @Composable
 fun CreateTimeTableScreen(
-    sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: CreateTimeTableViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
     navigateToNextScreen: () -> Unit,

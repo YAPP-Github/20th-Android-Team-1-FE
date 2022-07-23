@@ -17,7 +17,7 @@ fun Date.toFormatDate(): String {
 }
 
 fun CalendarDay.toParseFormatDate(): String {
-    return FULL_DATE_FORMAT.format(this.date)
+    return PARSE_DATE_FORMAT.format(this.date)
 }
 
 fun Date.toCalculateDiffDay(other: Date): Long {
