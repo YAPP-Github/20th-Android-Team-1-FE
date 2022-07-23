@@ -26,6 +26,7 @@ import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.model.TimeType
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTimeRange
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Companion.DEFAULT_END_HOUR
@@ -111,14 +112,13 @@ fun TimeRangeScreen(
                 is TimeRangeSideEffect.ExitCreateScreen -> {
                     exitCreateScreen()
                 }
-                is TimeRangeSideEffect.NavigateToNextScreen -> {
+                is TimeRangeSideEffect.CreateTemporaryPlan -> {
                     sharedViewModel.setEvent(
                         DecideTimeRange(
                             startHour = viewState.startHour ?: DEFAULT_START_HOUR,
                             endHour = viewState.endHour ?: DEFAULT_END_HOUR
                         )
                     )
-                    navigateToNextScreen()
                 }
                 is TimeRangeSideEffect.NavigateToPreviousScreen -> {
                     navigateToPreviousScreen()
@@ -140,6 +140,16 @@ fun TimeRangeScreen(
                             context.getString(R.string.create_plan_time_range_error_message)
                         )
                     }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = sharedViewModel.effect) {
+        sharedViewModel.effect.collect { effect ->
+            when (effect) {
+                is CreatePlanContract.CreatePlanSideEffect.NavigateToNextScreen -> {
+                    navigateToNextScreen()
                 }
             }
         }

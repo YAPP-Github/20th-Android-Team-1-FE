@@ -20,7 +20,7 @@ class TimeRangeContract {
 
     sealed class TimeRangeSideEffect : ViewSideEffect {
         object ExitCreateScreen : TimeRangeSideEffect()
-        object NavigateToNextScreen : TimeRangeSideEffect()
+        object CreateTemporaryPlan : TimeRangeSideEffect()
         object NavigateToPreviousScreen : TimeRangeSideEffect()
         object ShowBottomSheet : TimeRangeSideEffect()
         object HideBottomSheet : TimeRangeSideEffect()
