@@ -1,6 +1,6 @@
 package com.yapp.growth.data.parameter
 
-data class TimeRequestParameter(
+data class TimeCheckedOfDaysParameter(
     val unit: Float,
     val timeTable: List<TimeCheckedOfDayParameter>
 )

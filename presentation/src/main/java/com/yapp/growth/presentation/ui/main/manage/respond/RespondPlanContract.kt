@@ -27,13 +27,16 @@ class RespondPlanContract {
     ) : ViewState
 
     sealed class RespondPlanSideEffect : ViewSideEffect {
-
+        object NavigateToSendCompleteScreen : RespondPlanSideEffect()
+        object NavigateToSendRejectedScreen: RespondPlanSideEffect()
+        object NavigateToPreviousScreen : RespondPlanSideEffect()
     }
 
     sealed class RespondPlanEvent : ViewEvent {
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : RespondPlanEvent()
         object OnClickNextDayButton : RespondPlanEvent()
         object OnClickPreviousDayButton : RespondPlanEvent()
-        object OnClickRespondButton : RespondPlanEvent()
+        object OnClickSendPlanButton : RespondPlanEvent()
+        object OnClickRejectPlanButton : RespondPlanEvent()
     }
 }

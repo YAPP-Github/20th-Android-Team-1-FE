@@ -40,7 +40,7 @@ fun ConfirmPlanScreen(
                 timeTable = uiState.timeTable,
                 currentClickTimeIndex = uiState.currentClickTimeIndex,
                 currentClickUserData = uiState.currentClickUserData,
-                onClickSelectPlan = {  }
+                onClickSelectPlan = { date -> viewModel.setEvent(ConfirmPlanEvent.OnClickConfirmButton(date)) }
             )
         }) {
 
@@ -101,6 +101,8 @@ fun ConfirmPlanScreen(
                 is ConfirmPlanSideEffect.HideBottomSheet -> {
                     coroutineScope.launch { sheetState.hide() }
                 }
+                ConfirmPlanSideEffect.NavigateToNextScreen -> TODO()
+                ConfirmPlanSideEffect.NavigateToPreviousScreen -> TODO()
             }
 
         }
