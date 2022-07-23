@@ -7,7 +7,7 @@ import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
-import com.yapp.growth.domain.usecase.GetAllFixedPlanListUseCase
+import com.yapp.growth.domain.usecase.GetFixedPlansUseCase
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllFixedPlanListUseCase: GetAllFixedPlanListUseCase,
+    private val getFixedPlansUseCase: GetFixedPlansUseCase,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
@@ -74,7 +74,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchPlans() {
         viewModelScope.launch {
-            val result = (getAllFixedPlanListUseCase.invoke())
+            val result = (getFixedPlansUseCase.invoke())
 
             result.onSuccess { plans ->
                 val todayPlans = plans.filter { plan ->

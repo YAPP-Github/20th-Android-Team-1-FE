@@ -1,7 +1,7 @@
 package com.yapp.growth.domain.entity
 
 sealed class Plan(
-    open val id: Long,
+    open val id: Int,
     open val title: String,
     open val isLeader: Boolean,
     open val category: String, // type?
@@ -9,7 +9,7 @@ sealed class Plan(
     open val place: String,
 ) {
     data class WaitingPlan(
-        override val id: Long,
+        override val id: Int,
         override val title: String,
         override val isLeader: Boolean = false,
         override val category: String,
@@ -28,7 +28,7 @@ sealed class Plan(
     )
 
     data class FixedPlan(
-        override val id: Long,
+        override val id: Int,
         override val title: String,
         override val isLeader: Boolean = false,
         override val category: String,
