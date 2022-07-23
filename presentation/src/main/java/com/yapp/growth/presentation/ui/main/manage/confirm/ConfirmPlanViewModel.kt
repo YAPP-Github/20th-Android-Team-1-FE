@@ -40,7 +40,11 @@ class ConfirmPlanViewModel @Inject constructor(
             result?.let {
                 originalTable = it
                 makeRespondList(it)
-                val sliceTimeTable: TimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
+                val sliceTimeTable: TimeTable = if (it.availableDates.size >= 4) {
+                    it.copy(availableDates = it.availableDates.subList(0, 4))
+                } else {
+                    it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+                }
                 updateState {
                     copy(timeTable = sliceTimeTable)
                 }
