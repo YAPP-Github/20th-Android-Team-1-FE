@@ -1,17 +1,16 @@
 package com.yapp.growth.data.mapper
 
 import com.yapp.growth.data.response.FixedPlanResponse
-import com.yapp.growth.domain.entity.Plan.FixedPlan
+import com.yapp.growth.domain.entity.Plan
 
-fun FixedPlanResponse.toFixedPlan(): FixedPlan {
-    val response = this
-    return FixedPlan(
-        id = response.id,
-        title = response.promiseName,
-        isLeader = response.isOwner,
-        category = response.category.keyword,
-        members = response.members.map { it.userName },
-        place = response.placeName,
-        date = response.promiseDate,
+fun FixedPlanResponse.toFixedPlan(): Plan.FixedPlan {
+    return Plan.FixedPlan(
+        id = id,
+        title = title,
+        isLeader = isLeader,
+        category = category.keyword,
+        members = members.map { it.userName },
+        place = place,
+        date = date,
     )
 }

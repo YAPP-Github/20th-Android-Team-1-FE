@@ -1,12 +1,13 @@
 package com.yapp.growth.data.response
 
-interface FixedPlanResponse {
+interface WaitingPlanResponse {
     val id: Int
     val title: String
-    val date: String
-    val leader: UserResponse
     val isLeader: Boolean
+    val startTime: String
+    val endTime: String
     val category: CategoryResponse
+    val availableDates: List<String>
     val members: List<UserResponse>
     val place: String
 }

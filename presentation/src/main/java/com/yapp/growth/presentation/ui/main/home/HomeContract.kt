@@ -28,7 +28,7 @@ class HomeContract {
     sealed class HomeSideEffect : ViewSideEffect {
         object MoveToLogin : HomeSideEffect()
         object NavigateToMyPageScreen : HomeSideEffect()
-        data class NavigateDetailPlanScreen(val planId: Long) : HomeSideEffect()
+        data class NavigateDetailPlanScreen(val planId: Int) : HomeSideEffect()
         object ShowBottomSheet : HomeSideEffect()
         object HideBottomSheet : HomeSideEffect()
     }
@@ -36,7 +36,7 @@ class HomeContract {
     sealed class HomeEvent : ViewEvent {
         object OnInduceLoginClicked : HomeEvent()
         object OnUserImageClicked : HomeEvent()
-        data class OnPlanItemClicked(val planId: Long) : HomeEvent()
+        data class OnPlanItemClicked(val planId: Int) : HomeEvent()
         data class OnCalendarDayClicked(val selectionDay: CalendarDay) : HomeEvent()
         object OnBottomSheetExitClicked : HomeEvent()
         object OnTodayPlanExpandedClicked : HomeEvent()

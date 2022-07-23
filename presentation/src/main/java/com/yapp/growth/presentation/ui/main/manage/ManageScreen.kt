@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.main.manage
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,9 +41,9 @@ import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageSideEffe
 fun ManageScreen(
     viewModel: ManageViewModel = hiltViewModel(),
     intentToCreateScreen: () -> Unit,
-    navigateToFixPlanScreen: (Long) -> Unit,
-    navigateToMemberResponseScreen: (Long) -> Unit,
-    navigateToInvitationScreen: (Long) -> Unit,
+    navigateToFixPlanScreen: (Int) -> Unit,
+    navigateToMemberResponseScreen: (Int) -> Unit,
+    navigateToInvitationScreen: (Int) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -81,7 +84,8 @@ fun ManageScreen(
                 },
                 onFixedItemClick = { planId ->
                     viewModel.setEvent(ManageEvent.OnClickFixedPlan(planId))
-                }
+                },
+                onCreateButtonClick = { viewModel.setEvent(ManageEvent.OnClickCreateButton) }
             )
         }
     }
@@ -158,8 +162,9 @@ fun ManagePager(
     pagerState: PagerState,
     waitingPlans: List<Plan.WaitingPlan>,
     fixedPlans: List<Plan.FixedPlan>,
-    onWaitingItemClick: (Long) -> Unit,
-    onFixedItemClick: (Long) -> Unit,
+    onWaitingItemClick: (Int) -> Unit,
+    onFixedItemClick: (Int) -> Unit,
+    onCreateButtonClick: () -> Unit,
 ) {
     HorizontalPager(
         state = pagerState,
@@ -167,18 +172,22 @@ fun ManagePager(
     ) { tabIndex ->
         when (tabIndex) {
             ManageTapMenu.WAITING_PLAN.ordinal -> {
-                ManagePlansList(
-                    plans = waitingPlans,
-                    type = ManageTapMenu.WAITING_PLAN,
-                    onItemClick = onWaitingItemClick
-                )
+                if (waitingPlans.isNotEmpty()) {
+                    ManagePlansList(
+                        plans = waitingPlans,
+                        type = ManageTapMenu.WAITING_PLAN,
+                        onItemClick = onWaitingItemClick
+                    )
+                } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
             }
             ManageTapMenu.FIXED_PLAN.ordinal -> {
-                ManagePlansList(
-                    plans = fixedPlans,
-                    type = ManageTapMenu.FIXED_PLAN,
-                    onItemClick = onFixedItemClick
-                )
+                if (fixedPlans.isNotEmpty()) {
+                    ManagePlansList(
+                        plans = fixedPlans,
+                        type = ManageTapMenu.FIXED_PLAN,
+                        onItemClick = onFixedItemClick
+                    )
+                } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
             }
         }
     }
@@ -188,7 +197,7 @@ fun ManagePager(
 fun ManagePlansList(
     plans: List<Plan>,
     type: ManageTapMenu,
-    onItemClick: (Long) -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -218,7 +227,7 @@ fun ManagePlansList(
 fun ManagePlansItem(
     plan: Plan,
     type: ManageTapMenu,
-    onItemClick: (Long) -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -313,6 +322,53 @@ fun ManageLeaderBadge(
     }
 }
 
+@Composable
+fun ManageEmptyView(
+    onCreateButtonClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.image_empty_invitation),
+            contentDescription = ""
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(id = R.string.manage_plan_empty_view_text),
+            style = PlanzTypography.body2,
+            color = CoolGray300,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        ManageCreateButton(onCreateButtonClick = onCreateButtonClick)
+    }
+}
+
+@Composable
+fun ManageCreateButton(
+    onCreateButtonClick: () -> Unit,
+) {
+    OutlinedButton(
+        modifier = Modifier
+            .height(36.dp)
+            .width(96.dp),
+        border = BorderStroke(1.dp, MainPurple900),
+        shape = RoundedCornerShape(8.dp),
+        onClick = onCreateButtonClick
+    ) {
+        Text(
+            text = stringResource(id = R.string.manage_plan_empty_view_create_button_text),
+            style = PlanzTypography.caption,
+            color = MainPurple900
+        )
+    }
+}
+
 enum class ManageTapMenu(@StringRes val textId: Int) {
     WAITING_PLAN(R.string.manage_plan_waiting_plan_text),
     FIXED_PLAN(R.string.manage_plan_fixed_plan_text)
@@ -328,8 +384,10 @@ fun WaitingPlanItemPreview() {
             isLeader = true,
             category = "식사",
             members = listOf("member1", "member2", "member3", "member4"),
-            startTime = "",
-            endTime = "",
+            place = "place",
+            startTime = 0,
+            endTime = 24,
+            isAlreadyReplied = false,
         ),
         type = ManageTapMenu.WAITING_PLAN,
         onItemClick = {}
@@ -369,4 +427,10 @@ fun ManageScreenPreview() {
         navigateToMemberResponseScreen = {},
         navigateToInvitationScreen = {}
     )
+}
+
+@Preview
+@Composable
+fun ManageCreateButtonPreview() {
+    ManageCreateButton(onCreateButtonClick = {})
 }

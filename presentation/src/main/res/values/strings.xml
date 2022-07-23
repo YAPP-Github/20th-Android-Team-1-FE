@@ -23,6 +23,8 @@
     <string name="manage_plan_completed_member_count_text">명 응답 완료</string>
     <string name="manage_plan_waiting_plan_text">대기중인 약속</string>
     <string name="manage_plan_fixed_plan_text">확정된 약속</string>
+    <string name="manage_plan_empty_view_text">약속이 없습니다.\n친구들과 약속을 잡아보세요.</string>
+    <string name="manage_plan_empty_view_create_button_text">약속 잡기</string>
 
     <string name="my_page_text">내 정보</string>
     <string name="my_page_planz_sign_up_text">플랜즈 회원가입</string>

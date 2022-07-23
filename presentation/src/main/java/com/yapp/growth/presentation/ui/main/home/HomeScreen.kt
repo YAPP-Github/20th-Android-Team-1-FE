@@ -85,7 +85,7 @@ import java.util.*
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMyPageScreen: () -> Unit,
-    navigateToDetailPlanScreen: (Long) -> Unit,
+    navigateToDetailPlanScreen: (Int) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
@@ -222,7 +222,7 @@ fun HomeTodayPlan(
     expanded: Boolean,
     todayPlans: List<Plan.FixedPlan>,
     planCount: Int,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Surface(
@@ -365,7 +365,7 @@ fun HomeMonthlyPlan(
     onDateClick: (CalendarDay) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     val year: Int = currentDate.year
@@ -548,7 +548,7 @@ fun HomeTodayPlanCountText(
 fun HomeDayPlanList(
     expanded: Boolean,
     dayPlans: List<Plan.FixedPlan>,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(bottom = 36.dp),
@@ -584,7 +584,7 @@ fun HomeDayPlanList(
 fun HomeMonthlyPlanList(
     monthlyPlans: List<Plan.FixedPlan>,
     expanded: Boolean,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Column {
@@ -645,11 +645,11 @@ fun HomeMonthlyPlanList(
 
 @Composable
 fun HomeTodayPlanItem(
-    id: Long,
+    id: Int,
     date: String,
     category: String,
     title: String,
-    onPlanItemClick: (Long) -> Unit
+    onPlanItemClick: (Int) -> Unit
 ) {
     val tmp = date.toDate()
     val calendar: Calendar = Calendar.getInstance()
@@ -703,10 +703,10 @@ fun HomeTodayPlanItem(
 
 @Composable
 fun HomeMonthlyPlanItem(
-    id: Long,
+    id: Int,
     date: String,
     title: String,
-    onPlanItemClick: (Long) -> Unit
+    onPlanItemClick: (Int) -> Unit
 ) {
     val time = SimpleDateFormat("aa h시", Locale.KOREA).format(date.toDate())
     val dates = SimpleDateFormat("M/d", Locale.KOREA).format(date.toDate())
@@ -744,7 +744,7 @@ fun HomeBottomSheetContent(
     selectionDay: CalendarDay,
     selectDayPlans: List<Plan.FixedPlan>,
     onExitClick: () -> Unit,
-    onPlanItemClick: (Long) -> Unit
+    onPlanItemClick: (Int) -> Unit
 ) {
     val month = selectionDay.month + 1
     val day = selectionDay.day
