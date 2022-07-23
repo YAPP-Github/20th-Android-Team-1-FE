@@ -1,27 +1,25 @@
 package com.yapp.growth.data.internal.response
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import com.yapp.growth.data.response.WaitingPlanResponse
 
 data class WaitingPlanResponseImpl(
-    @SerializedName("id")
+    @Json(name = "id")
     override val id: Int,
-    @SerializedName("promisingName")
+    @Json(name = "promisingName")
     override val title: String,
-    @SerializedName("owner")
-    override val leader: UserResponseImpl,
-    @SerializedName("isOwner")
+    @Json(name = "isOwner")
     override val isLeader: Boolean,
-    @SerializedName("minTime")
+    @Json(name = "minTime")
     override val startTime: String,
-    @SerializedName("maxTime")
+    @Json(name = "maxTime")
     override val endTime: String,
-    @SerializedName("category")
+    @Json(name = "category")
     override val category: CategoryResponseImpl,
-    @SerializedName("availableDates")
-    override val availableDate: String,
-    @SerializedName("members")
+    @Json(name = "availableDates")
+    override val availableDates: List<String>,
+    @Json(name = "members")
     override val members: List<UserResponseImpl>,
-    @SerializedName("placeName")
+    @Json(name = "placeName")
     override val place: String,
 ) : WaitingPlanResponse

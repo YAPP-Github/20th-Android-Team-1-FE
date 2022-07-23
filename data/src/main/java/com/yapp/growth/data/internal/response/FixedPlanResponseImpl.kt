@@ -1,23 +1,23 @@
 package com.yapp.growth.data.internal.response
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import com.yapp.growth.data.response.FixedPlanResponse
 
 data class FixedPlanResponseImpl(
-    @SerializedName("id")
+    @Json(name = "id")
     override val id: Int,
-    @SerializedName("promiseName")
+    @Json(name = "promiseName")
     override val title: String,
-    @SerializedName("promiseDate")
+    @Json(name = "promiseDate")
     override val date: String,
-    @SerializedName("owner")
+    @Json(name = "owner")
     override val leader: UserResponseImpl,
-    @SerializedName("isOwner")
+    @Json(name = "isOwner")
     override val isLeader: Boolean,
-    @SerializedName("category")
+    @Json(name = "category")
     override val category: CategoryResponseImpl,
-    @SerializedName("members")
+    @Json(name = "members")
     override val members: List<UserResponseImpl>,
-    @SerializedName("placeName")
+    @Json(name = "placeName")
     override val place: String,
 ) : FixedPlanResponse
