@@ -4,8 +4,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal val PARSE_DATE_FORMAT1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
-internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
+internal val FULL_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
 internal val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 fun CalendarDay.toFormatDate(): String {
@@ -17,7 +17,7 @@ fun Date.toFormatDate(): String {
 }
 
 fun CalendarDay.toParseFormatDate(): String {
-    return PARSE_DATE_FORMAT1.format(this.date)
+    return FULL_DATE_FORMAT.format(this.date)
 }
 
 fun Date.toCalculateDiffDay(other: Date): Long {
@@ -25,7 +25,7 @@ fun Date.toCalculateDiffDay(other: Date): Long {
 }
 
 fun String.toDate(): Date {
-    return PARSE_DATE_FORMAT1.parse(this) ?: Date()
+    return PARSE_DATE_FORMAT.parse(this) ?: Date()
 }
 
 fun String.toDay(): String {
