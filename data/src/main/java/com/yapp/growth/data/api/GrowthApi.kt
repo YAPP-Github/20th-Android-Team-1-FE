@@ -2,6 +2,12 @@ package com.yapp.growth.data.api
 
 import com.yapp.growth.data.internal.response.*
 import com.yapp.growth.data.parameter.TimeRequestParameter
+import com.yapp.growth.data.internal.response.FixedPlanResponseImpl
+import com.yapp.growth.data.internal.response.CreateTimeTableResponseImpl
+import com.yapp.growth.data.internal.response.PromisingTimeTableResponseImpl
+import com.yapp.growth.data.internal.response.TimeRequestResponseImpl
+import com.yapp.growth.data.parameter.ConfirmPlanParameter
+import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -14,6 +20,11 @@ interface GrowthApi {
         @Path("promisingId") promisingId: String,
     ): PromisingTimeTableResponseImpl
 
+    @GET("/api/promises/{promiseId}")
+    suspend fun getFixedPlan(
+        @Path("promiseId") pId: Long
+    ): FixedPlanResponseImpl
+
     @GET("/api/promisings/session/{uuid}")
     suspend fun getCreateTimeTable(
         @Path("uuid") uuid: String,
@@ -24,6 +35,12 @@ interface GrowthApi {
         @Path("uuid") uuid: String,
         @Body timeRequestParameter: TimeRequestParameter,
     ): TimeRequestResponseImpl
+
+    @POST("/api/promisings/{promisingId}/confirmation")
+    suspend fun sendConfirmPlan(
+        @Path("promisingId") promisingId: String,
+        @Body confirmPlanParameter: ConfirmPlanParameter
+    ): Any
 
     @GET("/api/promisings/user")
     suspend fun getWaitingPlans(): List<WaitingPlanResponseImpl>

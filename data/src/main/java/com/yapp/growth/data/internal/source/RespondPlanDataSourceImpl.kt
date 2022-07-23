@@ -2,29 +2,21 @@ package com.yapp.growth.data.internal.source
 
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
-import com.yapp.growth.data.mapper.toCreateTimeTable
-import com.yapp.growth.data.mapper.toLong
 import com.yapp.growth.data.parameter.TimeCheckedOfDayParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
-import com.yapp.growth.data.source.CreateTimeTableDataSource
+import com.yapp.growth.data.source.RespondPlanDataSource
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import javax.inject.Inject
 
-internal class CreateTimeTableDataSourceImpl @Inject constructor(
+internal class RespondPlanDataSourceImpl @Inject constructor(
     private val retrofitApi: GrowthApi
-): CreateTimeTableDataSource {
+): RespondPlanDataSource {
 
-    override suspend fun getCreateTimeTable(uuid: String): NetworkResult<CreateTimeTable> =
-        handleApi {
-            retrofitApi.getCreateTimeTable(uuid).toCreateTimeTable()
-        }
-
-    override suspend fun sendTimeCheckedOfDay(
-        uuid: String,
+    override suspend fun sendRespondPlan(
+        promisingId: Long,
         timeCheckedOfDays: List<TimeCheckedOfDay>
-    ): NetworkResult<Long> =
+    ): NetworkResult<Unit> =
         handleApi {
             val parameter = TimeCheckedOfDaysParameter(
                 unit = 0.5f,
@@ -35,6 +27,7 @@ internal class CreateTimeTableDataSourceImpl @Inject constructor(
                     )
                 }
             )
-            retrofitApi.sendTimeCheckedOfDay(uuid, parameter).toLong()
+            retrofitApi.sendRespondPlan(promisingId.toString(), parameter)
         }
+
 }

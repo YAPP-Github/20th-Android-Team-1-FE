@@ -12,8 +12,12 @@ internal class ConfirmPlanRepositoryImpl @Inject constructor(
     private val dataSource: ConfirmPlanDataSource
 ) : ConfirmPlanRepository {
 
-    override suspend fun getRespondUsers(promisingKey: Long): NetworkResult<TimeTable> {
-        return dataSource.getRespondUsers(promisingKey)
+    override suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable> {
+        return dataSource.getRespondUsers(promisingId)
+    }
+
+    override suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any> {
+        return dataSource.sendConfirmPlan(promisingId, date)
     }
 
 }

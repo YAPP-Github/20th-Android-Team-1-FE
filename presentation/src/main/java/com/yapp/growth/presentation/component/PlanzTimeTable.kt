@@ -152,6 +152,7 @@ fun ConfirmPlanTimeTable(
 @Composable
 fun PlanzPlanTimeTable(
     timeTable: TimeTable,
+    timeCheckedOfDays: List<TimeCheckedOfDay>,
     onClickTimeTable: (Int, Int) -> Unit
 ) {
     LazyColumn(
@@ -181,8 +182,8 @@ fun PlanzPlanTimeTable(
 
                 itemsIndexed(timeTable.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
-                    var upperTableClicked by remember { mutableStateOf(false) }
-                    var underTableClicked by remember { mutableStateOf(false) }
+                    val upperTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
+                    val underTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
 
                     val blockList = timeTable.timeTableDate.find { it.date == date }?.timeTableUnits
 
@@ -212,7 +213,6 @@ fun PlanzPlanTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    upperTableClicked = !upperTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex)
                                 }
                                 .background(if (upperTableClicked) SubCoral.copy(0.5f) else Color.Transparent),
@@ -248,7 +248,6 @@ fun PlanzPlanTimeTable(
                                     shape = RectangleShape
                                 )
                                 .clickable {
-                                    underTableClicked = !underTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
                                 }
                                 .background(if (underTableClicked) SubCoral.copy(0.5f) else Color.Transparent),
@@ -301,8 +300,8 @@ fun CreateTimeTable(
 
                 itemsIndexed(createTimeTable.availableDates) { dateIndex, date ->
                     val minuteIndex = 2 * hourIndex
-                    var upperTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
-                    var underTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
+                    val upperTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex) ?: false
+                    val underTableClicked = timeCheckedOfDays.find { it.date == date }?.timeList?.get(minuteIndex.plus(1)) ?: false
 
                     Column(modifier = Modifier
                         .fillMaxWidth()
@@ -317,7 +316,6 @@ fun CreateTimeTable(
                                 .height(26.dp)
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
                                 .clickable {
-                                    upperTableClicked = !upperTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex)
                                     println(date)
                                 }
@@ -342,7 +340,6 @@ fun CreateTimeTable(
                                 .height(26.dp)
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
                                 .clickable {
-                                    underTableClicked = !underTableClicked
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
                                     println(date)
                                 }
@@ -443,7 +440,7 @@ fun LocationAndAvailableColorBox(
 }
 
 @Composable
-fun ConfirmPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: () -> Unit) {
+fun ConfirmPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: (String) -> Unit) {
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
     val day = timeTable.availableDates[currentClickTimeIndex.first].split('T').first()
@@ -505,7 +502,7 @@ fun ConfirmPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int
         PlanzBasicBottomButton(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp), text = "약속시간 선택", onClick = {
-            onClickSelectPlan()
+            onClickSelectPlan(time.getCurrentBlockDate(currentClickTimeIndex.second))
         })
     }
 }

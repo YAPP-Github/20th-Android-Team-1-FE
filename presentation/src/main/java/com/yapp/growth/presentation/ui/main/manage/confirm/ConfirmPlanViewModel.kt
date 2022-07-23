@@ -3,40 +3,44 @@ package com.yapp.growth.presentation.ui.main.manage.confirm
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
+import com.yapp.growth.domain.entity.TimeTable
+import com.yapp.growth.domain.entity.User
+import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
+import com.yapp.growth.domain.usecase.SendConfirmPlanUseCase
 import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ConfirmPlanViewModel @Inject constructor(
-    private val getRespondUsersUseCase: GetRespondUsersUseCase
+    private val getRespondUsersUseCase: GetRespondUsersUseCase,
+    private val sendConfirmPlanUseCase: SendConfirmPlanUseCase
 ) : BaseViewModel<ConfirmPlanViewState, ConfirmPlanSideEffect, ConfirmPlanEvent>(
     ConfirmPlanViewState()
 ) {
 
-    private val _sendResponsePlan = MutableStateFlow<List<TimeCheckedOfDay>>(emptyList())
-    val sendResponsePlan: StateFlow<List<TimeCheckedOfDay>>
-        get() = _sendResponsePlan.asStateFlow()
+    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
+    private var currentIndex = 0
+    private val promisingId: Long = 25
 
     init {
-        loadRespondUsers(14)
+        loadRespondUsers(promisingId)
     }
 
-    private fun loadRespondUsers(promisingKey: Long) {
+    private fun loadRespondUsers(promisingId: Long) {
         viewModelScope.launch {
-            val result = (getRespondUsersUseCase.invoke(promisingKey) as? NetworkResult.Success)?.data
+            val result = (getRespondUsersUseCase.invoke(promisingId) as? NetworkResult.Success)?.data
             result?.let {
+                originalTable = it
                 makeRespondList(it)
+                val sliceTimeTable: TimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
                 updateState {
-                    copy(timeTable = it)
+                    copy(timeTable = sliceTimeTable)
                 }
             }
         }
@@ -53,16 +57,14 @@ class ConfirmPlanViewModel @Inject constructor(
                 ))
             }
         }.toList()
-
-        _sendResponsePlan.value = temp
     }
 
     private fun filterCurrentSelectedUser(dateIndex: Int, minuteIndex: Int) {
         viewModelScope.launch(Dispatchers.Default) {
-            val day = viewState.value.timeTable.availableDates[dateIndex]
-            var hour = viewState.value.timeTable.hourList[minuteIndex/2]
+            val day = originalTable.availableDates[currentIndex.times(4).plus(dateIndex)]
+            var hour = originalTable.hourList[minuteIndex/2]
 
-            val blockList = viewState.value.timeTable.timeTableDate.find { it.date == day }?.timeTableUnits
+            val blockList = originalTable.timeTableDate.find { it.date == day }?.timeTableUnits
             val userList = blockList?.let { block ->
                 block.find { it.index == minuteIndex }?.users
             }
@@ -76,13 +78,75 @@ class ConfirmPlanViewModel @Inject constructor(
         }
     }
 
+    private fun sendConfirmPlan(date: String) = viewModelScope.launch {
+        sendConfirmPlanUseCase.invoke(promisingId, date)
+            .onSuccess {
+                println(it)
+            }
+            .onError {
+                print(it)
+            }
+    }
+
+    private fun nextDay() = viewModelScope.launch(Dispatchers.Default) {
+        currentIndex += 1
+        val fromIndex = currentIndex.times(4)
+        if (fromIndex >= originalTable.availableDates.size) {
+            currentIndex -= 1
+            return@launch
+        }
+
+        val toIndex: Int = if (originalTable.availableDates.size < fromIndex.plus(4)) {
+            originalTable.availableDates.size
+        } else {
+            fromIndex.plus(4)
+        }
+        val sliceCreateTimeTable: TimeTable = originalTable.copy(
+            availableDates = originalTable.availableDates.subList(
+                fromIndex,
+                toIndex
+            )
+        )
+        updateState {
+            copy(timeTable = sliceCreateTimeTable)
+        }
+    }
+
+
+    private fun previousDay() = viewModelScope.launch(Dispatchers.Default) {
+        if (currentIndex == 0) return@launch
+        currentIndex -= 1
+        val fromIndex = currentIndex.times(4)
+        val toIndex = fromIndex.plus(4)
+
+        val temp: TimeTable = originalTable.copy(
+            availableDates = originalTable.availableDates.subList(
+                fromIndex,
+                toIndex
+            )
+        )
+        updateState {
+            copy(timeTable = temp)
+        }
+    }
+
+    private fun initCurrentClickTimeIndex() = updateState {
+        copy(currentClickTimeIndex = -1 to -1)
+    }
+
     override fun handleEvents(event: ConfirmPlanEvent) {
         when (event) {
-            is ConfirmPlanEvent.OnClickNextDayButton -> { }
-            is ConfirmPlanEvent.OnClickPreviousDayButton -> { }
-            is ConfirmPlanEvent.OnClickConfirmButton -> { }
+            ConfirmPlanEvent.OnClickNextDayButton -> {
+                initCurrentClickTimeIndex()
+                nextDay()
+            }
+            ConfirmPlanEvent.OnClickPreviousDayButton -> {
+                initCurrentClickTimeIndex()
+                previousDay()
+            }
+            ConfirmPlanEvent.OnClickBackButton -> { sendEffect({ ConfirmPlanSideEffect.NavigateToPreviousScreen }) }
+            is ConfirmPlanEvent.OnClickConfirmButton -> { sendConfirmPlan(event.date) }
             is ConfirmPlanEvent.OnClickTimeTable -> {
-                _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex] = _sendResponsePlan.value[event.dateIndex].timeList[event.minuteIndex].not()
                 updateState {
                     copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex)
                 }

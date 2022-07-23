@@ -5,5 +5,7 @@ import com.yapp.growth.domain.entity.TimeTable
 
 interface ConfirmPlanRepository {
 
-    suspend fun getRespondUsers(promisingKey: Long): NetworkResult<TimeTable>
+    suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable>
+
+    suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any>
 }
