@@ -3,11 +3,9 @@ package com.yapp.growth.data.mapper
 import com.yapp.growth.data.response.PromisingTimeTableResponse
 import com.yapp.growth.data.response.TimeTableDateResponse
 import com.yapp.growth.data.response.TimeTableUnitResponse
-import com.yapp.growth.data.response.UserResponse
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.TimeTableDate
 import com.yapp.growth.domain.entity.TimeTableUnit
-import com.yapp.growth.domain.entity.User
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,15 +48,6 @@ fun TimeTableUnitResponse.toTimeTableUnit(): TimeTableUnit {
         count = response.count,
         users = response.users.toUserList(),
         color = response.color
-    )
-}
-
-fun List<UserResponse>.toUserList(): List<User> = map { it.toUser() }
-fun UserResponse.toUser(): User {
-    val response = this
-    return User (
-        id = response.id,
-        userName = response.userName
     )
 }
 

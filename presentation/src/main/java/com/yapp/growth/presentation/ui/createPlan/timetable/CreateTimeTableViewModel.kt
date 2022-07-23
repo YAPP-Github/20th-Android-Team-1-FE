@@ -9,7 +9,7 @@ import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetCreateTimeTableUseCase
-import com.yapp.growth.domain.usecase.SendTimeCheckedOfDayUseCase
+import com.yapp.growth.domain.usecase.MakePlanUseCase
 import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class CreateTimeTableViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase,
-    private val sendTimeCheckedOfDayUseCase: SendTimeCheckedOfDayUseCase,
+    private val makePlanUseCase: MakePlanUseCase,
 ): BaseViewModel<CreateTimeTableViewState, CreateTimeTableSideEffect, CreateTimeTableEvent>(CreateTimeTableViewState()) {
 
     private val _timeCheckedOfDays = MutableStateFlow<List<TimeCheckedOfDay>>(emptyList())
@@ -103,7 +103,7 @@ class CreateTimeTableViewModel @Inject constructor(
 
     private fun sendTimeCheckedOfDays(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
-            sendTimeCheckedOfDayUseCase.invoke(uuid, timeCheckedOfDays)
+            makePlanUseCase.invoke(uuid, timeCheckedOfDays)
                 .onSuccess {
                     sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
                 }

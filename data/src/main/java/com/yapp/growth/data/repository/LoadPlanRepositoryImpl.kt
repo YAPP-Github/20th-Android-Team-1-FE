@@ -1,19 +1,21 @@
 package com.yapp.growth.data.repository
 
-import com.yapp.growth.data.source.LoadPlanDataSource
+import com.yapp.growth.data.source.PlanzDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.domain.repository.LoadPlanRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class LoadPlanRepositoryImpl @Inject constructor(
-    private val loadPlanDataSource: LoadPlanDataSource,
+@Singleton
+internal class LoadPlanRepositoryImpl @Inject constructor(
+    private val dataSource: PlanzDataSource,
 ) : LoadPlanRepository {
     override suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>> {
-        return loadPlanDataSource.getWaitingPlans()
+        return dataSource.getWaitingPlans()
     }
 
     override suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>> {
-        return loadPlanDataSource.getFixedPlans()
+        return dataSource.getFixedPlans()
     }
 }

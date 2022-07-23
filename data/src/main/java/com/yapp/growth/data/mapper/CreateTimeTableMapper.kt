@@ -3,7 +3,6 @@ package com.yapp.growth.data.mapper
 import com.yapp.growth.data.response.CreateTimeTableResponse
 import com.yapp.growth.data.response.TimeRequestResponse
 import com.yapp.growth.domain.entity.CreateTimeTable
-import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import java.text.SimpleDateFormat
 import java.util.*
 

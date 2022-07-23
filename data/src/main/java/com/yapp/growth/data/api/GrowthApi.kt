@@ -4,6 +4,7 @@ import com.yapp.growth.data.internal.response.*
 import com.yapp.growth.data.parameter.ConfirmPlanParameter
 import com.yapp.growth.data.parameter.TemporaryPlanParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
+import com.yapp.growth.data.response.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -24,7 +25,7 @@ interface GrowthApi {
     ): CreateTimeTableResponseImpl
 
     @POST("/api/promisings/session/{uuid}/time-response")
-    suspend fun sendTimeCheckedOfDay(
+    suspend fun makePlan(
         @Path("uuid") uuid: String,
         @Body timeCheckedOfDaysParameter: TimeCheckedOfDaysParameter,
     ): TimeRequestResponseImpl
@@ -58,4 +59,12 @@ interface GrowthApi {
     suspend fun createTemporaryPlan(
         @Body temporaryPlanParameter: TemporaryPlanParameter,
     ): TemporaryPlanUuidResponseImpl
+
+    // User
+
+    @POST("/api/users/sign-up")
+    suspend fun signUp(): UserResponseImpl
+
+    @GET("/api/users/info")
+    suspend fun getUserInfo(): UserResponseImpl
 }

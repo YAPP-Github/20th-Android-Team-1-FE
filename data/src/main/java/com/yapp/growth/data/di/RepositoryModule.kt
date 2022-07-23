@@ -48,5 +48,9 @@ internal abstract class RepositoryModule {
     abstract fun bindRespondPlanRepository(
         respondPlanRepository: RespondPlanRepositoryImpl,
     ): RespondPlanRepository
-}
 
+    @Binds
+    abstract fun bindUserRepository(
+        userRepository: UserRepositoryImpl
+    ): UserRepository
+}
