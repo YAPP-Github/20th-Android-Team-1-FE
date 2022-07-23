@@ -78,34 +78,6 @@ fun CreatePlanScreen(
                 )
             }
 
-            composable(route = CreatePlanScreenRoute.RESPOND_PLAN.route) {
-                RespondPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToSendCompleteScreen = { navController.navigate(CreatePlanScreenRoute.RESPOND_PLAN_COMPLETE.route) },
-                    navigateToSendRejectedScreen = { navController.navigate(CreatePlanScreenRoute.RESPOND_PLAN_REJECT.route) }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.CONFIRM_PLAN.route) {
-                ConfirmPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.RESPOND_PLAN_COMPLETE.route) {
-                RespondPlanCompleteScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = {  }
-                )
-            }
-
-            composable(route = CreatePlanScreenRoute.RESPOND_PLAN_REJECT.route) {
-                RespondPlanRejectScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = {  }
-                )
-            }
-
             composable(route = CreatePlanScreenRoute.SHARE.route) {
                 ShareScreen(
                     finishCreatePlan = exitCreatePlan,
@@ -122,9 +94,5 @@ enum class CreatePlanScreenRoute(val route: String) {
     DATE("date"),
     TIME_RANGE("time-range"),
     CREATE_TIMETABLE("create-timetable"),
-    RESPOND_PLAN("respond-plan"),
-    CONFIRM_PLAN("confirm-plan"),
-    RESPOND_PLAN_COMPLETE("respond-plan-complete"),
-    RESPOND_PLAN_REJECT("respond-plan-reject"),
     SHARE("share-plan"),
 }

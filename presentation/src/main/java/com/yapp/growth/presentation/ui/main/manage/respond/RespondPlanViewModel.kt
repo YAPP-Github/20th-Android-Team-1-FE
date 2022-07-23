@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.manage.respond
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
@@ -22,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RespondPlanViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getRespondUsersUseCase: GetRespondUsersUseCase,
     private val sendRespondPlanUseCase: SendRespondPlanUseCase,
 ): BaseViewModel<RespondPlanViewState, RespondPlanSideEffect, RespondPlanEvent>(
@@ -34,7 +36,7 @@ class RespondPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
     private var currentIndex = 0
-    private val promisingId: Long = 8
+    private var promisingId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
 
     init {
         loadRespondUsers(promisingId)
