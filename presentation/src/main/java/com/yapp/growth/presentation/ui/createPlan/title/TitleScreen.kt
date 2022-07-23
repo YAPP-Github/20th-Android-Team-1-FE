@@ -16,6 +16,8 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzTextField
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecidePlace
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTitle
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleEvent
@@ -87,6 +89,7 @@ fun TitleScreen(
                 }
                 is TitleSideEffect.NavigateToNextScreen -> {
                     sharedViewModel.setEvent(DecideTitle(viewState.title))
+                    sharedViewModel.setEvent(DecidePlace(viewState.place))
                     navigateToNextScreen()
                 }
                 is TitleSideEffect.NavigateToPreviousScreen -> {
@@ -107,5 +110,5 @@ fun TitleScreenPreview() {
     )
 }
 
-const val MAX_LENGTH_TITLE = 20
-const val MAX_LENGTH_PLACE = 20
+const val MAX_LENGTH_TITLE = 10
+const val MAX_LENGTH_PLACE = 10
