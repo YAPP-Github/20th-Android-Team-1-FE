@@ -19,10 +19,8 @@ class ManageViewModel @Inject constructor(
     ManageViewState()
 ) {
     init {
-        viewModelScope.launch {
-            getWaitingPlans()
-            getFixedPlans()
-        }
+        getWaitingPlans()
+        getFixedPlans()
     }
 
     override fun handleEvents(event: ManageEvent) {
@@ -43,34 +41,40 @@ class ManageViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getWaitingPlans() {
-        when(val result = getWaitingPlansUseCase()) {
-            is NetworkResult.Success -> {
-                updateState {
-                    copy(waitingPlans = result.data)
+    private fun getWaitingPlans() {
+        viewModelScope.launch {
+            when (val result = getWaitingPlansUseCase()) {
+                is NetworkResult.Success -> {
+                    updateState {
+                        copy(waitingPlans = result.data)
+                    }
+                    Timber.w("waitingPlans = ${result.data}")
                 }
-            }
-            is NetworkResult.Error -> {
+                is NetworkResult.Error -> {
+                    Timber.w("waitingPlans error = ${result.exception}")
+                }
+                is NetworkResult.Loading -> {
 
-            }
-            is NetworkResult.Loading -> {
-
+                }
             }
         }
     }
 
-    private suspend fun getFixedPlans() {
-        when(val result = getFixedPlansUseCase()) {
-            is NetworkResult.Success -> {
-                updateState {
-                    copy(fixedPlans = result.data)
+    private fun getFixedPlans() {
+        viewModelScope.launch {
+            when (val result = getFixedPlansUseCase()) {
+                is NetworkResult.Success -> {
+                    updateState {
+                        copy(fixedPlans = result.data)
+                    }
+                    Timber.w("fixedPlans = ${result.data}")
                 }
-            }
-            is NetworkResult.Error -> {
+                is NetworkResult.Error -> {
+                    Timber.w("fixedPlans error = ${result.exception}")
+                }
+                is NetworkResult.Loading -> {
 
-            }
-            is NetworkResult.Loading -> {
-
+                }
             }
         }
     }

@@ -41,7 +41,12 @@ class CreateTimeTableViewModel @Inject constructor(
         result?.let {
             originalTable = it
             makeRespondList(it)
-            val sliceCreateTimeTable: CreateTimeTable = it.copy(availableDates = it.availableDates.subList(0,4))
+            val sliceCreateTimeTable = if (it.availableDates.size >= 4) {
+                it.copy(availableDates = it.availableDates.subList(0, 4))
+            } else {
+                it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+            }
+
             updateState {
                 copy(createTimeTable = sliceCreateTimeTable)
             }

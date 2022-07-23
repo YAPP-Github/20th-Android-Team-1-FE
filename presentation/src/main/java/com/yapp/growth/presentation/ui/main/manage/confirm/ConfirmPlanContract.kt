@@ -5,6 +5,7 @@ import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
+import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableContract
 
 class ConfirmPlanContract {
     data class ConfirmPlanViewState(
@@ -29,13 +30,15 @@ class ConfirmPlanContract {
     sealed class ConfirmPlanSideEffect : ViewSideEffect {
         object ShowBottomSheet : ConfirmPlanSideEffect()
         object HideBottomSheet : ConfirmPlanSideEffect()
+        object NavigateToNextScreen : ConfirmPlanSideEffect()
+        object NavigateToPreviousScreen : ConfirmPlanSideEffect()
     }
 
     sealed class ConfirmPlanEvent : ViewEvent {
+        object OnClickBackButton : ConfirmPlanEvent()
         object OnClickNextDayButton : ConfirmPlanEvent()
         object OnClickPreviousDayButton : ConfirmPlanEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : ConfirmPlanEvent()
-        data class OnClickConfirmButton(val dateIndex: Int, val minuteIndex: Int) :
-            ConfirmPlanEvent()
+        data class OnClickConfirmButton(val date: String) : ConfirmPlanEvent()
     }
 }

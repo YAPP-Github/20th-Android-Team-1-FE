@@ -8,21 +8,36 @@ import com.yapp.growth.data.source.CreateTimeTableDataSource
 import com.yapp.growth.data.source.LoadPlanDataSource
 import com.yapp.growth.data.internal.source.LoadPlanDataSourceImpl
 import com.yapp.growth.data.source.TemporaryPlanDataSource
+import com.yapp.growth.data.internal.source.*
+import com.yapp.growth.data.source.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class DataSourceModule {
 
     @Binds
-    abstract fun bindConfirmPlanDataSource(confirmPlanDataSource: ConfirmPlanDataSourceImpl): ConfirmPlanDataSource
+    abstract fun bindConfirmPlanDataSource(
+        confirmPlanDataSource: ConfirmPlanDataSourceImpl,
+    ): ConfirmPlanDataSource
 
     @Binds
-    abstract fun bindCreateTimeTableDataSource(createTimeTableDataSource: CreateTimeTableDataSourceImpl): CreateTimeTableDataSource
+    abstract fun binDetailDataSource(
+        detailDataSource: DetailDataSourceImpl,
+    ): DetailDataSource
+
+    @Binds
+    abstract fun bindCreateTimeTableDataSource(
+        createTimeTableDataSource: CreateTimeTableDataSourceImpl,
+    ): CreateTimeTableDataSource
+
+    @Binds
+    abstract fun bindRespondPlanDataSource(
+        respondPlanDataSource: RespondPlanDataSourceImpl,
+    ): RespondPlanDataSource
 
     @Binds
     abstract fun bindLoadPlanDataSource(

@@ -73,7 +73,9 @@ fun CreatePlanScreen(
 
             composable(route = CreatePlanScreenRoute.RESPOND_PLAN.route) {
                 RespondPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() }
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    navigateToSendCompleteScreen = { navController.navigate(CreatePlanScreenRoute.RESPOND_PLAN_COMPLETE.route) },
+                    navigateToSendRejectedScreen = { navController.navigate(CreatePlanScreenRoute.RESPOND_PLAN_REJECT.route) }
                 )
             }
 

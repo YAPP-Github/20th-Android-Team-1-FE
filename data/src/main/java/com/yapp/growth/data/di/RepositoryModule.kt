@@ -8,11 +8,12 @@ import com.yapp.growth.domain.repository.ConfirmPlanRepository
 import com.yapp.growth.domain.repository.TemporaryPlanRepository
 import com.yapp.growth.domain.repository.CreateTimeTableRepository
 import com.yapp.growth.domain.repository.LoadPlanRepository
+import com.yapp.growth.data.repository.*
+import com.yapp.growth.domain.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -30,11 +31,22 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindConfirmPlanRepository(
-        confirmPlanRepository: ConfirmPlanRepositoryImpl
+        confirmPlanRepository: ConfirmPlanRepositoryImpl,
     ): ConfirmPlanRepository
 
     @Binds
+    abstract fun bindDetailRepository(
+        detailRepository: DetailRepositoryImpl,
+    ): DetailRepository
+
+    @Binds
     abstract fun bindCreateTimeTableRepository(
-        createTimeTableRepository: CreateTimeTableRepositoryImpl
+        createTimeTableRepository: CreateTimeTableRepositoryImpl,
     ): CreateTimeTableRepository
+
+    @Binds
+    abstract fun bindRespondPlanRepository(
+        respondPlanRepository: RespondPlanRepositoryImpl,
+    ): RespondPlanRepository
 }
+

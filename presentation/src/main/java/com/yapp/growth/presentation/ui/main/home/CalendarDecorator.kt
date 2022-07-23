@@ -163,12 +163,32 @@ class CalendarDecorator {
         }
     }
 
-    // TODO : 일정이 있는 날만 점 데코레이터 찍기
-    class DotDecorator : DayViewDecorator {
-        private var date = CalendarDay.from(2022, 5, 21)
+    class SingleDotDecorator(private val calendarDay: CalendarDay) : DayViewDecorator {
 
         override fun shouldDecorate(day: CalendarDay): Boolean {
-            return day == date
+            return calendarDay == day
+        }
+
+        override fun decorate(view: DayViewFacade) {
+            view.addSpan(CustomMultipleDotSpan(4F, color = intArrayOf(SubCoral.toArgb())))
+        }
+    }
+
+    class DoubleDotDecorator(private val calendarDay: CalendarDay) : DayViewDecorator {
+
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return calendarDay == day
+        }
+
+        override fun decorate(view: DayViewFacade) {
+            view.addSpan(CustomMultipleDotSpan(4F, color = intArrayOf(SubCoral.toArgb(), SubYellow.toArgb())))
+        }
+    }
+
+    class TripleDotDecorator(private val calendarDay: CalendarDay) : DayViewDecorator {
+
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return calendarDay == day
         }
 
         override fun decorate(view: DayViewFacade) {
