@@ -1,9 +1,8 @@
 package com.yapp.growth.data.api
 
 import com.yapp.growth.data.internal.response.*
-import com.yapp.growth.data.parameter.TemporaryPlanParameter
-import com.yapp.growth.data.parameter.TimeRequestParameter
 import com.yapp.growth.data.parameter.ConfirmPlanParameter
+import com.yapp.growth.data.parameter.TemporaryPlanParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
 import retrofit2.http.Body
 import retrofit2.http.GET
