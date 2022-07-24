@@ -97,7 +97,7 @@ fun MyPageScreen(
                         .wrapContentHeight()
                 ) {
                     when (viewState.loginState) {
-                        LoginState.LOGIN -> MyPageUserInfo("${viewState.userName}")
+                        LoginState.LOGIN -> MyPageUserInfo(viewState.userName)
                         LoginState.NONE -> MyPageSignUp(
                             onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
                         )

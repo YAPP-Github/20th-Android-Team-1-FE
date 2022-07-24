@@ -8,7 +8,7 @@ class MyPageContract {
     data class MyPageViewState(
         val loadState: LoadState = LoadState.Idle,
         val loginState: LoginState = LoginState.NONE,
-        val userName: String? = null,
+        val userName: String = "",
         val isDialogVisible: Boolean = false,
     ) : ViewState
 
