@@ -49,6 +49,19 @@ class KakaoLoginSdk @Inject constructor(
         awaitLogoutResult.getOrAuthExceptionThrow()
     }
 
+    override suspend fun withdraw() {
+        val awaitWithdrawResult = suspendCancellableCoroutine<Result<Unit>> { cont ->
+            kakaoUserApiClient.unlink { e ->
+                val withdrawResult = when {
+                    e != null -> Result.failure(e.toAuthException())
+                    else -> Result.success(Unit)
+                }
+                cont.resume(withdrawResult)
+            }
+        }
+        awaitWithdrawResult.getOrAuthExceptionThrow()
+    }
+
     override suspend fun getAccessToken(): KakaoAccessToken =
         KakaoAccessToken(
             kakaoAuthApiClient.tokenManagerProvider.manager.getToken()?.accessToken
