@@ -5,13 +5,9 @@ package com.yapp.growth.presentation.ui.main.manage.confirm
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -26,17 +22,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun FixPlanScreen(
     viewModel: FixPlanViewModel = hiltViewModel(),
-    navigateToPreviousScreen: () -> Unit
+    navigateToPreviousScreen: () -> Unit,
+    navigateToNextScreen: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.viewState.collectAsState()
 
-    PlanzBottomSheetLayout(
-        sheetState = sheetState,
-        scrimColor = Color.Transparent,
+    PlanzBottomSheetScaffoldLayout(
+        scaffoldState = scaffoldState,
         sheetContent = {
-            FixPlanBottomSheet(
+            FixPlanBottomSheetContent(
                 timeTable = uiState.timeTable,
                 currentClickTimeIndex = uiState.currentClickTimeIndex,
                 currentClickUserData = uiState.currentClickUserData,
@@ -48,13 +45,15 @@ fun FixPlanScreen(
             topBar = {
                 PlanzBackAndShareAppBar(
                     title = stringResource(id = R.string.fix_plan_title_text),
-                    onClickBackIcon = navigateToPreviousScreen,
+                    onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
                     onClickShareIcon = { /*TODO*/ }
                 )
             }
         ) { padding ->
 
-            ConstraintLayout(modifier = Modifier.fillMaxSize().padding(padding)) {
+            ConstraintLayout(modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)) {
                 val (column, button) = createRefs()
 
                 Column(modifier = Modifier.constrainAs(column) {
@@ -95,14 +94,14 @@ fun FixPlanScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is FixPlanSideEffect.ShowBottomSheet -> {
-                    coroutineScope.launch { sheetState.show() }
+                    coroutineScope.launch { sheetState.expand() }
                 }
 
                 is FixPlanSideEffect.HideBottomSheet -> {
-                    coroutineScope.launch { sheetState.hide() }
+                    coroutineScope.launch { sheetState.collapse() }
                 }
-                FixPlanSideEffect.NavigateToNextScreen -> TODO()
-                FixPlanSideEffect.NavigateToPreviousScreen -> TODO()
+                FixPlanSideEffect.NavigateToNextScreen -> navigateToNextScreen()
+                FixPlanSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
             }
 
         }

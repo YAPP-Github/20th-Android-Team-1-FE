@@ -1,6 +1,5 @@
 package com.yapp.growth.presentation.ui.main.home
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -58,7 +57,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
+import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.theme.BackgroundColor1
@@ -118,7 +117,7 @@ fun HomeScreen(
     }
 
     // TODO : 바텀시트가 다른 화면을 갔다 와도 유지되는 현상 해결해야 함
-    PlanzBottomSheetLayout(
+    PlanzModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
             HomeBottomSheetContent(
