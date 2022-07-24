@@ -165,7 +165,8 @@ fun PlanzScreen(
                     navArgument("planId") { type = NavType.IntType }
                 )) {
                 FixPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() }
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    navigateToNextScreen = { /*TODO*/ },
                 )
             }
 

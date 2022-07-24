@@ -78,16 +78,13 @@ class FixPlanViewModel @Inject constructor(
                 copy(currentClickUserData = userList ?: emptyList())
             }
 
-            sendEffect({
-                FixPlanSideEffect.ShowBottomSheet
-            })
         }
     }
 
     private fun sendFixPlan(date: String) = viewModelScope.launch {
         sendFixPlanUseCase.invoke(planId, date)
             .onSuccess {
-                println(it)
+                sendEffect({ FixPlanSideEffect.NavigateToNextScreen })
             }
             .onError {
                 print(it)
@@ -156,6 +153,7 @@ class FixPlanViewModel @Inject constructor(
                 updateState {
                     copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex)
                 }
+                sendEffect({ FixPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
         }
