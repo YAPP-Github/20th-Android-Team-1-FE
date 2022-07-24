@@ -19,11 +19,7 @@ class HomeContract {
         val isTodayPlanExpanded: Boolean = false,
         val isMonthlyPlanExpanded: Boolean = false,
         val monthlyPlanMode: MonthlyPlanModeState = MonthlyPlanModeState.CALENDAR
-    ) : ViewState {
-        enum class LoadState {
-            Loading, Idle, Error
-        }
-    }
+    ) : ViewState
 
     sealed class HomeSideEffect : ViewSideEffect {
         object MoveToLogin : HomeSideEffect()
@@ -44,6 +40,10 @@ class HomeContract {
         object OnMonthlyPlanModeClicked : HomeEvent()
         object OnMonthlyPreviousClicked : HomeEvent()
         object OnMonthlyNextClicked : HomeEvent()
+    }
+
+    enum class LoadState {
+        Loading, Idle, Error
     }
 
     enum class LoginState {

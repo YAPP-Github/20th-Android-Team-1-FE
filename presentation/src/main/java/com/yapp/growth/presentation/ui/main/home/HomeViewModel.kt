@@ -35,7 +35,7 @@ class HomeViewModel @Inject constructor(
 ) {
 
     init {
-        updateState { copy(loadState = HomeViewState.LoadState.Loading) }
+        updateState { copy(loadState = HomeContract.LoadState.Loading) }
         checkValidLoginToken()
         fetchPlans()
     }
@@ -84,12 +84,12 @@ class HomeViewModel @Inject constructor(
                     CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
                 }
                 updateState {
-                    copy(loadState = HomeViewState.LoadState.Idle, allPlans = plans, monthlyPlans = monthlyPlans, todayPlans = todayPlans)
+                    copy(loadState = HomeContract.LoadState.Idle, allPlans = plans, monthlyPlans = monthlyPlans, todayPlans = todayPlans)
                 }
             }
 
             result.onError {
-                updateState { copy(loadState = HomeViewState.LoadState.Error) }
+                updateState { copy(loadState = HomeContract.LoadState.Error) }
                 Timber.e(it)
             }
         }
