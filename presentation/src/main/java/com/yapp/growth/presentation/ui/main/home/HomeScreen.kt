@@ -1,6 +1,5 @@
 package com.yapp.growth.presentation.ui.main.home
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
