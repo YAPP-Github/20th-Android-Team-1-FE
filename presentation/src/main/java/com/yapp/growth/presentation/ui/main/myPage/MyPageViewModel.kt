@@ -69,29 +69,40 @@ class MyPageViewModel @Inject constructor(
                     sendEffect({ MyPageSideEffect.MoveToLogin })
                 }
                 .onError {
-                    sendEffect({ MyPageSideEffect.ShowToast(resourcesProvider.getString(R.string.my_page_logout_error_text))})
+                    sendEffect({ MyPageSideEffect.ShowToast(resourcesProvider.getString(R.string.my_page_logout_error_text)) })
                 }
         }
     }
 
     private fun fetchUserInfo() {
         viewModelScope.launch {
-            getUserInfoUseCase.invoke()
-                .onSuccess {
-                    updateState {
-                        copy(
-                            loadState = MyPageContract.LoadState.Idle,
-                            userName = it.userName
-                        )
+            val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
+
+            if(cacheInfo == null) {
+                getUserInfoUseCase.invoke()
+                    .onSuccess {
+                        updateState {
+                            copy(
+                                loadState = MyPageContract.LoadState.Idle,
+                                userName = it.userName
+                            )
+                        }
                     }
-                }
-                .onError {
-                    updateState {
-                        copy(
-                            loadState = MyPageContract.LoadState.Error
-                        )
+                    .onError {
+                        updateState {
+                            copy(
+                                loadState = MyPageContract.LoadState.Error
+                            )
+                        }
                     }
+            } else {
+                updateState {
+                    copy(
+                        loadState = MyPageContract.LoadState.Idle,
+                        userName = cacheInfo.userName
+                    )
                 }
+            }
         }
     }
 

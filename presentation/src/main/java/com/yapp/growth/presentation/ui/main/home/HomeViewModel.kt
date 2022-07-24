@@ -17,6 +17,7 @@ import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeSta
 import com.yapp.growth.presentation.util.toDate
 import com.yapp.growth.presentation.util.toFormatDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +45,7 @@ class HomeViewModel @Inject constructor(
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
+    @OptIn(FlowPreview::class)
     val currentDate: StateFlow<CalendarDay> = _currentDate.debounce(300).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
@@ -77,27 +78,39 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchUserInfo() {
         viewModelScope.launch {
-            getUserInfoUseCase.invoke()
-                .onSuccess {
-                    updateState {
-                        copy(
-                            loadState = HomeContract.LoadState.Idle,
-                            userName = it.userName
-                        )
+            val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
+
+            if(cacheInfo == null) {
+                getUserInfoUseCase.invoke()
+                    .onSuccess {
+                        updateState {
+                            copy(
+                                loadState = HomeContract.LoadState.Idle,
+                                userName = it.userName
+                            )
+                        }
                     }
-                }
-                .onError {
-                    updateState {
-                        copy(
-                            loadState = HomeContract.LoadState.Error
-                        )
+                    .onError {
+                        updateState {
+                            copy(
+                                loadState = HomeContract.LoadState.Error
+                            )
+                        }
                     }
+            } else {
+                updateState {
+                    copy(
+                        loadState = HomeContract.LoadState.Idle,
+                        userName = cacheInfo.userName
+                    )
                 }
+            }
         }
     }
 
     private fun fetchPlans() {
         viewModelScope.launch {
+
             getFixedPlansUseCase.invoke()
                 .onSuccess { plans ->
                     val todayPlans = plans.filter { plan ->
