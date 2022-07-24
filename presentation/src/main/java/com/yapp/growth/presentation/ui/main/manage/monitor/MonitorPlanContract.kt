@@ -36,6 +36,7 @@ class MonitorPlanContract {
         object OnClickBackButton : MonitorPlanEvent()
         object OnClickNextDayButton : MonitorPlanEvent()
         object OnClickPreviousDayButton : MonitorPlanEvent()
+        object OnClickExitIcon : MonitorPlanEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : MonitorPlanEvent()
     }
 }

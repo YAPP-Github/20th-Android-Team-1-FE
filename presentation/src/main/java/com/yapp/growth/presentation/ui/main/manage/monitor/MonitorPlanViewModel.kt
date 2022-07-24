@@ -78,10 +78,6 @@ class MonitorPlanViewModel @Inject constructor(
             updateState {
                 copy(currentClickUserData = userList ?: emptyList())
             }
-
-            sendEffect({
-                MonitorPlanSideEffect.ShowBottomSheet
-            })
         }
     }
 
@@ -133,13 +129,13 @@ class MonitorPlanViewModel @Inject constructor(
 
     override fun handleEvents(event: MonitorPlanEvent) {
         when (event) {
-            MonitorPlanEvent.OnClickBackButton -> TODO()
+            MonitorPlanEvent.OnClickBackButton -> sendEffect({ MonitorPlanSideEffect.NavigateToPreviousScreen })
             MonitorPlanEvent.OnClickNextDayButton -> nextDay()
             MonitorPlanEvent.OnClickPreviousDayButton -> previousDay()
+            MonitorPlanEvent.OnClickExitIcon -> sendEffect({ MonitorPlanSideEffect.HideBottomSheet })
             is MonitorPlanEvent.OnClickTimeTable -> {
-                updateState {
-                    copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex)
-                }
+                updateState { copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex) }
+                sendEffect({ MonitorPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
         }
