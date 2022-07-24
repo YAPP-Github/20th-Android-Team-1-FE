@@ -13,9 +13,13 @@ internal class RespondPlanRepositoryImpl @Inject constructor(
 ): RespondPlanRepository {
 
     override suspend fun sendRespondPlan(
-        promisingId: Long,
+        planId: Long,
         timeCheckedOfDays: List<TimeCheckedOfDay>
     ): NetworkResult<Unit> {
-        return datasource.sendRespondPlan(promisingId, timeCheckedOfDays)
+        return datasource.sendRespondPlan(planId, timeCheckedOfDays)
+    }
+
+    override suspend fun sendRejectPlan(planId: Long): NetworkResult<Unit> {
+        return datasource.sendRejectPlan(planId)
     }
 }

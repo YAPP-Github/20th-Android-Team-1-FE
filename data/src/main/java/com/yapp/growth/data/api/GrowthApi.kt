@@ -31,14 +31,19 @@ interface GrowthApi {
 
     @POST("/api/promisings/{promisingId}/confirmation")
     suspend fun sendFixPlan(
-        @Path("promisingId") promisingId: String,
+        @Path("promisingId") planId: String,
         @Body fixPlanParameter: FixPlanParameter,
     ): Any
 
     @POST("/api/promisings/{promisingId}/time-response")
     suspend fun sendRespondPlan(
-        @Path("promisingId") promisingId: String,
+        @Path("promisingId") planId: String,
         @Body timeCheckedOfDaysParameter: TimeCheckedOfDaysParameter,
+    )
+
+    @POST("/api/promisings/{promisingId}/time-response/rejection")
+    suspend fun sendRejectPlan(
+        @Path("promisingId") planId: String
     )
 
     @GET("/api/promisings/user")
@@ -48,7 +53,7 @@ interface GrowthApi {
 
     @GET("/api/promises/{promiseId}")
     suspend fun getFixedPlan(
-        @Path("promiseId") pId: Long,
+        @Path("promiseId") planId: Long,
     ): FixedPlanResponseImpl
 
     @GET("/api/promises/user")
