@@ -47,7 +47,7 @@ fun FixPlanScreen(
         Scaffold(
             topBar = {
                 PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.confirm_plan_title_text),
+                    title = stringResource(id = R.string.fix_plan_title_text),
                     onClickBackIcon = navigateToPreviousScreen,
                     onClickShareIcon = { /*TODO*/ }
                 )
