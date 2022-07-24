@@ -17,6 +17,7 @@ class LoginContract {
 
     sealed class LoginEvent: ViewEvent {
         data class OnClickKakaoLoginButton(val context: Context): LoginEvent()
+        object OnClickNonLoginButton: LoginEvent()
     }
 
     enum class LoginState {
