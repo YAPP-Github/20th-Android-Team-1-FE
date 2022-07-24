@@ -3,6 +3,7 @@
 package com.yapp.growth.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -159,7 +160,11 @@ fun MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: Li
             .padding(top = 5.dp, start = 20.dp, end = 20.dp)) {
 
         Icon(
-            modifier = Modifier.align(Alignment.End),
+            modifier = Modifier
+                .align(Alignment.End)
+                .clickable {
+                    onClickExitIcon()
+                },
             painter = painterResource(R.drawable.ic_exit),
             tint = Color.Unspecified,
             contentDescription = stringResource(R.string.icon_exit_content_description),
