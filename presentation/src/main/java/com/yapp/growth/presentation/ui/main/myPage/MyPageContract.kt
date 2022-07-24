@@ -15,6 +15,7 @@ class MyPageContract {
     sealed class MyPageSideEffect : ViewSideEffect {
         object MoveToLogin : MyPageSideEffect()
         object ExitMyPageScreen : MyPageSideEffect()
+        data class ShowToast(val msg: String) : MyPageSideEffect()
     }
 
     sealed class MyPageEvent : ViewEvent {

@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.main.myPage
 
 import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -74,6 +75,9 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.ExitMyPageScreen -> {
                     exitMyPageScreen()
+                }
+                is MyPageSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
                 }
             }
         }
