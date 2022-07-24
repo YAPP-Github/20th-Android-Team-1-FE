@@ -10,4 +10,5 @@ interface WaitingPlanResponse {
     val availableDates: List<String>
     val members: List<UserResponse>
     val place: String
+    val isAlreadyReplied: Boolean
 }

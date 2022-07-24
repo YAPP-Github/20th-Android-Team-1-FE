@@ -1,15 +1,13 @@
 package com.yapp.growth.domain.usecase
 
 import com.yapp.growth.domain.NetworkResult
-import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.repository.FixPlanRepository
 import javax.inject.Inject
 
-class GetRespondUsersUseCase @Inject constructor(
+class SendFixPlanUseCase @Inject constructor(
     private val repository: FixPlanRepository
 ) {
-    suspend operator fun invoke(planId: Long): NetworkResult<TimeTable> {
-        return repository.getRespondUsers(planId)
+    suspend operator fun invoke(planId: Long, date: String): NetworkResult<Any> {
+        return repository.sendFixPlan(planId, date)
     }
-
 }

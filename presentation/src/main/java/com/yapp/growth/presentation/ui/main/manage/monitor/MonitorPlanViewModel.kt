@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.confirm
+package com.yapp.growth.presentation.ui.main.manage.monitor
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -10,28 +10,27 @@ import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
-import com.yapp.growth.domain.usecase.SendConfirmPlanUseCase
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
+import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.yapp.growth.presentation.ui.main.manage.monitor.MonitorPlanContract.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ConfirmPlanViewModel @Inject constructor(
+class MonitorPlanViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getRespondUsersUseCase: GetRespondUsersUseCase,
-    private val sendConfirmPlanUseCase: SendConfirmPlanUseCase
-) : BaseViewModel<ConfirmPlanViewState, ConfirmPlanSideEffect, ConfirmPlanEvent>(
-    ConfirmPlanViewState()
+): BaseViewModel<MonitorPlanViewState, MonitorPlanSideEffect, MonitorPlanEvent>(
+    MonitorPlanViewState()
 ) {
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
     private var currentIndex = 0
-    private val promisingId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
+    private val planId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
 
     init {
-        loadRespondUsers(promisingId)
+        loadRespondUsers(planId)
     }
 
     private fun loadRespondUsers(promisingId: Long) {
@@ -57,10 +56,12 @@ class ConfirmPlanViewModel @Inject constructor(
 
         val temp = mutableListOf<TimeCheckedOfDay>().also { list ->
             repeat(data.availableDates.size) {
-                list.add(TimeCheckedOfDay(
+                list.add(
+                    TimeCheckedOfDay(
                     date = data.availableDates[it],
                     timeList = booleanArray.copyOf().toMutableList()
-                ))
+                )
+                )
             }
         }.toList()
     }
@@ -77,21 +78,7 @@ class ConfirmPlanViewModel @Inject constructor(
             updateState {
                 copy(currentClickUserData = userList ?: emptyList())
             }
-
-            sendEffect({
-                ConfirmPlanSideEffect.ShowBottomSheet
-            })
         }
-    }
-
-    private fun sendConfirmPlan(date: String) = viewModelScope.launch {
-        sendConfirmPlanUseCase.invoke(promisingId, date)
-            .onSuccess {
-                println(it)
-            }
-            .onError {
-                print(it)
-            }
     }
 
     private fun nextDay() = viewModelScope.launch(Dispatchers.Default) {
@@ -140,24 +127,18 @@ class ConfirmPlanViewModel @Inject constructor(
         copy(currentClickTimeIndex = -1 to -1)
     }
 
-    override fun handleEvents(event: ConfirmPlanEvent) {
+    override fun handleEvents(event: MonitorPlanEvent) {
         when (event) {
-            ConfirmPlanEvent.OnClickNextDayButton -> {
-                initCurrentClickTimeIndex()
-                nextDay()
-            }
-            ConfirmPlanEvent.OnClickPreviousDayButton -> {
-                initCurrentClickTimeIndex()
-                previousDay()
-            }
-            ConfirmPlanEvent.OnClickBackButton -> { sendEffect({ ConfirmPlanSideEffect.NavigateToPreviousScreen }) }
-            is ConfirmPlanEvent.OnClickConfirmButton -> { sendConfirmPlan(event.date) }
-            is ConfirmPlanEvent.OnClickTimeTable -> {
-                updateState {
-                    copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex)
-                }
+            MonitorPlanEvent.OnClickBackButton -> sendEffect({ MonitorPlanSideEffect.NavigateToPreviousScreen })
+            MonitorPlanEvent.OnClickNextDayButton -> nextDay()
+            MonitorPlanEvent.OnClickPreviousDayButton -> previousDay()
+            MonitorPlanEvent.OnClickExitIcon -> sendEffect({ MonitorPlanSideEffect.HideBottomSheet })
+            is MonitorPlanEvent.OnClickTimeTable -> {
+                updateState { copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex) }
+                sendEffect({ MonitorPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
         }
     }
+
 }

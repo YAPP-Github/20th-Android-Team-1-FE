@@ -1,10 +1,10 @@
 package com.yapp.growth.data.di
 
-import com.yapp.growth.data.repository.ConfirmPlanRepositoryImpl
+import com.yapp.growth.data.repository.FixPlanRepositoryImpl
 import com.yapp.growth.data.repository.CreateTimeTableRepositoryImpl
 import com.yapp.growth.data.repository.LoadPlanRepositoryImpl
 import com.yapp.growth.data.repository.TemporaryPlanRepositoryImpl
-import com.yapp.growth.domain.repository.ConfirmPlanRepository
+import com.yapp.growth.domain.repository.FixPlanRepository
 import com.yapp.growth.domain.repository.TemporaryPlanRepository
 import com.yapp.growth.domain.repository.CreateTimeTableRepository
 import com.yapp.growth.domain.repository.LoadPlanRepository
@@ -30,9 +30,9 @@ internal abstract class RepositoryModule {
     ): TemporaryPlanRepository
 
     @Binds
-    abstract fun bindConfirmPlanRepository(
-        confirmPlanRepository: ConfirmPlanRepositoryImpl,
-    ): ConfirmPlanRepository
+    abstract fun bindFixPlanRepository(
+        fixPlanRepository: FixPlanRepositoryImpl,
+    ): FixPlanRepository
 
     @Binds
     abstract fun bindDetailRepository(

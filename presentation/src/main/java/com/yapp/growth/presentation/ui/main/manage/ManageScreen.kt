@@ -43,6 +43,7 @@ fun ManageScreen(
     intentToCreateScreen: () -> Unit,
     navigateToFixPlanScreen: (Int) -> Unit,
     navigateToMemberResponseScreen: (Int) -> Unit,
+    navigateToMonitorPlanScreen: (Int) -> Unit,
     navigateToInvitationScreen: (Int) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -101,6 +102,9 @@ fun ManageScreen(
                 }
                 is ManageSideEffect.NavigateToMemberResponseScreen -> {
                     navigateToMemberResponseScreen(effect.planId)
+                }
+                is ManageSideEffect.NavigateToMonitorPlanScreen -> {
+                    navigateToMonitorPlanScreen(effect.planId)
                 }
                 is ManageSideEffect.NavigateToInvitationScreen -> {
                     navigateToInvitationScreen(effect.planId)
@@ -425,6 +429,7 @@ fun ManageScreenPreview() {
         intentToCreateScreen = {},
         navigateToFixPlanScreen = {},
         navigateToMemberResponseScreen = {},
+        navigateToMonitorPlanScreen = {},
         navigateToInvitationScreen = {}
     )
 }

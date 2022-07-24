@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
+import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
@@ -55,7 +55,7 @@ fun TimeRangeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     // TODO: 드래그로 시트가 닫히지 않도록 수정
-    PlanzBottomSheetLayout(
+    PlanzModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
             TimeRangeTimeBottomSheetContent(

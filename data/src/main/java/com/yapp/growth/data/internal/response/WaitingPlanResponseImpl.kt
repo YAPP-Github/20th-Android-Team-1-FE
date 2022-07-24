@@ -22,4 +22,6 @@ data class WaitingPlanResponseImpl(
     override val members: List<UserResponseImpl>,
     @Json(name = "placeName")
     override val place: String,
+    @Json(name = "isResponsed")
+    override val isAlreadyReplied: Boolean,
 ) : WaitingPlanResponse

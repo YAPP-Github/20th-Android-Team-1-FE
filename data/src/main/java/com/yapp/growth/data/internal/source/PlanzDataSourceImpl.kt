@@ -3,7 +3,7 @@ package com.yapp.growth.data.internal.source
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.mapper.*
-import com.yapp.growth.data.parameter.ConfirmPlanParameter
+import com.yapp.growth.data.parameter.FixPlanParameter
 import com.yapp.growth.data.parameter.TemporaryPlanParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDayParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
@@ -38,13 +38,13 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.makePlan(uuid, parameter).toLong()
         }
 
-    override suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable> =
+    override suspend fun getRespondUsers(planId: Long): NetworkResult<TimeTable> =
         handleApi {
-            retrofitApi.getResponseTimeTable(promisingId.toString()).toTimeTable()
+            retrofitApi.getResponseTimeTable(planId.toString()).toTimeTable()
         }
 
     override suspend fun sendRespondPlan(
-        promisingId: Long,
+        planId: Long,
         timeCheckedOfDays: List<TimeCheckedOfDay>
     ): NetworkResult<Unit> =
         handleApi {
@@ -57,12 +57,17 @@ internal class PlanzDataSourceImpl @Inject constructor(
                     )
                 }
             )
-            retrofitApi.sendRespondPlan(promisingId.toString(), parameter)
+            retrofitApi.sendRespondPlan(planId.toString(), parameter)
         }
 
-    override suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any> =
+    override suspend fun sendRejectPlan(planId: Long): NetworkResult<Unit> =
         handleApi {
-            retrofitApi.sendConfirmPlan(promisingId.toString(), ConfirmPlanParameter(date))
+            retrofitApi.sendRejectPlan(planId.toString())
+        }
+
+    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Any> =
+        handleApi {
+            retrofitApi.sendFixPlan(planId.toString(), FixPlanParameter(date))
         }
 
     override suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>> =
