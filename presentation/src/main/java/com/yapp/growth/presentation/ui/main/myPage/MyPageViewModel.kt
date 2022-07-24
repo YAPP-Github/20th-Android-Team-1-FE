@@ -4,17 +4,25 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
-import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.*
+import com.yapp.growth.domain.usecase.GetUserInfoUseCase
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageEvent
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageSideEffect
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
+    private val getUserInfoUseCase: GetUserInfoUseCase,
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
     init {
+        updateState { copy(loadState = MyPageContract.LoadState.Idle) }
+        fetchUserInfo()
         checkValidLoginToken()
     }
 
@@ -44,6 +52,27 @@ class MyPageViewModel @Inject constructor(
                 sendEffect({ MyPageSideEffect.MoveToLogin })
                 // withdraw()
             }
+        }
+    }
+
+    private fun fetchUserInfo() {
+        viewModelScope.launch {
+            getUserInfoUseCase.invoke()
+                .onSuccess {
+                    updateState {
+                        copy(
+                            loadState = MyPageContract.LoadState.Idle,
+                            userName = it.userName
+                        )
+                    }
+                }
+                .onError {
+                    updateState {
+                        copy(
+                            loadState = MyPageContract.LoadState.Error
+                        )
+                    }
+                }
         }
     }
 

@@ -8,6 +8,7 @@ import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
 import com.yapp.growth.domain.usecase.GetFixedPlansUseCase
+import com.yapp.growth.domain.usecase.GetUserInfoUseCase
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
@@ -29,15 +30,17 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getFixedPlansUseCase: GetFixedPlansUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
 ) {
 
     init {
-        updateState { copy(loadState = HomeViewState.LoadState.Loading) }
-        checkValidLoginToken()
+        updateState { copy(loadState = HomeContract.LoadState.Loading) }
         fetchPlans()
+        fetchUserInfo()
+        checkValidLoginToken()
     }
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
@@ -72,26 +75,49 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun fetchUserInfo() {
+        viewModelScope.launch {
+            getUserInfoUseCase.invoke()
+                .onSuccess {
+                    updateState {
+                        copy(
+                            loadState = HomeContract.LoadState.Idle,
+                            userName = it.userName
+                        )
+                    }
+                }
+                .onError {
+                    updateState {
+                        copy(
+                            loadState = HomeContract.LoadState.Error
+                        )
+                    }
+                }
+        }
+    }
+
     private fun fetchPlans() {
         viewModelScope.launch {
-            val result = (getFixedPlansUseCase.invoke())
-
-            result.onSuccess { plans ->
-                val todayPlans = plans.filter { plan ->
-                    CalendarDay.from(plan.date.toDate()) == CalendarDay.today()
+            getFixedPlansUseCase.invoke()
+                .onSuccess { plans ->
+                    val todayPlans = plans.filter { plan ->
+                        CalendarDay.from(plan.date.toDate()) == CalendarDay.today()
+                    }
+                    val monthlyPlans = plans.filter { plan ->
+                        CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
+                    }
+                    updateState {
+                        copy(
+                            loadState = HomeContract.LoadState.Idle,
+                            allPlans = plans,
+                            monthlyPlans = monthlyPlans,
+                            todayPlans = todayPlans
+                        )
+                    }
                 }
-                val monthlyPlans = plans.filter { plan ->
-                    CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
+                .onError {
+                    updateState { copy(loadState = HomeContract.LoadState.Error) }
                 }
-                updateState {
-                    copy(loadState = HomeViewState.LoadState.Idle, allPlans = plans, monthlyPlans = monthlyPlans, todayPlans = todayPlans)
-                }
-            }
-
-            result.onError {
-                updateState { copy(loadState = HomeViewState.LoadState.Error) }
-                Timber.e(it)
-            }
         }
     }
 
