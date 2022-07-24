@@ -95,8 +95,7 @@ fun MyPageScreen(
                 .wrapContentHeight()
         ) {
             when (viewState.loginState) {
-                // TODO : UserName 을 SharedPreferences 로 관리할 것인지 . . .?
-                LoginState.LOGIN -> MyPageUserInfo(viewState.userName)
+                LoginState.LOGIN -> MyPageUserInfo("${viewState.userName}")
                 LoginState.NONE -> MyPageSignUp(
                     onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
                 )

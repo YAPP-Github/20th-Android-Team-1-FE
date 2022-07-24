@@ -7,7 +7,7 @@ import com.yapp.growth.base.ViewState
 class MyPageContract {
     data class MyPageViewState(
         val loginState: LoginState = LoginState.NONE,
-        val userName: String = "김정호",
+        val userName: String? = null,
         val isDialogVisible: Boolean = false,
     ) : ViewState
 
