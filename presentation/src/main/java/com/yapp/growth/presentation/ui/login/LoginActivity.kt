@@ -25,7 +25,10 @@ class LoginActivity : ComponentActivity() {
 
         setContent {
             PlanzTheme {
-                LoginScreen(onClick = { viewModel.setEvent(LoginEvent.OnClickKakaoLoginButton(this@LoginActivity)) })
+                LoginScreen(
+                    onClickKakaoLogin = { viewModel.setEvent(LoginEvent.OnClickKakaoLoginButton(this@LoginActivity)) },
+                    onClickNonLogin = { viewModel.setEvent(LoginEvent.OnClickNonLoginButton) }
+                )
             }
 
             LaunchedEffect(key1 = viewModel.effect) {
