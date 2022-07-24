@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.main.myPage
 
 import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,6 +60,8 @@ import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageSideEffe
 @Composable
 fun MyPageScreen(
     viewModel: MyPageViewModel = hiltViewModel(),
+    navigateToPolicyScreen: () -> Unit,
+    navigateToTermsScreen: () -> Unit,
     exitMyPageScreen: () -> Unit,
 ) {
 
@@ -74,6 +77,15 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.ExitMyPageScreen -> {
                     exitMyPageScreen()
+                }
+                is MyPageSideEffect.NavigateToPolicy -> {
+                    navigateToPolicyScreen()
+                }
+                is MyPageSideEffect.NavigateToTerms -> {
+                    navigateToTermsScreen()
+                }
+                is MyPageSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -103,7 +115,11 @@ fun MyPageScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
-                    MyPageCustomerService(context = context)
+                    MyPageCustomerService(
+                        context = context,
+                        onPolicyClicked = { viewModel.setEvent(MyPageEvent.OnPolicyClicked) },
+                        onTermsClicked = { viewModel.setEvent(MyPageEvent.OnTermsClicked) },
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
                     if (viewState.loginState == LoginState.LOGIN) {
                         MyPageAccountManagement(
@@ -204,7 +220,9 @@ fun MyPageUserInfo(
 
 @Composable
 fun MyPageCustomerService(
-    context: Context
+    context: Context,
+    onTermsClicked: () -> Unit,
+    onPolicyClicked: () -> Unit,
 ) {
     val versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
@@ -213,11 +231,11 @@ fun MyPageCustomerService(
         Spacer(modifier = Modifier.height(12.dp))
         MyPageItem(
             content = stringResource(id = R.string.my_page_terms_text),
-            onClick = { /* TODO */ }
+            onClick = onTermsClicked
         )
         MyPageItem(
             content = stringResource(id = R.string.my_page_privacy_policy_text),
-            onClick = { /* TODO */ }
+            onClick = onPolicyClicked
         )
         MyPageItem(
             content = stringResource(id = R.string.my_page_version_info_text) + " $versionName",
@@ -341,7 +359,11 @@ fun MyPageDialog(
 @Composable
 fun PreviewMyPageScreen() {
     PlanzTheme {
-        MyPageScreen(exitMyPageScreen = { })
+        MyPageScreen(
+            navigateToPolicyScreen = {  },
+            navigateToTermsScreen = {  },
+            exitMyPageScreen = { }
+        )
     }
 }
 

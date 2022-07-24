@@ -14,10 +14,15 @@ class MyPageContract {
 
     sealed class MyPageSideEffect : ViewSideEffect {
         object MoveToLogin : MyPageSideEffect()
+        object NavigateToTerms : MyPageSideEffect()
+        object NavigateToPolicy : MyPageSideEffect()
         object ExitMyPageScreen : MyPageSideEffect()
+        data class ShowToast(val msg: String) : MyPageSideEffect()
     }
 
     sealed class MyPageEvent : ViewEvent {
+        object OnTermsClicked : MyPageEvent()
+        object OnPolicyClicked : MyPageEvent()
         object OnLogoutClicked : MyPageEvent()
         object OnSignUpClicked : MyPageEvent()
         object OnWithDrawClicked : MyPageEvent()

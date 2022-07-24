@@ -52,7 +52,9 @@ import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
+import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
+import com.yapp.growth.presentation.ui.main.terms.TermsScreen
 import timber.log.Timber
 
 @Composable
@@ -160,7 +162,21 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.MY_PAGE.route) {
                 MyPageScreen(
-                    exitMyPageScreen = { navController.popBackStack() }
+                    exitMyPageScreen = { navController.popBackStack() },
+                    navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
+                    navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                )
+            }
+
+            composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
+                PrivacyPolicyScreen (
+                    exitPrivacyPolicyScreen = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.TERMS.route) {
+                TermsScreen (
+                    exitTermsScreen = { navController.popBackStack() }
                 )
             }
 
@@ -299,6 +315,8 @@ enum class PlanzScreenRoute(val route: String) {
     MANAGE_PLAN("manage-plan"),
     CREATE_PLAN("create-plan"),
     MY_PAGE("my-page"),
+    PRIVACY_POLICY("privacy-policy"),
+    TERMS("terms"),
     DETAIL_PLAN("detail-plan"),
     SAMPLE("sample"),
     RESPOND_PLAN("respond-plan"),
