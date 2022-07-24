@@ -8,8 +8,8 @@ import javax.inject.Inject
 class GetRespondUsersUseCase @Inject constructor(
     private val repository: FixPlanRepository
 ) {
-    suspend operator fun invoke(promisingId: Long): NetworkResult<TimeTable> {
-        return repository.getRespondUsers(promisingId)
+    suspend operator fun invoke(planId: Long): NetworkResult<TimeTable> {
+        return repository.getRespondUsers(planId)
     }
 
 }

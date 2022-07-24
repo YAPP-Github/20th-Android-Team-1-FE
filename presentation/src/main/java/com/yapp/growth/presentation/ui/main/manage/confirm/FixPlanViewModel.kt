@@ -81,16 +81,6 @@ class FixPlanViewModel @Inject constructor(
         }
     }
 
-    private fun sendFixPlan(date: String) = viewModelScope.launch {
-        sendFixPlanUseCase.invoke(planId, date)
-            .onSuccess {
-                sendEffect({ FixPlanSideEffect.NavigateToNextScreen })
-            }
-            .onError {
-                print(it)
-            }
-    }
-
     private fun nextDay() = viewModelScope.launch(Dispatchers.Default) {
         currentIndex += 1
         val fromIndex = currentIndex.times(4)
@@ -115,7 +105,6 @@ class FixPlanViewModel @Inject constructor(
         }
     }
 
-
     private fun previousDay() = viewModelScope.launch(Dispatchers.Default) {
         if (currentIndex == 0) return@launch
         currentIndex -= 1
@@ -135,6 +124,16 @@ class FixPlanViewModel @Inject constructor(
 
     private fun initCurrentClickTimeIndex() = updateState {
         copy(currentClickTimeIndex = -1 to -1)
+    }
+
+    private fun sendFixPlan(date: String) = viewModelScope.launch {
+        sendFixPlanUseCase.invoke(planId, date)
+            .onSuccess {
+                sendEffect({ FixPlanSideEffect.NavigateToNextScreen })
+            }
+            .onError {
+                print(it)
+            }
     }
 
     override fun handleEvents(event: FixPlanEvent) {

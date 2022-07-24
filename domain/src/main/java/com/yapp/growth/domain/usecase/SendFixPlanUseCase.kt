@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SendFixPlanUseCase @Inject constructor(
     private val repository: FixPlanRepository
 ) {
-    suspend operator fun invoke(promisingId: Long, date: String): NetworkResult<Any> {
-        return repository.sendFixPlan(promisingId, date)
+    suspend operator fun invoke(planId: Long, date: String): NetworkResult<Any> {
+        return repository.sendFixPlan(planId, date)
     }
 }

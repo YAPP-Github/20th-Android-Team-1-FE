@@ -12,12 +12,12 @@ internal class FixPlanRepositoryImpl @Inject constructor(
     private val dataSource: PlanzDataSource
 ) : FixPlanRepository {
 
-    override suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable> {
-        return dataSource.getRespondUsers(promisingId)
+    override suspend fun getRespondUsers(planId: Long): NetworkResult<TimeTable> {
+        return dataSource.getRespondUsers(planId)
     }
 
-    override suspend fun sendFixPlan(promisingId: Long, date: String): NetworkResult<Any> {
-        return dataSource.sendFixPlan(promisingId, date)
+    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Any> {
+        return dataSource.sendFixPlan(planId, date)
     }
 
 }
