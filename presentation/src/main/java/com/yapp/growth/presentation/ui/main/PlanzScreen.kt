@@ -43,11 +43,10 @@ import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.Pretendard
-import com.yapp.growth.presentation.ui.createPlan.CreatePlanScreenRoute
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
@@ -130,7 +129,8 @@ fun PlanzScreen(
                 )) {
                 RespondPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToSendCompleteScreen = { navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) },
+                    navigateToSendCompleteScreen = {
+                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) },
                     navigateToSendRejectedScreen = { navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route) }
                 )
             }
@@ -153,7 +153,7 @@ fun PlanzScreen(
                 arguments = listOf(
                     navArgument("planId") { type = NavType.IntType }
                 )) {
-                ConfirmPlanScreen(
+                FixPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }

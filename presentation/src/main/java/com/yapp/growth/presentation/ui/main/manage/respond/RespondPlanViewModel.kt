@@ -47,6 +47,7 @@ class RespondPlanViewModel @Inject constructor(
             val result = (getRespondUsersUseCase.invoke(promisingKey) as? NetworkResult.Success)?.data
             result?.let {
                 originalTable = it
+                checkAvailableResponse(it)
                 makeRespondList(it)
 
                 val sliceTimeTable = if (it.availableDates.size >= 4) {
@@ -60,6 +61,10 @@ class RespondPlanViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun checkAvailableResponse(timeTable: TimeTable) {
+        if (timeTable.users.size >= 10) updateState { copy(availableResponse = false) }
     }
 
     private fun nextDay() = viewModelScope.launch(Dispatchers.Default) {

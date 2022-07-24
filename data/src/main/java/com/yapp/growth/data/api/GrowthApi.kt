@@ -1,10 +1,9 @@
 package com.yapp.growth.data.api
 
 import com.yapp.growth.data.internal.response.*
-import com.yapp.growth.data.parameter.ConfirmPlanParameter
+import com.yapp.growth.data.parameter.FixPlanParameter
 import com.yapp.growth.data.parameter.TemporaryPlanParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
-import com.yapp.growth.data.response.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -31,9 +30,9 @@ interface GrowthApi {
     ): TimeRequestResponseImpl
 
     @POST("/api/promisings/{promisingId}/confirmation")
-    suspend fun sendConfirmPlan(
+    suspend fun sendFixPlan(
         @Path("promisingId") promisingId: String,
-        @Body confirmPlanParameter: ConfirmPlanParameter,
+        @Body fixPlanParameter: FixPlanParameter,
     ): Any
 
     @POST("/api/promisings/{promisingId}/time-response")

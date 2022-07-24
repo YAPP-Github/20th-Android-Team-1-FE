@@ -32,7 +32,7 @@ import com.yapp.growth.presentation.util.toHour
 import com.yapp.growth.presentation.util.toPlanDate
 
 @Composable
-fun ConfirmPlanTimeTable(
+fun FixPlanTimeTable(
     timeTable: TimeTable,
     onClickTimeTable: (Int, Int) -> Unit,
     currentClickTimeIndex: Pair<Int, Int>
@@ -440,7 +440,7 @@ fun LocationAndAvailableColorBox(
 }
 
 @Composable
-fun ConfirmPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: (String) -> Unit) {
+fun FixPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: (String) -> Unit) {
     if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
     val day = timeTable.availableDates[currentClickTimeIndex.first].split('T').first()

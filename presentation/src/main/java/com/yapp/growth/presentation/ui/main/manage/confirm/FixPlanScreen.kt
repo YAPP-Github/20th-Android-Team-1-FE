@@ -18,14 +18,14 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.ConfirmPlanEvent
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.ConfirmPlanSideEffect
+import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanEvent
+import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanSideEffect
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun ConfirmPlanScreen(
-    viewModel: ConfirmPlanViewModel = hiltViewModel(),
+fun FixPlanScreen(
+    viewModel: FixPlanViewModel = hiltViewModel(),
     navigateToPreviousScreen: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -36,11 +36,11 @@ fun ConfirmPlanScreen(
         sheetState = sheetState,
         scrimColor = Color.Transparent,
         sheetContent = {
-            ConfirmPlanBottomSheet(
+            FixPlanBottomSheet(
                 timeTable = uiState.timeTable,
                 currentClickTimeIndex = uiState.currentClickTimeIndex,
                 currentClickUserData = uiState.currentClickUserData,
-                onClickSelectPlan = { date -> viewModel.setEvent(ConfirmPlanEvent.OnClickConfirmButton(date)) }
+                onClickSelectPlan = { date -> viewModel.setEvent(FixPlanEvent.OnClickFixButton(date)) }
             )
         }) {
 
@@ -69,14 +69,14 @@ fun ConfirmPlanScreen(
 
                     PlanzPlanDateIndicator(
                         timeTable = uiState.timeTable,
-                        onClickPreviousDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickPreviousDayButton)},
-                        onClickNextDayButton = { viewModel.setEvent(ConfirmPlanEvent.OnClickNextDayButton) }
+                        onClickPreviousDayButton = { viewModel.setEvent(FixPlanEvent.OnClickPreviousDayButton)},
+                        onClickNextDayButton = { viewModel.setEvent(FixPlanEvent.OnClickNextDayButton) }
                     )
 
-                    ConfirmPlanTimeTable(
+                    FixPlanTimeTable(
                         timeTable = uiState.timeTable,
                         onClickTimeTable = { dateIndex, minuteIndex ->
-                            viewModel.setEvent(ConfirmPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
+                            viewModel.setEvent(FixPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         },
                         currentClickTimeIndex = uiState.currentClickTimeIndex
                     )
@@ -94,15 +94,15 @@ fun ConfirmPlanScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is ConfirmPlanSideEffect.ShowBottomSheet -> {
+                is FixPlanSideEffect.ShowBottomSheet -> {
                     coroutineScope.launch { sheetState.show() }
                 }
 
-                is ConfirmPlanSideEffect.HideBottomSheet -> {
+                is FixPlanSideEffect.HideBottomSheet -> {
                     coroutineScope.launch { sheetState.hide() }
                 }
-                ConfirmPlanSideEffect.NavigateToNextScreen -> TODO()
-                ConfirmPlanSideEffect.NavigateToPreviousScreen -> TODO()
+                FixPlanSideEffect.NavigateToNextScreen -> TODO()
+                FixPlanSideEffect.NavigateToPreviousScreen -> TODO()
             }
 
         }

@@ -10,20 +10,20 @@ import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
-import com.yapp.growth.domain.usecase.SendConfirmPlanUseCase
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanContract.*
+import com.yapp.growth.domain.usecase.SendFixPlanUseCase
+import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ConfirmPlanViewModel @Inject constructor(
+class FixPlanViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getRespondUsersUseCase: GetRespondUsersUseCase,
-    private val sendConfirmPlanUseCase: SendConfirmPlanUseCase
-) : BaseViewModel<ConfirmPlanViewState, ConfirmPlanSideEffect, ConfirmPlanEvent>(
-    ConfirmPlanViewState()
+    private val sendFixPlanUseCase: SendFixPlanUseCase
+) : BaseViewModel<FixPlanViewState, FixPlanSideEffect, FixPlanEvent>(
+    FixPlanViewState()
 ) {
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
@@ -79,13 +79,13 @@ class ConfirmPlanViewModel @Inject constructor(
             }
 
             sendEffect({
-                ConfirmPlanSideEffect.ShowBottomSheet
+                FixPlanSideEffect.ShowBottomSheet
             })
         }
     }
 
-    private fun sendConfirmPlan(date: String) = viewModelScope.launch {
-        sendConfirmPlanUseCase.invoke(promisingId, date)
+    private fun sendFixPlan(date: String) = viewModelScope.launch {
+        sendFixPlanUseCase.invoke(promisingId, date)
             .onSuccess {
                 println(it)
             }
@@ -140,19 +140,19 @@ class ConfirmPlanViewModel @Inject constructor(
         copy(currentClickTimeIndex = -1 to -1)
     }
 
-    override fun handleEvents(event: ConfirmPlanEvent) {
+    override fun handleEvents(event: FixPlanEvent) {
         when (event) {
-            ConfirmPlanEvent.OnClickNextDayButton -> {
+            FixPlanEvent.OnClickNextDayButton -> {
                 initCurrentClickTimeIndex()
                 nextDay()
             }
-            ConfirmPlanEvent.OnClickPreviousDayButton -> {
+            FixPlanEvent.OnClickPreviousDayButton -> {
                 initCurrentClickTimeIndex()
                 previousDay()
             }
-            ConfirmPlanEvent.OnClickBackButton -> { sendEffect({ ConfirmPlanSideEffect.NavigateToPreviousScreen }) }
-            is ConfirmPlanEvent.OnClickConfirmButton -> { sendConfirmPlan(event.date) }
-            is ConfirmPlanEvent.OnClickTimeTable -> {
+            FixPlanEvent.OnClickBackButton -> { sendEffect({ FixPlanSideEffect.NavigateToPreviousScreen }) }
+            is FixPlanEvent.OnClickFixButton -> { sendFixPlan(event.date) }
+            is FixPlanEvent.OnClickTimeTable -> {
                 updateState {
                     copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex)
                 }

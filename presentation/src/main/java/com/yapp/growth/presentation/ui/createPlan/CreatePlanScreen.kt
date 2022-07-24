@@ -17,10 +17,6 @@ import com.yapp.growth.presentation.ui.createPlan.theme.ThemeScreen
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeScreen
 import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableScreen
 import com.yapp.growth.presentation.ui.createPlan.title.TitleScreen
-import com.yapp.growth.presentation.ui.main.manage.confirm.ConfirmPlanScreen
-import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
-import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
 
 @Composable
 fun CreatePlanScreen(

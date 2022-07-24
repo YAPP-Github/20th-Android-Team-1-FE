@@ -3,7 +3,7 @@ package com.yapp.growth.data.internal.source
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.mapper.*
-import com.yapp.growth.data.parameter.ConfirmPlanParameter
+import com.yapp.growth.data.parameter.FixPlanParameter
 import com.yapp.growth.data.parameter.TemporaryPlanParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDayParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
@@ -60,9 +60,9 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.sendRespondPlan(promisingId.toString(), parameter)
         }
 
-    override suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any> =
+    override suspend fun sendFixPlan(promisingId: Long, date: String): NetworkResult<Any> =
         handleApi {
-            retrofitApi.sendConfirmPlan(promisingId.toString(), ConfirmPlanParameter(date))
+            retrofitApi.sendFixPlan(promisingId.toString(), FixPlanParameter(date))
         }
 
     override suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>> =

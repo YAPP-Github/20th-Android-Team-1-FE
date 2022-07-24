@@ -11,7 +11,7 @@ interface PlanzDataSource {
 
     suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable>
     suspend fun sendRespondPlan(promisingId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>): NetworkResult<Unit>
-    suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any>
+    suspend fun sendFixPlan(promisingId: Long, date: String): NetworkResult<Any>
 
     suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>>
     suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>>
