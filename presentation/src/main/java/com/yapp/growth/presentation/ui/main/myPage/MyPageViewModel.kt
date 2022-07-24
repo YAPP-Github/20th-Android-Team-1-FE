@@ -34,6 +34,9 @@ class MyPageViewModel @Inject constructor(
 
     override fun handleEvents(event: MyPageEvent) {
         when (event) {
+            is MyPageEvent.OnTermsClicked -> {
+                sendEffect({ MyPageSideEffect.NavigateToTerms })
+            }
             is MyPageEvent.OnPolicyClicked -> {
                 sendEffect({ MyPageSideEffect.NavigateToPolicy })
             }
