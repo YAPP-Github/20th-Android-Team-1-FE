@@ -79,45 +79,53 @@ fun MyPageScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            PlanzBackAppBar(
-                modifier = Modifier.background(color = BackgroundColor1),
-                title = stringResource(id = R.string.my_page_text),
-                onBackClick = { viewModel.setEvent(MyPageEvent.OnBackButtonClicked) },
-            )
+    when(viewState.loadState) {
+        MyPageContract.LoadState.Idle -> {
+            Scaffold(
+                topBar = {
+                    PlanzBackAppBar(
+                        modifier = Modifier.background(color = BackgroundColor1),
+                        title = stringResource(id = R.string.my_page_text),
+                        onBackClick = { viewModel.setEvent(MyPageEvent.OnBackButtonClicked) },
+                    )
+                }
+            ) { padding ->
+                Column(
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
+                    when (viewState.loginState) {
+                        LoginState.LOGIN -> MyPageUserInfo("${viewState.userName}")
+                        LoginState.NONE -> MyPageSignUp(
+                            onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    MyPageCustomerService(context = context)
+                    Spacer(modifier = Modifier.height(24.dp))
+                    if (viewState.loginState == LoginState.LOGIN) {
+                        MyPageAccountManagement(
+                            onLogoutClick = { viewModel.setEvent(MyPageEvent.OnLogoutClicked) },
+                            onWithDrawClick = { viewModel.setEvent(MyPageEvent.OnWithDrawClicked) }
+                        )
+                    }
+                }
+            }
+
+            if (viewState.isDialogVisible) {
+                MyPageDialog(
+                    onCancelButtonClick = { viewModel.setEvent(MyPageEvent.OnNegativeButtonClicked) },
+                    onPositiveButtonClick = { viewModel.setEvent(MyPageEvent.OnPositiveButtonClicked) },
+                )
+            }
         }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxWidth()
-                .wrapContentHeight()
-        ) {
-            when (viewState.loginState) {
-                LoginState.LOGIN -> MyPageUserInfo("${viewState.userName}")
-                LoginState.NONE -> MyPageSignUp(
-                    onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
-                )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            MyPageCustomerService(context = context)
-            Spacer(modifier = Modifier.height(24.dp))
-            if (viewState.loginState == LoginState.LOGIN) {
-                MyPageAccountManagement(
-                    onLogoutClick = { viewModel.setEvent(MyPageEvent.OnLogoutClicked) },
-                    onWithDrawClick = { viewModel.setEvent(MyPageEvent.OnWithDrawClicked) }
-                )
-            }
+        else -> {
+
         }
     }
 
-    if (viewState.isDialogVisible) {
-        MyPageDialog(
-            onCancelButtonClick = { viewModel.setEvent(MyPageEvent.OnNegativeButtonClicked) },
-            onPositiveButtonClick = { viewModel.setEvent(MyPageEvent.OnPositiveButtonClicked) },
-        )
-    }
 }
 
 @Composable

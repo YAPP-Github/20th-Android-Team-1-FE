@@ -21,6 +21,7 @@ class MyPageViewModel @Inject constructor(
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
     init {
+        updateState { copy(loadState = MyPageContract.LoadState.Idle) }
         fetchUserInfo()
         checkValidLoginToken()
     }
@@ -58,10 +59,19 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             getUserInfoUseCase.invoke()
                 .onSuccess {
-                    updateState { copy(userName = it.userName) }
+                    updateState {
+                        copy(
+                            loadState = MyPageContract.LoadState.Idle,
+                            userName = it.userName
+                        )
+                    }
                 }
                 .onError {
-                    // TODO
+                    updateState {
+                        copy(
+                            loadState = MyPageContract.LoadState.Error
+                        )
+                    }
                 }
         }
     }
