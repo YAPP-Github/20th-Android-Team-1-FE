@@ -34,7 +34,9 @@ class MyPageViewModel @Inject constructor(
 
     override fun handleEvents(event: MyPageEvent) {
         when (event) {
-            // TODO : 이용약관, 개인정보 처리 방침, 탈퇴하기 (다이얼로그)
+            is MyPageEvent.OnPolicyClicked -> {
+                sendEffect({ MyPageSideEffect.NavigateToPolicy })
+            }
             is MyPageEvent.OnLogoutClicked -> {
                 logout()
             }
