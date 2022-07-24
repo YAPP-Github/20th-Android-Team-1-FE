@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.MainPurple900
@@ -59,6 +60,7 @@ fun Introduce(onClickNonLogin: () -> Unit) {
                    onClickNonLogin()
                 },
             text = "둘러보기",
+            textDecoration = TextDecoration.Underline,
             style = PlanzTypography.body2,
         )
 
