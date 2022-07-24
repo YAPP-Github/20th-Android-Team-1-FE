@@ -57,7 +57,10 @@ fun CreatePlanScreen(
                 TimeRangeScreen(
                     exitCreateScreen = exitCreatePlan,
                     navigateToNextScreen = { uuid ->
-                        navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/${uuid}"))
+                        navController.navigate(CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/${uuid}")) {
+                            popUpTo(CreatePlanScreenRoute.THEME.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
