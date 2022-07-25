@@ -20,6 +20,7 @@ class RespondPlanContract {
             "",
             emptyList(),
             emptyList(),
+            "",
             ""
         ),
         val clickCount: Int = 0,

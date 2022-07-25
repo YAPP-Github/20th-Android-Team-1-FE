@@ -45,10 +45,9 @@ fun MonitorPlanScreen(
     ) {
         Scaffold(
             topBar = {
-                PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.monitor_plan_title_text),
-                    onClickBackIcon = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
-                    onClickShareIcon = { /*TODO*/ }
+                PlanzColorTextWithExitAppBar(
+                    title = uiState.timeTable.categoryName,
+                    onExitClick = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
                 )
             }
         ) { padding ->

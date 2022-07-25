@@ -20,6 +20,7 @@ class FixPlanContract {
             "",
             emptyList(),
             emptyList(),
+            "",
             ""
         ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,

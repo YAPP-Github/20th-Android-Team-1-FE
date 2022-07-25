@@ -369,16 +369,21 @@ fun LocationAndAvailableColorBox(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Icon(
-                modifier = Modifier.width(15.dp).height(18.dp),
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(20.dp)
+                    .padding(vertical = 1.dp, horizontal = 3.dp),
                 tint = Color.Unspecified,
                 imageVector = ImageVector.vectorResource(R.drawable.ic_location_icon),
                 contentDescription = null
             )
 
             Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
                 text = timeTable.placeName,
                 color = CoolGray500,
                 style = PlanzTypography.caption,
