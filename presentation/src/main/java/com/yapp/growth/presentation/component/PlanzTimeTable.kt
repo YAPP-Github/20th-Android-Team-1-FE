@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -19,17 +19,12 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
-import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.util.getCurrentBlockDate
-import com.yapp.growth.presentation.util.toHour
-import com.yapp.growth.presentation.util.toPlanDate
 
 @Composable
 fun FixPlanTimeTable(
