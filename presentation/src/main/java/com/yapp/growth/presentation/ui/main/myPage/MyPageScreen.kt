@@ -3,6 +3,7 @@ package com.yapp.growth.presentation.ui.main.myPage
 import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -38,14 +37,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAppBar
+import com.yapp.growth.presentation.component.PlanzDialog
 import com.yapp.growth.presentation.theme.BackgroundColor1
-import com.yapp.growth.presentation.theme.Gray200
+import com.yapp.growth.presentation.theme.CoolGray500
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray700
 import com.yapp.growth.presentation.theme.Gray900
@@ -91,7 +92,11 @@ fun MyPageScreen(
         }
     }
 
-    when(viewState.loadState) {
+    BackHandler(enabled = viewState.isDialogVisible) {
+        viewModel.setEvent(MyPageEvent.OnNegativeButtonClicked)
+    }
+
+    when (viewState.loadState) {
         MyPageContract.LoadState.Idle -> {
             Scaffold(
                 topBar = {
@@ -131,9 +136,14 @@ fun MyPageScreen(
             }
 
             if (viewState.isDialogVisible) {
-                MyPageDialog(
-                    onCancelButtonClick = { viewModel.setEvent(MyPageEvent.OnNegativeButtonClicked) },
+                PlanzDialog(
+                    title = stringResource(id = R.string.my_page_dialog_title_text),
+                    content = stringResource(id = R.string.my_page_dialog_content_text),
+                    positiveButtonText = stringResource(id = R.string.my_page_dialog_positive_button_text),
+                    negativeButtonText = stringResource(id = R.string.my_page_dialog_negative_button_text),
+                    onCancelButtonClick = { viewModel.setEvent(MyPageEvent.OnPositiveButtonClicked) },
                     onPositiveButtonClick = { viewModel.setEvent(MyPageEvent.OnPositiveButtonClicked) },
+                    onNegativeButtonClick = { viewModel.setEvent(MyPageEvent.OnNegativeButtonClicked) }
                 )
             }
         }
@@ -297,71 +307,13 @@ fun MyPageItem(
     }
 }
 
-// TODO : 임시 다이얼로그
-@Composable
-fun MyPageDialog(
-    onCancelButtonClick: () -> Unit,
-    onPositiveButtonClick: () -> Unit
-) {
-    Dialog(onDismissRequest = { }) {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentHeight()
-                .padding(8.dp),
-            shape = RoundedCornerShape(10.dp),
-            color = Color.White
-        ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = "정말 탈퇴하시겠어요?",
-                    style = PlanzTypography.h2,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "더 이상 플랜즈의 편리한 기능을 누릴 수 없어요.",
-                    style = PlanzTypography.body2,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    onClick = { onCancelButtonClick() },
-                ) {
-                    Text(
-                        text = "다시 생각해볼게요",
-                        style = PlanzTypography.caption,
-                    )
-                }
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    onClick = { onPositiveButtonClick() },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Gray200),
-                ) {
-                    Text(
-                        text = "계정탈퇴",
-                        style = PlanzTypography.caption,
-                        color = Gray500
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun PreviewMyPageScreen() {
     PlanzTheme {
         MyPageScreen(
-            navigateToPolicyScreen = {  },
-            navigateToTermsScreen = {  },
+            navigateToPolicyScreen = { },
+            navigateToTermsScreen = { },
             exitMyPageScreen = { }
         )
     }
