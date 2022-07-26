@@ -129,10 +129,10 @@ class FixPlanViewModel @Inject constructor(
     private fun sendFixPlan(date: String) = viewModelScope.launch {
         sendFixPlanUseCase.invoke(planId, date)
             .onSuccess {
-                sendEffect({ FixPlanSideEffect.NavigateToNextScreen })
+                sendEffect({ FixPlanSideEffect.NavigateToNextScreen(it.id) })
             }
             .onError {
-                print(it)
+
             }
     }
 

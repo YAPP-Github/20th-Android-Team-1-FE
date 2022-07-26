@@ -30,7 +30,7 @@ class FixPlanContract {
     sealed class FixPlanSideEffect : ViewSideEffect {
         object ShowBottomSheet : FixPlanSideEffect()
         object HideBottomSheet : FixPlanSideEffect()
-        object NavigateToNextScreen : FixPlanSideEffect()
+        data class NavigateToNextScreen(val planId: Int) : FixPlanSideEffect()
         object NavigateToPreviousScreen : FixPlanSideEffect()
     }
 

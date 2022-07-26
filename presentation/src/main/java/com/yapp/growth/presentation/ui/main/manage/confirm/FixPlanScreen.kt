@@ -2,6 +2,7 @@
 
 package com.yapp.growth.presentation.ui.main.manage.confirm
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,12 +19,11 @@ import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPl
 import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanSideEffect
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun FixPlanScreen(
     viewModel: FixPlanViewModel = hiltViewModel(),
     navigateToPreviousScreen: () -> Unit,
-    navigateToNextScreen: () -> Unit,
+    navigateToNextScreen: (Int) -> Unit,
 ) {
     val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
@@ -100,10 +100,16 @@ fun FixPlanScreen(
                 is FixPlanSideEffect.HideBottomSheet -> {
                     coroutineScope.launch { sheetState.collapse() }
                 }
-                FixPlanSideEffect.NavigateToNextScreen -> navigateToNextScreen()
+                is FixPlanSideEffect.NavigateToNextScreen -> {
+                    navigateToNextScreen(effect.planId)
+                }
                 FixPlanSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
             }
 
         }
+    }
+
+    BackHandler(enabled = sheetState.isExpanded) {
+        coroutineScope.launch { sheetState.collapse() }
     }
 }
