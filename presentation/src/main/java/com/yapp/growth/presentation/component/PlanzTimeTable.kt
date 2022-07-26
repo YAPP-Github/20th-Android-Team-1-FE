@@ -312,7 +312,6 @@ fun CreateTimeTable(
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
                                 .clickable {
                                     onClickTimeTable(dateIndex, minuteIndex)
-                                    println(date)
                                 }
                                 .background(if (upperTableClicked) MainPurple900 else Color.Transparent),
                         )
@@ -336,7 +335,6 @@ fun CreateTimeTable(
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
                                 .clickable {
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
-                                    println(date)
                                 }
                                 .background(if (underTableClicked) MainPurple900 else Color.Transparent),
                         )
