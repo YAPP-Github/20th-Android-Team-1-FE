@@ -13,7 +13,7 @@ interface PlanzDataSource {
     suspend fun sendRespondPlan(planId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>): NetworkResult<Unit>
 
     suspend fun sendRejectPlan(planId: Long): NetworkResult<Unit>
-    suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Any>
+    suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Plan.FixedPlan>
 
     suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>>
     suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>>
