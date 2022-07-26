@@ -75,9 +75,9 @@ fun String.toPlanDate(): String {
     }
 
     dateTimeFormat = if (calendar.get(Calendar.MINUTE) == 0) {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) aa h시", Locale.KOREA)
     } else {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시 mm분", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) aa h시 mm분", Locale.KOREA)
     }
 
     val displayText = PARSE_DATE_FORMAT.parse(currentTime) ?: ""

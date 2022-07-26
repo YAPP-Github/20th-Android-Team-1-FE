@@ -2,6 +2,7 @@
 
 package com.yapp.growth.presentation.ui.main.manage.monitor
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -45,10 +46,9 @@ fun MonitorPlanScreen(
     ) {
         Scaffold(
             topBar = {
-                PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.monitor_plan_title_text),
-                    onClickBackIcon = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
-                    onClickShareIcon = { /*TODO*/ }
+                PlanzColorTextWithExitAppBar(
+                    title = uiState.timeTable.categoryName,
+                    onExitClick = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
                 )
             }
         ) { padding ->
@@ -94,6 +94,10 @@ fun MonitorPlanScreen(
                 MonitorPlanSideEffect.ShowBottomSheet -> { coroutineScope.launch { sheetState.expand() } }
             }
         }
+    }
+
+    BackHandler(enabled = sheetState.isExpanded) {
+        coroutineScope.launch { sheetState.collapse() }
     }
 
 }

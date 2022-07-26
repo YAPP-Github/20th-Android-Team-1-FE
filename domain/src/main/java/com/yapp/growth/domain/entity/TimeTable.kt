@@ -13,6 +13,7 @@ data class TimeTable(
     val availableDates: List<String>,
     val hourList: List<String>,
     val placeName: String,
+    val categoryName: String,
 )
 
 data class TimeTableDate(

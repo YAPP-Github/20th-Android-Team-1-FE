@@ -72,7 +72,13 @@ fun CreatePlanScreen(
                 )) {
                 CreateTimeTableScreen(
                     exitCreateScreen = exitCreatePlan,
-                    navigateToNextScreen = { navController.navigate(CreatePlanScreenRoute.SHARE.route) },
+                    navigateToNextScreen = {
+                        navController.navigate(CreatePlanScreenRoute.SHARE.route) {
+                            popUpTo(CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/{uuid}")) {
+                                inclusive = true
+                            }
+                        }
+                    },
                     navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }

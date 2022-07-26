@@ -36,7 +36,7 @@ class RespondPlanViewModel @Inject constructor(
     val timeCheckedOfDays: StateFlow<List<TimeCheckedOfDay>>
         get() = _timeCheckedOfDays.asStateFlow()
 
-    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
+    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
     private var planId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
 
