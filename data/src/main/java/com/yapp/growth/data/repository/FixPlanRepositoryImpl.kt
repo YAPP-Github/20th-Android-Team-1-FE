@@ -2,6 +2,7 @@ package com.yapp.growth.data.repository
 
 import com.yapp.growth.data.source.PlanzDataSource
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.repository.FixPlanRepository
 import javax.inject.Inject
@@ -16,7 +17,7 @@ internal class FixPlanRepositoryImpl @Inject constructor(
         return dataSource.getRespondUsers(planId)
     }
 
-    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Any> {
+    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Plan.FixedPlan> {
         return dataSource.sendFixPlan(planId, date)
     }
 
