@@ -44,7 +44,7 @@ fun ManageScreen(
     navigateToFixPlanScreen: (Int) -> Unit,
     navigateToMemberResponseScreen: (Int) -> Unit,
     navigateToMonitorPlanScreen: (Int) -> Unit,
-    navigateToInvitationScreen: (Int) -> Unit,
+    navigateToDetailPlanScreen: (Int) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -106,8 +106,8 @@ fun ManageScreen(
                 is ManageSideEffect.NavigateToMonitorPlanScreen -> {
                     navigateToMonitorPlanScreen(effect.planId)
                 }
-                is ManageSideEffect.NavigateToInvitationScreen -> {
-                    navigateToInvitationScreen(effect.planId)
+                is ManageSideEffect.NavigateToDetailPlanScreen -> {
+                    navigateToDetailPlanScreen(effect.planId)
                 }
                 is ManageSideEffect.SwitchTab -> {
                     pagerState.animateScrollToPage(effect.tabIndex)
@@ -430,7 +430,7 @@ fun ManageScreenPreview() {
         navigateToFixPlanScreen = {},
         navigateToMemberResponseScreen = {},
         navigateToMonitorPlanScreen = {},
-        navigateToInvitationScreen = {}
+        navigateToDetailPlanScreen = {}
     )
 }
 
