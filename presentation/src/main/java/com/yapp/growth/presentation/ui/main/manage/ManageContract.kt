@@ -16,7 +16,7 @@ class ManageContract {
         data class NavigateToFixPlanScreen(val planId: Int) : ManageSideEffect()
         data class NavigateToMemberResponseScreen(val planId: Int) : ManageSideEffect()
         data class NavigateToMonitorPlanScreen(val planId: Int) : ManageSideEffect()
-        data class NavigateToInvitationScreen(val planId: Int) : ManageSideEffect()
+        data class NavigateToDetailPlanScreen(val planId: Int) : ManageSideEffect()
         data class SwitchTab(val tabIndex: Int) : ManageSideEffect()
     }
 
