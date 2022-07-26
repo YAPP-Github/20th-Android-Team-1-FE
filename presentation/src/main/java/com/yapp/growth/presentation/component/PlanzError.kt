@@ -24,8 +24,8 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 
 
 @Composable
-fun PlanzError(modifier : Modifier) {
-    Box(modifier = modifier) {
+fun PlanzError() {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,6 +57,6 @@ fun PreviewPlanError() {
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        PlanzError(modifier = Modifier.fillMaxHeight())
+        PlanzError()
     }
 }

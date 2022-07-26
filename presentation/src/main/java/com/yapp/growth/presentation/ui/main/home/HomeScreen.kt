@@ -398,10 +398,9 @@ fun HomeMonthlyPlan(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isError) {
-                    PlanzError(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(264.dp)
-                    )
+                    Box(modifier = Modifier.height(264.dp)) {
+                        PlanzError()
+                    }
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
                     Box(
