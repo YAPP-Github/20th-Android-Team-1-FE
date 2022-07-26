@@ -131,10 +131,17 @@ fun PlanzScreen(
                 )) {
                 RespondPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToSendCompleteScreen = { navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) },
-                    navigateToSendRejectedScreen = { navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route) }
+                    navigateToSendCompleteScreen = {
+                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
+                            popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}")) { inclusive = true }
+                        }
+                    },
+                    navigateToSendRejectedScreen = {
+                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route.plus("/{planId}"))
+                    }
                 )
             }
+
             composable(route = PlanzScreenRoute.MONITOR_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
                     navArgument("planId") { type = NavType.IntType }
@@ -165,7 +172,9 @@ fun PlanzScreen(
                 FixPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
                     navigateToNextScreen = { planId ->
-                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}"))
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
+                            popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}")) { inclusive = true }
+                        }
                     },
                 )
             }
