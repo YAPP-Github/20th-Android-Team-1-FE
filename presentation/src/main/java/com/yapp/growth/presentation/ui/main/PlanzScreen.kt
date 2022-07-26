@@ -102,10 +102,7 @@ fun PlanzScreen(
                         navController.navigate(PlanzScreenRoute.MY_PAGE.route)
                     },
                     navigateToDetailPlanScreen = { planId ->
-                        navController.navigate(
-                            PlanzScreenRoute.DETAIL_PLAN.route
-                                .plus("/${planId}")
-                        )
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}"))
                     },
                 )
             }
@@ -122,7 +119,7 @@ fun PlanzScreen(
                     navigateToMonitorPlanScreen = { planId ->
                         navController.navigate(PlanzScreenRoute.MONITOR_PLAN.route.plus("/${planId}"))
                     },
-                    navigateToInvitationScreen = { planId ->
+                    navigateToDetailPlanScreen = { planId ->
                         navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}"))
                     }
                 )
@@ -134,8 +131,7 @@ fun PlanzScreen(
                 )) {
                 RespondPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToSendCompleteScreen = {
-                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) },
+                    navigateToSendCompleteScreen = { navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) },
                     navigateToSendRejectedScreen = { navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route) }
                 )
             }
@@ -168,7 +164,9 @@ fun PlanzScreen(
                 )) {
                 FixPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToNextScreen = { /*TODO*/ },
+                    navigateToNextScreen = { planId ->
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}"))
+                    },
                 )
             }
 
