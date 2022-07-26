@@ -33,7 +33,7 @@ interface GrowthApi {
     suspend fun sendFixPlan(
         @Path("promisingId") planId: String,
         @Body fixPlanParameter: FixPlanParameter,
-    ): Any
+    ): FixedPlanResponseImpl
 
     @POST("/api/promisings/{promisingId}/time-response")
     suspend fun sendRespondPlan(
