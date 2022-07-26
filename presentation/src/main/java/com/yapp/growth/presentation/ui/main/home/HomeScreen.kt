@@ -60,6 +60,7 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
+import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
@@ -397,31 +398,8 @@ fun HomeMonthlyPlan(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isError) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(264.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.align(Alignment.Center),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Image(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
-                                contentDescription = null,
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_error_text_01),
-                                color = Gray500,
-                                style = PlanzTypography.body2,
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_error_text_02),
-                                color = Gray500,
-                                style = PlanzTypography.body2,
-                            )
-                        }
+                    Box(modifier = Modifier.height(264.dp)) {
+                        PlanzError()
                     }
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
