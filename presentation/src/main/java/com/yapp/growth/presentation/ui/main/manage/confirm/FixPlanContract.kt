@@ -24,7 +24,8 @@ class FixPlanContract {
             ""
         ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
-        val currentClickUserData: List<User> = emptyList()
+        val currentClickUserData: List<User> = emptyList(),
+        val planId: Long = -1,
     ) : ViewState
 
     sealed class FixPlanSideEffect : ViewSideEffect {

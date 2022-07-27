@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
+import com.yapp.growth.presentation.firebase.SchemeType
+import com.yapp.growth.presentation.firebase.onDynamicLinkClick
 import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanEvent
 import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanSideEffect
 import kotlinx.coroutines.launch
@@ -29,6 +32,7 @@ fun FixPlanScreen(
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current
 
     PlanzBottomSheetScaffoldLayout(
         scaffoldState = scaffoldState,
@@ -46,7 +50,7 @@ fun FixPlanScreen(
                 PlanzBackAndShareAppBar(
                     title = stringResource(id = R.string.fix_plan_title_text),
                     onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
-                    onClickShareIcon = { /*TODO*/ }
+                    onClickShareIcon = { onDynamicLinkClick(context, SchemeType.RESPOND, uiState.planId.toString()) }
                 )
             }
         ) { padding ->

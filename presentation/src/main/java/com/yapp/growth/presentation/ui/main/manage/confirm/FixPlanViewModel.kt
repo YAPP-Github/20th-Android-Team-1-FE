@@ -32,6 +32,7 @@ class FixPlanViewModel @Inject constructor(
 
     init {
         loadRespondUsers(planId)
+        updateState { copy(planId = this@FixPlanViewModel.planId) }
     }
 
     private fun loadRespondUsers(promisingId: Long) {
