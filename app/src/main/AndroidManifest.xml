@@ -28,11 +28,11 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="planz.today"
+                    android:host="app.planz.today"
                     android:scheme="https"/>
 
                 <data
-                    android:host="planz.today"
+                    android:host="app.planz.today"
                     android:scheme="http"/>
             </intent-filter>
         </activity>
