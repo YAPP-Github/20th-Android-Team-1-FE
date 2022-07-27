@@ -38,8 +38,6 @@ class HomeViewModel @Inject constructor(
 
     init {
         updateState { copy(loadState = HomeContract.LoadState.Loading) }
-        fetchPlans()
-        fetchUserInfo()
         checkValidLoginToken()
     }
 
@@ -196,10 +194,29 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
-                else updateState { copy(loginState = LoginState.NONE) }
+                if (isValidLoginToken) {
+                    updateState {
+                        copy(
+                            loginState = LoginState.LOGIN,
+                        )
+                    }
+                    fetchUserInfo()
+                    fetchPlans()
+                } else {
+                    updateState {
+                        copy(
+                            loginState = LoginState.NONE,
+                            loadState = HomeContract.LoadState.Idle
+                        )
+                    }
+                }
             }.onError {
-                updateState { copy(loginState = LoginState.LOGIN) }
+                updateState {
+                    copy(
+                        loginState = LoginState.NONE,
+                        loadState = HomeContract.LoadState.Error
+                    )
+                }
             }
         }
     }
