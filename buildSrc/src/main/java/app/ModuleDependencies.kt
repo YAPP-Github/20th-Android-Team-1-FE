@@ -175,4 +175,5 @@ object ModuleDependencies {
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics-ktx"
+    const val FIREBASE_DYNAMICLINKS = "com.google.firebase:firebase-dynamic-links-ktx"
 }
