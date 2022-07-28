@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTimeTableViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase,
     private val makePlanUseCase: MakePlanUseCase,
 ): BaseViewModel<CreateTimeTableViewState, CreateTimeTableSideEffect, CreateTimeTableEvent>(CreateTimeTableViewState()) {
@@ -101,11 +101,11 @@ class CreateTimeTableViewModel @Inject constructor(
         _timeCheckedOfDays.value = temp
     }
 
-    private fun sendTimeCheckedOfDays(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
+    private fun sendMakePlan(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
             makePlanUseCase.invoke(uuid, timeCheckedOfDays)
-                .onSuccess {
-                    sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
+                .onSuccess { planId ->
+                    sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen(planId) })
                 }
                 .onError {
                     TODO()
@@ -116,7 +116,7 @@ class CreateTimeTableViewModel @Inject constructor(
         when (event) {
             CreateTimeTableEvent.OnClickBackButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToPreviousScreen })
             CreateTimeTableEvent.OnClickExitButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
-            CreateTimeTableEvent.OnClickSendButton -> sendTimeCheckedOfDays(uuid, timeCheckedOfDays.value)
+            CreateTimeTableEvent.OnClickSendButton -> sendMakePlan(uuid, timeCheckedOfDays.value)
             CreateTimeTableEvent.OnClickNextDayButton -> { nextDay() }
             CreateTimeTableEvent.OnClickPreviousDayButton -> { previousDay() }
             is CreateTimeTableEvent.OnClickTimeTable -> {
