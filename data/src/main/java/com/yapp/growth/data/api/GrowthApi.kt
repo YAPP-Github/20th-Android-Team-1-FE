@@ -49,6 +49,14 @@ interface GrowthApi {
     @GET("/api/promisings/user")
     suspend fun getWaitingPlans(): List<WaitingPlanResponseImpl>
 
+    @GET("/api/promisings/categories")
+    suspend fun getCategories(): List<CategoryResponseImpl>
+
+    @POST("/api/promisings")
+    suspend fun createTemporaryPlan(
+        @Body temporaryPlanParameter: TemporaryPlanParameter,
+    ): TemporaryPlanUuidResponseImpl
+
     // Fixed Plans
 
     @GET("/api/promises/{promiseId}")
@@ -58,11 +66,6 @@ interface GrowthApi {
 
     @GET("/api/promises/user")
     suspend fun getFixedPlans(): List<FixedPlanResponseImpl>
-
-    @POST("/api/promisings")
-    suspend fun createTemporaryPlan(
-        @Body temporaryPlanParameter: TemporaryPlanParameter,
-    ): TemporaryPlanUuidResponseImpl
 
     // User
 

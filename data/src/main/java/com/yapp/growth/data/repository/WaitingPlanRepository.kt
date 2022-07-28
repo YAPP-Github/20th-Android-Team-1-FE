@@ -3,6 +3,7 @@ package com.yapp.growth.data.repository
 import com.yapp.growth.data.mapper.toTemporaryPlanParameter
 import com.yapp.growth.data.source.PlanzDataSource
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.domain.entity.TemporaryPlan
 import com.yapp.growth.domain.entity.TemporaryPlanUuid
@@ -22,5 +23,9 @@ internal class WaitingPlanRepositoryImpl @Inject constructor(
         temporaryPlan: TemporaryPlan,
     ): NetworkResult<TemporaryPlanUuid> {
         return dataSource.createTemporaryPlan(temporaryPlan.toTemporaryPlanParameter())
+    }
+
+    override suspend fun getPlanCategories(): NetworkResult<List<Category>> {
+        return dataSource.getPlanCategories()
     }
 }
