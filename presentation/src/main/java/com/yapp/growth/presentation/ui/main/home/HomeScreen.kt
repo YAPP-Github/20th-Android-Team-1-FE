@@ -61,6 +61,7 @@ import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.component.PlanzError
+import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
@@ -143,41 +144,50 @@ fun HomeScreen(
             },
             modifier = Modifier.fillMaxSize(),
         ) { padding ->
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(modifier = Modifier.height(3.dp))
-                when (viewState.loginState) {
-                    HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                        isError = viewState.loadState == HomeContract.LoadState.Error,
-                        expanded = viewState.isTodayPlanExpanded,
-                        todayPlans = viewState.todayPlans,
-                        planCount = viewState.todayPlans.size,
-                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
-                        onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
-                    )
-                    HomeContract.LoginState.NONE -> HomeInduceLogin(
-                        OnInduceLoginClick = { viewModel.setEvent(HomeEvent.OnInduceLoginClicked) }
-                    )
+            when (viewState.loadState) {
+                HomeContract.LoadState.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        PlanzLoading()
+                    }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                HomeMonthlyPlan(
-                    isError = viewState.loadState == HomeContract.LoadState.Error,
-                    expanded = viewState.isMonthlyPlanExpanded,
-                    monthlyPlans = viewState.monthlyPlans,
-                    mode = viewState.monthlyPlanMode,
-                    currentDate = currentDate,
-                    onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
-                    onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
-                    onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
-                    onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
-                    onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
-                    onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
-                )
-                Spacer(modifier = Modifier.height(24.dp))
+                else -> {
+                    Column(
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Spacer(modifier = Modifier.height(3.dp))
+                        when (viewState.loginState) {
+                            HomeContract.LoginState.LOGIN -> HomeTodayPlan(
+                                isError = viewState.loadState == HomeContract.LoadState.Error,
+                                expanded = viewState.isTodayPlanExpanded,
+                                todayPlans = viewState.todayPlans,
+                                planCount = viewState.todayPlans.size,
+                                onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
+                                onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
+                            )
+                            HomeContract.LoginState.NONE -> HomeInduceLogin(
+                                OnInduceLoginClick = { viewModel.setEvent(HomeEvent.OnInduceLoginClicked) }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        HomeMonthlyPlan(
+                            isError = viewState.loadState == HomeContract.LoadState.Error,
+                            expanded = viewState.isMonthlyPlanExpanded,
+                            monthlyPlans = viewState.monthlyPlans,
+                            mode = viewState.monthlyPlanMode,
+                            currentDate = currentDate,
+                            onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
+                            onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
+                            onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
+                            onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
+                            onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
+                            onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                }
             }
         }
     }
