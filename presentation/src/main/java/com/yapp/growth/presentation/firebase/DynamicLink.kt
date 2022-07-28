@@ -1,12 +1,15 @@
+
 package com.yapp.growth.presentation.firebase
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.google.firebase.dynamiclinks.ktx.*
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.component1
 import com.google.firebase.dynamiclinks.ktx.component2
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.BuildConfig
 import timber.log.Timber
 

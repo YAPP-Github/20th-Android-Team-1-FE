@@ -22,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +52,7 @@ fun ShareScreen(
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
+    viewModel.getDynamicLink(context)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -160,7 +162,7 @@ fun kakaoSocialShare(
 ) {
     val shareFeedImageUrl =
         BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
-    // TODO: URL 설정
+
     val sharePlanFeedTemplate = FeedTemplate(
         content = Content(
             title = context.getString(R.string.share_plan_share_feed_template_title),
@@ -168,7 +170,7 @@ fun kakaoSocialShare(
             imageUrl = shareFeedImageUrl,
             link = Link(
                 webUrl = shareFeedImageUrl, /* 임시 URL */
-                mobileWebUrl = shareFeedImageUrl /* 임시 URL */
+                mobileWebUrl = shareFeedImageUrl,
             ),
             imageWidth = 800,
             imageHeight = 400
@@ -263,17 +265,24 @@ fun ShareUrl(
         elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = shareUrl,
                 color = Gray800,
-                style = PlanzTypography.body2
+                style = PlanzTypography.body2,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
             )
             Text(
-                modifier = Modifier.clickable { onCopyClick() },
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .clickable { onCopyClick() },
                 text = stringResource(id = R.string.share_plan_copy_text),
                 color = MainPurple900,
                 style = PlanzTypography.subtitle2
