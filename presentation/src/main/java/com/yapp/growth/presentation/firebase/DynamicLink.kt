@@ -7,13 +7,14 @@ import com.google.firebase.dynamiclinks.ktx.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.dynamiclinks.ktx.component1
 import com.google.firebase.dynamiclinks.ktx.component2
+import com.yapp.growth.presentation.BuildConfig
 import timber.log.Timber
 
 fun getDeepLink(scheme: String, key: String?, id: String?): Uri {
     return if (key.isNullOrEmpty()) {
-        Uri.parse("https://app.planz.today/")
+        Uri.parse(BuildConfig.PLANZ_DOMAIN)
     } else {
-        Uri.parse("https://app.planz.today/${scheme}/?${key}=$id")
+        Uri.parse(BuildConfig.PLANZ_DOMAIN + "/${scheme}/?${key}=$id")
     }
 }
 
@@ -24,7 +25,7 @@ fun onDynamicLinkClick(
 ) {
     val dynamicLink = Firebase.dynamicLinks.shortLinkAsync {
         link = getDeepLink(scheme.name, scheme.key, id)
-        domainUriPrefix = "https://app.planz.today/link"
+        domainUriPrefix = BuildConfig.DOMAIN_URI_PREFIX
         androidParameters(context.packageName) { }
 
     }.addOnSuccessListener { (shortLink, _) ->

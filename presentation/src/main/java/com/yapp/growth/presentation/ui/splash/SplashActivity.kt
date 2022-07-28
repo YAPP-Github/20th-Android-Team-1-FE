@@ -96,7 +96,6 @@ class SplashActivity : ComponentActivity() {
                         }
                     }
 
-                    MainActivity.dynamicLinkId = deepLink.toString() ?: ""
                 }
             }
             .addOnFailureListener(this) {
