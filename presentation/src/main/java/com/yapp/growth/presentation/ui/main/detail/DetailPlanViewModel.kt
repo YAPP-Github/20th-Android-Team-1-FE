@@ -47,7 +47,7 @@ class DetailPlanViewModel @Inject constructor(
                 updateState {
                     copy(
                         title = it.title,
-                        category = it.category,
+                        category = it.category.keyword,
                         date = convertDate(it.date),
                         place = it.place,
                         member = convertMemberList(it.members)
