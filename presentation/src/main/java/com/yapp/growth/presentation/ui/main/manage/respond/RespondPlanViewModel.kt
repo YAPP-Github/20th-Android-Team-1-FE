@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.manage.respond
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
@@ -9,6 +10,7 @@ import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
+import com.yapp.growth.domain.usecase.SendRejectPlanUseCase
 import com.yapp.growth.domain.usecase.SendRespondPlanUseCase
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +24,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RespondPlanViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getRespondUsersUseCase: GetRespondUsersUseCase,
     private val sendRespondPlanUseCase: SendRespondPlanUseCase,
+    private val sendRejectPlanUseCase: SendRejectPlanUseCase,
 ): BaseViewModel<RespondPlanViewState, RespondPlanSideEffect, RespondPlanEvent>(
     RespondPlanViewState()
 ) {
@@ -32,12 +36,12 @@ class RespondPlanViewModel @Inject constructor(
     val timeCheckedOfDays: StateFlow<List<TimeCheckedOfDay>>
         get() = _timeCheckedOfDays.asStateFlow()
 
-    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
+    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
-    private val promisingId: Long = 8
+    private var planId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
 
     init {
-        loadRespondUsers(promisingId)
+        loadRespondUsers(planId)
     }
 
     private fun loadRespondUsers(promisingKey: Long) {
@@ -45,6 +49,7 @@ class RespondPlanViewModel @Inject constructor(
             val result = (getRespondUsersUseCase.invoke(promisingKey) as? NetworkResult.Success)?.data
             result?.let {
                 originalTable = it
+                checkAvailableResponse(it)
                 makeRespondList(it)
 
                 val sliceTimeTable = if (it.availableDates.size >= 4) {
@@ -58,6 +63,10 @@ class RespondPlanViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun checkAvailableResponse(timeTable: TimeTable) {
+        if (timeTable.users.size >= 10) updateState { copy(availableResponse = false) }
     }
 
     private fun nextDay() = viewModelScope.launch(Dispatchers.Default) {
@@ -106,9 +115,15 @@ class RespondPlanViewModel @Inject constructor(
         _timeCheckedOfDays.value = temp
     }
 
-    private fun sendRespondPlan(promisingId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>) =
+    private fun clearTimeCheckedOfDays() {
+        _timeCheckedOfDays.value.forEach {
+            it.timeList.map { false }
+        }
+    }
+
+    private fun sendRespondPlan(planId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
-            sendRespondPlanUseCase.invoke(promisingId, timeCheckedOfDays)
+            sendRespondPlanUseCase.invoke(planId, timeCheckedOfDays)
                 .onSuccess {
                     sendEffect({ RespondPlanSideEffect.NavigateToSendCompleteScreen })
                 }
@@ -117,8 +132,20 @@ class RespondPlanViewModel @Inject constructor(
                 }
         }
 
+    private fun sendRejectPlan(planId: Long) =
+        viewModelScope.launch {
+            sendRejectPlanUseCase.invoke(planId)
+                .onSuccess {
+                    sendEffect({ RespondPlanSideEffect.NavigateToSendRejectScreen })
+                }
+                .onError {
+                    Timber.tag("API ERROR").e(it)
+                }
+        }
+
     override fun handleEvents(event: RespondPlanEvent) {
         when (event) {
+            is RespondPlanEvent.OnClickBackButton -> { sendEffect({ RespondPlanSideEffect.NavigateToPreviousScreen }) }
             is RespondPlanEvent.OnClickTimeTable -> {
                 _timeCheckedOfDays.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex] = _timeCheckedOfDays.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex].not()
                 if (timeCheckedOfDays.value[currentIndex.times(4).plus(event.dateIndex)].timeList[event.minuteIndex]) {
@@ -129,8 +156,9 @@ class RespondPlanViewModel @Inject constructor(
             }
             is RespondPlanEvent.OnClickNextDayButton -> nextDay()
             is RespondPlanEvent.OnClickPreviousDayButton -> previousDay()
-            is RespondPlanEvent.OnClickSendPlanButton -> sendRespondPlan(promisingId, timeCheckedOfDays.value)
-            is RespondPlanEvent.OnClickRejectPlanButton -> sendEffect({ RespondPlanSideEffect.NavigateToSendRejectedScreen })
+            is RespondPlanEvent.OnClickSendPlanButton -> sendRespondPlan(planId, timeCheckedOfDays.value)
+            is RespondPlanEvent.OnClickClearButton -> clearTimeCheckedOfDays()
+            is RespondPlanEvent.OnClickRejectPlanButton -> sendRejectPlan(planId)
         }
     }
 }

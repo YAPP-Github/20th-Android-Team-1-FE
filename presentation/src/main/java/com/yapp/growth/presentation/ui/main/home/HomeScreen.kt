@@ -1,6 +1,5 @@
 package com.yapp.growth.presentation.ui.main.home
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -58,9 +57,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
+import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
+import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
@@ -85,7 +85,7 @@ import java.util.*
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMyPageScreen: () -> Unit,
-    navigateToDetailPlanScreen: (Long) -> Unit,
+    navigateToDetailPlanScreen: (Int) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
@@ -118,7 +118,7 @@ fun HomeScreen(
     }
 
     // TODO : 바텀시트가 다른 화면을 갔다 와도 유지되는 현상 해결해야 함
-    PlanzBottomSheetLayout(
+    PlanzModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
             HomeBottomSheetContent(
@@ -152,7 +152,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(3.dp))
                 when (viewState.loginState) {
                     HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                        isError = viewState.loadState == HomeContract.HomeViewState.LoadState.Error,
+                        isError = viewState.loadState == HomeContract.LoadState.Error,
                         expanded = viewState.isTodayPlanExpanded,
                         todayPlans = viewState.todayPlans,
                         planCount = viewState.todayPlans.size,
@@ -165,7 +165,7 @@ fun HomeScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HomeMonthlyPlan(
-                    isError = viewState.loadState == HomeContract.HomeViewState.LoadState.Error,
+                    isError = viewState.loadState == HomeContract.LoadState.Error,
                     expanded = viewState.isMonthlyPlanExpanded,
                     monthlyPlans = viewState.monthlyPlans,
                     mode = viewState.monthlyPlanMode,
@@ -222,7 +222,7 @@ fun HomeTodayPlan(
     expanded: Boolean,
     todayPlans: List<Plan.FixedPlan>,
     planCount: Int,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Surface(
@@ -365,7 +365,7 @@ fun HomeMonthlyPlan(
     onDateClick: (CalendarDay) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     val year: Int = currentDate.year
@@ -398,31 +398,8 @@ fun HomeMonthlyPlan(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (isError) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(264.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.align(Alignment.Center),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Image(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_failed_character_53),
-                                contentDescription = null,
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_error_text_01),
-                                color = Gray500,
-                                style = PlanzTypography.body2,
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_error_text_02),
-                                color = Gray500,
-                                style = PlanzTypography.body2,
-                            )
-                        }
+                    Box(modifier = Modifier.height(264.dp)) {
+                        PlanzError()
                     }
                 } else {
                     Spacer(modifier = Modifier.height(20.dp))
@@ -548,7 +525,7 @@ fun HomeTodayPlanCountText(
 fun HomeDayPlanList(
     expanded: Boolean,
     dayPlans: List<Plan.FixedPlan>,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(bottom = 36.dp),
@@ -584,7 +561,7 @@ fun HomeDayPlanList(
 fun HomeMonthlyPlanList(
     monthlyPlans: List<Plan.FixedPlan>,
     expanded: Boolean,
-    onPlanItemClick: (Long) -> Unit,
+    onPlanItemClick: (Int) -> Unit,
     onExpandedClick: () -> Unit,
 ) {
     Column {
@@ -645,11 +622,11 @@ fun HomeMonthlyPlanList(
 
 @Composable
 fun HomeTodayPlanItem(
-    id: Long,
+    id: Int,
     date: String,
     category: String,
     title: String,
-    onPlanItemClick: (Long) -> Unit
+    onPlanItemClick: (Int) -> Unit
 ) {
     val tmp = date.toDate()
     val calendar: Calendar = Calendar.getInstance()
@@ -703,10 +680,10 @@ fun HomeTodayPlanItem(
 
 @Composable
 fun HomeMonthlyPlanItem(
-    id: Long,
+    id: Int,
     date: String,
     title: String,
-    onPlanItemClick: (Long) -> Unit
+    onPlanItemClick: (Int) -> Unit
 ) {
     val time = SimpleDateFormat("aa h시", Locale.KOREA).format(date.toDate())
     val dates = SimpleDateFormat("M/d", Locale.KOREA).format(date.toDate())
@@ -744,7 +721,7 @@ fun HomeBottomSheetContent(
     selectionDay: CalendarDay,
     selectDayPlans: List<Plan.FixedPlan>,
     onExitClick: () -> Unit,
-    onPlanItemClick: (Long) -> Unit
+    onPlanItemClick: (Int) -> Unit
 ) {
     val month = selectionDay.month + 1
     val day = selectionDay.day

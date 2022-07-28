@@ -1,15 +1,14 @@
 package com.yapp.growth.di
 
 import com.yapp.growth.BuildConfig
-import com.yapp.growth.data.api.NetworkSettings
 import com.yapp.growth.LoginSdk
+import com.yapp.growth.data.api.NetworkSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Authenticator
 import okhttp3.Interceptor
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -20,8 +19,8 @@ object AppModule {
     @Singleton
     fun provideNetworkSettings(): NetworkSettings {
         return NetworkSettings(
-            connectTimeoutMs = 1000 * 10,
-            readTimeoutMs = 1000 * 10,
+            connectTimeoutMs = 10_000,
+            readTimeoutMs = 10_000,
             isDebugMode = BuildConfig.DEBUG
         )
     }
@@ -29,7 +28,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideInterceptors(
-        kakaoLoginSdk: LoginSdk
+        kakaoLoginSdk: LoginSdk,
     ): Interceptor {
         return Interceptors(kakaoLoginSdk)
     }
@@ -37,7 +36,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthenticator(
-        kakaoLoginSdk: LoginSdk
+        kakaoLoginSdk: LoginSdk,
     ): Authenticator {
         return KakaoAccessTokenAuthenticator(kakaoLoginSdk)
     }

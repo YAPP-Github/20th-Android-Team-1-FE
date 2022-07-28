@@ -1,6 +1,6 @@
 package com.yapp.growth.data.repository
 
-import com.yapp.growth.data.source.CreateTimeTableDataSource
+import com.yapp.growth.data.source.PlanzDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
@@ -10,18 +10,18 @@ import javax.inject.Singleton
 
 @Singleton
 internal class CreateTimeTableRepositoryImpl @Inject constructor(
-    private val dataSource: CreateTimeTableDataSource
+    private val dataSource: PlanzDataSource
 ): CreateTimeTableRepository {
 
     override suspend fun getCreateTimeTable(uuid: String): NetworkResult<CreateTimeTable> {
         return dataSource.getCreateTimeTable(uuid)
     }
 
-    override suspend fun sendTimeCheckedOfDay(
+    override suspend fun makePlan(
         uuid: String,
         timeCheckedOfDays: List<TimeCheckedOfDay>
     ): NetworkResult<Long> {
-        return dataSource.sendTimeCheckedOfDay(uuid, timeCheckedOfDays)
+        return dataSource.makePlan(uuid, timeCheckedOfDays)
     }
 
 }

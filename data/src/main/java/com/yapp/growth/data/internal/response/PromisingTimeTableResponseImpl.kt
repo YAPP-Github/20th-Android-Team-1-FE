@@ -18,11 +18,6 @@ data class PromisingTimeTableResponseImpl(
     override val placeName: String
 ): PromisingTimeTableResponse
 
-data class UserResponseImpl (
-    override val id: Long,
-    override val userName: String
-): UserResponse
-
 data class TimeTableDateResponseImpl (
     override val date: String,
     override val blocks: List<TimeTableUnitResponseImpl>
@@ -34,8 +29,3 @@ data class TimeTableUnitResponseImpl (
     override val color: Long,
     override val users: List<UserResponseImpl>
 ): TimeTableUnitResponse
-
-data class CategoryResponseImpl (
-    override val id: Long,
-    override val keyword: String
-): CategoryResponse

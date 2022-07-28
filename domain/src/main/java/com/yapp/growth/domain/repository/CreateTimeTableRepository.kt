@@ -7,6 +7,5 @@ import com.yapp.growth.domain.entity.TimeCheckedOfDay
 interface CreateTimeTableRepository {
 
     suspend fun getCreateTimeTable(uuid: String): NetworkResult<CreateTimeTable>
-
-    suspend fun sendTimeCheckedOfDay(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>): NetworkResult<Long>
+    suspend fun makePlan(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>): NetworkResult<Long>
 }

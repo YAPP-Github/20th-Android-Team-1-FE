@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -47,9 +46,9 @@ fun RespondPlanScreen(
         topBar = {
             PlanzBackAndClearAppBar(
                 title = stringResource(id = R.string.respond_plan_title_text),
-                onClickBackIcon = navigateToPreviousScreen,
+                onClickBackIcon = { viewModel.setEvent(RespondPlanEvent.OnClickBackButton) },
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
-                onClickClearIcon = { /*TODO */ }
+                onClickClearIcon = { viewModel.setEvent(RespondPlanEvent.OnClickClearButton) }
             )
         }
     ) { padding ->
@@ -128,7 +127,7 @@ fun RespondPlanScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 RespondPlanSideEffect.NavigateToSendCompleteScreen -> navigateToSendCompleteScreen()
-                RespondPlanSideEffect.NavigateToSendRejectedScreen -> navigateToSendRejectedScreen()
+                RespondPlanSideEffect.NavigateToSendRejectScreen -> navigateToSendRejectedScreen()
                 RespondPlanSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
             }
         }

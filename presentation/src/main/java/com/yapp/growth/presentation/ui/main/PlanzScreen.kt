@@ -46,8 +46,15 @@ import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
+import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.monitor.MonitorPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
+import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
+import com.yapp.growth.presentation.ui.main.terms.TermsScreen
 import timber.log.Timber
 
 @Composable
@@ -95,10 +102,7 @@ fun PlanzScreen(
                         navController.navigate(PlanzScreenRoute.MY_PAGE.route)
                     },
                     navigateToDetailPlanScreen = { planId ->
-                        navController.navigate(
-                            PlanzScreenRoute.DETAIL_PLAN.route
-                                .plus("/${planId}")
-                        )
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}"))
                     },
                 )
             }
@@ -107,23 +111,91 @@ fun PlanzScreen(
                 ManageScreen(
                     intentToCreateScreen = intentToCreatePlan,
                     navigateToFixPlanScreen = { planId ->
-                        /* TODO: 파티장 - 약속 확정 화면 이동(planId) */
-                        Timber.w("약속 확정 화면 이동: $planId")
+                        navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/${planId}"))
                     },
                     navigateToMemberResponseScreen = { planId ->
-                        /* TODO: 멤버 - 현재까지의 응답 화면 이동(planId) */
-                        Timber.w("현재까지의 응답 화면 이동: $planId")
+                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route.plus("/${planId}"))
                     },
-                    navigateToInvitationScreen = { planId ->
-                        /* TODO: 확정된 약속 초대장 화면 이동(planId) */
-                        Timber.w("확정된 약속 초대장 화면 이동: $planId")
+                    navigateToMonitorPlanScreen = { planId ->
+                        navController.navigate(PlanzScreenRoute.MONITOR_PLAN.route.plus("/${planId}"))
+                    },
+                    navigateToDetailPlanScreen = { planId ->
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}"))
                     }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}"),
+                arguments = listOf(
+                    navArgument("planId") { type = NavType.IntType }
+                )) {
+                RespondPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    navigateToSendCompleteScreen = {
+                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
+                            popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}")) { inclusive = true }
+                        }
+                    },
+                    navigateToSendRejectedScreen = {
+                        navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route.plus("/{planId}"))
+                    }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.MONITOR_PLAN.route.plus("/{planId}"),
+                arguments = listOf(
+                    navArgument("planId") { type = NavType.IntType }
+                )) {
+                MonitorPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                )
+            }
+
+            composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
+                RespondPlanCompleteScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    onClickCheckButton = {  }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
+                RespondPlanRejectScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    onClickCheckButton = {  }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}"),
+                arguments = listOf(
+                    navArgument("planId") { type = NavType.IntType }
+                )) {
+                FixPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    navigateToNextScreen = { planId ->
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
+                            popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}")) { inclusive = true }
+                        }
+                    },
                 )
             }
 
             composable(route = PlanzScreenRoute.MY_PAGE.route) {
                 MyPageScreen(
-                    exitMyPageScreen = { navController.popBackStack() }
+                    exitMyPageScreen = { navController.popBackStack() },
+                    navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
+                    navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                )
+            }
+
+            composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
+                PrivacyPolicyScreen (
+                    exitPrivacyPolicyScreen = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.TERMS.route) {
+                TermsScreen (
+                    exitTermsScreen = { navController.popBackStack() }
                 )
             }
 
@@ -262,8 +334,15 @@ enum class PlanzScreenRoute(val route: String) {
     MANAGE_PLAN("manage-plan"),
     CREATE_PLAN("create-plan"),
     MY_PAGE("my-page"),
+    PRIVACY_POLICY("privacy-policy"),
+    TERMS("terms"),
     DETAIL_PLAN("detail-plan"),
     SAMPLE("sample"),
+    RESPOND_PLAN("respond-plan"),
+    CONFIRM_PLAN("confirm-plan"),
+    MONITOR_PLAN("monitor-plan"),
+    RESPOND_PLAN_COMPLETE("respond-plan-complete"),
+    RESPOND_PLAN_REJECT("respond-plan-reject"),
 }
 
 const val KEY_PLAN_ID = "plan-id"

@@ -1,42 +1,56 @@
 package com.yapp.growth.data.di
 
-import com.yapp.growth.data.repository.ConfirmPlanRepositoryImpl
+import com.yapp.growth.data.repository.FixPlanRepositoryImpl
 import com.yapp.growth.data.repository.CreateTimeTableRepositoryImpl
-import com.yapp.growth.data.repository.RespondPlanRepositoryImpl
-import com.yapp.growth.data.repository.DetailRepositoryImpl
-import com.yapp.growth.data.repository.HomeRepositoryImpl
-import com.yapp.growth.domain.repository.ConfirmPlanRepository
+import com.yapp.growth.data.repository.LoadPlanRepositoryImpl
+import com.yapp.growth.data.repository.TemporaryPlanRepositoryImpl
+import com.yapp.growth.domain.repository.FixPlanRepository
+import com.yapp.growth.domain.repository.TemporaryPlanRepository
 import com.yapp.growth.domain.repository.CreateTimeTableRepository
-import com.yapp.growth.domain.repository.RespondPlanRepository
-import com.yapp.growth.domain.repository.DetailRepository
-import com.yapp.growth.domain.repository.HomeRepository
+import com.yapp.growth.domain.repository.LoadPlanRepository
+import com.yapp.growth.data.repository.*
+import com.yapp.growth.domain.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class RepositoryModule {
 
     @Binds
-    @Singleton
-    abstract fun bindConfirmPlanRepository(confirmPlanRepository: ConfirmPlanRepositoryImpl): ConfirmPlanRepository
+    abstract fun bindLoadPlanRepository(
+        repository: LoadPlanRepositoryImpl,
+    ): LoadPlanRepository
 
     @Binds
-    @Singleton
-    abstract fun bindHomeRepository(homeRepository: HomeRepositoryImpl): HomeRepository
+    abstract fun bindTemporaryPlanRepository(
+        repository: TemporaryPlanRepositoryImpl,
+    ): TemporaryPlanRepository
 
     @Binds
-    @Singleton
-    abstract fun bindDetailRepository(detailRepository: DetailRepositoryImpl): DetailRepository
+    abstract fun bindFixPlanRepository(
+        fixPlanRepository: FixPlanRepositoryImpl,
+    ): FixPlanRepository
 
     @Binds
-    @Singleton
-    abstract fun bindCreateTimeTableRepository(createTimeTableRepository: CreateTimeTableRepositoryImpl): CreateTimeTableRepository
+    abstract fun bindDetailRepository(
+        detailRepository: DetailRepositoryImpl,
+    ): DetailRepository
 
     @Binds
-    @Singleton
-    abstract fun bindRespondPlanRepository(respondPlanRepository: RespondPlanRepositoryImpl): RespondPlanRepository
+    abstract fun bindCreateTimeTableRepository(
+        createTimeTableRepository: CreateTimeTableRepositoryImpl,
+    ): CreateTimeTableRepository
+
+    @Binds
+    abstract fun bindRespondPlanRepository(
+        respondPlanRepository: RespondPlanRepositoryImpl,
+    ): RespondPlanRepository
+
+    @Binds
+    abstract fun bindUserRepository(
+        userRepository: UserRepositoryImpl
+    ): UserRepository
 }

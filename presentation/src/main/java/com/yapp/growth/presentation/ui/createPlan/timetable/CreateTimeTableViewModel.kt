@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan.timetable
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
@@ -8,7 +9,7 @@ import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetCreateTimeTableUseCase
-import com.yapp.growth.domain.usecase.SendTimeCheckedOfDayUseCase
+import com.yapp.growth.domain.usecase.MakePlanUseCase
 import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTimeTableViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getCreateTimeTableUseCase: GetCreateTimeTableUseCase,
-    private val sendTimeCheckedOfDayUseCase: SendTimeCheckedOfDayUseCase,
+    private val makePlanUseCase: MakePlanUseCase,
 ): BaseViewModel<CreateTimeTableViewState, CreateTimeTableSideEffect, CreateTimeTableEvent>(CreateTimeTableViewState()) {
 
     private val _timeCheckedOfDays = MutableStateFlow<List<TimeCheckedOfDay>>(emptyList())
@@ -30,13 +32,13 @@ class CreateTimeTableViewModel @Inject constructor(
     private var originalTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList())
     private var currentIndex = 0
 
-    private val uuid = "43edb859-5892-42a4-b797-fab399ed4e34"
+    private var uuid: String = savedStateHandle.get<String>("uuid") ?: ""
 
     init {
         loadCreateTimeTable(uuid)
     }
 
-    fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
+    private fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
         val result = (getCreateTimeTableUseCase.invoke(uuid) as? NetworkResult.Success)?.data
         result?.let {
             originalTable = it
@@ -101,9 +103,9 @@ class CreateTimeTableViewModel @Inject constructor(
 
     private fun sendTimeCheckedOfDays(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
-            sendTimeCheckedOfDayUseCase.invoke(uuid, timeCheckedOfDays)
+            makePlanUseCase.invoke(uuid, timeCheckedOfDays)
                 .onSuccess {
-                    TODO()
+                    sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen })
                 }
                 .onError {
                     TODO()

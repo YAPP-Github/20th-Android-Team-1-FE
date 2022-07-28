@@ -1,6 +1,7 @@
 package com.yapp.growth.presentation.ui.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.MainPurple900
@@ -20,7 +22,8 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 
 @Composable
 fun LoginScreen(
-    onClick: () -> Unit
+    onClickKakaoLogin: () -> Unit,
+    onClickNonLogin: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -28,7 +31,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 24.dp, top = 54.dp)
         ) {
-            Introduce()
+            Introduce(onClickNonLogin = onClickNonLogin)
         }
 
         PlanzImage()
@@ -40,7 +43,7 @@ fun LoginScreen(
                     .padding(start = 16.dp, end = 16.dp, bottom = 36.dp)
                     .align(Alignment.BottomCenter),
             ) {
-                KakaoLoginButton(onClick = onClick)
+                KakaoLoginButton(onClickKakaoLogin = onClickKakaoLogin)
             }
         }
 
@@ -48,8 +51,19 @@ fun LoginScreen(
 }
 
 @Composable
-fun Introduce() {
+fun Introduce(onClickNonLogin: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.End)
+                .clickable {
+                   onClickNonLogin()
+                },
+            text = "둘러보기",
+            textDecoration = TextDecoration.Underline,
+            style = PlanzTypography.body2,
+        )
+
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -97,13 +111,13 @@ fun PlanzImage() {
 
 @Composable
 fun KakaoLoginButton(
-    onClick: () -> Unit
+    onClickKakaoLogin: () -> Unit
 ) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
-        onClick = onClick,
+        onClick = onClickKakaoLogin,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(0xffFEE500)
         ),

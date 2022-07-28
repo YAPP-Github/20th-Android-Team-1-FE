@@ -20,12 +20,13 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzBottomSheetLayout
+import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.model.TimeType
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTimeRange
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.Companion.DEFAULT_END_HOUR
@@ -42,7 +43,7 @@ fun TimeRangeScreen(
     sharedViewModel: CreatePlanViewModel = composableActivityViewModel(),
     viewModel: TimeRangeViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: () -> Unit,
+    navigateToNextScreen: (String) -> Unit,
     navigateToPreviousScreen: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -54,7 +55,7 @@ fun TimeRangeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     // TODO: 드래그로 시트가 닫히지 않도록 수정
-    PlanzBottomSheetLayout(
+    PlanzModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
             TimeRangeTimeBottomSheetContent(
@@ -111,14 +112,13 @@ fun TimeRangeScreen(
                 is TimeRangeSideEffect.ExitCreateScreen -> {
                     exitCreateScreen()
                 }
-                is TimeRangeSideEffect.NavigateToNextScreen -> {
+                is TimeRangeSideEffect.CreateTemporaryPlan -> {
                     sharedViewModel.setEvent(
                         DecideTimeRange(
                             startHour = viewState.startHour ?: DEFAULT_START_HOUR,
                             endHour = viewState.endHour ?: DEFAULT_END_HOUR
                         )
                     )
-                    navigateToNextScreen()
                 }
                 is TimeRangeSideEffect.NavigateToPreviousScreen -> {
                     navigateToPreviousScreen()
@@ -140,6 +140,16 @@ fun TimeRangeScreen(
                             context.getString(R.string.create_plan_time_range_error_message)
                         )
                     }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = sharedViewModel.effect) {
+        sharedViewModel.effect.collect { effect ->
+            when (effect) {
+                is CreatePlanContract.CreatePlanSideEffect.NavigateToNextScreen -> {
+                    navigateToNextScreen(sharedViewModel.viewState.value.tempPlanUuid)
                 }
             }
         }

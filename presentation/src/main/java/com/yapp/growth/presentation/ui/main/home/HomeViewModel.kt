@@ -7,7 +7,8 @@ import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
-import com.yapp.growth.domain.usecase.GetAllFixedPlanListUseCase
+import com.yapp.growth.domain.usecase.GetFixedPlansUseCase
+import com.yapp.growth.domain.usecase.GetUserInfoUseCase
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
@@ -16,6 +17,7 @@ import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeSta
 import com.yapp.growth.presentation.util.toDate
 import com.yapp.growth.presentation.util.toFormatDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,25 +25,27 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllFixedPlanListUseCase: GetAllFixedPlanListUseCase,
+    private val getFixedPlansUseCase: GetFixedPlansUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
 ) {
 
     init {
-        updateState { copy(loadState = HomeViewState.LoadState.Loading) }
-        checkValidLoginToken()
+        updateState { copy(loadState = HomeContract.LoadState.Loading) }
         fetchPlans()
+        fetchUserInfo()
+        checkValidLoginToken()
     }
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
+    @OptIn(FlowPreview::class)
     val currentDate: StateFlow<CalendarDay> = _currentDate.debounce(300).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
@@ -72,26 +76,61 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun fetchUserInfo() {
+        viewModelScope.launch {
+            val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
+
+            if(cacheInfo == null) {
+                getUserInfoUseCase.invoke()
+                    .onSuccess {
+                        updateState {
+                            copy(
+                                loadState = HomeContract.LoadState.Idle,
+                                userName = it.userName
+                            )
+                        }
+                    }
+                    .onError {
+                        updateState {
+                            copy(
+                                loadState = HomeContract.LoadState.Error
+                            )
+                        }
+                    }
+            } else {
+                updateState {
+                    copy(
+                        loadState = HomeContract.LoadState.Idle,
+                        userName = cacheInfo.userName
+                    )
+                }
+            }
+        }
+    }
+
     private fun fetchPlans() {
         viewModelScope.launch {
-            val result = (getAllFixedPlanListUseCase.invoke())
 
-            result.onSuccess { plans ->
-                val todayPlans = plans.filter { plan ->
-                    CalendarDay.from(plan.date.toDate()) == CalendarDay.today()
+            getFixedPlansUseCase.invoke()
+                .onSuccess { plans ->
+                    val todayPlans = plans.filter { plan ->
+                        CalendarDay.from(plan.date.toDate()) == CalendarDay.today()
+                    }
+                    val monthlyPlans = plans.filter { plan ->
+                        CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
+                    }
+                    updateState {
+                        copy(
+                            loadState = HomeContract.LoadState.Idle,
+                            allPlans = plans,
+                            monthlyPlans = monthlyPlans,
+                            todayPlans = todayPlans
+                        )
+                    }
                 }
-                val monthlyPlans = plans.filter { plan ->
-                    CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
+                .onError {
+                    updateState { copy(loadState = HomeContract.LoadState.Error) }
                 }
-                updateState {
-                    copy(loadState = HomeViewState.LoadState.Idle, allPlans = plans, monthlyPlans = monthlyPlans, todayPlans = todayPlans)
-                }
-            }
-
-            result.onError {
-                updateState { copy(loadState = HomeViewState.LoadState.Error) }
-                Timber.e(it)
-            }
         }
     }
 

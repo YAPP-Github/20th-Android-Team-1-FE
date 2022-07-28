@@ -4,8 +4,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal val PARSE_DATE_FORMAT1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
-internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
+internal val FULL_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
 internal val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 fun CalendarDay.toFormatDate(): String {
@@ -25,7 +25,7 @@ fun Date.toCalculateDiffDay(other: Date): Long {
 }
 
 fun String.toDate(): Date {
-    return PARSE_DATE_FORMAT1.parse(this) ?: Date()
+    return PARSE_DATE_FORMAT.parse(this) ?: Date()
 }
 
 fun String.toDay(): String {
@@ -75,9 +75,9 @@ fun String.toPlanDate(): String {
     }
 
     dateTimeFormat = if (calendar.get(Calendar.MINUTE) == 0) {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) aa h시", Locale.KOREA)
     } else {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시 mm분", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) aa h시 mm분", Locale.KOREA)
     }
 
     val displayText = PARSE_DATE_FORMAT.parse(currentTime) ?: ""
