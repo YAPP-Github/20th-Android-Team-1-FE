@@ -127,7 +127,7 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
-                    navArgument("planId") { type = NavType.IntType }
+                    navArgument("planId") { type = NavType.LongType }
                 )) {
                 RespondPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
@@ -144,7 +144,7 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.MONITOR_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
-                    navArgument("planId") { type = NavType.IntType }
+                    navArgument("planId") { type = NavType.LongType }
                 )) {
                 MonitorPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
@@ -167,7 +167,7 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
-                    navArgument("planId") { type = NavType.IntType }
+                    navArgument("planId") { type = NavType.LongType }
                 )) {
                 FixPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },

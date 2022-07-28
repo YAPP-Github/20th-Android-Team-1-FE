@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 fun FixPlanScreen(
     viewModel: FixPlanViewModel = hiltViewModel(),
     navigateToPreviousScreen: () -> Unit,
-    navigateToNextScreen: (Int) -> Unit,
+    navigateToNextScreen: (Long) -> Unit,
 ) {
     val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
