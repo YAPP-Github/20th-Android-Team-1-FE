@@ -16,11 +16,9 @@ import com.yapp.growth.presentation.firebase.SchemeType
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.MainActivity
-import com.yapp.growth.presentation.ui.splash.SplashContract.*
+import com.yapp.growth.presentation.ui.splash.SplashContract.SplashSideEffect
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -36,11 +34,11 @@ class SplashActivity : ComponentActivity() {
             content.viewTreeObserver.addOnPreDrawListener { false }
         }
 
-        handleDynamicLinks()
         setSplashScreen()
 
         lifecycleScope.launch {
             viewModel.checkValidLoginToken()
+            handleDynamicLinks()
         }
     }
 
@@ -62,44 +60,32 @@ class SplashActivity : ComponentActivity() {
     }
 
     private fun moveToMain() {
-        MainActivity.startActivity(this)
+        MainActivity.startActivity(this, intent?.data)
         finish()
     }
 
     private fun moveToLogin() {
-        LoginActivity.startActivity(this)
+        LoginActivity.startActivity(this, intent?.data)
         finish()
-    }
-
-    companion object {
-        private const val SPLASH_TIME = 1_000L
     }
 
     private fun handleDynamicLinks() {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                // Get deep link from result (may be null if no link is found)
+
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                 }
 
-                // Handle the deep link. For example, open the linked
-                // content, or apply promotional credit to the user's
-                // account.
-                deepLink?.let {
-                    val segment: String = deepLink.lastPathSegment!!
-                    when(segment) {
-                        SchemeType.RESPOND.name.lowercase() -> {
-                            
+                deepLink?.let { link ->
+                    when (deepLink.lastPathSegment!!) {
+                        SchemeType.RESPOND.name -> {
+
                         }
                     }
-
                 }
-            }
-            .addOnFailureListener(this) {
-                Timber.tag("FAIL HANDLE LINKS").e(it)
             }
     }
 }
