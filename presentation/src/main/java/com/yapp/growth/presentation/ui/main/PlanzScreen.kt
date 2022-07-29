@@ -1,21 +1,13 @@
 package com.yapp.growth.presentation.ui.main
 
 import android.app.Activity
-import android.content.Context
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -29,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -54,17 +47,19 @@ import com.yapp.growth.presentation.ui.main.manage.ManageScreen
 import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.monitor.MonitorPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.AlreadyConfirmPlanScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
 import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import com.yapp.growth.presentation.ui.main.terms.TermsScreen
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun PlanzScreen(
+    viewModel: UserPlanViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     intentToCreatePlan: () -> Unit,
     uri: Uri? = null,
@@ -164,14 +159,19 @@ fun PlanzScreen(
             composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
                 RespondPlanCompleteScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = { }
                 )
             }
 
             composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
                 RespondPlanRejectScreen(
+                    userName = "대원님",
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = { }
+                )
+            }
+
+            composable(route = PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route) {
+                AlreadyConfirmPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
                 )
             }
 
@@ -237,12 +237,31 @@ fun PlanzScreen(
         uri?.let { link ->
             val planId: Long = link.getQueryParameter(PLAN_ID_KEY_NAME)?.toLong() ?: -1
             if (planId > 0) {
-                navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route.plus("/${planId}"))
+                viewModel.setEvent(UserPlanContract.UserPlanEvent.GetUserPlanStatus(planId))
             }
 
             launch {
                 if (!link.toString().contains("kakaolink")) {
                     handleDynamicLinks(context, link)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when(effect) {
+                UserPlanContract.UserPlanSideEffect.MoveToAlreadyConfirmPlan -> {
+                    navController.navigate(PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route)
+                }
+                is UserPlanContract.UserPlanSideEffect.MoveToConfirmPlan -> {
+                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/${effect.planId}"))
+                }
+                is UserPlanContract.UserPlanSideEffect.MoveToMonitorPlan -> {
+                    navController.navigate(PlanzScreenRoute.MONITOR_PLAN.route.plus("/${effect.planId}"))
+                }
+                is UserPlanContract.UserPlanSideEffect.MoveToRespondPlan -> {
+                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route.plus("/${effect.planId}"))
                 }
             }
         }
@@ -394,6 +413,7 @@ enum class PlanzScreenRoute(val route: String) {
     MONITOR_PLAN("monitor-plan"),
     RESPOND_PLAN_COMPLETE("respond-plan-complete"),
     RESPOND_PLAN_REJECT("respond-plan-reject"),
+    ALREADY_CONFIRM_PLAN("already-confirm-plan"),
 }
 
 const val KEY_PLAN_ID = "plan-id"
