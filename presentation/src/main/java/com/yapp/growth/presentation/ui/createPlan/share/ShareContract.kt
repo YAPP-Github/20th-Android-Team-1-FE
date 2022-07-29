@@ -6,8 +6,9 @@ import com.yapp.growth.base.ViewState
 
 class ShareContract {
     data class ShareViewState(
-        val shareUrl: String = "planz/link/sample/125", // TODO: 공유 URL
+        val shareUrl: String = "",
         val snackBarType: SnackBarType = SnackBarType.SUCCESS,
+        val planId: Long? = null,
     ) : ViewState {
         enum class SnackBarType {
             SUCCESS,

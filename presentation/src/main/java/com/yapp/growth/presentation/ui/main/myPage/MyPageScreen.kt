@@ -73,7 +73,7 @@ fun MyPageScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is MyPageSideEffect.MoveToLogin -> {
-                    LoginActivity.startActivity(context)
+                    LoginActivity.startActivity(context, null)
                     context.finish()
                 }
                 is MyPageSideEffect.ExitMyPageScreen -> {
