@@ -152,6 +152,9 @@
     <string name="monitor_plan_title_text">약속현황</string>
     <string name="monitor_plan_join_title_text">&#160;참여자</string>
 
+    <!-- 약속 응답 상태 -->
+    <string name="respond_plan_already_confirm_info_text">이미 확정된 약속입니다.</string>
+
     <string name="icon_exit_content_description">Exit Icon</string>
     <string name="icon_create_content_description">Create Icon</string>
     <string name="icon_check_content_description">Check Icon</string>
