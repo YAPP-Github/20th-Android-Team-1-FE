@@ -13,11 +13,14 @@ import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.BuildConfig
 import timber.log.Timber
 
+const val DYNAMIC_LINK_PARAM = "dynamic_link_param"
+const val PLAN_ID_KEY_NAME = "planId"
+
 fun getDeepLink(scheme: String, key: String?, id: String?): Uri {
     return if (key.isNullOrEmpty()) {
-        Uri.parse(BuildConfig.PLANZ_DOMAIN)
+        Uri.parse(BuildConfig.PLANZ_FIREBASE_DOMAIN)
     } else {
-        Uri.parse(BuildConfig.PLANZ_DOMAIN + "/${scheme}/?${key}=$id")
+        Uri.parse(BuildConfig.PLANZ_FIREBASE_DOMAIN + "/${scheme}/?${key}=$id")
     }
 }
 
@@ -26,9 +29,9 @@ fun onDynamicLinkClick(
     scheme: SchemeType,
     id: String? = null
 ) {
-    val dynamicLink = Firebase.dynamicLinks.shortLinkAsync {
+    Firebase.dynamicLinks.shortLinkAsync {
         link = getDeepLink(scheme.name, scheme.key, id)
-        domainUriPrefix = BuildConfig.DOMAIN_URI_PREFIX
+        domainUriPrefix = BuildConfig.PLANZ_FIREBASE_PREFIX
         androidParameters(context.packageName) { }
 
     }.addOnSuccessListener { (shortLink, _) ->
