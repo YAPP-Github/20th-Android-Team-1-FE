@@ -28,4 +28,8 @@ internal class WaitingPlanRepositoryImpl @Inject constructor(
     override suspend fun getPlanCategories(): NetworkResult<List<Category>> {
         return dataSource.getPlanCategories()
     }
+
+    override suspend fun getSampleTitle(categoryId: Int): NetworkResult<String> {
+        return dataSource.getSampleTitle(categoryId)
+    }
 }

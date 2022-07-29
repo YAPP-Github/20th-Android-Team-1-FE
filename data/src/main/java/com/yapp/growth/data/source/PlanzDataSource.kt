@@ -20,6 +20,7 @@ interface PlanzDataSource {
     suspend fun getFixedPlan(planId: Long): NetworkResult<Plan.FixedPlan>
 
     suspend fun getPlanCategories(): NetworkResult<List<Category>>
+    suspend fun getSampleTitle(categoryId: Int): NetworkResult<String>
 
     suspend fun createTemporaryPlan(
         temporaryPlanParameter: TemporaryPlanParameter

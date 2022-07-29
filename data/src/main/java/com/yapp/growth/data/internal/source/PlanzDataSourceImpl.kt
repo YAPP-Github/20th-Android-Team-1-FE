@@ -85,6 +85,11 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.getCategories().map { it.toCategory() }
         }
 
+    override suspend fun getSampleTitle(categoryId: Int): NetworkResult<String> =
+        handleApi {
+            retrofitApi.getSampleTitle(categoryId).title
+        }
+
     override suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>> =
         handleApi {
             retrofitApi.getWaitingPlans().map { it.toWaitingPlan() }

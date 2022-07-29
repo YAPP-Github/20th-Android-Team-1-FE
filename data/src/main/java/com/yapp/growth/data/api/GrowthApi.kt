@@ -52,6 +52,11 @@ interface GrowthApi {
     @GET("/api/promisings/categories")
     suspend fun getCategories(): List<CategoryResponseImpl>
 
+    @GET("/api/promisings/categories/{categoryId}/name")
+    suspend fun getSampleTitle(
+        @Path("categoryId") categoryId: Int,
+    ): SampleTitleResponseImpl
+
     @POST("/api/promisings")
     suspend fun createTemporaryPlan(
         @Body temporaryPlanParameter: TemporaryPlanParameter,

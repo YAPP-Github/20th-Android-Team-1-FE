@@ -14,4 +14,5 @@ interface WaitingPlanRepository {
     ): NetworkResult<TemporaryPlanUuid>
 
     suspend fun getPlanCategories(): NetworkResult<List<Category>>
+    suspend fun getSampleTitle(categoryId: Int): NetworkResult<String>
 }
