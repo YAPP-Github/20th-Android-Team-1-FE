@@ -25,4 +25,5 @@ interface PlanzDataSource {
 
     suspend fun signUp(): NetworkResult<User>
     suspend fun getUserInfo(): NetworkResult<User>
+    suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus>
 }
