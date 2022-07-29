@@ -98,7 +98,7 @@ fun HomeScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is HomeSideEffect.MoveToLogin -> {
-                    LoginActivity.startActivity(context)
+                    LoginActivity.startActivity(context, null)
                     context.finish()
                 }
                 is HomeSideEffect.NavigateToMyPageScreen -> {
