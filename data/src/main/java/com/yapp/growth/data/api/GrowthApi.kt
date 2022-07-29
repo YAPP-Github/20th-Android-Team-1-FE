@@ -71,4 +71,11 @@ interface GrowthApi {
 
     @GET("/api/users/info")
     suspend fun getUserInfo(): UserResponseImpl
+
+    // Plan Status
+    @GET("/api/promisings/{promisingId}/status")
+    suspend fun getUserPlanStatus(
+        @Path("promisingId") planId: String,
+    ): UserPlanStatusResponseImpl
+
 }
