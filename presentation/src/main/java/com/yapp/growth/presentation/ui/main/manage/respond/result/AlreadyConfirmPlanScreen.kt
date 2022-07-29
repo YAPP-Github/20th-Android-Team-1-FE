@@ -18,7 +18,6 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 @Composable
 fun AlreadyConfirmPlanScreen(
     navigateToPreviousScreen: () -> Unit,
-    onClickCheckButton: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -55,7 +54,8 @@ fun AlreadyConfirmPlanScreen(
         ) {
             PlanzBasicButton(modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.respond_plan_reject_button_text),
-                onClick = { })
+                onClick = navigateToPreviousScreen
+            )
         }
     }
 }

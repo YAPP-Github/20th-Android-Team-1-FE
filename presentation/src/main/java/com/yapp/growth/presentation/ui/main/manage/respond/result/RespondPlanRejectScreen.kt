@@ -20,7 +20,6 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 fun RespondPlanRejectScreen(
     userName: String,
     navigateToPreviousScreen: () -> Unit,
-    onClickCheckButton: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -72,7 +71,8 @@ fun RespondPlanRejectScreen(
         ) {
             PlanzBasicButton(modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.respond_plan_reject_button_text),
-                onClick = { })
+                onClick = navigateToPreviousScreen
+            )
         }
     }
 }
