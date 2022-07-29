@@ -8,7 +8,7 @@ fun FixedPlanResponse.toFixedPlan(): Plan.FixedPlan {
         id = id,
         title = title,
         isLeader = isLeader,
-        category = category.keyword,
+        category = category.toCategory(),
         members = members.map { it.userName },
         place = place,
         date = date,

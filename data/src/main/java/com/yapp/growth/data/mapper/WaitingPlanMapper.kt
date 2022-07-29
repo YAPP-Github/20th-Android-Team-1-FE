@@ -8,7 +8,7 @@ fun WaitingPlanResponse.toWaitingPlan(): Plan.WaitingPlan {
         id = id,
         title = title,
         isLeader = isLeader,
-        category = category.keyword,
+        category = category.toCategory(),
         members = members.map { it.userName },
         startTime = 0, // TODO
         endTime = 24, // TODO

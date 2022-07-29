@@ -62,7 +62,7 @@
     <string name="create_plan_title_title_label">약속명(선택)</string>
     <string name="create_plan_title_title_hint">약속명</string>
     <string name="create_plan_title_place_label">장소(선택)</string>
-    <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
+    <string name="create_plan_title_place_hint">강남, 온라인 등</string>
 
     <string name="detail_plan_app_bar_text">약속 상세보기</string>
     <string name="detail_plan_info_when">날짜/시간</string>
