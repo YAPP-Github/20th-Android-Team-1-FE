@@ -28,5 +28,7 @@ jobs:
       run: |
         echo BASE_URL=\"$BASE_URL\" >> ./local.properties
         echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" >> ./local.properties
+        echo PLANZ_FIREBASE_DOMAIN=\"$PLANZ_FIREBASE_DOMAIN\" >> ./local.properties
+        echo PLANZ_FIREBASE_PREFIX=\"$PLANZ_FIREBASE_PREFIX\" >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew build
