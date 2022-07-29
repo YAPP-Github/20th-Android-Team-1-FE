@@ -6,6 +6,7 @@ import com.yapp.growth.data.response.BadRequestException
 import com.yapp.growth.data.source.PlanzDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.User
+import com.yapp.growth.domain.entity.UserPlanStatus
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.repository.UserRepository
@@ -29,5 +30,9 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCachedUserInfo(): User? = cachedUserInfo
+
+    override suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus> {
+        return dataSource.getUserPlanStatus(planId)
+    }
 
 }
