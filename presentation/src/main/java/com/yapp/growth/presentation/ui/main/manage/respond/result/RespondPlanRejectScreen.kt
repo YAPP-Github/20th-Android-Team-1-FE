@@ -10,6 +10,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBasicButton
 import com.yapp.growth.presentation.theme.Gray900
@@ -17,6 +18,7 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 
 @Composable
 fun RespondPlanRejectScreen(
+    userName: String,
     navigateToPreviousScreen: () -> Unit,
     onClickCheckButton: () -> Unit
 ) {
@@ -30,7 +32,7 @@ fun RespondPlanRejectScreen(
                 .padding(start = 20.dp)
         ) {
             Text(
-                text = "대원님", style = PlanzTypography.h2, color = Gray900
+                text = userName, style = PlanzTypography.h2, color = Gray900
             )
 
             Text(
