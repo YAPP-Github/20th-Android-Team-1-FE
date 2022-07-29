@@ -37,6 +37,7 @@ import com.yapp.growth.presentation.BuildConfig
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.component.PlanzSnackBar
+import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.theme.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -52,7 +53,6 @@ fun ShareScreen(
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
-    viewModel.getDynamicLink(context)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -110,6 +110,10 @@ fun ShareScreen(
             }
         }
     }
+    
+    LaunchedEffect(Unit) {
+        viewModel.getDynamicLink(context)
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -128,6 +132,8 @@ fun ShareScreen(
                 is ShareContract.ShareSideEffect.SendKakaoShareMessage -> {
                     kakaoSocialShare(
                         context = context,
+                        planId = viewState.planId.toString(),
+                        shareUrl = viewState.shareUrl,
                         startShareActivity = { shareIntent -> startShareActivity(shareIntent) },
                         failToShareWithKakaoTalk = {
                             viewModel.setEvent(ShareContract.ShareEvent.FailToShare)
@@ -157,6 +163,8 @@ fun ShareScreen(
 
 fun kakaoSocialShare(
     context: Context,
+    planId: String,
+    shareUrl: String,
     startShareActivity: (Intent) -> Unit,
     failToShareWithKakaoTalk: () -> Unit,
 ) {
@@ -169,8 +177,9 @@ fun kakaoSocialShare(
             description = context.getString(R.string.share_plan_share_feed_template_description),
             imageUrl = shareFeedImageUrl,
             link = Link(
-                webUrl = shareFeedImageUrl, /* 임시 URL */
-                mobileWebUrl = shareFeedImageUrl,
+                webUrl = shareUrl,
+                mobileWebUrl = shareUrl,
+                androidExecutionParams = mapOf(PLAN_ID_KEY_NAME to planId)
             ),
             imageWidth = 800,
             imageHeight = 400

@@ -49,7 +49,7 @@ class ShareViewModel @Inject constructor(
     ) {
         Firebase.dynamicLinks.shortLinkAsync {
             link = getDeepLink(scheme.name, scheme.key, id)
-            domainUriPrefix = BuildConfig.DOMAIN_URI_PREFIX
+            domainUriPrefix = BuildConfig.PLANZ_FIREBASE_PREFIX
             androidParameters(context.packageName) { }
 
         }.addOnSuccessListener { (shortLink, _) ->
