@@ -6,6 +6,7 @@ import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
+import com.yapp.growth.domain.usecase.DeleteUserInfoUseCase
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
@@ -15,11 +16,13 @@ import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageViewStat
 import com.yapp.growth.presentation.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val deleteUserInfoUseCase: DeleteUserInfoUseCase,
     private val resourcesProvider: ResourceProvider,
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
@@ -56,8 +59,7 @@ class MyPageViewModel @Inject constructor(
                 updateState { copy(isDialogVisible = false) }
             }
             is MyPageEvent.OnPositiveButtonClicked -> {
-                sendEffect({ MyPageSideEffect.MoveToLogin })
-                // withdraw()
+                withdraw()
             }
         }
     }
@@ -71,6 +73,29 @@ class MyPageViewModel @Inject constructor(
                 .onError {
                     sendEffect({ MyPageSideEffect.ShowToast(resourcesProvider.getString(R.string.my_page_logout_error_text)) })
                 }
+        }
+    }
+
+    private fun withdraw() {
+        viewModelScope.launch {
+            deleteUserInfoUseCase.invoke()
+                .onSuccess {
+                    runCatching { kakaoLoginSdk.withdraw() }
+                        .onSuccess {
+                            sendEffect({ MyPageSideEffect.MoveToLogin })
+                        }
+                        .onError {
+                            sendEffect({ MyPageSideEffect.ShowToast(resourcesProvider.getString(R.string.my_page_withdraw_error_text)) })
+                        }
+                }
+                .onError {
+                    Timber.w("usecase 에러")
+                    Timber.w(it)
+                    sendEffect({ MyPageSideEffect.ShowToast(resourcesProvider.getString(R.string.my_page_withdraw_error_text)) })
+                }
+
+
+
         }
     }
 
