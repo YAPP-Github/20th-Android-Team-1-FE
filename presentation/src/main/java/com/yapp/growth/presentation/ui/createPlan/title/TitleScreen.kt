@@ -93,7 +93,9 @@ fun TitleScreen(
                     exitCreateScreen()
                 }
                 is TitleSideEffect.NavigateToNextScreen -> {
-                    sharedViewModel.setEvent(DecideTitle(viewState.title))
+                    sharedViewModel.setEvent(
+                        DecideTitle(viewState.title.ifBlank { viewState.sampleTitle })
+                    )
                     sharedViewModel.setEvent(DecidePlace(viewState.place))
                     navigateToNextScreen()
                 }
