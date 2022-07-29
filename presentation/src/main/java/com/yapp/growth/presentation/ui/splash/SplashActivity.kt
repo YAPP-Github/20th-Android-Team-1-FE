@@ -1,6 +1,7 @@
 package com.yapp.growth.presentation.ui.splash
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -60,7 +61,11 @@ class SplashActivity : ComponentActivity() {
     }
 
     private fun moveToMain() {
-        MainActivity.startActivity(this, intent?.data)
+        if (intent.flags.and(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
+            MainActivity.startActivity(this, null)
+        } else {
+            MainActivity.startActivity(this, intent?.data)
+        }
         finish()
     }
 
