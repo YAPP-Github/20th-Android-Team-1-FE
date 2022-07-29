@@ -28,10 +28,11 @@ class FixPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
-    private val planId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
+    private val planId: Long = savedStateHandle.get<Long>("planId") ?: -1L
 
     init {
         loadRespondUsers(planId)
+        updateState { copy(planId = this@FixPlanViewModel.planId) }
     }
 
     private fun loadRespondUsers(promisingId: Long) {
@@ -129,7 +130,7 @@ class FixPlanViewModel @Inject constructor(
     private fun sendFixPlan(date: String) = viewModelScope.launch {
         sendFixPlanUseCase.invoke(planId, date)
             .onSuccess {
-                sendEffect({ FixPlanSideEffect.NavigateToNextScreen(it.id) })
+                sendEffect({ FixPlanSideEffect.NavigateToNextScreen(it.id.toLong()) })
             }
             .onError {
 

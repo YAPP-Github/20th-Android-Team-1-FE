@@ -70,4 +70,6 @@ dependencies {
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
     implementation(app.ModuleDependencies.FIREBASE_CRASHLYTICS)
+    implementation(app.ModuleDependencies.FIREBASE_DYNAMICLINKS)
+
 }

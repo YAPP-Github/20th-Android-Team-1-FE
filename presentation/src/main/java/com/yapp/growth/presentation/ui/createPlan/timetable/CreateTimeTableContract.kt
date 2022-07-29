@@ -13,7 +13,7 @@ class CreateTimeTableContract {
 
     sealed class CreateTimeTableSideEffect: ViewSideEffect {
         object ExitCreateScreen : CreateTimeTableSideEffect()
-        object NavigateToNextScreen : CreateTimeTableSideEffect()
+        data class NavigateToNextScreen(val planId: Long) : CreateTimeTableSideEffect()
         object NavigateToPreviousScreen : CreateTimeTableSideEffect()
     }
 

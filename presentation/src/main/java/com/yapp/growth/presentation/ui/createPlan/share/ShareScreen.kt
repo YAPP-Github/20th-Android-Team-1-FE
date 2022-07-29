@@ -22,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ import com.yapp.growth.presentation.BuildConfig
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.component.PlanzSnackBar
+import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.theme.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -108,6 +110,10 @@ fun ShareScreen(
             }
         }
     }
+    
+    LaunchedEffect(Unit) {
+        viewModel.getDynamicLink(context)
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -126,6 +132,8 @@ fun ShareScreen(
                 is ShareContract.ShareSideEffect.SendKakaoShareMessage -> {
                     kakaoSocialShare(
                         context = context,
+                        planId = viewState.planId.toString(),
+                        shareUrl = viewState.shareUrl,
                         startShareActivity = { shareIntent -> startShareActivity(shareIntent) },
                         failToShareWithKakaoTalk = {
                             viewModel.setEvent(ShareContract.ShareEvent.FailToShare)
@@ -155,20 +163,23 @@ fun ShareScreen(
 
 fun kakaoSocialShare(
     context: Context,
+    planId: String,
+    shareUrl: String,
     startShareActivity: (Intent) -> Unit,
     failToShareWithKakaoTalk: () -> Unit,
 ) {
     val shareFeedImageUrl =
         BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
-    // TODO: URL 설정
+
     val sharePlanFeedTemplate = FeedTemplate(
         content = Content(
             title = context.getString(R.string.share_plan_share_feed_template_title),
             description = context.getString(R.string.share_plan_share_feed_template_description),
             imageUrl = shareFeedImageUrl,
             link = Link(
-                webUrl = shareFeedImageUrl, /* 임시 URL */
-                mobileWebUrl = shareFeedImageUrl /* 임시 URL */
+                webUrl = shareUrl,
+                mobileWebUrl = shareUrl,
+                androidExecutionParams = mapOf(PLAN_ID_KEY_NAME to planId)
             ),
             imageWidth = 800,
             imageHeight = 400
@@ -263,17 +274,24 @@ fun ShareUrl(
         elevation = 0.dp
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = shareUrl,
                 color = Gray800,
-                style = PlanzTypography.body2
+                style = PlanzTypography.body2,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
             )
             Text(
-                modifier = Modifier.clickable { onCopyClick() },
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .clickable { onCopyClick() },
                 text = stringResource(id = R.string.share_plan_copy_text),
                 color = MainPurple900,
                 style = PlanzTypography.subtitle2

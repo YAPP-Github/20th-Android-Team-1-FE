@@ -72,8 +72,8 @@ fun CreatePlanScreen(
                 )) {
                 CreateTimeTableScreen(
                     exitCreateScreen = exitCreatePlan,
-                    navigateToNextScreen = {
-                        navController.navigate(CreatePlanScreenRoute.SHARE.route) {
+                    navigateToNextScreen = { planId ->
+                        navController.navigate(CreatePlanScreenRoute.SHARE.route.plus("/${planId}")) {
                             popUpTo(CreatePlanScreenRoute.CREATE_TIMETABLE.route.plus("/{uuid}")) {
                                 inclusive = true
                             }
@@ -83,7 +83,9 @@ fun CreatePlanScreen(
                 )
             }
 
-            composable(route = CreatePlanScreenRoute.SHARE.route) {
+            composable(route = CreatePlanScreenRoute.SHARE.route.plus("/{planId}"), arguments = listOf(
+                navArgument("planId") { type = NavType.LongType }
+            )) {
                 ShareScreen(
                     finishCreatePlan = exitCreatePlan,
                     startShareActivity = { shareIntent -> startShareActivity(shareIntent) }

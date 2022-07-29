@@ -1,5 +1,8 @@
 package com.yapp.growth.presentation.ui.main
 
+import android.app.Activity
+import android.content.Context
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
@@ -13,15 +16,13 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -38,7 +39,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.R
+import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
+import com.yapp.growth.presentation.firebase.SchemeType
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
@@ -55,16 +60,19 @@ import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import com.yapp.growth.presentation.ui.main.terms.TermsScreen
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
 fun PlanzScreen(
     navController: NavHostController = rememberNavController(),
     intentToCreatePlan: () -> Unit,
+    uri: Uri? = null,
 ) {
     var bottomBarState by rememberSaveable { mutableStateOf(true) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val context = LocalContext.current as Activity
 
     Scaffold(
         bottomBar = {
@@ -127,13 +135,15 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
-                    navArgument("planId") { type = NavType.IntType }
+                    navArgument("planId") { type = NavType.LongType }
                 )) {
                 RespondPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
                     navigateToSendCompleteScreen = {
                         navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
-                            popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}")) { inclusive = true }
+                            popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}")) {
+                                inclusive = true
+                            }
                         }
                     },
                     navigateToSendRejectedScreen = {
@@ -144,7 +154,7 @@ fun PlanzScreen(
 
             composable(route = PlanzScreenRoute.MONITOR_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
-                    navArgument("planId") { type = NavType.IntType }
+                    navArgument("planId") { type = NavType.LongType }
                 )) {
                 MonitorPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
@@ -154,26 +164,28 @@ fun PlanzScreen(
             composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
                 RespondPlanCompleteScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = {  }
+                    onClickCheckButton = { }
                 )
             }
 
             composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
                 RespondPlanRejectScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
-                    onClickCheckButton = {  }
+                    onClickCheckButton = { }
                 )
             }
 
             composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}"),
                 arguments = listOf(
-                    navArgument("planId") { type = NavType.IntType }
+                    navArgument("planId") { type = NavType.LongType }
                 )) {
                 FixPlanScreen(
                     navigateToPreviousScreen = { navController.popBackStack() },
                     navigateToNextScreen = { planId ->
                         navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
-                            popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}")) { inclusive = true }
+                            popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}")) {
+                                inclusive = true
+                            }
                         }
                     },
                 )
@@ -188,13 +200,13 @@ fun PlanzScreen(
             }
 
             composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
-                PrivacyPolicyScreen (
+                PrivacyPolicyScreen(
                     exitPrivacyPolicyScreen = { navController.popBackStack() }
                 )
             }
 
             composable(route = PlanzScreenRoute.TERMS.route) {
-                TermsScreen (
+                TermsScreen(
                     exitTermsScreen = { navController.popBackStack() }
                 )
             }
@@ -219,6 +231,21 @@ fun PlanzScreen(
         PlanzScreenRoute.HOME.route -> true
         PlanzScreenRoute.MANAGE_PLAN.route -> true
         else -> false
+    }
+
+    LaunchedEffect(key1 = uri) {
+        uri?.let { link ->
+            val planId: Long = link.getQueryParameter(PLAN_ID_KEY_NAME)?.toLong() ?: -1
+            if (planId > 0) {
+                navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route.plus("/${planId}"))
+            }
+
+            launch {
+                if (!link.toString().contains("kakaolink")) {
+                    handleDynamicLinks(context, link)
+                }
+            }
+        }
     }
 }
 
@@ -305,6 +332,30 @@ fun navigateBottomNavigationScreen(
             restoreState = true
         }
     }
+}
+
+private fun handleDynamicLinks(activity: Activity, uri: Uri) {
+    Firebase.dynamicLinks
+        .getDynamicLink(activity.intent)
+        .addOnSuccessListener(activity) { pendingDynamicLinkData ->
+
+            var deepLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                deepLink = pendingDynamicLinkData.link
+            }
+
+            deepLink?.let { link ->
+                when(deepLink.lastPathSegment!!) {
+                    SchemeType.RESPOND.name -> {
+
+                    }
+                }
+
+            }
+        }
+        .addOnFailureListener(activity) {
+
+        }
 }
 
 enum class BottomNavigationItem(
