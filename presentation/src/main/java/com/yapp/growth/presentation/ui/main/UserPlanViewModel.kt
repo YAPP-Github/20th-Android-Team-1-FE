@@ -23,7 +23,7 @@ class UserPlanViewModel @Inject constructor(
                     UserPlanStatus.OWNER -> sendEffect({ UserPlanSideEffect.MoveToConfirmPlan(planId) })
                     UserPlanStatus.CONFIRMED -> sendEffect({ UserPlanSideEffect.MoveToAlreadyConfirmPlan })
                     UserPlanStatus.RESPONSE_ALREADY -> sendEffect({ UserPlanSideEffect.MoveToMonitorPlan(planId) })
-                    UserPlanStatus.RESPONSE_MAXIMUM -> sendEffect({ UserPlanSideEffect.MoveToRespondPlan(planId) })
+                    UserPlanStatus.RESPONSE_MAXIMUM -> sendEffect({ UserPlanSideEffect.MoveToFulledPlan })
                     UserPlanStatus.RESPONSE_POSSIBLE -> sendEffect({ UserPlanSideEffect.MoveToRespondPlan(planId) })
                     UserPlanStatus.UNKNOWN -> { }
                 }
@@ -32,6 +32,12 @@ class UserPlanViewModel @Inject constructor(
 
             }
     }
+
+    fun getUserName(): String {
+        return repository.getCachedUserInfo()?.userName ?: ""
+    }
+
+
     override fun handleEvents(event: UserPlanEvent) {
         when(event) {
             is UserPlanEvent.GetUserPlanStatus -> getUserPlanStatus(event.planId)

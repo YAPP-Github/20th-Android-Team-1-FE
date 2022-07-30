@@ -18,6 +18,7 @@ class UserPlanContract {
         data class MoveToRespondPlan(val planId: Long): UserPlanSideEffect()
         data class MoveToMonitorPlan(val planId: Long): UserPlanSideEffect()
         object MoveToAlreadyConfirmPlan: UserPlanSideEffect()
+        object MoveToFulledPlan: UserPlanSideEffect()
     }
 
     sealed class UserPlanEvent: ViewEvent {
