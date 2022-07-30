@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +43,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAppBar
 import com.yapp.growth.presentation.component.PlanzDialog
+import com.yapp.growth.presentation.component.PlanzError
+import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray700
@@ -142,8 +146,15 @@ fun MyPageScreen(
                 )
             }
         }
-        else -> {
-
+        MyPageContract.LoadState.Loading -> {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                PlanzLoading()
+            }
+        }
+        MyPageContract.LoadState.Error -> {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                PlanzError()
+            }
         }
     }
 
