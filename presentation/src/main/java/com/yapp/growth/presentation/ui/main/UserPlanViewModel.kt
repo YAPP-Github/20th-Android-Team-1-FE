@@ -35,6 +35,7 @@ class UserPlanViewModel @Inject constructor(
     override fun handleEvents(event: UserPlanEvent) {
         when(event) {
             is UserPlanEvent.GetUserPlanStatus -> getUserPlanStatus(event.planId)
+            is UserPlanEvent.ChangeStatusBarColor -> updateState { copy(statusBarColor = event.color) }
             else -> {}
         }
     }

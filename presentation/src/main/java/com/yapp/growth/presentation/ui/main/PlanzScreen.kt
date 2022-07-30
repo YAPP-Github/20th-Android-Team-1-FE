@@ -32,15 +32,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
-import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.Gray900
-import com.yapp.growth.presentation.theme.MainPurple900
-import com.yapp.growth.presentation.theme.Pretendard
+import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
@@ -54,7 +52,6 @@ import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import com.yapp.growth.presentation.ui.main.terms.TermsScreen
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -64,10 +61,27 @@ fun PlanzScreen(
     intentToCreatePlan: () -> Unit,
     uri: Uri? = null,
 ) {
+    val uiState by viewModel.viewState.collectAsState()
     var bottomBarState by rememberSaveable { mutableStateOf(true) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val context = LocalContext.current as Activity
+
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = MaterialTheme.colors.isLight
+    var statusBarColor: Color by remember { mutableStateOf(Color.White) }
+
+    statusBarColor = when (currentDestination?.route) {
+        PlanzScreenRoute.HOME.route -> {
+            BackgroundColor1
+        }
+        PlanzScreenRoute.MY_PAGE.route -> {
+            BackgroundColor1
+        }
+        else -> {
+            Color.White
+        }
+    }
 
     Scaffold(
         bottomBar = {
@@ -231,6 +245,17 @@ fun PlanzScreen(
         PlanzScreenRoute.HOME.route -> true
         PlanzScreenRoute.MANAGE_PLAN.route -> true
         else -> false
+    }
+
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = statusBarColor,
+            darkIcons = useDarkIcons
+        )
+
+        systemUiController.setNavigationBarColor(
+            color = BackgroundColor1
+        )
     }
 
     LaunchedEffect(key1 = uri) {
