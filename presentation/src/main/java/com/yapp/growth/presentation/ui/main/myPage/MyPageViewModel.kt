@@ -53,10 +53,9 @@ class MyPageViewModel @Inject constructor(
                 sendEffect({ MyPageSideEffect.ExitMyPageScreen })
             }
             is MyPageEvent.OnNegativeButtonClicked -> {
-                sendEffect({ MyPageSideEffect.MoveToLogin })
+                withdraw()
             }
             is MyPageEvent.OnPositiveButtonClicked -> {
-                withdraw()
                 updateState { copy(isDialogVisible = false) }
             }
         }
