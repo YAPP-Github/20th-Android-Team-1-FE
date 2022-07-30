@@ -163,6 +163,10 @@ object ModuleDependencies {
     val accompanist = arrayOf(
         DependencyInfo("com.google.accompanist:accompanist-pager",
             Versions.ACCOMPANIST_PAGER,
+            Method.IMPLEMENTATION),
+
+        DependencyInfo("com.google.accompanist:accompanist-systemuicontroller",
+            Versions.ACCOMPANIST_SYSTEM_UI_CONTROLLER,
             Method.IMPLEMENTATION)
     )
 
