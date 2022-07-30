@@ -114,8 +114,8 @@ class CreateTimeTableViewModel @Inject constructor(
 
     override fun handleEvents(event: CreateTimeTableEvent) {
         when (event) {
-            CreateTimeTableEvent.OnClickBackButton -> sendEffect({ CreateTimeTableSideEffect.NavigateToPreviousScreen })
-            CreateTimeTableEvent.OnClickExitButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
+            CreateTimeTableEvent.OnClickBackButton -> updateState { copy(isDialogVisible = true) }
+            CreateTimeTableEvent.OnClickExitButton -> updateState { copy(isDialogVisible = true) }
             CreateTimeTableEvent.OnClickSendButton -> sendMakePlan(uuid, timeCheckedOfDays.value)
             CreateTimeTableEvent.OnClickNextDayButton -> { nextDay() }
             CreateTimeTableEvent.OnClickPreviousDayButton -> { previousDay() }
@@ -127,6 +127,8 @@ class CreateTimeTableViewModel @Inject constructor(
                     updateState { copy(clickCount = viewState.value.clickCount.minus(1)) }
                 }
             }
+            CreateTimeTableEvent.OnClickDialogNegativeButton -> updateState { copy(isDialogVisible = false) }
+            CreateTimeTableEvent.OnClickDialogPositiveButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
         }
     }
 }

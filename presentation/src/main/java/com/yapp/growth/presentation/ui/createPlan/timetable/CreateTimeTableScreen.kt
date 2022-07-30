@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan.timetable
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +28,6 @@ fun CreateTimeTableScreen(
     viewModel: CreateTimeTableViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
     navigateToNextScreen: (Long) -> Unit,
-    navigateToPreviousScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
     val timeCheckedOfDays by viewModel.timeCheckedOfDays.collectAsState()
@@ -86,6 +86,22 @@ fun CreateTimeTableScreen(
 
         }
 
+        if (uiState.isDialogVisible) {
+            PlanzAlertDialog(
+                title = "알림",
+                content = "작업한 내용이 저장되지 않고 홈화면으로\n" +
+                        "이동합니다. 진행하시겠습니까?",
+                positiveButtonText = "확인",
+                negativeButtonText = "취소",
+                onClickNegativeButton = {
+                    viewModel.setEvent(CreateTimeTableEvent.OnClickDialogNegativeButton)
+                },
+                onClickPositiveButton = {
+                    viewModel.setEvent(CreateTimeTableEvent.OnClickDialogPositiveButton)
+                },
+            )
+        }
+
     }
 
     LaunchedEffect(key1 = viewModel.effect) {
@@ -93,9 +109,12 @@ fun CreateTimeTableScreen(
             when (effect) {
                 CreateTimeTableSideEffect.ExitCreateScreen -> exitCreateScreen()
                 is CreateTimeTableSideEffect.NavigateToNextScreen -> navigateToNextScreen(effect.planId)
-                CreateTimeTableSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
             }
         }
+    }
+
+    BackHandler {
+        viewModel.setEvent(CreateTimeTableEvent.OnClickBackButton)
     }
 }
 
