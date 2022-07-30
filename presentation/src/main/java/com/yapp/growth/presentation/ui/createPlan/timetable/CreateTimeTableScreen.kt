@@ -86,21 +86,19 @@ fun CreateTimeTableScreen(
 
         }
 
-        if (uiState.isDialogVisible) {
-            PlanzAlertDialog(
-                title = "알림",
-                content = "작업한 내용이 저장되지 않고 홈화면으로\n" +
-                        "이동합니다. 진행하시겠습니까?",
-                positiveButtonText = "확인",
-                negativeButtonText = "취소",
-                onClickNegativeButton = {
-                    viewModel.setEvent(CreateTimeTableEvent.OnClickDialogNegativeButton)
-                },
-                onClickPositiveButton = {
-                    viewModel.setEvent(CreateTimeTableEvent.OnClickDialogPositiveButton)
-                },
-            )
-        }
+        PlanzAlertDialog(
+            visible = uiState.isDialogVisible,
+            title = stringResource(R.string.planz_alert_dialog_title),
+            content = stringResource(R.string.planz_alert_dialog_content),
+            positiveButtonText = stringResource(R.string.planz_alert_dialog_positive_button_text),
+            negativeButtonText = stringResource(R.string.planz_alert_dialog_negative_button_text),
+            onClickNegativeButton = {
+                viewModel.setEvent(CreateTimeTableEvent.OnClickDialogNegativeButton)
+            },
+            onClickPositiveButton = {
+                viewModel.setEvent(CreateTimeTableEvent.OnClickDialogPositiveButton)
+            },
+        )
 
     }
 
