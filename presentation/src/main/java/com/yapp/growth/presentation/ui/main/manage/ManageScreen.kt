@@ -49,7 +49,6 @@ fun ManageScreen(
     val viewState by viewModel.viewState.collectAsState()
 
     val pagerState = rememberPagerState(
-        pageCount = ManageTapMenu.values().size,
         initialPage = 0,
     )
     val tabIndex = pagerState.currentPage
@@ -78,6 +77,7 @@ fun ManageScreen(
 
             ManagePager(
                 pagerState = pagerState,
+                pageCount = ManageTapMenu.values().size,
                 waitingPlans = viewState.waitingPlans,
                 fixedPlans = viewState.fixedPlans,
                 onWaitingItemClick = { planId ->
@@ -164,6 +164,7 @@ fun ManageTabRow(
 @Composable
 fun ManagePager(
     pagerState: PagerState,
+    pageCount: Int,
     waitingPlans: List<Plan.WaitingPlan>,
     fixedPlans: List<Plan.FixedPlan>,
     onWaitingItemClick: (Int) -> Unit,
@@ -171,8 +172,9 @@ fun ManagePager(
     onCreateButtonClick: () -> Unit,
 ) {
     HorizontalPager(
+        count = pageCount,
         state = pagerState,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) { tabIndex ->
         when (tabIndex) {
             ManageTapMenu.WAITING_PLAN.ordinal -> {
