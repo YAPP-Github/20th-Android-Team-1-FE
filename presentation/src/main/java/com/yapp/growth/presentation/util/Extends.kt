@@ -5,19 +5,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 internal val PARSE_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
-internal val FULL_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
 internal val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 fun CalendarDay.toFormatDate(): String {
     return DATE_FORMAT.format(this.date)
 }
 
-fun Date.toFormatDate(): String {
-    return DATE_FORMAT.format(this)
-}
-
 fun CalendarDay.toParseFormatDate(): String {
     return PARSE_DATE_FORMAT.format(this.date)
+}
+
+fun Date.toFormatDate(): String {
+    return DATE_FORMAT.format(this)
 }
 
 fun Date.toHour(): String {
@@ -30,6 +29,11 @@ fun Date.toHourAndMinute(): String {
 
 fun Date.toCalculateDiffDay(other: Date): Long {
     return (other.time - this.time) / (60 * 60 * 24 * 1000)
+}
+
+fun String.toDayAndHour(): String {
+    val dateTimeFormat = PARSE_DATE_FORMAT.parse(this) as Date
+    return SimpleDateFormat("M월 d일 aa h시", Locale.KOREA).format(dateTimeFormat)
 }
 
 fun String.toDate(): Date {

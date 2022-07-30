@@ -1,6 +1,7 @@
 package com.yapp.growth.presentation.ui.main.home
 
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
@@ -8,7 +9,7 @@ import com.yapp.growth.domain.entity.Plan
 
 class HomeContract {
     data class HomeViewState(
-        val loadState: LoadState = LoadState.Success,
+        val loadState: LoadState = LoadState.SUCCESS,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "",
         val allPlans: List<Plan.FixedPlan> = emptyList(),
@@ -38,10 +39,6 @@ class HomeContract {
         object OnMonthlyPlanModeClicked : HomeEvent()
         object OnMonthlyPreviousClicked : HomeEvent()
         object OnMonthlyNextClicked : HomeEvent()
-    }
-
-    enum class LoadState {
-        Loading, Success, Error
     }
 
     enum class LoginState {

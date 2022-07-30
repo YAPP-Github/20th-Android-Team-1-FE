@@ -40,6 +40,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAppBar
 import com.yapp.growth.presentation.component.PlanzDialog
@@ -96,7 +97,7 @@ fun MyPageScreen(
     }
 
     when (viewState.loadState) {
-        MyPageContract.LoadState.Success -> {
+        LoadState.SUCCESS -> {
             Scaffold(
                 topBar = {
                     PlanzBackAppBar(
@@ -146,12 +147,12 @@ fun MyPageScreen(
                 )
             }
         }
-        MyPageContract.LoadState.Loading -> {
+        LoadState.LOADING -> {
             Surface(modifier = Modifier.fillMaxSize()) {
                 PlanzLoading()
             }
         }
-        MyPageContract.LoadState.Error -> {
+        LoadState.ERROR -> {
             Surface(modifier = Modifier.fillMaxSize()) {
                 PlanzError()
             }

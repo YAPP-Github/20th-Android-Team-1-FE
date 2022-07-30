@@ -3,6 +3,7 @@ package com.yapp.growth.presentation.ui.main.myPage
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
@@ -16,7 +17,6 @@ import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageViewStat
 import com.yapp.growth.presentation.util.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +28,7 @@ class MyPageViewModel @Inject constructor(
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
     init {
-        updateState { copy(loadState = MyPageContract.LoadState.Loading) }
+        updateState { copy(loadState = LoadState.LOADING) }
         checkValidLoginToken()
     }
     
@@ -76,7 +76,7 @@ class MyPageViewModel @Inject constructor(
                     updateState {
                         copy(
                             loginState = LoginState.NONE,
-                            loadState = MyPageContract.LoadState.Success
+                            loadState = LoadState.SUCCESS
                         )
                     }
                 }
@@ -84,7 +84,7 @@ class MyPageViewModel @Inject constructor(
                 updateState {
                     copy(
                         loginState = LoginState.NONE,
-                        loadState = MyPageContract.LoadState.Error
+                        loadState = LoadState.ERROR
                     )
                 }
             }
@@ -130,7 +130,7 @@ class MyPageViewModel @Inject constructor(
                     .onSuccess {
                         updateState {
                             copy(
-                                loadState = MyPageContract.LoadState.Success,
+                                loadState = LoadState.SUCCESS,
                                 userName = it.userName
                             )
                         }
@@ -138,14 +138,14 @@ class MyPageViewModel @Inject constructor(
                     .onError {
                         updateState {
                             copy(
-                                loadState = MyPageContract.LoadState.Error
+                                loadState = LoadState.ERROR,
                             )
                         }
                     }
             } else {
                 updateState {
                     copy(
-                        loadState = MyPageContract.LoadState.Success,
+                        loadState = LoadState.SUCCESS,
                         userName = cacheInfo.userName
                     )
                 }
