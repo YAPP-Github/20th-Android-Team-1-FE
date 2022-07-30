@@ -29,7 +29,7 @@ internal class UserRepositoryImpl @Inject constructor(
         return dataSource.getUserInfo().onSuccess { cachedUserInfo = it }
     }
 
-    override suspend fun getCachedUserInfo(): User? = cachedUserInfo
+    override fun getCachedUserInfo(): User? = cachedUserInfo
 
     override suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus> {
         return dataSource.getUserPlanStatus(planId)
