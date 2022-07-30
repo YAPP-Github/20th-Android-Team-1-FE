@@ -24,7 +24,6 @@ class RespondPlanContract {
             ""
         ),
         val clickCount: Int = 0,
-        val availableResponse: Boolean = true,
     ) : ViewState
 
     sealed class RespondPlanSideEffect : ViewSideEffect {
