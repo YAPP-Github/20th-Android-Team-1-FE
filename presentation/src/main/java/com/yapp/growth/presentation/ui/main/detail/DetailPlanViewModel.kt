@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailPlanViewModel @Inject constructor(
     private val getFixedPlanUseCase: GetFixedPlanUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) :
     BaseViewModel<DetailPlanViewState, DetailPlanSideEffect, DetailPlanEvent>(
         DetailPlanViewState()

@@ -88,12 +88,12 @@ fun DetailPlanScreen(
                         verticalArrangement = Arrangement.spacedBy(7.dp),
                     ) {
                         Text(
-                            text = "${viewState.category}",
+                            text = viewState.category,
                             style = PlanzTypography.h1,
                             color = MainPurple900,
                         )
                         Text(
-                            text = "${viewState.title}",
+                            text = viewState.title,
                             style = PlanzTypography.body2,
                             color = Gray500,
                         )
@@ -107,15 +107,15 @@ fun DetailPlanScreen(
                     ) {
                         DetailItem(
                             info = stringResource(id = R.string.detail_plan_info_when),
-                            content = "${viewState.date}"
+                            content = viewState.date
                         )
                         DetailItem(
                             info = stringResource(id = R.string.detail_plan_info_place),
-                            content = "${viewState.place}"
+                            content = viewState.place
                         )
                         DetailItem(
                             info = stringResource(id = R.string.detail_plan_info_member),
-                            content = "${viewState.member}"
+                            content = viewState.member
                         )
                     }
                 }
