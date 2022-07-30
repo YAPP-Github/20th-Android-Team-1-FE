@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
@@ -37,7 +38,7 @@ class HomeViewModel @Inject constructor(
 ) {
 
     init {
-        updateState { copy(loadState = HomeContract.LoadState.Loading) }
+        updateState { copy(loadState = LoadState.LOADING) }
         checkValidLoginToken()
     }
 
@@ -89,7 +90,7 @@ class HomeViewModel @Inject constructor(
                     updateState {
                         copy(
                             loginState = LoginState.NONE,
-                            loadState = HomeContract.LoadState.Success
+                            loadState = LoadState.SUCCESS
                         )
                     }
                 }
@@ -97,7 +98,7 @@ class HomeViewModel @Inject constructor(
                 updateState {
                     copy(
                         loginState = LoginState.NONE,
-                        loadState = HomeContract.LoadState.Error
+                        loadState = LoadState.ERROR
                     )
                 }
             }
@@ -113,7 +114,7 @@ class HomeViewModel @Inject constructor(
                     .onSuccess {
                         updateState {
                             copy(
-                                loadState = HomeContract.LoadState.Success,
+                                loadState = LoadState.SUCCESS,
                                 userName = it.userName
                             )
                         }
@@ -121,14 +122,14 @@ class HomeViewModel @Inject constructor(
                     .onError {
                         updateState {
                             copy(
-                                loadState = HomeContract.LoadState.Error
+                                loadState = LoadState.ERROR
                             )
                         }
                     }
             } else {
                 updateState {
                     copy(
-                        loadState = HomeContract.LoadState.Success,
+                        loadState = LoadState.SUCCESS,
                         userName = cacheInfo.userName
                     )
                 }
@@ -149,7 +150,7 @@ class HomeViewModel @Inject constructor(
                     }
                     updateState {
                         copy(
-                            loadState = HomeContract.LoadState.Success,
+                            loadState = LoadState.SUCCESS,
                             allPlans = plans,
                             monthlyPlans = monthlyPlans,
                             todayPlans = todayPlans
@@ -157,7 +158,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 .onError {
-                    updateState { copy(loadState = HomeContract.LoadState.Error) }
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
         }
     }

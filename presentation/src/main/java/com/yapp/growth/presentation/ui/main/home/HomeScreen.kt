@@ -50,6 +50,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCalendar
@@ -117,7 +118,7 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize(),
     ) { padding ->
         when (viewState.loadState) {
-            HomeContract.LoadState.Loading -> {
+            LoadState.LOADING -> {
                 Box(modifier = Modifier.fillMaxSize()) {
                     PlanzLoading()
                 }
@@ -132,7 +133,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(3.dp))
                     when (viewState.loginState) {
                         HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                            isError = viewState.loadState == HomeContract.LoadState.Error,
+                            isError = viewState.loadState == LoadState.ERROR,
                             expanded = viewState.isTodayPlanExpanded,
                             todayPlans = viewState.todayPlans,
                             planCount = viewState.todayPlans.size,
@@ -145,7 +146,7 @@ fun HomeScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     HomeMonthlyPlan(
-                        isError = viewState.loadState == HomeContract.LoadState.Error,
+                        isError = viewState.loadState == LoadState.ERROR,
                         expanded = viewState.isMonthlyPlanExpanded,
                         monthlyPlans = viewState.monthlyPlans,
                         mode = viewState.monthlyPlanMode,
