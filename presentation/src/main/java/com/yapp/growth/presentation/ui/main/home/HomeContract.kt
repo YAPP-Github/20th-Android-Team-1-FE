@@ -8,7 +8,7 @@ import com.yapp.growth.domain.entity.Plan
 
 class HomeContract {
     data class HomeViewState(
-        val loadState: LoadState = LoadState.Idle,
+        val loadState: LoadState = LoadState.Success,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "",
         val allPlans: List<Plan.FixedPlan> = emptyList(),
@@ -41,7 +41,7 @@ class HomeContract {
     }
 
     enum class LoadState {
-        Loading, Idle, Error
+        Loading, Success, Error
     }
 
     enum class LoginState {
