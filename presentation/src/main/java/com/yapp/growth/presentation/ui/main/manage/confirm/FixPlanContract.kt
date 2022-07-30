@@ -20,16 +20,18 @@ class FixPlanContract {
             "",
             emptyList(),
             emptyList(),
+            "",
             ""
         ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
-        val currentClickUserData: List<User> = emptyList()
+        val currentClickUserData: List<User> = emptyList(),
+        val planId: Long = -1,
     ) : ViewState
 
     sealed class FixPlanSideEffect : ViewSideEffect {
         object ShowBottomSheet : FixPlanSideEffect()
         object HideBottomSheet : FixPlanSideEffect()
-        object NavigateToNextScreen : FixPlanSideEffect()
+        data class NavigateToNextScreen(val planId: Long) : FixPlanSideEffect()
         object NavigateToPreviousScreen : FixPlanSideEffect()
     }
 

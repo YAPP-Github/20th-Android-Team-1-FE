@@ -4,18 +4,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzExitAppBar
@@ -47,52 +50,92 @@ fun DetailPlanScreen(
                 onExitClick = { viewModel.setEvent(DetailPlanEvent.OnClickExitButton) }
             )
         },
-        backgroundColor = BackgroundColor1,
+        backgroundColor = Color.White,
     ) { padding ->
-        Spacer(modifier = Modifier.height(16.dp))
-        Column(
-            modifier = Modifier.padding(horizontal = 21.dp)
-        ) {
-            Text(
-                text = "${viewState.category} 약속",
-                style = PlanzTypography.h1,
-                color = MainPurple900,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "${viewState.title}",
-                style = PlanzTypography.body2,
-                color = Gray500,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            val (box, icon) = createRefs()
+
             Box(
                 modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(color = Color.White)
-                    .border(1.dp, Gray200, RoundedCornerShape(8.dp)),
+                    .constrainAs(box) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(horizontal = 20.dp)
             ) {
+
                 Column(
                     modifier = Modifier
-                        .padding(vertical = 24.dp, horizontal = 28.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFFFBFCFF))
+                        .border(
+                            width = 1.dp,
+                            color = Gray200,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(vertical = 30.dp, horizontal = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    DetailItem(
-                        info = stringResource(id = R.string.detail_plan_info_when),
-                        content = "${viewState.date}"
-                    )
-                    DetailItem(
-                        info = stringResource(id = R.string.detail_plan_info_place),
-                        content = "${viewState.place}"
-                    )
-                    DetailItem(
-                        info = stringResource(id = R.string.detail_plan_info_member),
-                        content = "${viewState.member}"
-                    )
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(7.dp),
+                    ) {
+                        Text(
+                            text = "${viewState.category}",
+                            style = PlanzTypography.h1,
+                            color = MainPurple900,
+                        )
+                        Text(
+                            text = "${viewState.title}",
+                            style = PlanzTypography.body2,
+                            color = Gray500,
+                        )
+                    }
+
+                    Divider(color = Gray200, thickness = 1.dp)
+
+                    Column(
+                        modifier = Modifier.padding(horizontal = 6.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        DetailItem(
+                            info = stringResource(id = R.string.detail_plan_info_when),
+                            content = "${viewState.date}"
+                        )
+                        DetailItem(
+                            info = stringResource(id = R.string.detail_plan_info_place),
+                            content = "${viewState.place}"
+                        )
+                        DetailItem(
+                            info = stringResource(id = R.string.detail_plan_info_member),
+                            content = "${viewState.member}"
+                        )
+                    }
                 }
             }
+
+            Icon(
+                modifier = Modifier
+                    .constrainAs(icon) {
+                        top.linkTo(box.top)
+                        bottom.linkTo(box.top)
+                        start.linkTo(box.start)
+                        end.linkTo(box.end)
+                    }
+                    .padding(bottom = 20.dp),
+                tint = Color.Unspecified,
+                imageVector = ImageVector.vectorResource(R.drawable.icon_plan_detail),
+                contentDescription = null
+            )
         }
+
     }
 }
 
@@ -103,13 +146,14 @@ fun DetailItem(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Text(
             text = info,
             style = PlanzTypography.body2,
             color = Gray700,
         )
-        Spacer(modifier = Modifier.height(4.dp))
+
         Text(
             text = content,
             style = PlanzTypography.body2,
@@ -118,7 +162,7 @@ fun DetailItem(
     }
 }
 
-@Preview (showBackground = true, widthDp = 360, heightDp = 640)
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun PreviewDetailPlanScreen() {
     DetailPlanScreen(exitDetailPlanScreen = { })

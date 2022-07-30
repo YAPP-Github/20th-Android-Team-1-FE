@@ -13,8 +13,8 @@ import com.yapp.growth.domain.entity.*
 import javax.inject.Inject
 
 internal class PlanzDataSourceImpl @Inject constructor(
-    private val retrofitApi : GrowthApi
-): PlanzDataSource {
+    private val retrofitApi: GrowthApi,
+) : PlanzDataSource {
 
     override suspend fun getCreateTimeTable(uuid: String): NetworkResult<CreateTimeTable> =
         handleApi {
@@ -23,7 +23,7 @@ internal class PlanzDataSourceImpl @Inject constructor(
 
     override suspend fun makePlan(
         uuid: String,
-        timeCheckedOfDays: List<TimeCheckedOfDay>
+        timeCheckedOfDays: List<TimeCheckedOfDay>,
     ): NetworkResult<Long> =
         handleApi {
             val parameter = TimeCheckedOfDaysParameter(
@@ -45,7 +45,7 @@ internal class PlanzDataSourceImpl @Inject constructor(
 
     override suspend fun sendRespondPlan(
         planId: Long,
-        timeCheckedOfDays: List<TimeCheckedOfDay>
+        timeCheckedOfDays: List<TimeCheckedOfDay>,
     ): NetworkResult<Unit> =
         handleApi {
             val parameter = TimeCheckedOfDaysParameter(
@@ -65,9 +65,9 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.sendRejectPlan(planId.toString())
         }
 
-    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Any> =
+    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Plan.FixedPlan> =
         handleApi {
-            retrofitApi.sendFixPlan(planId.toString(), FixPlanParameter(date))
+            retrofitApi.sendFixPlan(planId.toString(), FixPlanParameter(date)).toFixedPlan()
         }
 
     override suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>> =
@@ -78,6 +78,16 @@ internal class PlanzDataSourceImpl @Inject constructor(
     override suspend fun getFixedPlan(planId: Long): NetworkResult<Plan.FixedPlan> =
         handleApi {
             retrofitApi.getFixedPlan(planId).toFixedPlan()
+        }
+
+    override suspend fun getPlanCategories(): NetworkResult<List<Category>> =
+        handleApi {
+            retrofitApi.getCategories().map { it.toCategory() }
+        }
+
+    override suspend fun getSampleTitle(categoryId: Int): NetworkResult<String> =
+        handleApi {
+            retrofitApi.getSampleTitle(categoryId).title
         }
 
     override suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>> =

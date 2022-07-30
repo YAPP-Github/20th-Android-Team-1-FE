@@ -33,7 +33,7 @@ interface GrowthApi {
     suspend fun sendFixPlan(
         @Path("promisingId") planId: String,
         @Body fixPlanParameter: FixPlanParameter,
-    ): Any
+    ): FixedPlanResponseImpl
 
     @POST("/api/promisings/{promisingId}/time-response")
     suspend fun sendRespondPlan(
@@ -49,6 +49,19 @@ interface GrowthApi {
     @GET("/api/promisings/user")
     suspend fun getWaitingPlans(): List<WaitingPlanResponseImpl>
 
+    @GET("/api/promisings/categories")
+    suspend fun getCategories(): List<CategoryResponseImpl>
+
+    @GET("/api/promisings/categories/{categoryId}/name")
+    suspend fun getSampleTitle(
+        @Path("categoryId") categoryId: Int,
+    ): SampleTitleResponseImpl
+
+    @POST("/api/promisings")
+    suspend fun createTemporaryPlan(
+        @Body temporaryPlanParameter: TemporaryPlanParameter,
+    ): TemporaryPlanUuidResponseImpl
+
     // Fixed Plans
 
     @GET("/api/promises/{promiseId}")
@@ -58,11 +71,6 @@ interface GrowthApi {
 
     @GET("/api/promises/user")
     suspend fun getFixedPlans(): List<FixedPlanResponseImpl>
-
-    @POST("/api/promisings")
-    suspend fun createTemporaryPlan(
-        @Body temporaryPlanParameter: TemporaryPlanParameter,
-    ): TemporaryPlanUuidResponseImpl
 
     // User
 

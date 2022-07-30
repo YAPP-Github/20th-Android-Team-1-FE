@@ -91,7 +91,7 @@ fun HomeScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is HomeSideEffect.MoveToLogin -> {
-                    LoginActivity.startActivity(context)
+                    LoginActivity.startActivity(context, null)
                     context.finish()
                 }
                 is HomeSideEffect.NavigateToMyPageScreen -> {
@@ -518,7 +518,7 @@ fun HomeDayPlanList(
                 DayPlanItem(
                     id = todayPlan.id,
                     date = todayPlan.date,
-                    category = todayPlan.category,
+                    category = todayPlan.category.keyword,
                     title = todayPlan.title,
                     onPlanItemClick = onPlanItemClick
                 )
@@ -532,7 +532,7 @@ fun HomeDayPlanList(
                 } else {
                     "${dayPlans[0].title} 외 ${dayPlans.size - 1}건"
                 }),
-                category = dayPlans[0].category,
+                category = dayPlans[0].category.keyword,
                 onPlanItemClick = onPlanItemClick
             )
         }

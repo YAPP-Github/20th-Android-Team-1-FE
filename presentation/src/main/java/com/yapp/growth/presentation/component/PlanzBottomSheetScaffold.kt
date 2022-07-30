@@ -136,7 +136,7 @@ fun FixPlanBottomSheetContent(timeTable: TimeTable, currentClickTimeIndex: Pair<
 
         PlanzBasicBottomButton(modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp), text = "약속시간 선택", onClick = {
+            .padding(top = 20.dp), text = stringResource(id = R.string.fix_plan_fix_button_title), onClick = {
             onClickSelectPlan(time.getCurrentBlockDate(currentClickTimeIndex.second))
         })
     }

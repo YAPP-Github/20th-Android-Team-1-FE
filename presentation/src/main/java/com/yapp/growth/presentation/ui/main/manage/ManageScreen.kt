@@ -29,6 +29,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
@@ -44,7 +45,7 @@ fun ManageScreen(
     navigateToFixPlanScreen: (Int) -> Unit,
     navigateToMemberResponseScreen: (Int) -> Unit,
     navigateToMonitorPlanScreen: (Int) -> Unit,
-    navigateToInvitationScreen: (Int) -> Unit,
+    navigateToDetailPlanScreen: (Int) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -106,8 +107,8 @@ fun ManageScreen(
                 is ManageSideEffect.NavigateToMonitorPlanScreen -> {
                     navigateToMonitorPlanScreen(effect.planId)
                 }
-                is ManageSideEffect.NavigateToInvitationScreen -> {
-                    navigateToInvitationScreen(effect.planId)
+                is ManageSideEffect.NavigateToDetailPlanScreen -> {
+                    navigateToDetailPlanScreen(effect.planId)
                 }
                 is ManageSideEffect.SwitchTab -> {
                     pagerState.animateScrollToPage(effect.tabIndex)
@@ -386,7 +387,7 @@ fun WaitingPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = true,
-            category = "식사",
+            category = Category(1, "test"),
             members = listOf("member1", "member2", "member3", "member4"),
             place = "place",
             startTime = 0,
@@ -406,7 +407,7 @@ fun FixedPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = false,
-            category = "식사",
+            category = Category(1, "test"),
             members = listOf("member1", "member2", "member3", "member4", "member5"),
             place = "",
             date = "",
@@ -430,7 +431,7 @@ fun ManageScreenPreview() {
         navigateToFixPlanScreen = {},
         navigateToMemberResponseScreen = {},
         navigateToMonitorPlanScreen = {},
-        navigateToInvitationScreen = {}
+        navigateToDetailPlanScreen = {}
     )
 }
 

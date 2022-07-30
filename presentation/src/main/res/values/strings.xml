@@ -62,7 +62,7 @@
     <string name="create_plan_title_title_label">약속명(선택)</string>
     <string name="create_plan_title_title_hint">약속명</string>
     <string name="create_plan_title_place_label">장소(선택)</string>
-    <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
+    <string name="create_plan_title_place_hint">강남, 온라인 등</string>
 
     <string name="detail_plan_app_bar_text">약속 상세보기</string>
     <string name="detail_plan_info_when">날짜/시간</string>
@@ -146,6 +146,7 @@
 
     <!-- 약속 확정 -->
     <string name="fix_plan_title_text">약속확정</string>
+    <string name="fix_plan_fix_button_title">해당 시간으로 약속 확정</string>
 
     <!-- 약속 현황 -->
     <string name="monitor_plan_title_text">약속현황</string>

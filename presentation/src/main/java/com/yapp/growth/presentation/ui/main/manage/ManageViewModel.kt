@@ -36,7 +36,7 @@ class ManageViewModel @Inject constructor(
                 }
             }
             is ManageEvent.OnClickFixedPlan -> sendEffect(
-                { ManageSideEffect.NavigateToInvitationScreen(event.planId) }
+                { ManageSideEffect.NavigateToDetailPlanScreen(event.planId) }
             )
             is ManageEvent.OnClickTab -> sendEffect({ ManageSideEffect.SwitchTab(event.tabIndex) })
         }

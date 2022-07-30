@@ -25,7 +25,7 @@ class MonitorPlanViewModel @Inject constructor(
     MonitorPlanViewState()
 ) {
 
-    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "")
+    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
     private val planId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
 
