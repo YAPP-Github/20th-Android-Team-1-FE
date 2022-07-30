@@ -56,7 +56,6 @@ import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.component.PlanzLoading
-import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
@@ -629,9 +628,9 @@ fun DayPlanItem(
                 tint = Color.Unspecified,
                 imageVector = (
                         when (category) {
-                            stringResource(PlanThemeType.MEAL.themeStringResId) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
-                            stringResource(PlanThemeType.TRIP.themeStringResId) -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
-                            stringResource(PlanThemeType.MEETING.themeStringResId) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)
+                            stringResource(R.string.create_plan_theme_list_meal) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
+                            stringResource(R.string.create_plan_theme_list_trip) -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
+                            stringResource(R.string.create_plan_theme_list_meeting) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)
                             else -> ImageVector.vectorResource(id = R.drawable.ic_plan_etc)
                         }),
                 contentDescription = null,
