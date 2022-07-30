@@ -21,17 +21,14 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val resourcesProvider: ResourceProvider,
+    private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
     init {
         updateState { copy(loadState = MyPageContract.LoadState.Loading) }
-        fetchUserInfo()
         checkValidLoginToken()
     }
-
-    @Inject
-    lateinit var kakaoLoginSdk: LoginSdk
-
+    
     override fun handleEvents(event: MyPageEvent) {
         when (event) {
             is MyPageEvent.OnTermsClicked -> {
@@ -62,6 +59,36 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    private fun checkValidLoginToken() {
+        viewModelScope.launch {
+            runCatching {
+                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
+                if (isValidLoginToken) {
+                    updateState {
+                        copy(
+                            loginState = LoginState.LOGIN,
+                        )
+                    }
+                    fetchUserInfo()
+                } else {
+                    updateState {
+                        copy(
+                            loginState = LoginState.NONE,
+                            loadState = MyPageContract.LoadState.Success
+                        )
+                    }
+                }
+            }.onError {
+                updateState {
+                    copy(
+                        loginState = LoginState.NONE,
+                        loadState = MyPageContract.LoadState.Error
+                    )
+                }
+            }
+        }
+    }
+
     private fun logout() {
         viewModelScope.launch {
             runCatching { kakaoLoginSdk.logout() }
@@ -83,7 +110,7 @@ class MyPageViewModel @Inject constructor(
                     .onSuccess {
                         updateState {
                             copy(
-                                loadState = MyPageContract.LoadState.Idle,
+                                loadState = MyPageContract.LoadState.Success,
                                 userName = it.userName
                             )
                         }
@@ -98,22 +125,10 @@ class MyPageViewModel @Inject constructor(
             } else {
                 updateState {
                     copy(
-                        loadState = MyPageContract.LoadState.Idle,
+                        loadState = MyPageContract.LoadState.Success,
                         userName = cacheInfo.userName
                     )
                 }
-            }
-        }
-    }
-
-    private fun checkValidLoginToken() {
-        viewModelScope.launch {
-            runCatching {
-                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
-                else updateState { copy(loginState = LoginState.NONE) }
-            }.onError {
-                updateState { copy(loginState = LoginState.LOGIN) }
             }
         }
     }

@@ -20,6 +20,14 @@ fun CalendarDay.toParseFormatDate(): String {
     return PARSE_DATE_FORMAT.format(this.date)
 }
 
+fun Date.toHour(): String {
+    return SimpleDateFormat("aa h시", Locale.KOREA).format(this)
+}
+
+fun Date.toHourAndMinute(): String {
+    return SimpleDateFormat("aa h시 m분", Locale.KOREA).format(this)
+}
+
 fun Date.toCalculateDiffDay(other: Date): Long {
     return (other.time - this.time) / (60 * 60 * 24 * 1000)
 }

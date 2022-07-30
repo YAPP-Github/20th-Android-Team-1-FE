@@ -6,7 +6,7 @@ import com.yapp.growth.base.ViewState
 
 class MyPageContract {
     data class MyPageViewState(
-        val loadState: LoadState = LoadState.Idle,
+        val loadState: LoadState = LoadState.Success,
         val loginState: LoginState = LoginState.NONE,
         val userName: String = "",
         val isDialogVisible: Boolean = false,
@@ -32,7 +32,7 @@ class MyPageContract {
     }
 
     enum class LoadState {
-        Loading, Idle, Error
+        Loading, Success, Error
     }
 
     enum class LoginState {
