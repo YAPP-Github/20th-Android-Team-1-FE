@@ -29,6 +29,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
@@ -78,6 +79,8 @@ fun ManageScreen(
             )
 
             ManagePager(
+                waitingPlansLoadState = viewState.waitingPlansLoadState,
+                fixedPlansLoadState = viewState.fixedPlansLoadState,
                 pagerState = pagerState,
                 waitingPlans = viewState.waitingPlans,
                 fixedPlans = viewState.fixedPlans,
@@ -115,6 +118,10 @@ fun ManageScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.setEvent(ManageEvent.InitManageScreen)
     }
 }
 
@@ -164,6 +171,8 @@ fun ManageTabRow(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ManagePager(
+    waitingPlansLoadState: LoadState,
+    fixedPlansLoadState: LoadState,
     pagerState: PagerState,
     waitingPlans: List<Plan.WaitingPlan>,
     fixedPlans: List<Plan.FixedPlan>,
@@ -177,24 +186,43 @@ fun ManagePager(
     ) { tabIndex ->
         when (tabIndex) {
             ManageTapMenu.WAITING_PLAN.ordinal -> {
-                if (waitingPlans.isNotEmpty()) {
-                    ManagePlansList(
-                        plans = waitingPlans,
-                        type = ManageTapMenu.WAITING_PLAN,
-                        onItemClick = onWaitingItemClick
-                    )
-                } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
+                ManagePagerContent(
+                    loadState = waitingPlansLoadState,
+                    plans = waitingPlans,
+                    type = ManageTapMenu.WAITING_PLAN,
+                    onItemClick = onWaitingItemClick,
+                    onCreateButtonClick = onCreateButtonClick
+                )
             }
             ManageTapMenu.FIXED_PLAN.ordinal -> {
-                if (fixedPlans.isNotEmpty()) {
-                    ManagePlansList(
-                        plans = fixedPlans,
-                        type = ManageTapMenu.FIXED_PLAN,
-                        onItemClick = onFixedItemClick
-                    )
-                } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
+                ManagePagerContent(
+                    loadState = fixedPlansLoadState,
+                    plans = fixedPlans,
+                    type = ManageTapMenu.FIXED_PLAN,
+                    onItemClick = onFixedItemClick,
+                    onCreateButtonClick = onCreateButtonClick
+                )
             }
         }
+    }
+}
+
+@Composable
+fun ManagePagerContent(
+    loadState: LoadState,
+    plans: List<Plan>,
+    type: ManageTapMenu,
+    onItemClick: (Int) -> Unit,
+    onCreateButtonClick: () -> Unit,
+) {
+    when (loadState) {
+        LoadState.LOADING -> {}
+        LoadState.SUCCESS -> {
+            if (plans.isNotEmpty()) {
+                ManagePlansList(plans = plans, type = type, onItemClick = onItemClick)
+            } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
+        }
+        LoadState.ERROR -> {}
     }
 }
 
