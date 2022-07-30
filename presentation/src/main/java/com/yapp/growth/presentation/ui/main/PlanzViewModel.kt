@@ -10,12 +10,28 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanzViewModel @Inject constructor(
 ) : BaseViewModel<PlanzViewState, PlanzSideEffect, PlanzEvent>(
-    PlanzViewState
+    PlanzViewState()
 ) {
 
     override fun handleEvents(event: PlanzEvent) {
-        when(event) {
-            is PlanzEvent.OnBottomSheetExitClicked -> { sendEffect({ PlanzSideEffect.HideBottomSheet }) }
+        when (event) {
+            is PlanzEvent.OnPlanItemClicked -> {
+                sendEffect({ PlanzSideEffect.NavigateDetailPlanScreen(event.planId) })
+            }
+            is PlanzEvent.OnBottomSheetExitClicked -> {
+                sendEffect({ PlanzSideEffect.HideBottomSheet })
+            }
+            is PlanzEvent.ShowBottomSheet -> {
+                updateState { copy(
+                    selectDayPlans = event.selectionDayPlans,
+                    selectionDay = event.selectionDay
+                ) }
+                sendEffect({ PlanzSideEffect.ShowBottomSheet })
+            }
         }
+    }
+
+    fun clearSelectionPlans() {
+        updateState { copy(selectDayPlans = emptyList()) }
     }
 }
