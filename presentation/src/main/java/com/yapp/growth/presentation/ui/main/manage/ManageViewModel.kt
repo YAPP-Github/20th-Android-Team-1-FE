@@ -29,13 +29,14 @@ class ManageViewModel @Inject constructor(
             is ManageEvent.OnClickWaitingPlan -> {
                 val selectedPlan =
                     viewState.value.waitingPlans.firstOrNull { it.id == event.planId }
-                selectedPlan?.let {
-                    if (it.isLeader) sendEffect({ ManageSideEffect.NavigateToFixPlanScreen(event.planId) })
+                selectedPlan?.let { waitingPlan ->
+                    if (waitingPlan.isLeader) sendEffect({ ManageSideEffect.NavigateToFixPlanScreen(event.planId) })
+                    else if (waitingPlan.isAlreadyReplied) sendEffect({ ManageSideEffect.NavigateToMonitorPlanScreen(event.planId) })
                     else sendEffect({ ManageSideEffect.NavigateToMemberResponseScreen(event.planId) })
                 }
             }
             is ManageEvent.OnClickFixedPlan -> sendEffect(
-                { ManageSideEffect.NavigateToInvitationScreen(event.planId) }
+                { ManageSideEffect.NavigateToDetailPlanScreen(event.planId) }
             )
             is ManageEvent.OnClickTab -> sendEffect({ ManageSideEffect.SwitchTab(event.tabIndex) })
         }

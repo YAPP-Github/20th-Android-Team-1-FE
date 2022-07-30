@@ -25,8 +25,12 @@ jobs:
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+        PLANZ_FIREBASE_DOMAIN: ${{ secrets.PLANZ_FIREBASE_DOMAIN }}
+        PLANZ_FIREBASE_PREFIX: ${{ secrets.PLANZ_FIREBASE_PREFIX }}
       run: |
         echo BASE_URL=\"$BASE_URL\" >> ./local.properties
         echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" >> ./local.properties
+        echo PLANZ_FIREBASE_DOMAIN=\"$PLANZ_FIREBASE_DOMAIN\" >> ./local.properties
+        echo PLANZ_FIREBASE_PREFIX=\"$PLANZ_FIREBASE_PREFIX\" >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew build

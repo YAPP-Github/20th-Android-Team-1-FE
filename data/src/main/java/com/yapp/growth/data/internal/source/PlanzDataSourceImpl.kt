@@ -3,7 +3,7 @@ package com.yapp.growth.data.internal.source
 import com.yapp.growth.data.api.GrowthApi
 import com.yapp.growth.data.api.handleApi
 import com.yapp.growth.data.mapper.*
-import com.yapp.growth.data.parameter.ConfirmPlanParameter
+import com.yapp.growth.data.parameter.FixPlanParameter
 import com.yapp.growth.data.parameter.TemporaryPlanParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDayParameter
 import com.yapp.growth.data.parameter.TimeCheckedOfDaysParameter
@@ -13,8 +13,8 @@ import com.yapp.growth.domain.entity.*
 import javax.inject.Inject
 
 internal class PlanzDataSourceImpl @Inject constructor(
-    private val retrofitApi : GrowthApi
-): PlanzDataSource {
+    private val retrofitApi: GrowthApi,
+) : PlanzDataSource {
 
     override suspend fun getCreateTimeTable(uuid: String): NetworkResult<CreateTimeTable> =
         handleApi {
@@ -23,7 +23,7 @@ internal class PlanzDataSourceImpl @Inject constructor(
 
     override suspend fun makePlan(
         uuid: String,
-        timeCheckedOfDays: List<TimeCheckedOfDay>
+        timeCheckedOfDays: List<TimeCheckedOfDay>,
     ): NetworkResult<Long> =
         handleApi {
             val parameter = TimeCheckedOfDaysParameter(
@@ -38,14 +38,14 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.makePlan(uuid, parameter).toLong()
         }
 
-    override suspend fun getRespondUsers(promisingId: Long): NetworkResult<TimeTable> =
+    override suspend fun getRespondUsers(planId: Long): NetworkResult<TimeTable> =
         handleApi {
-            retrofitApi.getResponseTimeTable(promisingId.toString()).toTimeTable()
+            retrofitApi.getResponseTimeTable(planId.toString()).toTimeTable()
         }
 
     override suspend fun sendRespondPlan(
-        promisingId: Long,
-        timeCheckedOfDays: List<TimeCheckedOfDay>
+        planId: Long,
+        timeCheckedOfDays: List<TimeCheckedOfDay>,
     ): NetworkResult<Unit> =
         handleApi {
             val parameter = TimeCheckedOfDaysParameter(
@@ -57,12 +57,17 @@ internal class PlanzDataSourceImpl @Inject constructor(
                     )
                 }
             )
-            retrofitApi.sendRespondPlan(promisingId.toString(), parameter)
+            retrofitApi.sendRespondPlan(planId.toString(), parameter)
         }
 
-    override suspend fun sendConfirmPlan(promisingId: Long, date: String): NetworkResult<Any> =
+    override suspend fun sendRejectPlan(planId: Long): NetworkResult<Unit> =
         handleApi {
-            retrofitApi.sendConfirmPlan(promisingId.toString(), ConfirmPlanParameter(date))
+            retrofitApi.sendRejectPlan(planId.toString())
+        }
+
+    override suspend fun sendFixPlan(planId: Long, date: String): NetworkResult<Plan.FixedPlan> =
+        handleApi {
+            retrofitApi.sendFixPlan(planId.toString(), FixPlanParameter(date)).toFixedPlan()
         }
 
     override suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>> =
@@ -73,6 +78,16 @@ internal class PlanzDataSourceImpl @Inject constructor(
     override suspend fun getFixedPlan(planId: Long): NetworkResult<Plan.FixedPlan> =
         handleApi {
             retrofitApi.getFixedPlan(planId).toFixedPlan()
+        }
+
+    override suspend fun getPlanCategories(): NetworkResult<List<Category>> =
+        handleApi {
+            retrofitApi.getCategories().map { it.toCategory() }
+        }
+
+    override suspend fun getSampleTitle(categoryId: Int): NetworkResult<String> =
+        handleApi {
+            retrofitApi.getSampleTitle(categoryId).title
         }
 
     override suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>> =

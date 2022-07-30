@@ -1,5 +1,5 @@
 package com.yapp.growth.data.parameter
 
-data class ConfirmPlanParameter(
+data class FixPlanParameter(
     val promiseDate: String
 )

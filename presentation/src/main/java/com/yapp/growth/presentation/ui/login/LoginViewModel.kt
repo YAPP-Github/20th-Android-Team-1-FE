@@ -25,12 +25,6 @@ class LoginViewModel @Inject constructor(
     @Inject
     lateinit var kakaoLoginSdk: LoginSdk
 
-    override fun handleEvents(event: LoginEvent) {
-        when (event) {
-            is LoginEvent.OnClickKakaoLoginButton -> requestKakaoLogin(event.context)
-        }
-    }
-
     private fun requestKakaoLogin(context: Context) = viewModelScope.launch {
         runCatching { kakaoLoginSdk.login(context) }
             .onSuccess { requestGetUserInfo() }
@@ -52,6 +46,13 @@ class LoginViewModel @Inject constructor(
             .onError {
                 sendEffect({ LoginSideEffect.LoginFailed })
             }
+    }
+
+    override fun handleEvents(event: LoginEvent) {
+        when (event) {
+            is LoginEvent.OnClickKakaoLoginButton -> requestKakaoLogin(event.context)
+            is LoginEvent.OnClickNonLoginButton -> sendEffect({ LoginSideEffect.MoveToMain })
+        }
     }
 
 }

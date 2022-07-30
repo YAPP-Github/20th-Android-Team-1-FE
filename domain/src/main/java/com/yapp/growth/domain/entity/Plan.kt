@@ -4,7 +4,7 @@ sealed class Plan(
     open val id: Int,
     open val title: String,
     open val isLeader: Boolean,
-    open val category: String, // type?
+    open val category: Category,
     open val members: List<String>,
     open val place: String,
 ) {
@@ -12,7 +12,7 @@ sealed class Plan(
         override val id: Int,
         override val title: String,
         override val isLeader: Boolean = false,
-        override val category: String,
+        override val category: Category,
         override val members: List<String>,
         override val place: String,
         val startTime: Int,
@@ -31,7 +31,7 @@ sealed class Plan(
         override val id: Int,
         override val title: String,
         override val isLeader: Boolean = false,
-        override val category: String,
+        override val category: Category,
         override val members: List<String>,
         override val place: String,
         val date: String,

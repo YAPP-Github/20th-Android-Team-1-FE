@@ -8,7 +8,7 @@ import com.yapp.growth.domain.entity.Plan
 
 class HomeContract {
     data class HomeViewState(
-        val loadState: LoadState = LoadState.Idle,
+        val loadState: LoadState = LoadState.Success,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "",
         val allPlans: List<Plan.FixedPlan> = emptyList(),
@@ -26,7 +26,6 @@ class HomeContract {
         object NavigateToMyPageScreen : HomeSideEffect()
         data class NavigateDetailPlanScreen(val planId: Int) : HomeSideEffect()
         object ShowBottomSheet : HomeSideEffect()
-        object HideBottomSheet : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
@@ -34,7 +33,6 @@ class HomeContract {
         object OnUserImageClicked : HomeEvent()
         data class OnPlanItemClicked(val planId: Int) : HomeEvent()
         data class OnCalendarDayClicked(val selectionDay: CalendarDay) : HomeEvent()
-        object OnBottomSheetExitClicked : HomeEvent()
         object OnTodayPlanExpandedClicked : HomeEvent()
         object OnMonthlyPlanExpandedClicked : HomeEvent()
         object OnMonthlyPlanModeClicked : HomeEvent()
@@ -43,7 +41,7 @@ class HomeContract {
     }
 
     enum class LoadState {
-        Loading, Idle, Error
+        Loading, Success, Error
     }
 
     enum class LoginState {

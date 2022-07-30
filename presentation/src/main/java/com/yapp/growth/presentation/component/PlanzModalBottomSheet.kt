@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlanzBottomSheetLayout(
+fun PlanzModalBottomSheetLayout(
     sheetState: ModalBottomSheetState,
     sheetContent: @Composable () -> Unit,
     scrimColor: Color = ModalBottomSheetDefaults.scrimColor,
@@ -30,7 +30,7 @@ fun PlanzBottomSheetLayout(
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                PlanzBottomSheet {
+                PlanzModalBottomSheet {
                     sheetContent()
                 }
             }
@@ -41,13 +41,13 @@ fun PlanzBottomSheetLayout(
 }
 
 @Composable
-fun PlanzBottomSheet(
+fun PlanzModalBottomSheet(
     sheetContent: @Composable () -> Unit,
 ) {
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
-            .height(20.dp)
+            .height(24.dp)
             .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .background(color = Color.White)
     )

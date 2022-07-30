@@ -26,7 +26,7 @@ import com.yapp.growth.presentation.util.composableActivityViewModel
 fun CreateTimeTableScreen(
     viewModel: CreateTimeTableViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
-    navigateToNextScreen: () -> Unit,
+    navigateToNextScreen: (Long) -> Unit,
     navigateToPreviousScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
@@ -92,7 +92,7 @@ fun CreateTimeTableScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 CreateTimeTableSideEffect.ExitCreateScreen -> exitCreateScreen()
-                CreateTimeTableSideEffect.NavigateToNextScreen -> navigateToNextScreen()
+                is CreateTimeTableSideEffect.NavigateToNextScreen -> navigateToNextScreen(effect.planId)
                 CreateTimeTableSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
             }
         }

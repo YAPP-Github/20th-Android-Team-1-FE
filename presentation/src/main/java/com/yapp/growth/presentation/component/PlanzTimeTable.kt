@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -19,20 +19,15 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
-import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.util.getCurrentBlockDate
-import com.yapp.growth.presentation.util.toHour
-import com.yapp.growth.presentation.util.toPlanDate
 
 @Composable
-fun ConfirmPlanTimeTable(
+fun FixPlanTimeTable(
     timeTable: TimeTable,
     onClickTimeTable: (Int, Int) -> Unit,
     currentClickTimeIndex: Pair<Int, Int>
@@ -317,7 +312,6 @@ fun CreateTimeTable(
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
                                 .clickable {
                                     onClickTimeTable(dateIndex, minuteIndex)
-                                    println(date)
                                 }
                                 .background(if (upperTableClicked) MainPurple900 else Color.Transparent),
                         )
@@ -341,7 +335,6 @@ fun CreateTimeTable(
                                 .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
                                 .clickable {
                                     onClickTimeTable(dateIndex, minuteIndex.plus(1))
-                                    println(date)
                                 }
                                 .background(if (underTableClicked) MainPurple900 else Color.Transparent),
                         )
@@ -369,16 +362,21 @@ fun LocationAndAvailableColorBox(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Icon(
-                modifier = Modifier.width(15.dp).height(18.dp),
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(20.dp)
+                    .padding(vertical = 1.dp, horizontal = 3.dp),
                 tint = Color.Unspecified,
                 imageVector = ImageVector.vectorResource(R.drawable.ic_location_icon),
                 contentDescription = null
             )
 
             Text(
+                modifier = Modifier.align(Alignment.CenterVertically),
                 text = timeTable.placeName,
                 color = CoolGray500,
                 style = PlanzTypography.caption,
@@ -439,70 +437,4 @@ fun LocationAndAvailableColorBox(
 
 }
 
-@Composable
-fun ConfirmPlanBottomSheet(timeTable: TimeTable, currentClickTimeIndex: Pair<Int,Int>, currentClickUserData: List<User>, onClickSelectPlan: (String) -> Unit) {
-    if (currentClickTimeIndex.first < 0 || currentClickTimeIndex.second < 0 ) return
 
-    val day = timeTable.availableDates[currentClickTimeIndex.first].split('T').first()
-    val hour = timeTable.minTime.toHour()
-    val time = "${day}T${hour}:00"
-
-    val respondUserText = StringBuilder()
-    currentClickUserData.forEachIndexed { index, user ->
-        if (index == 3) respondUserText.append("\n")
-        if (index == 7) respondUserText.append("\n")
-        if (index == 0) respondUserText.append(user.userName)
-        else respondUserText.append(", ${user.userName}")
-    }
-
-    Column(
-        modifier = Modifier
-            .background(Color.White)
-            .padding(start = 20.dp, end = 20.dp)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = "약속 날짜",
-                style = PlanzTypography.subtitle2,
-                color = Gray700
-            )
-
-            Text(
-                text = time.getCurrentBlockDate(currentClickTimeIndex.second).toPlanDate(),
-                style = PlanzTypography.subtitle2,
-                color = MainPurple900
-            )
-        }
-
-        if (respondUserText.isNotEmpty()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "응답자",
-                    style = PlanzTypography.subtitle2,
-                    color = Gray700
-                )
-
-                Text(
-                    text = respondUserText.toString(),
-                    style = PlanzTypography.caption,
-                    color = Gray800,
-                    textAlign = TextAlign.End
-                )
-            }
-        }
-
-        PlanzBasicBottomButton(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp), text = "약속시간 선택", onClick = {
-            onClickSelectPlan(time.getCurrentBlockDate(currentClickTimeIndex.second))
-        })
-    }
-}

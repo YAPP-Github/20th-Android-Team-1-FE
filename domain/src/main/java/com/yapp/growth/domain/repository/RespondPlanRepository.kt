@@ -4,5 +4,6 @@ import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 
 interface RespondPlanRepository {
-    suspend fun sendRespondPlan(promisingId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>): NetworkResult<Unit>
+    suspend fun sendRespondPlan(planId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>): NetworkResult<Unit>
+    suspend fun sendRejectPlan(planId: Long): NetworkResult<Unit>
 }

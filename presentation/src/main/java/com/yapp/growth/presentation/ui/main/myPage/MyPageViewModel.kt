@@ -24,17 +24,14 @@ class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val deleteUserInfoUseCase: DeleteUserInfoUseCase,
     private val resourcesProvider: ResourceProvider,
+    private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
     init {
         updateState { copy(loadState = MyPageContract.LoadState.Loading) }
-        fetchUserInfo()
         checkValidLoginToken()
     }
-
-    @Inject
-    lateinit var kakaoLoginSdk: LoginSdk
-
+    
     override fun handleEvents(event: MyPageEvent) {
         when (event) {
             is MyPageEvent.OnTermsClicked -> {
@@ -56,10 +53,41 @@ class MyPageViewModel @Inject constructor(
                 sendEffect({ MyPageSideEffect.ExitMyPageScreen })
             }
             is MyPageEvent.OnNegativeButtonClicked -> {
-                updateState { copy(isDialogVisible = false) }
+                sendEffect({ MyPageSideEffect.MoveToLogin })
             }
             is MyPageEvent.OnPositiveButtonClicked -> {
                 withdraw()
+                updateState { copy(isDialogVisible = false) }
+            }
+        }
+    }
+
+    private fun checkValidLoginToken() {
+        viewModelScope.launch {
+            runCatching {
+                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
+                if (isValidLoginToken) {
+                    updateState {
+                        copy(
+                            loginState = LoginState.LOGIN,
+                        )
+                    }
+                    fetchUserInfo()
+                } else {
+                    updateState {
+                        copy(
+                            loginState = LoginState.NONE,
+                            loadState = MyPageContract.LoadState.Success
+                        )
+                    }
+                }
+            }.onError {
+                updateState {
+                    copy(
+                        loginState = LoginState.NONE,
+                        loadState = MyPageContract.LoadState.Error
+                    )
+                }
             }
         }
     }
@@ -89,13 +117,8 @@ class MyPageViewModel @Inject constructor(
                         }
                 }
                 .onError {
-                    Timber.w("usecase 에러")
-                    Timber.w(it)
                     sendEffect({ MyPageSideEffect.ShowToast(resourcesProvider.getString(R.string.my_page_withdraw_error_text)) })
                 }
-
-
-
         }
     }
 
@@ -108,7 +131,7 @@ class MyPageViewModel @Inject constructor(
                     .onSuccess {
                         updateState {
                             copy(
-                                loadState = MyPageContract.LoadState.Idle,
+                                loadState = MyPageContract.LoadState.Success,
                                 userName = it.userName
                             )
                         }
@@ -123,22 +146,10 @@ class MyPageViewModel @Inject constructor(
             } else {
                 updateState {
                     copy(
-                        loadState = MyPageContract.LoadState.Idle,
+                        loadState = MyPageContract.LoadState.Success,
                         userName = cacheInfo.userName
                     )
                 }
-            }
-        }
-    }
-
-    private fun checkValidLoginToken() {
-        viewModelScope.launch {
-            runCatching {
-                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
-                else updateState { copy(loginState = LoginState.NONE) }
-            }.onError {
-                updateState { copy(loginState = LoginState.LOGIN) }
             }
         }
     }

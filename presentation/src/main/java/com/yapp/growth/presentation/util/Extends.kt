@@ -20,6 +20,14 @@ fun CalendarDay.toParseFormatDate(): String {
     return PARSE_DATE_FORMAT.format(this.date)
 }
 
+fun Date.toHour(): String {
+    return SimpleDateFormat("aa h시", Locale.KOREA).format(this)
+}
+
+fun Date.toHourAndMinute(): String {
+    return SimpleDateFormat("aa h시 m분", Locale.KOREA).format(this)
+}
+
 fun Date.toCalculateDiffDay(other: Date): Long {
     return (other.time - this.time) / (60 * 60 * 24 * 1000)
 }
@@ -75,9 +83,9 @@ fun String.toPlanDate(): String {
     }
 
     dateTimeFormat = if (calendar.get(Calendar.MINUTE) == 0) {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) aa h시", Locale.KOREA)
     } else {
-        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) ${this.to12HourClock()}HH시 mm분", Locale.KOREA)
+        SimpleDateFormat("M월 d일(${this.toDayOfWeek()}) aa h시 mm분", Locale.KOREA)
     }
 
     val displayText = PARSE_DATE_FORMAT.parse(currentTime) ?: ""
