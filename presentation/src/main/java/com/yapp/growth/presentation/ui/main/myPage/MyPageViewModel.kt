@@ -25,7 +25,6 @@ class MyPageViewModel @Inject constructor(
 
     init {
         updateState { copy(loadState = MyPageContract.LoadState.Loading) }
-        fetchUserInfo()
         checkValidLoginToken()
     }
 
@@ -58,6 +57,36 @@ class MyPageViewModel @Inject constructor(
             is MyPageEvent.OnPositiveButtonClicked -> {
                 updateState { copy(isDialogVisible = false) }
                 // withdraw()
+            }
+        }
+    }
+
+    private fun checkValidLoginToken() {
+        viewModelScope.launch {
+            runCatching {
+                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
+                if (isValidLoginToken) {
+                    updateState {
+                        copy(
+                            loginState = LoginState.LOGIN,
+                        )
+                    }
+                    fetchUserInfo()
+                } else {
+                    updateState {
+                        copy(
+                            loginState = LoginState.NONE,
+                            loadState = MyPageContract.LoadState.Success
+                        )
+                    }
+                }
+            }.onError {
+                updateState {
+                    copy(
+                        loginState = LoginState.NONE,
+                        loadState = MyPageContract.LoadState.Error
+                    )
+                }
             }
         }
     }
@@ -102,18 +131,6 @@ class MyPageViewModel @Inject constructor(
                         userName = cacheInfo.userName
                     )
                 }
-            }
-        }
-    }
-
-    private fun checkValidLoginToken() {
-        viewModelScope.launch {
-            runCatching {
-                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
-                else updateState { copy(loginState = LoginState.NONE) }
-            }.onError {
-                updateState { copy(loginState = LoginState.LOGIN) }
             }
         }
     }
