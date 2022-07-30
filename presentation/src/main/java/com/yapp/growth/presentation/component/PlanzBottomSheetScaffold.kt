@@ -10,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,13 +33,14 @@ fun PlanzBottomSheetScaffoldLayout(
         scaffoldState = scaffoldState,
         sheetBackgroundColor = Color.Transparent,
         sheetPeekHeight = 0.dp,
+        sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         sheetContent = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                PlanzBottomSheet {
+                PlanzBottomSheetScaffold {
                     sheetContent()
                 }
             }
@@ -53,14 +53,13 @@ fun PlanzBottomSheetScaffoldLayout(
 
 
 @Composable
-fun PlanzBottomSheet(
+fun PlanzBottomSheetScaffold(
     sheetContent: @Composable () -> Unit
 ) {
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
-            .height(24.dp)
-            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .height(20.dp)
             .background(color = Color.White)
     )
 
@@ -157,7 +156,7 @@ fun MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: Li
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(top = 5.dp, start = 20.dp, end = 20.dp)) {
+            .padding(start = 20.dp, end = 20.dp)) {
 
         Icon(
             modifier = Modifier
