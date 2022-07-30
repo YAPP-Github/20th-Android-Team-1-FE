@@ -21,16 +21,14 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val resourcesProvider: ResourceProvider,
+    private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
     init {
         updateState { copy(loadState = MyPageContract.LoadState.Loading) }
         checkValidLoginToken()
     }
-
-    @Inject
-    lateinit var kakaoLoginSdk: LoginSdk
-
+    
     override fun handleEvents(event: MyPageEvent) {
         when (event) {
             is MyPageEvent.OnTermsClicked -> {
