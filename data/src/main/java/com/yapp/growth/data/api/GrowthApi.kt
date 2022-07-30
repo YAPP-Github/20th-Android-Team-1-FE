@@ -79,4 +79,7 @@ interface GrowthApi {
 
     @GET("/api/users/info")
     suspend fun getUserInfo(): UserResponseImpl
+
+    @POST("/api/users/resign-member")
+    suspend fun deleteUserInfo()
 }

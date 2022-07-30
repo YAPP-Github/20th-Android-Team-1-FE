@@ -7,4 +7,5 @@ interface UserRepository {
     suspend fun signUp(): NetworkResult<User>
     suspend fun getUserInfo(): NetworkResult<User>
     suspend fun getCachedUserInfo(): User?
+    suspend fun deleteUserInfo(): NetworkResult<Unit>
 }

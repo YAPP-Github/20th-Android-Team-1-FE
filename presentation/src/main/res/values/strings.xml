@@ -43,6 +43,7 @@
     <string name="my_page_dialog_positive_button_text">다시 생각해볼게요</string>
     <string name="my_page_dialog_negative_button_text">계정탈퇴</string>
     <string name="my_page_logout_error_text">로그아웃에 실패했습니다. 다시 시도해주세요.</string>
+    <string name="my_page_withdraw_error_text">탈퇴 처리에 실패했습니다. 다시 시도해주세요.</string>
 
     <string name="privacy_policy_app_bar_text">개인정보 처리방침</string>
 
