@@ -103,8 +103,6 @@ fun HomeScreen(
                 is HomeSideEffect.ShowBottomSheet -> {
                     showBottomSheet(viewState.selectionDay, viewState.selectDayPlans)
                 }
-                is HomeSideEffect.HideBottomSheet -> {
-                }
             }
         }
     }
