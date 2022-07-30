@@ -9,12 +9,12 @@ class CreateTimeTableContract {
     data class CreateTimeTableViewState(
         val createTimeTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList()),
         val clickCount: Int = 0,
+        val isDialogVisible: Boolean = false,
     ): ViewState
 
     sealed class CreateTimeTableSideEffect: ViewSideEffect {
         object ExitCreateScreen : CreateTimeTableSideEffect()
         data class NavigateToNextScreen(val planId: Long) : CreateTimeTableSideEffect()
-        object NavigateToPreviousScreen : CreateTimeTableSideEffect()
     }
 
     sealed class CreateTimeTableEvent: ViewEvent {
@@ -24,5 +24,7 @@ class CreateTimeTableContract {
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : CreateTimeTableEvent()
         object OnClickNextDayButton : CreateTimeTableEvent()
         object OnClickPreviousDayButton : CreateTimeTableEvent()
+        object OnClickDialogPositiveButton : CreateTimeTableEvent()
+        object OnClickDialogNegativeButton : CreateTimeTableEvent()
     }
 }
