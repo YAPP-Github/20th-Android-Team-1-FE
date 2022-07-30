@@ -67,11 +67,11 @@ import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
-import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanScreen
-import com.yapp.growth.presentation.ui.main.manage.monitor.MonitorPlanScreen
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanScreen
-import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanCompleteScreen
-import com.yapp.growth.presentation.ui.main.manage.respond.result.RespondPlanRejectScreen
+import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
+import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanScreen
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanScreen
+import com.yapp.growth.presentation.ui.main.respond.result.RespondPlanCompleteScreen
+import com.yapp.growth.presentation.ui.main.respond.result.RespondPlanRejectScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.sample.SampleScreen

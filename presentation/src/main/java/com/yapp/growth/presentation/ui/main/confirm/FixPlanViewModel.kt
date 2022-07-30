@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.confirm
+package com.yapp.growth.presentation.ui.main.confirm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.domain.usecase.SendFixPlanUseCase
-import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.*
+import com.yapp.growth.presentation.ui.main.confirm.FixPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
