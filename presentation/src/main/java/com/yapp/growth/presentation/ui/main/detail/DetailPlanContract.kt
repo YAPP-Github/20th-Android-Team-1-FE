@@ -7,6 +7,7 @@ import com.yapp.growth.base.ViewState
 
 class DetailPlanContract {
     data class DetailPlanViewState(
+        val loadState: LoadState = LoadState.SUCCESS,
         val title: String = "",
         val category: String = "",
         val date: String = "",

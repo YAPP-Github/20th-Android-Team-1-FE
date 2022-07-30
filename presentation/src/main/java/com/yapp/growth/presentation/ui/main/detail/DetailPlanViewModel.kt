@@ -3,6 +3,8 @@ package com.yapp.growth.presentation.ui.main.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
+import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetFixedPlanUseCase
 import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
@@ -22,11 +24,13 @@ class DetailPlanViewModel @Inject constructor(
     BaseViewModel<DetailPlanViewState, DetailPlanSideEffect, DetailPlanEvent>(
         DetailPlanViewState()
     ) {
+
     companion object {
-        const val DEFAULT_PLAN_ID : Long = 1
+        const val DEFAULT_PLAN_ID: Long = 1
     }
 
     init {
+        updateState { copy(loadState = LoadState.LOADING) }
         fetchPlan(savedStateHandle.get<Long>(KEY_PLAN_ID) ?: DEFAULT_PLAN_ID)
     }
 
@@ -38,19 +42,22 @@ class DetailPlanViewModel @Inject constructor(
 
     private fun fetchPlan(planId: Long) {
         viewModelScope.launch {
-            val result = (getFixedPlanUseCase.invoke(planId))
-
-            result.onSuccess {
-                updateState {
-                    copy(
-                        title = it.title,
-                        category = it.category.keyword,
-                        date = it.date.toDayAndHour(),
-                        place = it.place,
-                        member = convertMemberList(it.members)
-                    )
+            getFixedPlanUseCase.invoke(planId)
+                .onSuccess {
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            title = it.title,
+                            category = it.category.keyword,
+                            date = it.date.toDayAndHour(),
+                            place = it.place,
+                            member = convertMemberList(it.members)
+                        )
+                    }
                 }
-            }
+                .onError {
+                    updateState { copy(loadState = LoadState.ERROR) }
+                }
         }
     }
 
