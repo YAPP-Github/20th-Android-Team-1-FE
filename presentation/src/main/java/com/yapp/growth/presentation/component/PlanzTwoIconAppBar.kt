@@ -52,7 +52,8 @@ private fun PlanzTwoIconAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(76.dp)
+            .padding(top = 20.dp)
     ) {
 
         Icon(
