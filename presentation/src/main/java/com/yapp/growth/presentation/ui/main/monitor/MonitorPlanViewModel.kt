@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.monitor
+package com.yapp.growth.presentation.ui.main.monitor
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -10,9 +10,9 @@ import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
-import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract
+import com.yapp.growth.presentation.ui.main.confirm.FixPlanContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.yapp.growth.presentation.ui.main.manage.monitor.MonitorPlanContract.*
+import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject

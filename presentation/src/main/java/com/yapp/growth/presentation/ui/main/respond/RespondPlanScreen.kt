@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.respond
+package com.yapp.growth.presentation.ui.main.respond
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,8 +29,8 @@ import com.yapp.growth.presentation.theme.Gray100
 import com.yapp.growth.presentation.theme.Gray300
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.PlanzTypography
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanSideEffect
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanEvent
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanSideEffect
 
 @Composable
 fun RespondPlanScreen(

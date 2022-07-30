@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.respond.result
+package com.yapp.growth.presentation.ui.main.respond.result
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

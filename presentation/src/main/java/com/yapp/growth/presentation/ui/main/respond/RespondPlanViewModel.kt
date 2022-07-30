@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.respond
+package com.yapp.growth.presentation.ui.main.respond
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.domain.usecase.SendRejectPlanUseCase
 import com.yapp.growth.domain.usecase.SendRespondPlanUseCase
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.*
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
