@@ -26,20 +26,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,17 +47,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.component.PlanzLoading
+import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray200
 import com.yapp.growth.presentation.theme.Gray500
@@ -69,31 +64,28 @@ import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainGradient
 import com.yapp.growth.presentation.theme.MainPurple300
 import com.yapp.growth.presentation.theme.MainPurple900
-import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.util.advancedShadow
 import com.yapp.growth.presentation.util.toDate
-import kotlinx.coroutines.launch
+import com.yapp.growth.presentation.util.toHour
+import com.yapp.growth.presentation.util.toHourAndMinute
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMyPageScreen: () -> Unit,
     navigateToDetailPlanScreen: (Int) -> Unit,
+    showBottomSheet: (CalendarDay, List<Plan.FixedPlan>) -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
     val context = LocalContext.current as Activity
-
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -109,84 +101,66 @@ fun HomeScreen(
                     navigateToDetailPlanScreen(effect.planId)
                 }
                 is HomeSideEffect.ShowBottomSheet -> {
-                    coroutineScope.launch { sheetState.show() }
+                    showBottomSheet(viewState.selectionDay, viewState.selectDayPlans)
                 }
                 is HomeSideEffect.HideBottomSheet -> {
-                    coroutineScope.launch { sheetState.hide() }
                 }
             }
         }
     }
 
-    // TODO : 바텀시트가 다른 화면을 갔다 와도 유지되는 현상 해결해야 함
-    PlanzModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            HomeBottomSheetContent(
-                selectionDay = viewState.selectionDay,
-                selectDayPlans = viewState.selectDayPlans,
-                onExitClick = {
-                    viewModel.setEvent(HomeEvent.OnBottomSheetExitClicked)
-                },
-                onPlanItemClick = {
-                    viewModel.setEvent(HomeEvent.OnPlanItemClicked(it))
-                }
+    Scaffold(
+        backgroundColor = BackgroundColor1,
+        topBar = {
+            HomeUserProfile(
+                userName = viewState.userName,
+                onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
             )
-        }
-    ) {
-        Scaffold(
-            backgroundColor = BackgroundColor1,
-            topBar = {
-                HomeUserProfile(
-                    userName = viewState.userName,
-                    onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
-                )
-            },
-            modifier = Modifier.fillMaxSize(),
-        ) { padding ->
-            when (viewState.loadState) {
-                HomeContract.LoadState.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        PlanzLoading()
-                    }
+        },
+        modifier = Modifier.fillMaxSize(),
+    ) { padding ->
+        when (viewState.loadState) {
+            HomeContract.LoadState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    PlanzLoading()
                 }
-                else -> {
-                    Column(
-                        modifier = Modifier
-                            .padding(padding)
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        Spacer(modifier = Modifier.height(3.dp))
-                        when (viewState.loginState) {
-                            HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                                isError = viewState.loadState == HomeContract.LoadState.Error,
-                                expanded = viewState.isTodayPlanExpanded,
-                                todayPlans = viewState.todayPlans,
-                                planCount = viewState.todayPlans.size,
-                                onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
-                                onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
-                            )
-                            HomeContract.LoginState.NONE -> HomeInduceLogin(
-                                OnInduceLoginClick = { viewModel.setEvent(HomeEvent.OnInduceLoginClicked) }
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        HomeMonthlyPlan(
+            }
+            else -> {
+                Column(
+                    modifier = Modifier
+                        .padding(padding)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(modifier = Modifier.height(3.dp))
+                    when (viewState.loginState) {
+                        HomeContract.LoginState.LOGIN -> HomeTodayPlan(
                             isError = viewState.loadState == HomeContract.LoadState.Error,
-                            expanded = viewState.isMonthlyPlanExpanded,
-                            monthlyPlans = viewState.monthlyPlans,
-                            mode = viewState.monthlyPlanMode,
-                            currentDate = currentDate,
-                            onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
-                            onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
-                            onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
-                            onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
+                            expanded = viewState.isTodayPlanExpanded,
+                            todayPlans = viewState.todayPlans,
+                            planCount = viewState.todayPlans.size,
                             onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
-                            onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
+                            onExpandedClick = { viewModel.setEvent(HomeEvent.OnTodayPlanExpandedClicked) }
                         )
-                        Spacer(modifier = Modifier.height(24.dp))
+                        HomeContract.LoginState.NONE -> HomeInduceLogin(
+                            OnInduceLoginClick = { viewModel.setEvent(HomeEvent.OnInduceLoginClicked) }
+                        )
                     }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HomeMonthlyPlan(
+                        isError = viewState.loadState == HomeContract.LoadState.Error,
+                        expanded = viewState.isMonthlyPlanExpanded,
+                        monthlyPlans = viewState.monthlyPlans,
+                        mode = viewState.monthlyPlanMode,
+                        currentDate = currentDate,
+                        onModeClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanModeClicked) },
+                        onDateClick = { viewModel.setEvent(HomeEvent.OnCalendarDayClicked(it)) },
+                        onPreviousClick = { viewModel.setEvent(HomeEvent.OnMonthlyPreviousClicked) },
+                        onNextClick = { viewModel.setEvent(HomeEvent.OnMonthlyNextClicked) },
+                        onPlanItemClick = { viewModel.setEvent(HomeEvent.OnPlanItemClicked(it)) },
+                        onExpandedClick = { viewModel.setEvent(HomeEvent.OnMonthlyPlanExpandedClicked) }
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
             }
         }
@@ -543,7 +517,7 @@ fun HomeDayPlanList(
     ) {
         if (expanded) {
             for (todayPlan in dayPlans) {
-                HomeTodayPlanItem(
+                DayPlanItem(
                     id = todayPlan.id,
                     date = todayPlan.date,
                     category = todayPlan.category,
@@ -552,7 +526,7 @@ fun HomeDayPlanList(
                 )
             }
         } else {
-            HomeTodayPlanItem(
+            DayPlanItem(
                 id = dayPlans[0].id,
                 date = dayPlans[0].date,
                 title = (if (dayPlans.size == 1) {
@@ -631,7 +605,7 @@ fun HomeMonthlyPlanList(
 
 
 @Composable
-fun HomeTodayPlanItem(
+fun DayPlanItem(
     id: Int,
     date: String,
     category: String,
@@ -643,12 +617,7 @@ fun HomeTodayPlanItem(
     calendar.time = tmp
 
     val minute = calendar.get(Calendar.MINUTE)
-
-    val time = if (minute == 0) {
-        SimpleDateFormat("aa h시", Locale.KOREA).format(tmp)
-    } else {
-        SimpleDateFormat("aa h시 m분", Locale.KOREA).format(tmp)
-    }
+    val time = if (minute == 0) tmp.toHour() else tmp.toHourAndMinute()
 
     Box(
         modifier = Modifier
@@ -662,9 +631,9 @@ fun HomeTodayPlanItem(
                 tint = Color.Unspecified,
                 imageVector = (
                         when (category) {
-                            "식사" -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
-                            "여행" -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
-                            "미팅" -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)
+                            stringResource(PlanThemeType.MEAL.themeStringResId) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
+                            stringResource(PlanThemeType.TRIP.themeStringResId) -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
+                            stringResource(PlanThemeType.MEETING.themeStringResId) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)
                             else -> ImageVector.vectorResource(id = R.drawable.ic_plan_etc)
                         }),
                 contentDescription = null,
@@ -722,59 +691,6 @@ fun HomeMonthlyPlanItem(
             color = Gray500,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.align(Alignment.CenterEnd)
-        )
-    }
-}
-
-@Composable
-fun HomeBottomSheetContent(
-    selectionDay: CalendarDay,
-    selectDayPlans: List<Plan.FixedPlan>,
-    onExitClick: () -> Unit,
-    onPlanItemClick: (Int) -> Unit
-) {
-    val month = selectionDay.month + 1
-    val day = selectionDay.day
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(start = 20.dp, end = 20.dp, top = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "${month}월 ${day}일 약속",
-                style = PlanzTypography.h3
-            )
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_exit),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(30.dp))
-                    .clickable { onExitClick() },
-            )
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        HomeDayPlanList(
-            expanded = true,
-            dayPlans = selectDayPlans,
-            onPlanItemClick = onPlanItemClick
-        )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
-@Composable
-fun PreviewHomeScreen() {
-    PlanzTheme {
-        HomeScreen(
-            navigateToDetailPlanScreen = { },
-            navigateToMyPageScreen = { },
         )
     }
 }
