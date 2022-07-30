@@ -83,7 +83,7 @@ class MyPageViewModel @Inject constructor(
                     .onSuccess {
                         updateState {
                             copy(
-                                loadState = MyPageContract.LoadState.Idle,
+                                loadState = MyPageContract.LoadState.Success,
                                 userName = it.userName
                             )
                         }
@@ -98,7 +98,7 @@ class MyPageViewModel @Inject constructor(
             } else {
                 updateState {
                     copy(
-                        loadState = MyPageContract.LoadState.Idle,
+                        loadState = MyPageContract.LoadState.Success,
                         userName = cacheInfo.userName
                     )
                 }
