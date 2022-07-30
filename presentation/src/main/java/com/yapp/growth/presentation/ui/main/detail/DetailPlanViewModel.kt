@@ -1,6 +1,5 @@
 package com.yapp.growth.presentation.ui.main.detail
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
@@ -10,10 +9,9 @@ import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanEvent
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanSideEffect
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanViewState
+import com.yapp.growth.presentation.util.toDayAndHour
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +36,6 @@ class DetailPlanViewModel @Inject constructor(
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun fetchPlan(planId: Long) {
         viewModelScope.launch {
             val result = (getFixedPlanUseCase.invoke(planId))
@@ -48,21 +45,13 @@ class DetailPlanViewModel @Inject constructor(
                     copy(
                         title = it.title,
                         category = it.category.keyword,
-                        date = convertDate(it.date),
+                        date = it.date.toDayAndHour(),
                         place = it.place,
                         member = convertMemberList(it.members)
                     )
                 }
             }
         }
-    }
-
-    // 2022-11-28 11:30:00 -> 11월 28일 오전 11시
-    @SuppressLint("SimpleDateFormat")
-    private fun convertDate(date: String): String {
-        val tmp: Date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date) as Date
-
-        return SimpleDateFormat("M월 d일 aa h시", Locale.KOREA).format(tmp)
     }
 
     private fun convertMemberList(members: List<String>): String {
