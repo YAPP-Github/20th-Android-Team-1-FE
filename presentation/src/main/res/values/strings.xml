@@ -123,8 +123,6 @@
     <string name="share_plan_share_feed_template_title">약속 요청이 도착했어요!</string>
     <string name="share_plan_share_feed_template_description">가능한 약속 날짜와 시간을 응답해 주세요!</string>
     <string name="share_plan_share_feed_template_image_url">/images/share-feed.png</string>
-    <string name="share_plan_share_feed_template_web_url">/images/share-feed.png</string> <!-- 임시 URL -->
-    <string name="share_plan_share_feed_template_mobile_url">/images/share-feed.png</string> <!-- 임시 URL -->
 
     <!-- 약속 응답 -->
     <string name="respond_plan_title_text">약속응답</string>
@@ -155,6 +153,10 @@
 
     <!-- 약속 응답 상태 -->
     <string name="respond_plan_already_confirm_info_text">이미 확정된 약속입니다.</string>
+
+    <!-- 약속 공유 썸네일 -->
+    <string name="share_thumbnail_title">"약속 조율 요청이 도착했어요!"</string>
+    <string name="share_thumbnail_description">"정말 편리한 약속잡기, Planz"</string>
 
     <string name="icon_exit_content_description">Exit Icon</string>
     <string name="icon_create_content_description">Create Icon</string>
