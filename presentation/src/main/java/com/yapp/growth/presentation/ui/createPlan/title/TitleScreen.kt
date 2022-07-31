@@ -16,6 +16,7 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzTextField
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecidePlace
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTitle
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleEvent
@@ -31,6 +32,12 @@ fun TitleScreen(
     navigateToPreviousScreen: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsState()
+
+    if (viewState.sampleTitle.isBlank()) {
+        viewModel.setEvent(
+            TitleEvent.InitHintText(sharedViewModel.viewState.value.category?.id ?: 0)
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -50,7 +57,7 @@ fun TitleScreen(
             ) {
                 PlanzTextField(
                     label = stringResource(id = R.string.create_plan_title_title_label),
-                    hint = stringResource(id = R.string.create_plan_title_title_hint),
+                    hint = viewState.sampleTitle,
                     maxLength = MAX_LENGTH_TITLE,
                     text = viewState.title,
                     onInputChanged = { viewModel.setEvent(TitleEvent.FillInTitle(it)) },
@@ -86,7 +93,10 @@ fun TitleScreen(
                     exitCreateScreen()
                 }
                 is TitleSideEffect.NavigateToNextScreen -> {
-                    sharedViewModel.setEvent(DecideTitle(viewState.title))
+                    sharedViewModel.setEvent(
+                        DecideTitle(viewState.title.ifBlank { viewState.sampleTitle })
+                    )
+                    sharedViewModel.setEvent(DecidePlace(viewState.place))
                     navigateToNextScreen()
                 }
                 is TitleSideEffect.NavigateToPreviousScreen -> {
@@ -107,5 +117,5 @@ fun TitleScreenPreview() {
     )
 }
 
-const val MAX_LENGTH_TITLE = 20
-const val MAX_LENGTH_PLACE = 20
+const val MAX_LENGTH_TITLE = 10
+const val MAX_LENGTH_PLACE = 10

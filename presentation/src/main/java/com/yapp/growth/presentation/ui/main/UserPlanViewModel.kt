@@ -33,9 +33,9 @@ class UserPlanViewModel @Inject constructor(
             }
     }
 
-    fun getUserName(): String {
-        return repository.getCachedUserInfo()?.userName ?: ""
-    }
+//    fun getUserName(): String {
+//        return repository.getCachedUserInfo()?.userName ?: ""
+//    }
 
 
     override fun handleEvents(event: UserPlanEvent) {

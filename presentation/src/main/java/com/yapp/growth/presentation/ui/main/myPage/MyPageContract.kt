@@ -1,12 +1,13 @@
 package com.yapp.growth.presentation.ui.main.myPage
 
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
 
 class MyPageContract {
     data class MyPageViewState(
-        val loadState: LoadState = LoadState.Idle,
+        val loadState: LoadState = LoadState.SUCCESS,
         val loginState: LoginState = LoginState.NONE,
         val userName: String = "",
         val isDialogVisible: Boolean = false,
@@ -29,10 +30,6 @@ class MyPageContract {
         object OnBackButtonClicked : MyPageEvent()
         object OnNegativeButtonClicked : MyPageEvent()
         object OnPositiveButtonClicked : MyPageEvent()
-    }
-
-    enum class LoadState {
-        Loading, Idle, Error
     }
 
     enum class LoginState {

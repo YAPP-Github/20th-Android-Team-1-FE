@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.confirm
+package com.yapp.growth.presentation.ui.main.confirm
 
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect

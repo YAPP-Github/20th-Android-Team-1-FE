@@ -29,6 +29,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.yapp.growth.base.LoadState
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
@@ -76,6 +78,8 @@ fun ManageScreen(
             )
 
             ManagePager(
+                waitingPlansLoadState = viewState.waitingPlansLoadState,
+                fixedPlansLoadState = viewState.fixedPlansLoadState,
                 pagerState = pagerState,
                 pageCount = ManageTapMenu.values().size,
                 waitingPlans = viewState.waitingPlans,
@@ -114,6 +118,10 @@ fun ManageScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.setEvent(ManageEvent.InitManageScreen)
     }
 }
 
@@ -163,6 +171,8 @@ fun ManageTabRow(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ManagePager(
+    waitingPlansLoadState: LoadState,
+    fixedPlansLoadState: LoadState,
     pagerState: PagerState,
     pageCount: Int,
     waitingPlans: List<Plan.WaitingPlan>,
@@ -178,24 +188,43 @@ fun ManagePager(
     ) { tabIndex ->
         when (tabIndex) {
             ManageTapMenu.WAITING_PLAN.ordinal -> {
-                if (waitingPlans.isNotEmpty()) {
-                    ManagePlansList(
-                        plans = waitingPlans,
-                        type = ManageTapMenu.WAITING_PLAN,
-                        onItemClick = onWaitingItemClick
-                    )
-                } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
+                ManagePagerContent(
+                    loadState = waitingPlansLoadState,
+                    plans = waitingPlans,
+                    type = ManageTapMenu.WAITING_PLAN,
+                    onItemClick = onWaitingItemClick,
+                    onCreateButtonClick = onCreateButtonClick
+                )
             }
             ManageTapMenu.FIXED_PLAN.ordinal -> {
-                if (fixedPlans.isNotEmpty()) {
-                    ManagePlansList(
-                        plans = fixedPlans,
-                        type = ManageTapMenu.FIXED_PLAN,
-                        onItemClick = onFixedItemClick
-                    )
-                } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
+                ManagePagerContent(
+                    loadState = fixedPlansLoadState,
+                    plans = fixedPlans,
+                    type = ManageTapMenu.FIXED_PLAN,
+                    onItemClick = onFixedItemClick,
+                    onCreateButtonClick = onCreateButtonClick
+                )
             }
         }
+    }
+}
+
+@Composable
+fun ManagePagerContent(
+    loadState: LoadState,
+    plans: List<Plan>,
+    type: ManageTapMenu,
+    onItemClick: (Int) -> Unit,
+    onCreateButtonClick: () -> Unit,
+) {
+    when (loadState) {
+        LoadState.LOADING -> {}
+        LoadState.SUCCESS -> {
+            if (plans.isNotEmpty()) {
+                ManagePlansList(plans = plans, type = type, onItemClick = onItemClick)
+            } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
+        }
+        LoadState.ERROR -> {}
     }
 }
 
@@ -388,7 +417,7 @@ fun WaitingPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = true,
-            category = "식사",
+            category = Category(1, "test"),
             members = listOf("member1", "member2", "member3", "member4"),
             place = "place",
             startTime = 0,
@@ -408,7 +437,7 @@ fun FixedPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = false,
-            category = "식사",
+            category = Category(1, "test"),
             members = listOf("member1", "member2", "member3", "member4", "member5"),
             place = "",
             date = "",

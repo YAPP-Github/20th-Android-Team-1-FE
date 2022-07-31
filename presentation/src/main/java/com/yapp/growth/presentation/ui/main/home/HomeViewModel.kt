@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
@@ -35,14 +36,6 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
 ) {
-
-    init {
-        updateState { copy(loadState = HomeContract.LoadState.Loading) }
-        fetchPlans()
-        fetchUserInfo()
-        checkValidLoginToken()
-    }
-
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
     @OptIn(FlowPreview::class)
@@ -54,12 +47,15 @@ class HomeViewModel @Inject constructor(
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
+            is HomeEvent.InitHomeScreen -> {
+                updateState { copy(loadState = LoadState.LOADING) }
+                checkValidLoginToken()
+            }
             is HomeEvent.OnInduceLoginClicked -> { sendEffect({ HomeSideEffect.MoveToLogin }) }
             is HomeEvent.OnCalendarDayClicked -> {
                 sendEffect({ HomeSideEffect.ShowBottomSheet })
                 updateSelectionDaysState(event.selectionDay)
             }
-            is HomeEvent.OnBottomSheetExitClicked -> { sendEffect({ HomeSideEffect.HideBottomSheet }) }
             is HomeEvent.OnPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen(event.planId) }) }
             is HomeEvent.OnUserImageClicked -> { sendEffect({ HomeSideEffect.NavigateToMyPageScreen }) }
             is HomeEvent.OnTodayPlanExpandedClicked -> { updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) } }
@@ -76,6 +72,37 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun checkValidLoginToken() {
+        viewModelScope.launch {
+            runCatching {
+                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
+                if (isValidLoginToken) {
+                    updateState {
+                        copy(
+                            loginState = LoginState.LOGIN,
+                        )
+                    }
+                    fetchUserInfo()
+                    fetchPlans()
+                } else {
+                    updateState {
+                        copy(
+                            loginState = LoginState.NONE,
+                            loadState = LoadState.SUCCESS
+                        )
+                    }
+                }
+            }.onError {
+                updateState {
+                    copy(
+                        loginState = LoginState.NONE,
+                        loadState = LoadState.ERROR
+                    )
+                }
+            }
+        }
+    }
+
     private fun fetchUserInfo() {
         viewModelScope.launch {
             val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
@@ -85,7 +112,7 @@ class HomeViewModel @Inject constructor(
                     .onSuccess {
                         updateState {
                             copy(
-                                loadState = HomeContract.LoadState.Idle,
+                                loadState = LoadState.SUCCESS,
                                 userName = it.userName
                             )
                         }
@@ -93,14 +120,14 @@ class HomeViewModel @Inject constructor(
                     .onError {
                         updateState {
                             copy(
-                                loadState = HomeContract.LoadState.Error
+                                loadState = LoadState.ERROR
                             )
                         }
                     }
             } else {
                 updateState {
                     copy(
-                        loadState = HomeContract.LoadState.Idle,
+                        loadState = LoadState.SUCCESS,
                         userName = cacheInfo.userName
                     )
                 }
@@ -121,7 +148,7 @@ class HomeViewModel @Inject constructor(
                     }
                     updateState {
                         copy(
-                            loadState = HomeContract.LoadState.Idle,
+                            loadState = LoadState.SUCCESS,
                             allPlans = plans,
                             monthlyPlans = monthlyPlans,
                             todayPlans = todayPlans
@@ -129,7 +156,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 .onError {
-                    updateState { copy(loadState = HomeContract.LoadState.Error) }
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
         }
     }
@@ -188,18 +215,6 @@ class HomeViewModel @Inject constructor(
                 updateState {
                     copy(monthlyPlans = monthlyPlans)
                 }
-            }
-        }
-    }
-
-    private fun checkValidLoginToken() {
-        viewModelScope.launch {
-            runCatching {
-                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) updateState { copy(loginState = LoginState.LOGIN) }
-                else updateState { copy(loginState = LoginState.NONE) }
-            }.onError {
-                updateState { copy(loginState = LoginState.LOGIN) }
             }
         }
     }

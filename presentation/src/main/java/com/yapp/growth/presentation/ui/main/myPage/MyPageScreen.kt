@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -37,16 +37,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBackAppBar
 import com.yapp.growth.presentation.component.PlanzDialog
+import com.yapp.growth.presentation.component.PlanzError
+import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.theme.BackgroundColor1
-import com.yapp.growth.presentation.theme.CoolGray500
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray700
 import com.yapp.growth.presentation.theme.Gray900
@@ -97,7 +97,7 @@ fun MyPageScreen(
     }
 
     when (viewState.loadState) {
-        MyPageContract.LoadState.Idle -> {
+        LoadState.SUCCESS -> {
             Scaffold(
                 topBar = {
                     PlanzBackAppBar(
@@ -147,8 +147,15 @@ fun MyPageScreen(
                 )
             }
         }
-        else -> {
-
+        LoadState.LOADING -> {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                PlanzLoading()
+            }
+        }
+        LoadState.ERROR -> {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                PlanzError()
+            }
         }
     }
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray900
-import com.yapp.growth.presentation.theme.MainPurple900
+import com.yapp.growth.presentation.theme.MainPurple700
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.theme.SubCoral
 
@@ -34,7 +34,7 @@ fun PlanzSnackBar(
             modifier = Modifier.padding(vertical = 12.dp),
             text = message,
             style = PlanzTypography.caption,
-            color = MainPurple900
+            color = MainPurple700
         )
     }
 }

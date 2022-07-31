@@ -1,6 +1,7 @@
 package com.yapp.growth.presentation.ui.main.home
 
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
@@ -8,7 +9,7 @@ import com.yapp.growth.domain.entity.Plan
 
 class HomeContract {
     data class HomeViewState(
-        val loadState: LoadState = LoadState.Idle,
+        val loadState: LoadState = LoadState.SUCCESS,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "",
         val allPlans: List<Plan.FixedPlan> = emptyList(),
@@ -26,24 +27,19 @@ class HomeContract {
         object NavigateToMyPageScreen : HomeSideEffect()
         data class NavigateDetailPlanScreen(val planId: Int) : HomeSideEffect()
         object ShowBottomSheet : HomeSideEffect()
-        object HideBottomSheet : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
+        object InitHomeScreen : HomeEvent()
         object OnInduceLoginClicked : HomeEvent()
         object OnUserImageClicked : HomeEvent()
         data class OnPlanItemClicked(val planId: Int) : HomeEvent()
         data class OnCalendarDayClicked(val selectionDay: CalendarDay) : HomeEvent()
-        object OnBottomSheetExitClicked : HomeEvent()
         object OnTodayPlanExpandedClicked : HomeEvent()
         object OnMonthlyPlanExpandedClicked : HomeEvent()
         object OnMonthlyPlanModeClicked : HomeEvent()
         object OnMonthlyPreviousClicked : HomeEvent()
         object OnMonthlyNextClicked : HomeEvent()
-    }
-
-    enum class LoadState {
-        Loading, Idle, Error
     }
 
     enum class LoginState {

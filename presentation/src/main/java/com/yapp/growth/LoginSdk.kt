@@ -19,6 +19,9 @@ interface LoginSdk {
     suspend fun logout()
 
     @Throws(AuthException::class)
+    suspend fun withdraw()
+
+    @Throws(AuthException::class)
     suspend fun getAccessToken(): KakaoAccessToken?
 
     suspend fun isValidAccessToken(): Boolean

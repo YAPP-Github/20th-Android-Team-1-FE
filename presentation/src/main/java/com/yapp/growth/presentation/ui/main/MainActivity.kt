@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.firebase.DYNAMIC_LINK_PARAM
@@ -16,6 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private var createResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { _ ->
+        // TODO: send event to HomeScreen & ManageScreen
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
     private fun intentToCreatePlan() {
         val intent = Intent(this, CreatePlanActivity::class.java)
-        startActivity(intent)
+        createResultLauncher.launch(intent)
     }
 
     companion object {

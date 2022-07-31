@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.yapp.growth.presentation.ui.main.manage.confirm
+package com.yapp.growth.presentation.ui.main.monitor
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -9,52 +9,49 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.firebase.SchemeType
-import com.yapp.growth.presentation.firebase.onDynamicLinkClick
-import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanEvent
-import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.FixPlanSideEffect
+import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.MonitorPlanEvent
+import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.MonitorPlanSideEffect
 import kotlinx.coroutines.launch
 
 @Composable
-fun FixPlanScreen(
-    viewModel: FixPlanViewModel = hiltViewModel(),
+fun MonitorPlanScreen(
+    viewModel: MonitorPlanViewModel = hiltViewModel(),
     navigateToPreviousScreen: () -> Unit,
-    navigateToNextScreen: (Long) -> Unit,
 ) {
-    val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
-    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.viewState.collectAsState()
-    val context = LocalContext.current
+    val sheetState = rememberBottomSheetState(
+        initialValue = BottomSheetValue.Collapsed
+    )
+
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = sheetState
+    )
 
     PlanzBottomSheetScaffoldLayout(
         scaffoldState = scaffoldState,
         sheetContent = {
-            FixPlanBottomSheetContent(
+            MonitorPlanBottomSheetContent(
                 timeTable = uiState.timeTable,
-                currentClickTimeIndex = uiState.currentClickTimeIndex,
                 currentClickUserData = uiState.currentClickUserData,
-                onClickSelectPlan = { date -> viewModel.setEvent(FixPlanEvent.OnClickFixButton(date)) }
+                onClickExitIcon = { viewModel.setEvent(MonitorPlanEvent.OnClickExitIcon) }
             )
-        }) {
-
+        }
+    ) {
         Scaffold(
             topBar = {
-                PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.fix_plan_title_text),
-                    onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
-                    onClickShareIcon = { onDynamicLinkClick(context, SchemeType.RESPOND, uiState.planId.toString()) }
+                PlanzColorTextWithExitAppBar(
+                    title = uiState.timeTable.categoryName,
+                    onExitClick = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
                 )
             }
         ) { padding ->
-
             ConstraintLayout(modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)) {
@@ -72,48 +69,35 @@ fun FixPlanScreen(
 
                     PlanzPlanDateIndicator(
                         timeTable = uiState.timeTable,
-                        onClickPreviousDayButton = { viewModel.setEvent(FixPlanEvent.OnClickPreviousDayButton)},
-                        onClickNextDayButton = { viewModel.setEvent(FixPlanEvent.OnClickNextDayButton) }
+                        onClickPreviousDayButton = { viewModel.setEvent(MonitorPlanEvent.OnClickPreviousDayButton)},
+                        onClickNextDayButton = { viewModel.setEvent(MonitorPlanEvent.OnClickNextDayButton) }
                     )
 
                     FixPlanTimeTable(
                         timeTable = uiState.timeTable,
                         onClickTimeTable = { dateIndex, minuteIndex ->
-                            viewModel.setEvent(FixPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
+                            viewModel.setEvent(MonitorPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
                         },
                         currentClickTimeIndex = uiState.currentClickTimeIndex
                     )
                 }
-
             }
 
         }
-
     }
 
-
-
-
     LaunchedEffect(key1 = viewModel.effect) {
-        viewModel.effect.collect { effect ->
+        viewModel.effect.collect() { effect ->
             when (effect) {
-                is FixPlanSideEffect.ShowBottomSheet -> {
-                    coroutineScope.launch { sheetState.expand() }
-                }
-
-                is FixPlanSideEffect.HideBottomSheet -> {
-                    coroutineScope.launch { sheetState.collapse() }
-                }
-                is FixPlanSideEffect.NavigateToNextScreen -> {
-                    navigateToNextScreen(effect.planId)
-                }
-                FixPlanSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
+                MonitorPlanSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
+                MonitorPlanSideEffect.HideBottomSheet -> { coroutineScope.launch { sheetState.collapse() } }
+                MonitorPlanSideEffect.ShowBottomSheet -> { coroutineScope.launch { sheetState.expand() } }
             }
-
         }
     }
 
     BackHandler(enabled = sheetState.isExpanded) {
         coroutineScope.launch { sheetState.collapse() }
     }
+
 }

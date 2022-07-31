@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.respond
+package com.yapp.growth.presentation.ui.main.respond
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,8 +19,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.theme.Gray300
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanEvent
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.RespondPlanSideEffect
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanEvent
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanSideEffect
 
 @Composable
 fun RespondPlanScreen(

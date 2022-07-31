@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.confirm
+package com.yapp.growth.presentation.ui.main.confirm
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,8 @@ import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.domain.usecase.SendFixPlanUseCase
-import com.yapp.growth.presentation.ui.main.manage.confirm.FixPlanContract.*
+import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
+import com.yapp.growth.presentation.ui.main.confirm.FixPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class FixPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
-    private val planId: Long = savedStateHandle.get<Long>("planId") ?: -1L
+    private val planId: Long = savedStateHandle.get<Long>(KEY_PLAN_ID) ?: -1L
 
     init {
         loadRespondUsers(planId)

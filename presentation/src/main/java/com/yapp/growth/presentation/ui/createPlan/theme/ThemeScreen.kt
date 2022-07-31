@@ -20,9 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzMainButton
-import com.yapp.growth.presentation.model.PlanThemeType
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTheme
+import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideCategory
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.util.composableActivityViewModel
 
@@ -51,12 +50,12 @@ fun ThemeScreen(
                 modifier = Modifier.padding(top = 44.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                PlanThemeType.values().forEach {
+                uiState.planCategories.forEach {
                     ThemeChoiceButton(
-                        isChosen = uiState.chosenTheme == it,
-                        text = stringResource(id = it.themeStringResId),
+                        isChosen = uiState.chosenCategory == it,
+                        text = it.keyword,
                         onClick = {
-                            viewModel.setEvent(ThemeContract.ThemeEvent.ChoosePlanTheme(it))
+                            viewModel.setEvent(ThemeContract.ThemeEvent.ChoosePlanCategory(it))
                         }
                     )
                 }
@@ -64,7 +63,7 @@ fun ThemeScreen(
 
             PlanzMainButton(
                 text = stringResource(id = R.string.create_plan_next_button_text),
-                enabled = uiState.chosenTheme != null,
+                enabled = uiState.chosenCategory != null,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 32.dp),
@@ -77,8 +76,8 @@ fun ThemeScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is ThemeContract.ThemeSideEffect.NavigateToNextScreen -> {
-                    uiState.chosenTheme?.let {
-                        sharedViewModel.setEvent(DecideTheme(it))
+                    uiState.chosenCategory?.let {
+                        sharedViewModel.setEvent(DecideCategory(it))
                         navigateToNextScreen()
                     }
                 }

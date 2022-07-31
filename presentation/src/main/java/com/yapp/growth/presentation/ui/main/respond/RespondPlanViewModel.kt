@@ -1,4 +1,4 @@
-package com.yapp.growth.presentation.ui.main.manage.respond
+package com.yapp.growth.presentation.ui.main.respond
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,8 @@ import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.domain.usecase.SendRejectPlanUseCase
 import com.yapp.growth.domain.usecase.SendRespondPlanUseCase
-import com.yapp.growth.presentation.ui.main.manage.respond.RespondPlanContract.*
+import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
+import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +38,7 @@ class RespondPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
-    private var planId: Long = savedStateHandle.get<Long>("planId") ?: -1L
+    private var planId: Long = savedStateHandle.get<Long>(KEY_PLAN_ID) ?: -1L
 
     init {
         loadRespondUsers(planId)

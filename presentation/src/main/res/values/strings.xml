@@ -43,6 +43,7 @@
     <string name="my_page_dialog_positive_button_text">다시 생각해볼게요</string>
     <string name="my_page_dialog_negative_button_text">계정탈퇴</string>
     <string name="my_page_logout_error_text">로그아웃에 실패했습니다. 다시 시도해주세요.</string>
+    <string name="my_page_withdraw_error_text">탈퇴 처리에 실패했습니다. 다시 시도해주세요.</string>
 
     <string name="privacy_policy_app_bar_text">개인정보 처리방침</string>
 
@@ -62,7 +63,7 @@
     <string name="create_plan_title_title_label">약속명(선택)</string>
     <string name="create_plan_title_title_hint">약속명</string>
     <string name="create_plan_title_place_label">장소(선택)</string>
-    <string name="create_plan_title_place_hint">장소명 ex) 강남, 온라인 등</string>
+    <string name="create_plan_title_place_hint">강남, 온라인 등</string>
 
     <string name="detail_plan_app_bar_text">약속 상세보기</string>
     <string name="detail_plan_info_when">날짜/시간</string>
