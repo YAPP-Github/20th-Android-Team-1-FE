@@ -36,12 +36,6 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
 ) {
-
-    init {
-        updateState { copy(loadState = LoadState.LOADING) }
-        checkValidLoginToken()
-    }
-
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
     @OptIn(FlowPreview::class)
@@ -53,6 +47,10 @@ class HomeViewModel @Inject constructor(
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
+            is HomeEvent.InitHomeScreen -> {
+                updateState { copy(loadState = LoadState.LOADING) }
+                checkValidLoginToken()
+            }
             is HomeEvent.OnInduceLoginClicked -> { sendEffect({ HomeSideEffect.MoveToLogin }) }
             is HomeEvent.OnCalendarDayClicked -> {
                 sendEffect({ HomeSideEffect.ShowBottomSheet })

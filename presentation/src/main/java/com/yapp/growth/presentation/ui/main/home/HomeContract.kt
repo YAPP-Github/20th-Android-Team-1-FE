@@ -30,6 +30,7 @@ class HomeContract {
     }
 
     sealed class HomeEvent : ViewEvent {
+        object InitHomeScreen : HomeEvent()
         object OnInduceLoginClicked : HomeEvent()
         object OnUserImageClicked : HomeEvent()
         data class OnPlanItemClicked(val planId: Int) : HomeEvent()

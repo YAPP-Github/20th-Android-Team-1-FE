@@ -6,25 +6,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -58,23 +42,18 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
-import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.Gray900
-import com.yapp.growth.presentation.theme.MainPurple900
-import com.yapp.growth.presentation.theme.PlanzTypography
-import com.yapp.growth.presentation.theme.Pretendard
+import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
-import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanScreen
+import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
+import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanScreen
 import com.yapp.growth.presentation.ui.main.respond.result.RespondPlanCompleteScreen
 import com.yapp.growth.presentation.ui.main.respond.result.RespondPlanRejectScreen
-import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
-import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
-import com.yapp.growth.presentation.ui.main.sample.SampleScreen
 import com.yapp.growth.presentation.ui.main.terms.TermsScreen
 import kotlinx.coroutines.launch
 
@@ -94,13 +73,13 @@ fun PlanzScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    if(!sheetState.isVisible) {
+    if (!sheetState.isVisible) {
         viewModel.clearSelectionPlans()
     }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
-            when(effect) {
+            when (effect) {
                 is PlanzContract.PlanzSideEffect.NavigateDetailPlanScreen -> {
                     navController.navigate(
                         PlanzScreenRoute.DETAIL_PLAN.route
@@ -171,7 +150,8 @@ fun PlanzScreen(
                             )
                         },
                         showBottomSheet = { calendarDay, fixedPlans ->
-                            viewModel.setEvent(PlanzContract.PlanzEvent.ShowBottomSheet(calendarDay, fixedPlans))
+                            viewModel.setEvent(PlanzContract.PlanzEvent.ShowBottomSheet(calendarDay,
+                                fixedPlans))
                         }
                     )
                 }
@@ -194,28 +174,28 @@ fun PlanzScreen(
                     )
                 }
 
-                composable(route = PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}"),
+                composable(route = PlanzScreenRoute.RESPOND_PLAN.route.plus("/{$KEY_PLAN_ID}"),
                     arguments = listOf(
-                        navArgument("planId") { type = NavType.LongType }
+                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
                     )) {
                     RespondPlanScreen(
                         navigateToPreviousScreen = { navController.popBackStack() },
                         navigateToSendCompleteScreen = {
                             navController.navigate(PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
-                                popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{planId}")) {
+                                popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
                                     inclusive = true
                                 }
                             }
                         },
                         navigateToSendRejectedScreen = {
-                            navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route.plus("/{planId}"))
+                            navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route.plus("/{$KEY_PLAN_ID}"))
                         }
                     )
                 }
 
-                composable(route = PlanzScreenRoute.MONITOR_PLAN.route.plus("/{planId}"),
+                composable(route = PlanzScreenRoute.MONITOR_PLAN.route.plus("/{$KEY_PLAN_ID}"),
                     arguments = listOf(
-                        navArgument("planId") { type = NavType.LongType }
+                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
                     )) {
                     MonitorPlanScreen(
                         navigateToPreviousScreen = { navController.popBackStack() },
@@ -236,15 +216,15 @@ fun PlanzScreen(
                     )
                 }
 
-                composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}"),
+                composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}"),
                     arguments = listOf(
-                        navArgument("planId") { type = NavType.LongType }
+                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
                     )) {
                     FixPlanScreen(
                         navigateToPreviousScreen = { navController.popBackStack() },
                         navigateToNextScreen = { planId ->
                             navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
-                                popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{planId}")) {
+                                popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
                                     inclusive = true
                                 }
                             }
@@ -270,10 +250,6 @@ fun PlanzScreen(
                     TermsScreen(
                         exitTermsScreen = { navController.popBackStack() }
                     )
-                }
-
-                composable(route = PlanzScreenRoute.SAMPLE.route) {
-                    SampleScreen()
                 }
 
                 composable(
@@ -384,7 +360,7 @@ fun PlanzBottomSheetContent(
     selectionDay: CalendarDay,
     selectDayPlans: List<Plan.FixedPlan>,
     onExitClick: () -> Unit,
-    onPlanItemClick: (Int) -> Unit
+    onPlanItemClick: (Int) -> Unit,
 ) {
     val month = selectionDay.month + 1
     val day = selectionDay.day
@@ -471,7 +447,7 @@ private fun handleDynamicLinks(activity: Activity, uri: Uri) {
             }
 
             deepLink?.let { link ->
-                when(deepLink.lastPathSegment!!) {
+                when (deepLink.lastPathSegment!!) {
                     SchemeType.RESPOND.name -> {
 
                     }
@@ -514,7 +490,6 @@ enum class PlanzScreenRoute(val route: String) {
     PRIVACY_POLICY("privacy-policy"),
     TERMS("terms"),
     DETAIL_PLAN("detail-plan"),
-    SAMPLE("sample"),
     RESPOND_PLAN("respond-plan"),
     CONFIRM_PLAN("confirm-plan"),
     MONITOR_PLAN("monitor-plan"),

@@ -87,6 +87,10 @@ fun HomeScreen(
     val currentDate by viewModel.currentDate.collectAsState()
     val context = LocalContext.current as Activity
 
+    LaunchedEffect(key1 = true) {
+        viewModel.setEvent(HomeEvent.InitHomeScreen)
+    }
+
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
