@@ -4,6 +4,9 @@ import android.app.Activity
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,6 +37,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -48,6 +52,8 @@ import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.AlreadyConfirmPlanScreen
+import com.yapp.growth.presentation.ui.main.manage.respond.result.FulledPlanScreen
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
@@ -73,28 +79,24 @@ fun PlanzScreen(
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    if (!sheetState.isVisible) {
-        viewModel.clearSelectionPlans()
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = MaterialTheme.colors.isLight
+    var statusBarColor: Color by remember { mutableStateOf(Color.White) }
+
+    statusBarColor = when (currentDestination?.route) {
+        PlanzScreenRoute.HOME.route -> {
+            BackgroundColor1
+        }
+        PlanzScreenRoute.MY_PAGE.route -> {
+            BackgroundColor1
+        }
+        else -> {
+            Color.White
+        }
     }
 
-    LaunchedEffect(key1 = viewModel.effect) {
-        viewModel.effect.collect { effect ->
-            when (effect) {
-                is PlanzContract.PlanzSideEffect.NavigateDetailPlanScreen -> {
-                    navController.navigate(
-                        PlanzScreenRoute.DETAIL_PLAN.route
-                            .plus("/${effect.planId}")
-                    )
-                    coroutineScope.launch { sheetState.hide() }
-                }
-                is PlanzContract.PlanzSideEffect.HideBottomSheet -> {
-                    coroutineScope.launch { sheetState.hide() }
-                }
-                is PlanzContract.PlanzSideEffect.ShowBottomSheet -> {
-                    coroutineScope.launch { sheetState.show() }
-                }
-            }
-        }
+    if (!sheetState.isVisible) {
+        viewModel.clearSelectionPlans()
     }
 
     PlanzModalBottomSheetLayout(
@@ -202,68 +204,79 @@ fun PlanzScreen(
                     )
                 }
 
-                composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
-                    RespondPlanCompleteScreen(
-                        navigateToPreviousScreen = { navController.popBackStack() },
-                        onClickCheckButton = { }
-                    )
-                }
+            composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
+                RespondPlanCompleteScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                )
+            }
 
-                composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
-                    RespondPlanRejectScreen(
-                        navigateToPreviousScreen = { navController.popBackStack() },
-                        onClickCheckButton = { }
-                    )
-                }
+            composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
+                RespondPlanRejectScreen(
+                    userName = viewModel.getUserName(),
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                )
+            }
 
-                composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}"),
-                    arguments = listOf(
-                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
-                    )) {
-                    FixPlanScreen(
-                        navigateToPreviousScreen = { navController.popBackStack() },
-                        navigateToNextScreen = { planId ->
-                            navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
-                                popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
-                                    inclusive = true
-                                }
+            composable(route = PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route) {
+                AlreadyConfirmPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                )
+            }
+
+            composable(route = PlanzScreenRoute.FULLED_PLAN.route) {
+                FulledPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                )
+            }
+
+            composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_ID) { type = NavType.LongType }
+                )) {
+                FixPlanScreen(
+                    navigateToPreviousScreen = { navController.popBackStack() },
+                    navigateToNextScreen = { planId ->
+                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
+                            popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
+                                inclusive = true
                             }
-                        },
-                    )
-                }
+                        }
+                    },
+                )
+            }
 
-                composable(route = PlanzScreenRoute.MY_PAGE.route) {
-                    MyPageScreen(
-                        exitMyPageScreen = { navController.popBackStack() },
-                        navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
-                        navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
-                    )
-                }
+            composable(route = PlanzScreenRoute.MY_PAGE.route) {
+                MyPageScreen(
+                    exitMyPageScreen = { navController.popBackStack() },
+                    navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
+                    navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                )
+            }
 
-                composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
-                    PrivacyPolicyScreen(
-                        exitPrivacyPolicyScreen = { navController.popBackStack() }
-                    )
-                }
+            composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
+                PrivacyPolicyScreen(
+                    exitPrivacyPolicyScreen = { navController.popBackStack() }
+                )
+            }
 
-                composable(route = PlanzScreenRoute.TERMS.route) {
-                    TermsScreen(
-                        exitTermsScreen = { navController.popBackStack() }
-                    )
-                }
+            composable(route = PlanzScreenRoute.TERMS.route) {
+                TermsScreen(
+                    exitTermsScreen = { navController.popBackStack() }
+                )
+            }
 
-                composable(
-                    route = PlanzScreenRoute.DETAIL_PLAN.route
-                        .plus("/{$KEY_PLAN_ID}"),
-                    arguments = listOf(
-                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
-                    )
-                ) {
-                    DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
-                }
+            composable(
+                route = PlanzScreenRoute.DETAIL_PLAN.route
+                    .plus("/{$KEY_PLAN_ID}"),
+                arguments = listOf(
+                    navArgument(KEY_PLAN_ID) { type = NavType.LongType }
+                )
+            ) {
+                DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
             }
         }
     }
+}
 
 
     bottomBarState = when (currentDestination?.route) {
@@ -272,16 +285,62 @@ fun PlanzScreen(
         else -> false
     }
 
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = statusBarColor,
+            darkIcons = useDarkIcons
+        )
+
+        systemUiController.setNavigationBarColor(
+            color = BackgroundColor1
+        )
+    }
+
     LaunchedEffect(key1 = uri) {
         uri?.let { link ->
             val planId: Long = link.getQueryParameter(PLAN_ID_KEY_NAME)?.toLong() ?: -1
             if (planId > 0) {
-                navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route.plus("/${planId}"))
+                viewModel.setEvent(PlanzContract.PlanzEvent.GetUserPlanStatus(planId))
             }
 
             launch {
                 if (!link.toString().contains("kakaolink")) {
                     handleDynamicLinks(context, link)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when(effect) {
+                PlanzContract.PlanzSideEffect.MoveToAlreadyConfirmPlan -> {
+                    navController.navigate(PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route)
+                }
+                PlanzContract.PlanzSideEffect.MoveToFulledPlan -> {
+                    navController.navigate(PlanzScreenRoute.FULLED_PLAN.route)
+                }
+                is PlanzContract.PlanzSideEffect.MoveToConfirmPlan -> {
+                    navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/${effect.planId}"))
+                }
+                is PlanzContract.PlanzSideEffect.MoveToMonitorPlan -> {
+                    navController.navigate(PlanzScreenRoute.MONITOR_PLAN.route.plus("/${effect.planId}"))
+                }
+                is PlanzContract.PlanzSideEffect.MoveToRespondPlan -> {
+                    navController.navigate(PlanzScreenRoute.RESPOND_PLAN.route.plus("/${effect.planId}"))
+                }
+                is PlanzContract.PlanzSideEffect.NavigateDetailPlanScreen -> {
+                    navController.navigate(
+                        PlanzScreenRoute.DETAIL_PLAN.route
+                            .plus("/${effect.planId}")
+                    )
+                    coroutineScope.launch { sheetState.hide() }
+                }
+                is PlanzContract.PlanzSideEffect.HideBottomSheet -> {
+                    coroutineScope.launch { sheetState.hide() }
+                }
+                is PlanzContract.PlanzSideEffect.ShowBottomSheet -> {
+                    coroutineScope.launch { sheetState.show() }
                 }
             }
         }
@@ -495,6 +554,8 @@ enum class PlanzScreenRoute(val route: String) {
     MONITOR_PLAN("monitor-plan"),
     RESPOND_PLAN_COMPLETE("respond-plan-complete"),
     RESPOND_PLAN_REJECT("respond-plan-reject"),
+    ALREADY_CONFIRM_PLAN("already-confirm-plan"),
+    FULLED_PLAN("fulled-plan"),
 }
 
 const val KEY_PLAN_ID = "plan-id"

@@ -79,7 +79,6 @@ fun CreatePlanScreen(
                             }
                         }
                     },
-                    navigateToPreviousScreen = { navController.popBackStack() }
                 )
             }
 

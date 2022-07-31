@@ -1,18 +1,10 @@
 package com.yapp.growth.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,12 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.theme.CoolGray500
-import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.*
 
 @Composable
 fun PlanzDialog(
@@ -98,4 +90,139 @@ fun PlanzDialog(
             }
         }
     }
+}
+
+@Composable
+fun PlanzAlertDialog(
+    visible: Boolean,
+    title: String,
+    content: String,
+    positiveButtonText: String,
+    negativeButtonText: String,
+    onClickNegativeButton: () -> Unit,
+    onClickPositiveButton: () -> Unit,
+) {
+    if (visible) {
+        CustomAlertDialog(onDismissRequest = onClickNegativeButton) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White)
+                    .padding(top = 24.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+            ) {
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = title,
+                    style = PlanzTypography.subtitle1,
+                    color = Gray900,
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = content,
+                    style = PlanzTypography.body2,
+                    color = Gray900,
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+
+                    PlanzDialogButton(
+                        modifier = Modifier.weight(1f),
+                        text = negativeButtonText,
+                        isPositive = false,
+                        onClick = onClickNegativeButton,
+                    )
+
+                    PlanzDialogButton(
+                        modifier = Modifier.weight(1f),
+                        text = positiveButtonText,
+                        isPositive = true,
+                        onClick = onClickPositiveButton,
+                    )
+                }
+            }
+        }
+
+    }
+}
+
+@Composable
+fun CustomAlertDialog(
+    onDismissRequest: () -> Unit,
+    properties: DialogProperties = DialogProperties(),
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun PlanzDialogButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    isPositive: Boolean = true,
+    buttonColor: Color = MainPurple900,
+    textColor: Color = Color.White,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier.height(52.dp),
+        shape = RoundedCornerShape(10.dp),
+        onClick = onClick,
+        colors =
+            if (isPositive) ButtonDefaults.buttonColors(buttonColor)
+            else ButtonDefaults.buttonColors(Gray200),
+        elevation = null,
+    ) {
+        Text(
+            text = text,
+            color = if (isPositive) textColor else Gray500,
+            style = PlanzTypography.button
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewPlanzDialog() {
+    PlanzDialog(
+        title = "프리뷰",
+        content = "프리뷰입니다.",
+        positiveButtonText = "확인",
+        negativeButtonText = "취소",
+        onCancelButtonClick = {},
+        onPositiveButtonClick = {},
+        onNegativeButtonClick = {}
+    )
+}
+
+@Preview
+@Composable
+fun PreviewDefaultAlertDialog() {
+    PlanzAlertDialog(
+        visible = true,
+        title = "알림",
+        content = "작업한 내용이 저장되지 않고 홈화면으로\n" +
+                "이동합니다. 진행하시겠습니까?",
+        positiveButtonText = "확인",
+        negativeButtonText = "취소",
+        onClickNegativeButton = {},
+        onClickPositiveButton = {},
+    )
 }

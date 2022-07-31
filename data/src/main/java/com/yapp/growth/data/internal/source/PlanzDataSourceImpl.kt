@@ -110,6 +110,11 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.getUserInfo().toUser()
         }
 
+    override suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus> =
+        handleApi {
+            retrofitApi.getUserPlanStatus(planId.toString()).status.toEnumValueOfOrNull<UserPlanStatus>() ?: UserPlanStatus.UNKNOWN
+        }
+
     override suspend fun deleteUserInfo(): NetworkResult<Unit> =
         handleApi {
             retrofitApi.deleteUserInfo()

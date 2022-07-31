@@ -153,6 +153,9 @@
     <string name="monitor_plan_title_text">약속현황</string>
     <string name="monitor_plan_join_title_text">&#160;참여자</string>
 
+    <!-- 약속 응답 상태 -->
+    <string name="respond_plan_already_confirm_info_text">이미 확정된 약속입니다.</string>
+
     <string name="icon_exit_content_description">Exit Icon</string>
     <string name="icon_create_content_description">Create Icon</string>
     <string name="icon_check_content_description">Check Icon</string>
@@ -162,6 +165,11 @@
     <string name="icon_arrow_left_content_description">Left Icon</string>
     <string name="icon_arrow_box_left_24_content_description">Left Box Icon</string>
     <string name="icon_arrow_box_right_24_content_description">Right Box Icon</string>
+    
+    <string name="planz_alert_dialog_title">안내</string>
+    <string name="planz_alert_dialog_content">"작업한 내용이 저장되지 않고 홈화면으로\n이동합니다. 진행하시겠습니까?"</string>
+    <string name="planz_alert_dialog_positive_button_text">확인</string>
+    <string name="planz_alert_dialog_negative_button_text">취소</string>
 
     <string name="image_invitation_content_description">Invitation Image</string>
 </resources>

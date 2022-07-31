@@ -3,6 +3,7 @@ package com.yapp.growth.data.repository
 import com.yapp.growth.data.source.PlanzDataSource
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.User
+import com.yapp.growth.domain.entity.UserPlanStatus
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.repository.UserRepository
 import javax.inject.Inject
@@ -23,7 +24,11 @@ internal class UserRepositoryImpl @Inject constructor(
         return dataSource.getUserInfo().onSuccess { cachedUserInfo = it }
     }
 
-    override suspend fun getCachedUserInfo(): User? = cachedUserInfo
+    override fun getCachedUserInfo(): User? = cachedUserInfo
+
+    override suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus> {
+        return dataSource.getUserPlanStatus(planId)
+    }
 
     override suspend fun deleteUserInfo(): NetworkResult<Unit> {
         return dataSource.deleteUserInfo()

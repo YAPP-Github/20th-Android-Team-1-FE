@@ -146,28 +146,19 @@ private fun PlanzColorTextAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(80.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ){
-            Text(
-                text = title,
-                style = PlanzTypography.h2,
-                color = MainPurple900,
-                maxLines = 1,
-            )
 
-            Text(
-                text = "약속",
-                style = PlanzTypography.h2,
-                color = Gray900,
-                maxLines = 1,
-            )
-        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp)
+                .align(Alignment.CenterStart),
+            text = title,
+            style = PlanzTypography.h2,
+            color = Gray900,
+            maxLines = 1,
+        )
 
         if(menu != null) {
             Icon(
@@ -227,5 +218,14 @@ fun PlanzExitAppBarPreview() {
     PlanzExitAppBar(
         title = "약속 잡기",
         onExitClick = {},
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewPlanzColorTextWithExitAppBar() {
+    PlanzColorTextWithExitAppBar(
+        title = "식사",
+        onExitClick = { }
     )
 }

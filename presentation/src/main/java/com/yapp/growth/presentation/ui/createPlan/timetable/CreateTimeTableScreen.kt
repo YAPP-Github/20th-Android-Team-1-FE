@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan.timetable
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +28,6 @@ fun CreateTimeTableScreen(
     viewModel: CreateTimeTableViewModel = hiltViewModel(),
     exitCreateScreen: () -> Unit,
     navigateToNextScreen: (Long) -> Unit,
-    navigateToPreviousScreen: () -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsState()
     val timeCheckedOfDays by viewModel.timeCheckedOfDays.collectAsState()
@@ -86,6 +86,20 @@ fun CreateTimeTableScreen(
 
         }
 
+        PlanzAlertDialog(
+            visible = uiState.isDialogVisible,
+            title = stringResource(R.string.planz_alert_dialog_title),
+            content = stringResource(R.string.planz_alert_dialog_content),
+            positiveButtonText = stringResource(R.string.planz_alert_dialog_positive_button_text),
+            negativeButtonText = stringResource(R.string.planz_alert_dialog_negative_button_text),
+            onClickNegativeButton = {
+                viewModel.setEvent(CreateTimeTableEvent.OnClickDialogNegativeButton)
+            },
+            onClickPositiveButton = {
+                viewModel.setEvent(CreateTimeTableEvent.OnClickDialogPositiveButton)
+            },
+        )
+
     }
 
     LaunchedEffect(key1 = viewModel.effect) {
@@ -93,9 +107,12 @@ fun CreateTimeTableScreen(
             when (effect) {
                 CreateTimeTableSideEffect.ExitCreateScreen -> exitCreateScreen()
                 is CreateTimeTableSideEffect.NavigateToNextScreen -> navigateToNextScreen(effect.planId)
-                CreateTimeTableSideEffect.NavigateToPreviousScreen -> navigateToPreviousScreen()
             }
         }
+    }
+
+    BackHandler {
+        viewModel.setEvent(CreateTimeTableEvent.OnClickBackButton)
     }
 }
 

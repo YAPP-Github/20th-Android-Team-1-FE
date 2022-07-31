@@ -12,5 +12,5 @@ class GetUserInfoUseCase @Inject constructor(
         return repository.getUserInfo()
     }
 
-    suspend fun getCachedUserInfo(): User? = repository.getCachedUserInfo()
+    fun getCachedUserInfo(): User? = repository.getCachedUserInfo()
 }
