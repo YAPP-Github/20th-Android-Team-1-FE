@@ -10,6 +10,7 @@ import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
+import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
 import com.yapp.growth.presentation.ui.main.confirm.FixPlanContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.*
@@ -27,7 +28,7 @@ class MonitorPlanViewModel @Inject constructor(
 
     private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
     private var currentIndex = 0
-    private val planId: Long = savedStateHandle.get<Int>("planId")?.toLong() ?: 0L
+    private val planId: Long = savedStateHandle.get<Int>(KEY_PLAN_ID)?.toLong() ?: 0L
 
     init {
         loadRespondUsers(planId)
