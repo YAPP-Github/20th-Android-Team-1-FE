@@ -26,7 +26,7 @@ fun RespondPlanCompleteScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(top = 70.dp)
+            .padding(top = 25.dp)
     ) {
         Column(
             modifier = Modifier.weight(1f)

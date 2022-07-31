@@ -28,14 +28,16 @@ fun RespondPlanRejectScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(top = 70.dp)
+            .padding(top = 25.dp)
     ) {
         Column(
             modifier = Modifier
                 .padding(start = 20.dp)
         ) {
             Text(
-                text = userName, style = PlanzTypography.h2, color = Gray900
+                text = userName + "님",
+                style = PlanzTypography.h2,
+                color = Gray900
             )
 
             Text(

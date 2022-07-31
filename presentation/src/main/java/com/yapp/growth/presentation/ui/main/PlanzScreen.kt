@@ -190,7 +190,11 @@ fun PlanzScreen(
                             }
                         },
                         navigateToSendRejectedScreen = {
-                            navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route.plus("/{$KEY_PLAN_ID}"))
+                            navController.navigate(PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
+                                popUpTo(PlanzScreenRoute.RESPOND_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     )
                 }
@@ -204,79 +208,79 @@ fun PlanzScreen(
                     )
                 }
 
-            composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
-                RespondPlanCompleteScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                )
-            }
+                composable(route = PlanzScreenRoute.RESPOND_PLAN_COMPLETE.route) {
+                    RespondPlanCompleteScreen(
+                        navigateToPreviousScreen = { navController.popBackStack() },
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
-                RespondPlanRejectScreen(
-                    userName = viewModel.getUserName(),
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                )
-            }
+                composable(route = PlanzScreenRoute.RESPOND_PLAN_REJECT.route) {
+                    RespondPlanRejectScreen(
+                        userName = viewModel.getUserName(),
+                        navigateToPreviousScreen = { navController.popBackStack() },
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route) {
-                AlreadyConfirmPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                )
-            }
+                composable(route = PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route) {
+                    AlreadyConfirmPlanScreen(
+                        navigateToPreviousScreen = { navController.popBackStack() },
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.FULLED_PLAN.route) {
-                FulledPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                )
-            }
+                composable(route = PlanzScreenRoute.FULLED_PLAN.route) {
+                    FulledPlanScreen(
+                        navigateToPreviousScreen = { navController.popBackStack() },
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}"),
-                arguments = listOf(
-                    navArgument(KEY_PLAN_ID) { type = NavType.LongType }
-                )) {
-                FixPlanScreen(
-                    navigateToPreviousScreen = { navController.popBackStack() },
-                    navigateToNextScreen = { planId ->
-                        navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
-                            popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
-                                inclusive = true
+                composable(route = PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
+                    )) {
+                    FixPlanScreen(
+                        navigateToPreviousScreen = { navController.popBackStack() },
+                        navigateToNextScreen = { planId ->
+                            navController.navigate(PlanzScreenRoute.DETAIL_PLAN.route.plus("/${planId}")) {
+                                popUpTo(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/{$KEY_PLAN_ID}")) {
+                                    inclusive = true
+                                }
                             }
-                        }
-                    },
-                )
-            }
+                        },
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.MY_PAGE.route) {
-                MyPageScreen(
-                    exitMyPageScreen = { navController.popBackStack() },
-                    navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
-                    navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
-                )
-            }
+                composable(route = PlanzScreenRoute.MY_PAGE.route) {
+                    MyPageScreen(
+                        exitMyPageScreen = { navController.popBackStack() },
+                        navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
+                        navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
-                PrivacyPolicyScreen(
-                    exitPrivacyPolicyScreen = { navController.popBackStack() }
-                )
-            }
+                composable(route = PlanzScreenRoute.PRIVACY_POLICY.route) {
+                    PrivacyPolicyScreen(
+                        exitPrivacyPolicyScreen = { navController.popBackStack() }
+                    )
+                }
 
-            composable(route = PlanzScreenRoute.TERMS.route) {
-                TermsScreen(
-                    exitTermsScreen = { navController.popBackStack() }
-                )
-            }
+                composable(route = PlanzScreenRoute.TERMS.route) {
+                    TermsScreen(
+                        exitTermsScreen = { navController.popBackStack() }
+                    )
+                }
 
-            composable(
-                route = PlanzScreenRoute.DETAIL_PLAN.route
-                    .plus("/{$KEY_PLAN_ID}"),
-                arguments = listOf(
-                    navArgument(KEY_PLAN_ID) { type = NavType.LongType }
-                )
-            ) {
-                DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
+                composable(
+                    route = PlanzScreenRoute.DETAIL_PLAN.route
+                        .plus("/{$KEY_PLAN_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_PLAN_ID) { type = NavType.LongType }
+                    )
+                ) {
+                    DetailPlanScreen(exitDetailPlanScreen = { navController.popBackStack() })
+                }
             }
         }
     }
-}
 
 
     bottomBarState = when (currentDestination?.route) {

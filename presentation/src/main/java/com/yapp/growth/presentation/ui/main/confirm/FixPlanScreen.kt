@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.presentation.BuildConfig
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.firebase.SchemeType
@@ -50,7 +51,14 @@ fun FixPlanScreen(
                 PlanzBackAndShareAppBar(
                     title = stringResource(id = R.string.fix_plan_title_text),
                     onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
-                    onClickShareIcon = { onDynamicLinkClick(context, SchemeType.RESPOND, uiState.planId.toString()) }
+                    onClickShareIcon = { onDynamicLinkClick(
+                        context, SchemeType.RESPOND,
+                        uiState.planId.toString(),
+                        thumbNailTitle = context.getString(R.string.share_thumbnail_title),
+                        thumbNailDescription = context.getString(R.string.share_thumbnail_description),
+                        thumbNailImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
+                        )
+                    }
                 )
             }
         ) { padding ->

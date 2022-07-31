@@ -4,14 +4,9 @@ package com.yapp.growth.presentation.firebase
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.google.firebase.dynamiclinks.ktx.androidParameters
-import com.google.firebase.dynamiclinks.ktx.component1
-import com.google.firebase.dynamiclinks.ktx.component2
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
+import com.google.firebase.dynamiclinks.ktx.*
 import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.BuildConfig
-import timber.log.Timber
 
 const val DYNAMIC_LINK_PARAM = "dynamic_link_param"
 const val PLAN_ID_KEY_NAME = "planId"
@@ -27,12 +22,23 @@ fun getDeepLink(scheme: String, key: String?, id: String?): Uri {
 fun onDynamicLinkClick(
     context: Context,
     scheme: SchemeType,
-    id: String? = null
+    id: String? = null,
+    thumbNailTitle: String,
+    thumbNailDescription: String,
+    thumbNailImageUrl: String,
 ) {
     Firebase.dynamicLinks.shortLinkAsync {
         link = getDeepLink(scheme.name, scheme.key, id)
         domainUriPrefix = BuildConfig.PLANZ_FIREBASE_PREFIX
         androidParameters(context.packageName) { }
+        iosParameters(context.packageName) {
+            setFallbackUrl(Uri.parse("https://jalynne.notion.site/3379be16ecc04914bb98f8a57c980a46"))
+        }
+        socialMetaTagParameters {
+            title = thumbNailTitle
+            description = thumbNailDescription
+            imageUrl = Uri.parse(thumbNailImageUrl)
+        }
 
     }.addOnSuccessListener { (shortLink, _) ->
         runCatching {
@@ -43,7 +49,7 @@ fun onDynamicLinkClick(
             context.startActivity(Intent.createChooser(sendIntent, "Share"))
         }
         .onFailure {
-            Timber.tag("SHORTLINK").e(it)
+
         }
     }
 

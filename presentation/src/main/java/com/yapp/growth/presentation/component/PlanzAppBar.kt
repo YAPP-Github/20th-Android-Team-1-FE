@@ -146,7 +146,8 @@ private fun PlanzColorTextAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(80.dp)
+            .wrapContentHeight()
+            .padding(vertical = 24.dp)
     ) {
 
         Text(

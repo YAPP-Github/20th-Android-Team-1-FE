@@ -110,9 +110,14 @@ fun ShareScreen(
             }
         }
     }
-    
+
     LaunchedEffect(Unit) {
-        viewModel.getDynamicLink(context)
+        viewModel.getDynamicLink(
+            context = context,
+            thumbNailTitle = context.getString(R.string.share_thumbnail_title),
+            thumbNailDescription = context.getString(R.string.share_thumbnail_description),
+            thumbNailImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
+        )
     }
 
     LaunchedEffect(key1 = viewModel.effect) {

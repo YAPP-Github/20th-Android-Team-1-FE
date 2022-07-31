@@ -355,7 +355,7 @@ fun LocationAndAvailableColorBox(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(top = 8.dp, bottom = 16.dp, start = 14.dp, end = 20.dp)
+            .padding(bottom = 16.dp, start = 20.dp, end = 16.dp)
     )
     {
         Row(
