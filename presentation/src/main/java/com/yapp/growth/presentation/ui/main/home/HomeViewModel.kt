@@ -10,11 +10,13 @@ import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
 import com.yapp.growth.domain.usecase.GetFixedPlansUseCase
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
+import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.LoginState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeState
+import com.yapp.growth.presentation.util.ResourceProvider
 import com.yapp.growth.presentation.util.toDate
 import com.yapp.growth.presentation.util.toFormatDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +34,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getFixedPlansUseCase: GetFixedPlansUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val resourcesProvider: ResourceProvider,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
@@ -44,6 +47,10 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.Lazily,
         initialValue = _currentDate.value
     )
+
+    init {
+        updateState { copy(loadState = LoadState.LOADING) }
+    }
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
@@ -88,6 +95,7 @@ class HomeViewModel @Inject constructor(
                     updateState {
                         copy(
                             loginState = LoginState.NONE,
+                            userName = resourcesProvider.getString(R.string.planz_title),
                             loadState = LoadState.SUCCESS
                         )
                     }
