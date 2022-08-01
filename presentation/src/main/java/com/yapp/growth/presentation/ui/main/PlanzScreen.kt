@@ -4,16 +4,38 @@ import android.app.Activity
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,7 +68,12 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
-import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.theme.BackgroundColor1
+import com.yapp.growth.presentation.theme.Gray500
+import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainPurple900
+import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
@@ -121,7 +148,11 @@ fun PlanzScreen(
                                 navController = navController,
                                 navigationItem = navigationItem,
                                 loginState = viewState.loginState,
-                                onNoneLoginBottomNavigationClicked = { viewModel.setEvent(PlanzContract.PlanzEvent.OnNoneLoginBottomNavigationClicked) },
+                                onNoneLoginBottomNavigationClicked = {
+                                    viewModel.setEvent(
+                                        PlanzContract.PlanzEvent.OnNoneLoginBottomNavigationClicked
+                                    )
+                                },
                                 moveToCreatePlan = intentToCreatePlan
                             )
                         }
@@ -130,9 +161,16 @@ fun PlanzScreen(
             },
             floatingActionButton = {
                 if (bottomBarState) {
-                    CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                        intentToCreatePlan()
-                    }
+                    CreatePlanFAB(
+                        modifier = Modifier.padding(top = 12.dp),
+                        navigateToManageScreen = { intentToCreatePlan() },
+                        loginState = viewState.loginState,
+                        onNoneLoginBottomNavigationClicked = {
+                            viewModel.setEvent(
+                                PlanzContract.PlanzEvent.OnNoneLoginBottomNavigationClicked
+                            )
+                        },
+                    )
                 }
             },
             isFloatingActionButtonDocked = true,
@@ -155,8 +193,12 @@ fun PlanzScreen(
                             )
                         },
                         showBottomSheet = { calendarDay, fixedPlans ->
-                            viewModel.setEvent(PlanzContract.PlanzEvent.ShowBottomSheet(calendarDay,
-                                fixedPlans))
+                            viewModel.setEvent(
+                                PlanzContract.PlanzEvent.ShowBottomSheet(
+                                    calendarDay,
+                                    fixedPlans
+                                )
+                            )
                         }
                     )
                 }
@@ -320,7 +362,7 @@ fun PlanzScreen(
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
-            when(effect) {
+            when (effect) {
                 PlanzContract.PlanzSideEffect.MoveToAlreadyConfirmPlan -> {
                     navController.navigate(PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route)
                 }
@@ -409,12 +451,14 @@ fun PlanzBottomNavigation(
 fun CreatePlanFAB(
     modifier: Modifier = Modifier,
     navigateToManageScreen: () -> Unit,
+    loginState: PlanzContract.LoginState,
+    onNoneLoginBottomNavigationClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        IconButton(onClick = { navigateToManageScreen() }) {
+        IconButton(onClick = if (loginState == PlanzContract.LoginState.NONE) onNoneLoginBottomNavigationClicked else navigateToManageScreen) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_fab_create),
                 contentDescription = null,
@@ -495,7 +539,7 @@ fun navigateBottomNavigationScreen(
     onNoneLoginBottomNavigationClicked: () -> Unit,
     moveToCreatePlan: () -> Unit,
 ) {
-    if(loginState == PlanzContract.LoginState.NONE) {
+    if (loginState == PlanzContract.LoginState.NONE) {
         onNoneLoginBottomNavigationClicked()
         return
     }
