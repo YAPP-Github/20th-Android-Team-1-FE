@@ -511,7 +511,7 @@ fun PlanzBottomSheetContent(
         } else {
             Spacer(modifier = Modifier.height(70.dp))
             Text(
-                text = "오늘의 약속이 없습니다.",
+                text = stringResource(id = R.string.planz_has_not_plan),
                 style = PlanzTypography.body1,
                 color = Gray500,
                 modifier = Modifier.align(Alignment.CenterHorizontally)

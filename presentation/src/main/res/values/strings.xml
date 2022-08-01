@@ -9,6 +9,7 @@
 
     <string name="planz_error_text_01">문제가 발생했습니다.</string>
     <string name="planz_error_text_02">다시 시도해주세요.</string>
+    <string name="planz_has_not_plan">오늘의 약속이 없습니다.</string>
 
     <string name="navigation_home_text">메인 홈</string>
     <string name="navigation_create_plan_text">약속잡기</string>
