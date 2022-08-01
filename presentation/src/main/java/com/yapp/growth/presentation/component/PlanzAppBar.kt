@@ -96,7 +96,7 @@ private fun PlanzAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(60.dp)
     ) {
         Text(
             text = title,
