@@ -477,8 +477,7 @@ fun HomeCalendar(
         currentDate = currentDate,
         selectMode = PlanzCalendarSelectMode.SINGLE,
         onDateSelectedListener = { widget, date, selected ->
-            if (monthlyPlanDates.containsKey(date))
-                onDateClick(date)
+            onDateClick(date)
         },
         monthlyDates = monthlyPlanDates
     )
