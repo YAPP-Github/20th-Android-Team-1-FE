@@ -304,13 +304,14 @@ fun HomeInduceLogin(
                 cornersRadius = 12.dp,
                 shadowBlurRadius = 10.dp,
                 offsetY = 7.dp
-            ),
+            )
     ) {
         Box(
             modifier = Modifier
                 .height(60.dp)
                 .fillMaxWidth()
-                .background(brush = MainGradient),
+                .background(brush = MainGradient)
+                .clickable { OnInduceLoginClick() },
             contentAlignment = Alignment.Center,
         ) {
             Row(
@@ -325,16 +326,12 @@ fun HomeInduceLogin(
                     color = Color.White,
                     style = MaterialTheme.typography.subtitle2,
                 )
-                IconButton(
+                Icon(
                     modifier = Modifier.size(6.dp, 12.dp),
-                    onClick = { OnInduceLoginClick() },
-                ) {
-                    Icon(
-                        tint = Color.Unspecified,
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
-                        contentDescription = null,
-                    )
-                }
+                    tint = Color.Unspecified,
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_transparent_arrow_right),
+                    contentDescription = null,
+                )
             }
         }
     }
@@ -480,8 +477,7 @@ fun HomeCalendar(
         currentDate = currentDate,
         selectMode = PlanzCalendarSelectMode.SINGLE,
         onDateSelectedListener = { widget, date, selected ->
-            if (date != CalendarDay.today() && monthlyPlanDates.containsKey(date))
-                onDateClick(date)
+            onDateClick(date)
         },
         monthlyDates = monthlyPlanDates
     )
