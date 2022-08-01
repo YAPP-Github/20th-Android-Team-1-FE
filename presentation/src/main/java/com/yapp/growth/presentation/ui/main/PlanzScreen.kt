@@ -47,6 +47,7 @@ import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
@@ -117,9 +118,11 @@ fun PlanzScreen(
                         currentDestination = currentDestination,
                         navigateToScreen = { navigationItem ->
                             navigateBottomNavigationScreen(
-                                navController,
-                                navigationItem,
-                                intentToCreatePlan
+                                navController = navController,
+                                navigationItem = navigationItem,
+                                loginState = viewState.loginState,
+                                onNoneLoginBottomNavigationClicked = { viewModel.setEvent(PlanzContract.PlanzEvent.OnNoneLoginBottomNavigationClicked) },
+                                moveToCreatePlan = intentToCreatePlan
                             )
                         }
                     )
@@ -324,6 +327,10 @@ fun PlanzScreen(
                 PlanzContract.PlanzSideEffect.MoveToFulledPlan -> {
                     navController.navigate(PlanzScreenRoute.FULLED_PLAN.route)
                 }
+                is PlanzContract.PlanzSideEffect.MoveToLogin -> {
+                    LoginActivity.startActivity(context, null)
+                    context.finish()
+                }
                 is PlanzContract.PlanzSideEffect.MoveToConfirmPlan -> {
                     navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/${effect.planId}"))
                 }
@@ -484,8 +491,15 @@ fun PlanzPlanList(
 fun navigateBottomNavigationScreen(
     navController: NavHostController,
     navigationItem: BottomNavigationItem,
+    loginState: PlanzContract.LoginState,
+    onNoneLoginBottomNavigationClicked: () -> Unit,
     moveToCreatePlan: () -> Unit,
 ) {
+    if(loginState == PlanzContract.LoginState.NONE) {
+        onNoneLoginBottomNavigationClicked()
+        return
+    }
+
     if (navigationItem == BottomNavigationItem.CREATE_PLAN) {
         moveToCreatePlan()
     } else {

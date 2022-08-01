@@ -12,6 +12,7 @@ import com.yapp.growth.presentation.theme.BackgroundColor1
 class PlanzContract {
 
     data class PlanzViewState(
+        val loginState: LoginState = LoginState.NONE,
         val selectDayPlans: List<Plan.FixedPlan> = emptyList(),
         val selectionDay: CalendarDay = CalendarDay.today(),
         val userPlanStatus: UserPlanStatus = UserPlanStatus.UNKNOWN,
@@ -27,10 +28,12 @@ class PlanzContract {
         data class MoveToMonitorPlan(val planId: Long): PlanzSideEffect()
         object MoveToAlreadyConfirmPlan: PlanzSideEffect()
         object MoveToFulledPlan: PlanzSideEffect()
+        object MoveToLogin: PlanzSideEffect()
     }
 
     sealed class PlanzEvent : ViewEvent {
         data class OnPlanItemClicked(val planId: Int) : PlanzEvent()
+        object OnNoneLoginBottomNavigationClicked : PlanzEvent()
         object OnBottomSheetExitClicked : PlanzEvent()
         data class ShowBottomSheet(
             val selectionDay: CalendarDay,
@@ -38,5 +41,9 @@ class PlanzContract {
         ) : PlanzEvent()
         data class GetUserPlanStatus(val planId: Long): PlanzEvent()
         data class ChangeStatusBarColor(val color: Color): PlanzEvent()
+    }
+
+    enum class LoginState {
+        NONE, LOGIN
     }
 }

@@ -1,11 +1,13 @@
 package com.yapp.growth.presentation.ui.main
 
 import androidx.lifecycle.viewModelScope
+import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.entity.UserPlanStatus
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.repository.UserRepository
+import com.yapp.growth.domain.runCatching
 import com.yapp.growth.presentation.ui.main.PlanzContract.PlanzEvent
 import com.yapp.growth.presentation.ui.main.PlanzContract.PlanzSideEffect
 import com.yapp.growth.presentation.ui.main.PlanzContract.PlanzViewState
@@ -16,9 +18,14 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanzViewModel @Inject constructor(
     private val repository: UserRepository,
+    private val kakaoLoginSdk: LoginSdk,
 ) : BaseViewModel<PlanzViewState, PlanzSideEffect, PlanzEvent>(
     PlanzViewState()
 ) {
+
+    init {
+        checkValidLoginToken()
+    }
 
     private fun getUserPlanStatus(planId: Long) = viewModelScope.launch {
         repository.getUserPlanStatus(planId)
@@ -37,6 +44,21 @@ class PlanzViewModel @Inject constructor(
             }
     }
 
+    private fun checkValidLoginToken() {
+        viewModelScope.launch {
+            runCatching {
+                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
+                if (isValidLoginToken) {
+                    updateState { copy(loginState = PlanzContract.LoginState.LOGIN) }
+                } else {
+                    updateState { copy(loginState = PlanzContract.LoginState.NONE) }
+                }
+            }.onError {
+                updateState { copy(loginState = PlanzContract.LoginState.NONE) }
+            }
+        }
+    }
+
     fun getUserName(): String {
         return repository.getCachedUserInfo()?.userName ?: ""
     }
@@ -45,6 +67,9 @@ class PlanzViewModel @Inject constructor(
         when (event) {
             is PlanzEvent.OnPlanItemClicked -> {
                 sendEffect({ PlanzSideEffect.NavigateDetailPlanScreen(event.planId) })
+            }
+            is PlanzEvent.OnNoneLoginBottomNavigationClicked -> {
+                sendEffect({ PlanzSideEffect.MoveToLogin })
             }
             is PlanzEvent.OnBottomSheetExitClicked -> {
                 sendEffect({ PlanzSideEffect.HideBottomSheet })
