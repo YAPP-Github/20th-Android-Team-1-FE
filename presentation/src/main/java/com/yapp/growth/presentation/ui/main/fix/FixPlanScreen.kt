@@ -49,7 +49,7 @@ fun FixPlanScreen(
         Scaffold(
             topBar = {
                 PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.fix_plan_title_text),
+                    title = uiState.timeTable.promisingName,
                     onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
                     onClickShareIcon = { onDynamicLinkClick(
                         context, SchemeType.RESPOND,

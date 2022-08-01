@@ -36,7 +36,7 @@ fun RespondPlanScreen(
     Scaffold(
         topBar = {
             PlanzBackAndClearAppBar(
-                title = stringResource(id = R.string.respond_plan_title_text),
+                title = uiState.timeTable.promisingName,
                 onClickBackIcon = { viewModel.setEvent(RespondPlanEvent.OnClickBackButton) },
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 textIconColor = MainPurple900,
