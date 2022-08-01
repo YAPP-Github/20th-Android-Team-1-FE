@@ -120,7 +120,9 @@ fun MyPageScreen(
                     when (viewState.loginState) {
                         LoginState.LOGIN -> MyPageUserInfo(
                             userName = viewState.userName,
-                            OnClickModifyNickname = { },
+                            OnClickModifyNickname = {
+                                viewModel.setEvent(MyPageEvent.OnClickModifyNickname)
+                            },
                         )
                         LoginState.NONE -> MyPageSignUp(
                             onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
