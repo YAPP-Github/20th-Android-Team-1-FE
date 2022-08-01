@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.theme.Gray300
+import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanEvent
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanSideEffect
 
@@ -38,6 +39,7 @@ fun RespondPlanScreen(
                 title = stringResource(id = R.string.respond_plan_title_text),
                 onClickBackIcon = { viewModel.setEvent(RespondPlanEvent.OnClickBackButton) },
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
+                textIconColor = MainPurple900,
                 onClickClearIcon = { viewModel.setEvent(RespondPlanEvent.OnClickClearButton) }
             )
         }
