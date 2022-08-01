@@ -63,7 +63,6 @@ interface GrowthApi {
     ): TemporaryPlanUuidResponseImpl
 
     // Fixed Plans
-
     @GET("/api/promises/{promiseId}")
     suspend fun getFixedPlan(
         @Path("promiseId") planId: Long,
@@ -72,8 +71,17 @@ interface GrowthApi {
     @GET("/api/promises/user")
     suspend fun getFixedPlans(): List<FixedPlanResponseImpl>
 
-    // User
+    @GET("/api/promises/date/{dateTime}")
+    suspend fun getDayFixedPlans(
+        @Path("dateTime") dateTime: String,
+    ): List<FixedPlanResponseImpl>
 
+    @GET("/api/promises/month/{dateTime}")
+    suspend fun getMonthlyFixedPlans(
+        @Path("dateTime") dateTime: String,
+    ): List<FixedPlanResponseImpl>
+
+    // User
     @POST("/api/users/sign-up")
     suspend fun signUp(): UserResponseImpl
 

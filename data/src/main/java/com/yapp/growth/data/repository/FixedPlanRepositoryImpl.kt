@@ -11,7 +11,16 @@ import javax.inject.Singleton
 internal class FixedPlanRepositoryImpl @Inject constructor(
     private val dataSource: PlanzDataSource,
 ) : FixedPlanRepository {
+
     override suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>> {
         return dataSource.getFixedPlans()
+    }
+
+    override suspend fun getDayFixedPlans(dateTime: String): NetworkResult<List<Plan.FixedPlan>> {
+        return dataSource.getDayFixedPlans(dateTime)
+    }
+
+    override suspend fun getMonthlyFixedPlans(dateTime: String): NetworkResult<List<Plan.FixedPlan>> {
+        return dataSource.getMonthlyFixedPlans(dateTime)
     }
 }
