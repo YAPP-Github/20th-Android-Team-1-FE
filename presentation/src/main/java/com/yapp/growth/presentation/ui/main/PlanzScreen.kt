@@ -47,7 +47,7 @@ import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
 import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
+import com.yapp.growth.presentation.ui.main.fix.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
@@ -254,6 +254,7 @@ fun PlanzScreen(
                         exitMyPageScreen = { navController.popBackStack() },
                         navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
                         navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                        navigateToModifyNickNameScreen = { }
                     )
                 }
 
