@@ -68,7 +68,7 @@ class PlanzViewModel @Inject constructor(
             is PlanzEvent.OnPlanItemClicked -> {
                 sendEffect({ PlanzSideEffect.NavigateDetailPlanScreen(event.planId) })
             }
-            is PlanzEvent.OnNoneLoginBottomNavigationClicked -> {
+            is PlanzEvent.OnBottomNavigationClickedWhenNotLogin -> {
                 sendEffect({ PlanzSideEffect.MoveToLogin })
             }
             is PlanzEvent.OnBottomSheetExitClicked -> {

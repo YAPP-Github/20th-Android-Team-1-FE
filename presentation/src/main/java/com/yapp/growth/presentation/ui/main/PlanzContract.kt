@@ -33,7 +33,7 @@ class PlanzContract {
 
     sealed class PlanzEvent : ViewEvent {
         data class OnPlanItemClicked(val planId: Int) : PlanzEvent()
-        object OnNoneLoginBottomNavigationClicked : PlanzEvent()
+        object OnBottomNavigationClickedWhenNotLogin : PlanzEvent()
         object OnBottomSheetExitClicked : PlanzEvent()
         data class ShowBottomSheet(
             val selectionDay: CalendarDay,

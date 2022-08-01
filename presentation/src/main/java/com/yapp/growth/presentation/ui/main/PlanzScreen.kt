@@ -150,7 +150,7 @@ fun PlanzScreen(
                                 loginState = viewState.loginState,
                                 onNoneLoginBottomNavigationClicked = {
                                     viewModel.setEvent(
-                                        PlanzContract.PlanzEvent.OnNoneLoginBottomNavigationClicked
+                                        PlanzContract.PlanzEvent.OnBottomNavigationClickedWhenNotLogin
                                     )
                                 },
                                 moveToCreatePlan = intentToCreatePlan
@@ -167,7 +167,7 @@ fun PlanzScreen(
                         loginState = viewState.loginState,
                         onNoneLoginBottomNavigationClicked = {
                             viewModel.setEvent(
-                                PlanzContract.PlanzEvent.OnNoneLoginBottomNavigationClicked
+                                PlanzContract.PlanzEvent.OnBottomNavigationClickedWhenNotLogin
                             )
                         },
                     )
