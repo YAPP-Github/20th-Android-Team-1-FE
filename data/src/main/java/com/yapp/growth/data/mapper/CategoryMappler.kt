@@ -6,6 +6,7 @@ import com.yapp.growth.domain.entity.Category
 fun CategoryResponse.toCategory(): Category {
     return Category(
         id = this.id,
-        keyword = this.keyword
+        keyword = this.keyword,
+        type = this.type,
     )
 }

@@ -63,6 +63,7 @@ fun MyPageScreen(
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateToPolicyScreen: () -> Unit,
     navigateToTermsScreen: () -> Unit,
+    navigateToModifyNickNameScreen: () -> Unit,
     exitMyPageScreen: () -> Unit,
 ) {
 
@@ -87,6 +88,9 @@ fun MyPageScreen(
                 }
                 is MyPageSideEffect.ShowToast -> {
                     Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+                MyPageSideEffect.ModifyNickName -> {
+                    navigateToModifyNickNameScreen()
                 }
             }
         }
@@ -114,7 +118,12 @@ fun MyPageScreen(
                         .wrapContentHeight()
                 ) {
                     when (viewState.loginState) {
-                        LoginState.LOGIN -> MyPageUserInfo(viewState.userName)
+                        LoginState.LOGIN -> MyPageUserInfo(
+                            userName = viewState.userName,
+                            OnClickModifyNickname = {
+                                viewModel.setEvent(MyPageEvent.OnClickModifyNickname)
+                            },
+                        )
                         LoginState.NONE -> MyPageSignUp(
                             onSingUpClick = { viewModel.setEvent(MyPageEvent.OnSignUpClicked) },
                         )
@@ -169,7 +178,7 @@ fun MyPageSignUp(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = BackgroundColor1)
-            .padding(start = 20.dp, end = 20.dp, bottom = 25.dp),
+            .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 25.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Row(
@@ -203,23 +212,33 @@ fun MyPageSignUp(
 
 @Composable
 fun MyPageUserInfo(
-    userName: String
+    userName: String,
+    OnClickModifyNickname: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = BackgroundColor1)
-            .padding(start = 20.dp, end = 20.dp, bottom = 25.dp),
+            .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = userName,
-                color = Gray900,
-                style = PlanzTypography.h2
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp),) {
+                Text(
+                    text = userName,
+                    color = Gray900,
+                    style = PlanzTypography.h2
+                )
+
+                Icon(
+                    modifier = Modifier.clickable { OnClickModifyNickname() },
+                    painter = painterResource(id = R.drawable.ic_nickname_modify),
+                    contentDescription = null,
+                )
+            }
+
             Text(
                 text = stringResource(id = R.string.my_page_login_info_text),
                 color = Gray500,
@@ -321,7 +340,8 @@ fun PreviewMyPageScreen() {
         MyPageScreen(
             navigateToPolicyScreen = { },
             navigateToTermsScreen = { },
-            exitMyPageScreen = { }
+            navigateToModifyNickNameScreen = { },
+            exitMyPageScreen = { },
         )
     }
 }
@@ -330,7 +350,10 @@ fun PreviewMyPageScreen() {
 @Composable
 fun PreviewMyPageUserInfo() {
     PlanzTheme {
-        MyPageUserInfo("김정호")
+        MyPageUserInfo(
+            userName = "김정호",
+            OnClickModifyNickname = { }
+        )
     }
 }
 

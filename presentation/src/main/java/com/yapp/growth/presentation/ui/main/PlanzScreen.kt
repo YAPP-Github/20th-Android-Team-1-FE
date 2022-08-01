@@ -68,6 +68,7 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
+import com.yapp.growth.presentation.ui.main.fix.FixPlanScreen
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
@@ -75,7 +76,6 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.ui.login.LoginActivity
-import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
@@ -84,6 +84,7 @@ import com.yapp.growth.presentation.ui.main.manage.respond.result.AlreadyConfirm
 import com.yapp.growth.presentation.ui.main.manage.respond.result.FulledPlanScreen
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
+import com.yapp.growth.presentation.ui.main.myPage.nickname.ModifyNickNameScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanScreen
 import com.yapp.growth.presentation.ui.main.respond.result.RespondPlanCompleteScreen
@@ -299,6 +300,7 @@ fun PlanzScreen(
                         exitMyPageScreen = { navController.popBackStack() },
                         navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
                         navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                        navigateToModifyNickNameScreen = { navController.navigate(PlanzScreenRoute.MODIFY_NICKNAME.route) },
                     )
                 }
 
@@ -311,6 +313,12 @@ fun PlanzScreen(
                 composable(route = PlanzScreenRoute.TERMS.route) {
                     TermsScreen(
                         exitTermsScreen = { navController.popBackStack() }
+                    )
+                }
+
+                composable(route = PlanzScreenRoute.MODIFY_NICKNAME.route) {
+                    ModifyNickNameScreen(
+                        navigateToPreviousScreen = { navController.popBackStack() }
                     )
                 }
 
@@ -622,6 +630,7 @@ enum class PlanzScreenRoute(val route: String) {
     MY_PAGE("my-page"),
     PRIVACY_POLICY("privacy-policy"),
     TERMS("terms"),
+    MODIFY_NICKNAME("modify-nickname"),
     DETAIL_PLAN("detail-plan"),
     RESPOND_PLAN("respond-plan"),
     CONFIRM_PLAN("confirm-plan"),

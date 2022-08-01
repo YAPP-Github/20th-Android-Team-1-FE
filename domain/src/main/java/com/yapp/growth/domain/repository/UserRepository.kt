@@ -6,6 +6,8 @@ import com.yapp.growth.domain.entity.UserPlanStatus
 
 interface UserRepository {
     suspend fun signUp(): NetworkResult<User>
+
+    suspend fun modifyNickName(nickName: String): NetworkResult<User>
     suspend fun getUserInfo(): NetworkResult<User>
     fun getCachedUserInfo(): User?
 

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
 
 
@@ -29,6 +30,7 @@ fun PlanzBackAndClearAppBar(
     title: String,
     onClickBackIcon: () -> Unit,
     textIconTitle: String,
+    textIconColor: Color,
     onClickClearIcon: () -> Unit,
 ) {
     PlanzIconAndTextAppBar(
@@ -36,6 +38,7 @@ fun PlanzBackAndClearAppBar(
         menu = PlanzAppBarMenu.BACK,
         onClickIcon = onClickBackIcon,
         textIconTitle = textIconTitle,
+        textIconColor = textIconColor,
         onclickTextIcon = onClickClearIcon
     )
 }
@@ -47,13 +50,14 @@ private fun PlanzIconAndTextAppBar(
     menu: PlanzAppBarMenu,
     onClickIcon: () -> Unit,
     textIconTitle: String,
+    textIconColor: Color,
     onclickTextIcon: () -> Unit
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(top = 20.dp, bottom = 15.dp)
+            .padding(top = 20.dp, bottom = 16.dp)
     ) {
 
         Icon(
@@ -83,7 +87,7 @@ private fun PlanzIconAndTextAppBar(
         Text(
             text = textIconTitle,
             style = PlanzTypography.caption,
-            color = Gray500,
+            color = textIconColor,
             modifier = Modifier
                 .padding(end = 20.dp)
                 .align(Alignment.CenterEnd)
@@ -100,6 +104,7 @@ fun PlanzIconAndTextAppBarPreview() {
         menu = PlanzAppBarMenu.BACK,
         onClickIcon = {},
         textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
+        textIconColor = MainPurple900,
         onclickTextIcon = {}
     )
 }

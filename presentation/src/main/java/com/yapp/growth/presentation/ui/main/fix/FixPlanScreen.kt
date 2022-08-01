@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.yapp.growth.presentation.ui.main.confirm
+package com.yapp.growth.presentation.ui.main.fix
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,8 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.firebase.SchemeType
 import com.yapp.growth.presentation.firebase.onDynamicLinkClick
-import com.yapp.growth.presentation.ui.main.confirm.FixPlanContract.FixPlanEvent
-import com.yapp.growth.presentation.ui.main.confirm.FixPlanContract.FixPlanSideEffect
+import com.yapp.growth.presentation.ui.main.fix.FixPlanContract.FixPlanEvent
+import com.yapp.growth.presentation.ui.main.fix.FixPlanContract.FixPlanSideEffect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,7 +49,7 @@ fun FixPlanScreen(
         Scaffold(
             topBar = {
                 PlanzBackAndShareAppBar(
-                    title = stringResource(id = R.string.fix_plan_title_text),
+                    title = uiState.timeTable.promisingName,
                     onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
                     onClickShareIcon = { onDynamicLinkClick(
                         context, SchemeType.RESPOND,

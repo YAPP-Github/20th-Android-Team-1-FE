@@ -18,6 +18,7 @@ class MyPageContract {
         object NavigateToTerms : MyPageSideEffect()
         object NavigateToPolicy : MyPageSideEffect()
         object ExitMyPageScreen : MyPageSideEffect()
+        object ModifyNickName : MyPageSideEffect()
         data class ShowToast(val msg: String) : MyPageSideEffect()
     }
 
@@ -30,6 +31,7 @@ class MyPageContract {
         object OnBackButtonClicked : MyPageEvent()
         object OnNegativeButtonClicked : MyPageEvent()
         object OnPositiveButtonClicked : MyPageEvent()
+        object OnClickModifyNickname : MyPageEvent()
     }
 
     enum class LoginState {

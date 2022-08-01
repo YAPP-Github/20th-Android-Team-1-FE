@@ -77,6 +77,9 @@ interface GrowthApi {
     @POST("/api/users/sign-up")
     suspend fun signUp(): UserResponseImpl
 
+    @POST("/api/users/name")
+    suspend fun modifyNickName(@Body userName: Map<String, String>): UserResponseImpl
+
     @GET("/api/users/info")
     suspend fun getUserInfo(): UserResponseImpl
 

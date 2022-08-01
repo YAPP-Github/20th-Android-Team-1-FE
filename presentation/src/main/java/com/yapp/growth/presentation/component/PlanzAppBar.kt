@@ -96,7 +96,7 @@ private fun PlanzAppBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(60.dp)
     ) {
         Text(
             text = title,
@@ -147,13 +147,13 @@ private fun PlanzColorTextAppBar(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(vertical = 24.dp)
+            .padding(top = 20.dp, bottom = 15.dp, start = 20.dp, end = 20.dp)
     ) {
 
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp)
+                .padding()
                 .align(Alignment.CenterStart),
             text = title,
             style = PlanzTypography.h2,
@@ -167,7 +167,6 @@ private fun PlanzColorTextAppBar(
                 tint = Color.Unspecified,
                 contentDescription = stringResource(id = menu.contentDescription),
                 modifier = Modifier
-                    .padding(end = menu.horizontalPadding)
                     .clip(RoundedCornerShape(30.dp))
                     .clickable { onMenuClick() }
                     .align(Alignment.CenterEnd),

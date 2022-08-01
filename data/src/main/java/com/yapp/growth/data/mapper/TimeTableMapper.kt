@@ -28,6 +28,7 @@ fun PromisingTimeTableResponse.toTimeTable(): TimeTable {
         hourList = makeHourList(response.minTime, response.totalCount),
         placeName = response.placeName,
         categoryName = response.category.keyword,
+        category = response.category.toCategory(),
     )
 }
 
