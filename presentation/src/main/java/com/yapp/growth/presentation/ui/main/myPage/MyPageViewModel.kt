@@ -58,6 +58,9 @@ class MyPageViewModel @Inject constructor(
             is MyPageEvent.OnPositiveButtonClicked -> {
                 updateState { copy(isDialogVisible = false) }
             }
+            MyPageEvent.OnClickModifyNickname -> {
+                sendEffect({ MyPageSideEffect.ModifyNickName })
+            }
         }
     }
 
