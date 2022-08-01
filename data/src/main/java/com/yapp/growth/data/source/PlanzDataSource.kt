@@ -27,6 +27,7 @@ interface PlanzDataSource {
     ): NetworkResult<TemporaryPlanUuid>
 
     suspend fun signUp(): NetworkResult<User>
+    suspend fun modifyNickName(nickName: String): NetworkResult<User>
     suspend fun getUserInfo(): NetworkResult<User>
     suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus>
     suspend fun deleteUserInfo(): NetworkResult<Unit>
