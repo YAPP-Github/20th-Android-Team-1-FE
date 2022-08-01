@@ -126,6 +126,7 @@
 
     <!-- 약속 공통 -->
     <string name="common_plan_location_black_title">미정</string>
+    <string name="common_plan_colorBox_available_text">가능</string>
 
     <!-- 약속 응답 -->
     <string name="respond_plan_title_text">약속응답</string>

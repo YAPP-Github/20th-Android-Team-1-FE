@@ -436,7 +436,7 @@ fun LocationAndAvailableColorBox(
                     color = CoolGray300
                 )
                 Text(
-                    text = "가능",
+                    text = stringResource(R.string.common_plan_colorBox_available_text),
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -466,7 +466,7 @@ fun LocationAndAvailableColorBox(
                     color = CoolGray300
                 )
                 Text(
-                    text = "가능",
+                    text = stringResource(R.string.common_plan_colorBox_available_text),
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
