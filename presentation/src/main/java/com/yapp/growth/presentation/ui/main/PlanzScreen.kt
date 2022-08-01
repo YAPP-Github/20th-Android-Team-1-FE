@@ -502,11 +502,23 @@ fun PlanzBottomSheetContent(
                     .clickable { onExitClick() },
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        PlanzPlanList(
-            dayPlans = selectDayPlans,
-            onPlanItemClick = onPlanItemClick
-        )
+        if(selectDayPlans.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(24.dp))
+            PlanzPlanList(
+                dayPlans = selectDayPlans,
+                onPlanItemClick = onPlanItemClick
+            )
+        } else {
+            Spacer(modifier = Modifier.height(70.dp))
+            Text(
+                text = stringResource(id = R.string.planz_has_not_plan),
+                style = PlanzTypography.body1,
+                color = Gray500,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(70.dp))
+        }
+
     }
 }
 
