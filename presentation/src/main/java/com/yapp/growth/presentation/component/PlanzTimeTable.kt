@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -382,7 +383,7 @@ fun LocationAndAvailableColorBox(
 
                 Text(
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    text = timeTable.placeName,
+                    text = timeTable.placeName.ifBlank { stringResource(R.string.common_plan_location_black_title) },
                     color = CoolGray500,
                     style = PlanzTypography.caption,
                 )
@@ -407,7 +408,9 @@ fun LocationAndAvailableColorBox(
                 )
 
                 Divider(
-                    modifier = Modifier.width(1.dp).height(10.dp),
+                    modifier = Modifier
+                        .width(1.dp)
+                        .height(10.dp),
                     color = Gray500,
                 )
 

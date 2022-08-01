@@ -124,6 +124,9 @@
     <string name="share_plan_share_feed_template_description">가능한 약속 날짜와 시간을 응답해 주세요!</string>
     <string name="share_plan_share_feed_template_image_url">/images/share-feed.png</string>
 
+    <!-- 약속 공통 -->
+    <string name="common_plan_location_black_title">미정</string>
+
     <!-- 약속 응답 -->
     <string name="respond_plan_title_text">약속응답</string>
     <string name="respond_plan_location_text">강남역카카오프렌즈강</string>
