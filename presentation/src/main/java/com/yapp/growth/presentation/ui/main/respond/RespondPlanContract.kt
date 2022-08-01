@@ -3,6 +3,7 @@ package com.yapp.growth.presentation.ui.main.respond
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 
@@ -21,7 +22,8 @@ class RespondPlanContract {
             emptyList(),
             emptyList(),
             "",
-            ""
+            "",
+            Category(0,"",""),
         ),
         val clickCount: Int = 0,
     ) : ViewState

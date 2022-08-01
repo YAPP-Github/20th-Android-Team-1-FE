@@ -14,6 +14,7 @@ data class TimeTable(
     val hourList: List<String>,
     val placeName: String,
     val categoryName: String,
+    val category: Category,
 )
 
 data class TimeTableDate(

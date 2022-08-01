@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
@@ -23,7 +24,7 @@ class MonitorPlanViewModel @Inject constructor(
     MonitorPlanViewState()
 ) {
 
-    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
+    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "", Category(0,"",""))
     private var currentIndex = 0
     private val planId: Long = savedStateHandle.get<Long>(KEY_PLAN_ID) ?: -1L
 
