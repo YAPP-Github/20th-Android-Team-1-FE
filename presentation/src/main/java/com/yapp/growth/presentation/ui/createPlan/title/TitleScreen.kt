@@ -43,7 +43,7 @@ fun TitleScreen(
         topBar = {
             PlanzCreateStepTitle(
                 currentStep = 2,
-                title = stringResource(id = R.string.create_plan_theme_title_text),
+                title = stringResource(id = R.string.create_plan_title_title_text),
                 onExitClick = { viewModel.setEvent(TitleEvent.OnClickExitButton) }
             )
         }
