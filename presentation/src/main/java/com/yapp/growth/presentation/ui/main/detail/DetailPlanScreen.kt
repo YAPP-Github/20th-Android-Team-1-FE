@@ -55,6 +55,7 @@ fun DetailPlanScreen(
         },
         backgroundColor = Color.White,
     ) { padding ->
+
         when (viewState.loadState) {
             LoadState.LOADING -> {
                 Surface(modifier = Modifier.fillMaxSize()) {
@@ -71,7 +72,6 @@ fun DetailPlanScreen(
                     modifier = Modifier
                         .padding(top = 84.dp, start = 20.dp, end = 20.dp)
                 ) {
-
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -130,11 +130,11 @@ fun DetailPlanScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
+                        .padding(top = 42.dp),
                 ) {
                     Icon(
                         modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(bottom = 20.dp),
+                            .align(Alignment.Center),
                         tint = Color.Unspecified,
                         imageVector = ImageVector.vectorResource(R.drawable.icon_plan_detail),
                         contentDescription = null
@@ -244,11 +244,11 @@ fun PreviewDetailPlanScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
+                .padding(top = 42.dp),
         ) {
             Icon(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 42.dp),
+                    .align(Alignment.Center),
                 tint = Color.Unspecified,
                 imageVector = ImageVector.vectorResource(R.drawable.icon_plan_detail),
                 contentDescription = null
