@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.fix
 
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
@@ -9,6 +10,7 @@ import com.yapp.growth.domain.entity.User
 
 class FixPlanContract {
     data class FixPlanViewState(
+        val loadState: LoadState = LoadState.SUCCESS,
         val timeTable: TimeTable = TimeTable(
             emptyList(),
             emptyList(),
@@ -43,5 +45,6 @@ class FixPlanContract {
         object OnClickPreviousDayButton : FixPlanEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : FixPlanEvent()
         data class OnClickFixButton(val date: String) : FixPlanEvent()
+        object OnClickErrorRetryButton : FixPlanEvent()
     }
 }

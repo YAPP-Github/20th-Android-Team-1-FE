@@ -42,9 +42,7 @@ fun CreateTimeTableScreen(
     ) { padding ->
 
         when (uiState.loadState) {
-            LoadState.LOADING -> {
-                PlanzLoading()
-            }
+            LoadState.LOADING -> PlanzLoading()
             LoadState.ERROR -> {
                 PlanzError(
                     retryVisible = true,

@@ -107,12 +107,14 @@ class CreateTimeTableViewModel @Inject constructor(
 
     private fun sendMakePlan(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
+            updateState { copy(loadState = LoadState.LOADING) }
             makePlanUseCase.invoke(uuid, timeCheckedOfDays)
                 .onSuccess { planId ->
+                    updateState { copy(loadState = LoadState.SUCCESS) }
                     sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen(planId) })
                 }
                 .onError {
-                    TODO()
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
         }
 

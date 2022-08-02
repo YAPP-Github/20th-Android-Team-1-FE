@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.BuildConfig
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
@@ -49,58 +50,71 @@ fun FixPlanScreen(
         Scaffold(
             topBar = {
                 PlanzBackAndShareAppBar(
-                    title = uiState.timeTable.promisingName,
+                    title = if (uiState.loadState == LoadState.SUCCESS) uiState.timeTable.promisingName else stringResource(R.string.fix_plan_title),
                     onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
-                    onClickShareIcon = { onDynamicLinkClick(
-                        context, SchemeType.RESPOND,
-                        uiState.planId.toString(),
-                        thumbNailTitle = context.getString(R.string.share_thumbnail_title),
-                        thumbNailDescription = context.getString(R.string.share_thumbnail_description),
-                        thumbNailImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
+                    onClickShareIcon = {
+                        onDynamicLinkClick(
+                            context, SchemeType.RESPOND,
+                            uiState.planId.toString(),
+                            thumbNailTitle = context.getString(R.string.share_thumbnail_title),
+                            thumbNailDescription = context.getString(R.string.share_thumbnail_description),
+                            thumbNailImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
                         )
                     }
                 )
             }
         ) { padding ->
 
-            ConstraintLayout(modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)) {
-                val (column, button) = createRefs()
-
-                Column(modifier = Modifier.constrainAs(column) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(button.top)
-                    height = Dimension.fillToConstraints
-                }) {
-
-                    LocationAndAvailableColorBox(timeTable = uiState.timeTable)
-
-                    PlanzPlanDateIndicator(
-                        timeTable = uiState.timeTable,
-                        onClickPreviousDayButton = { viewModel.setEvent(FixPlanEvent.OnClickPreviousDayButton)},
-                        onClickNextDayButton = { viewModel.setEvent(FixPlanEvent.OnClickNextDayButton) }
-                    )
-
-                    FixPlanTimeTable(
-                        timeTable = uiState.timeTable,
-                        onClickTimeTable = { dateIndex, minuteIndex ->
-                            viewModel.setEvent(FixPlanEvent.OnClickTimeTable(dateIndex, minuteIndex))
+            when (uiState.loadState) {
+                LoadState.LOADING -> PlanzLoading()
+                LoadState.ERROR -> {
+                    PlanzError(
+                        retryVisible = true,
+                        onClickRetry = {
+                            viewModel.setEvent(FixPlanEvent.OnClickErrorRetryButton)
                         },
-                        currentClickTimeIndex = uiState.currentClickTimeIndex
                     )
                 }
+                LoadState.SUCCESS -> {
+                    ConstraintLayout(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                    ) {
+                        val (column, button) = createRefs()
 
+                        Column(modifier = Modifier.constrainAs(column) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(button.top)
+                            height = Dimension.fillToConstraints
+                        }) {
+
+                            LocationAndAvailableColorBox(timeTable = uiState.timeTable)
+
+                            PlanzPlanDateIndicator(
+                                timeTable = uiState.timeTable,
+                                onClickPreviousDayButton = { viewModel.setEvent(FixPlanEvent.OnClickPreviousDayButton) },
+                                onClickNextDayButton = { viewModel.setEvent(FixPlanEvent.OnClickNextDayButton) }
+                            )
+
+                            FixPlanTimeTable(
+                                timeTable = uiState.timeTable,
+                                onClickTimeTable = { dateIndex, minuteIndex ->
+                                    viewModel.setEvent(
+                                        FixPlanEvent.OnClickTimeTable(dateIndex, minuteIndex)
+                                    )
+                                },
+                                currentClickTimeIndex = uiState.currentClickTimeIndex
+                            )
+                        }
+                    }
+                }
             }
-
         }
 
     }
-
-
-
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
