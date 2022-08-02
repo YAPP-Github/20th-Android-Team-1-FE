@@ -8,7 +8,8 @@ import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
-import com.yapp.growth.domain.usecase.GetFixedPlansUseCase
+import com.yapp.growth.domain.usecase.GetDayFixedPlansUseCase
+import com.yapp.growth.domain.usecase.GetMonthlyFixedPlansUseCase
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
@@ -26,11 +27,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getFixedPlansUseCase: GetFixedPlansUseCase,
+    private val getDayFixedPlansUseCase: GetDayFixedPlansUseCase,
+    private val getMonthlyFixedPlansUseCase: GetMonthlyFixedPlansUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
@@ -41,13 +44,14 @@ class HomeViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     val currentDate: StateFlow<CalendarDay> = _currentDate.debounce(300).stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Lazily,
+        started = SharingStarted.WhileSubscribed(),
         initialValue = _currentDate.value
     )
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
             is HomeEvent.InitHomeScreen -> {
+                Timber.d("Init")
                 updateState { copy(loadState = LoadState.LOADING) }
                 checkValidLoginToken()
             }
@@ -63,11 +67,9 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.OnMonthlyPlanModeClicked -> { updateMonthlyPlanModeState(viewState.value.monthlyPlanMode) }
             is HomeEvent.OnMonthlyPreviousClicked -> {
                 updateCurrentDateState(HomeEvent.OnMonthlyPreviousClicked)
-                updateMonthlyPlansState()
             }
             is HomeEvent.OnMonthlyNextClicked -> {
                 updateCurrentDateState(HomeEvent.OnMonthlyNextClicked)
-                updateMonthlyPlansState()
             }
         }
     }
@@ -77,13 +79,10 @@ class HomeViewModel @Inject constructor(
             runCatching {
                 val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
                 if (isValidLoginToken) {
-                    updateState {
-                        copy(
-                            loginState = LoginState.LOGIN,
-                        )
-                    }
+                    updateState { copy(loginState = LoginState.LOGIN) }
                     fetchUserInfo()
-                    fetchPlans()
+                    fetchDayPlans()
+                    fetchMonthlyPlans()
                 } else {
                     updateState {
                         copy(
@@ -118,11 +117,7 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                     .onError {
-                        updateState {
-                            copy(
-                                loadState = LoadState.ERROR
-                            )
-                        }
+                        updateState { copy(loadState = LoadState.ERROR) }
                     }
             } else {
                 updateState {
@@ -135,29 +130,41 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchPlans() {
+    private fun fetchDayPlans() {
         viewModelScope.launch {
-
-            getFixedPlansUseCase.invoke()
+            getDayFixedPlansUseCase.invoke(CalendarDay.today().toFormatDate())
                 .onSuccess { plans ->
-                    val todayPlans = plans.filter { plan ->
-                        CalendarDay.from(plan.date.toDate()) == CalendarDay.today()
-                    }
-                    val monthlyPlans = plans.filter { plan ->
-                        CalendarDay.from(plan.date.toDate()).month == _currentDate.value.month
-                    }
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
-                            allPlans = plans,
-                            monthlyPlans = monthlyPlans,
-                            todayPlans = todayPlans
+                            todayPlans = plans
                         )
                     }
                 }
                 .onError {
                     updateState { copy(loadState = LoadState.ERROR) }
                 }
+        }
+    }
+
+    private fun fetchMonthlyPlans() {
+        viewModelScope.launch {
+            currentDate.collectLatest{ currentDate ->
+            updateState { copy(loadState = LoadState.LOADING) }
+            Timber.d("collectLatest :: $currentDate")
+                getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
+                    .onSuccess { plans ->
+                        updateState {
+                            copy(
+                                loadState = LoadState.SUCCESS,
+                                monthlyPlans = plans,
+                            )
+                        }
+                    }
+                    .onError {
+                        updateState { copy(loadState = LoadState.ERROR) }
+                    }
+            }
         }
     }
 
@@ -204,18 +211,5 @@ class HomeViewModel @Inject constructor(
         }
 
         _currentDate.value = CalendarDay.from(year, month - 1, 1)
-    }
-
-    private fun updateMonthlyPlansState() {
-        viewModelScope.launch {
-            currentDate.collectLatest { currentDate ->
-                val monthlyPlans = viewState.value.allPlans.filter {
-                    CalendarDay.from(it.date.toDate()).month == currentDate.month
-                }
-                updateState {
-                    copy(monthlyPlans = monthlyPlans)
-                }
-            }
-        }
     }
 }
