@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.detail
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
@@ -7,11 +8,14 @@ import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetFixedPlanUseCase
+import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanEvent
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanSideEffect
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanViewState
-import com.yapp.growth.presentation.util.toDayAndHour
+import com.yapp.growth.presentation.util.ResourceProvider
+import com.yapp.growth.presentation.util.toDayAndTime
+import com.yapp.growth.presentation.util.toPlanDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailPlanViewModel @Inject constructor(
     private val getFixedPlanUseCase: GetFixedPlanUseCase,
+    private val resourcesProvider: ResourceProvider,
     savedStateHandle: SavedStateHandle,
 ) :
     BaseViewModel<DetailPlanViewState, DetailPlanSideEffect, DetailPlanEvent>(
@@ -49,8 +54,8 @@ class DetailPlanViewModel @Inject constructor(
                             loadState = LoadState.SUCCESS,
                             title = it.title,
                             category = it.category.keyword,
-                            date = it.date.toDayAndHour(),
-                            place = it.place,
+                            date = it.date.toPlanDate(),
+                            place = it.place.ifEmpty { resourcesProvider.getString(R.string.detail_plan_info_non_place) },
                             member = convertMemberList(it.members)
                         )
                     }

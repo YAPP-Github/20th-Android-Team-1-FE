@@ -72,6 +72,7 @@
     <string name="detail_plan_info_when">날짜/시간</string>
     <string name="detail_plan_info_place">장소</string>
     <string name="detail_plan_info_member">참여자</string>
+    <string name="detail_plan_info_non_place">미정</string>
 
     <!-- 약속 생성 STEP 3 -->
     <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
