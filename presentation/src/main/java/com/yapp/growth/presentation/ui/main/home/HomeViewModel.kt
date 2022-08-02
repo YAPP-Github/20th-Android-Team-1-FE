@@ -102,69 +102,63 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchUserInfo() {
-        viewModelScope.launch {
-            val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
+    private suspend fun fetchUserInfo() {
+        val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
 
-            if(cacheInfo == null) {
-                getUserInfoUseCase.invoke()
-                    .onSuccess {
-                        updateState {
-                            copy(
-                                loadState = LoadState.SUCCESS,
-                                userName = it.userName
-                            )
-                        }
-                    }
-                    .onError {
-                        updateState { copy(loadState = LoadState.ERROR) }
-                    }
-            } else {
-                updateState {
-                    copy(
-                        loadState = LoadState.SUCCESS,
-                        userName = cacheInfo.userName
-                    )
-                }
-            }
-        }
-    }
-
-    private fun fetchDayPlans() {
-        viewModelScope.launch {
-            getDayFixedPlansUseCase.invoke(CalendarDay.today().toFormatDate())
-                .onSuccess { plans ->
+        if(cacheInfo == null) {
+            getUserInfoUseCase.invoke()
+                .onSuccess {
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
-                            todayPlans = plans
+                            userName = it.userName
                         )
                     }
                 }
                 .onError {
                     updateState { copy(loadState = LoadState.ERROR) }
                 }
+        } else {
+            updateState {
+                copy(
+                    loadState = LoadState.SUCCESS,
+                    userName = cacheInfo.userName
+                )
+            }
         }
     }
 
-    private fun fetchMonthlyPlans() {
-        viewModelScope.launch {
-            currentDate.collectLatest{ currentDate ->
-            updateState { copy(loadState = LoadState.LOADING) }
-            Timber.d("collectLatest :: $currentDate")
-                getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
-                    .onSuccess { plans ->
-                        updateState {
-                            copy(
-                                loadState = LoadState.SUCCESS,
-                                monthlyPlans = plans,
-                            )
-                        }
-                    }
-                    .onError {
-                        updateState { copy(loadState = LoadState.ERROR) }
-                    }
+    private suspend fun fetchDayPlans() {
+        getDayFixedPlansUseCase.invoke(CalendarDay.today().toFormatDate())
+            .onSuccess { plans ->
+                updateState {
+                    copy(
+                        loadState = LoadState.SUCCESS,
+                        todayPlans = plans
+                    )
+                }
             }
+            .onError {
+                updateState { copy(loadState = LoadState.ERROR) }
+            }
+    }
+
+    private suspend fun fetchMonthlyPlans() {
+        currentDate.collectLatest{ currentDate ->
+        updateState { copy(loadState = LoadState.LOADING) }
+        Timber.d("collectLatest :: $currentDate")
+            getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
+                .onSuccess { plans ->
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            monthlyPlans = plans,
+                        )
+                    }
+                }
+                .onError {
+                    updateState { copy(loadState = LoadState.ERROR) }
+                }
         }
     }
 
