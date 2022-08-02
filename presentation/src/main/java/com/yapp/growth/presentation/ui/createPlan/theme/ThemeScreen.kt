@@ -21,6 +21,7 @@ import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
 import com.yapp.growth.presentation.component.PlanzError
+import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.component.PlanzMainButton
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideCategory
@@ -68,7 +69,7 @@ fun ThemeScreen(
                         }
                     }
                 }
-                LoadState.LOADING -> {}
+                LoadState.LOADING -> PlanzLoading()
                 LoadState.ERROR -> PlanzError(retryVisible = true)
             }
 
