@@ -15,7 +15,8 @@
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.Growth.Splash">
+            android:theme="@style/Theme.Growth.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,17 +59,20 @@
         <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.Growth" />
+            android:theme="@style/Theme.Growth"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.Growth" />
+            android:theme="@style/Theme.Growth"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".presentation.ui.createPlan.CreatePlanActivity"
             android:exported="false"
-            android:theme="@style/Theme.Growth" />
+            android:theme="@style/Theme.Growth"
+            android:screenOrientation="portrait"/>
 
     </application>
 
