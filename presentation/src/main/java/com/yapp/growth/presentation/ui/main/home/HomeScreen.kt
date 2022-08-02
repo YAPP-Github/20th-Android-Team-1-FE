@@ -4,34 +4,11 @@ import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -57,27 +34,20 @@ import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.component.PlanzLoading
-import com.yapp.growth.presentation.theme.BackgroundColor1
-import com.yapp.growth.presentation.theme.Gray200
-import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.Gray900
-import com.yapp.growth.presentation.theme.MainGradient
-import com.yapp.growth.presentation.theme.MainPurple300
-import com.yapp.growth.presentation.theme.MainPurple900
-import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.login.LoginActivity
+import com.yapp.growth.presentation.ui.main.MainContract
+import com.yapp.growth.presentation.ui.main.MainViewModel
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
-import com.yapp.growth.presentation.util.advancedShadow
-import com.yapp.growth.presentation.util.toDate
-import com.yapp.growth.presentation.util.toHour
-import com.yapp.growth.presentation.util.toHourAndMinute
+import com.yapp.growth.presentation.util.*
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun HomeScreen(
+    mainViewModel: MainViewModel = composableActivityViewModel(),
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToMyPageScreen: () -> Unit,
     navigateToDetailPlanScreen: (Int) -> Unit,
@@ -106,6 +76,16 @@ fun HomeScreen(
                 }
                 is HomeSideEffect.ShowBottomSheet -> {
                     showBottomSheet(viewState.selectionDay, viewState.selectDayPlans)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = mainViewModel.effect) {
+        mainViewModel.effect.collect { effect ->
+            when (effect) {
+                is MainContract.MainSideEffect.RefreshScreen -> {
+                    viewModel.setEvent(HomeEvent.InitHomeScreen)
                 }
             }
         }
@@ -292,7 +272,7 @@ fun HomeTodayPlan(
 
 @Composable
 fun HomeInduceLogin(
-    OnInduceLoginClick: () -> Unit
+    OnInduceLoginClick: () -> Unit,
 ) {
     Surface(
         color = Color.Transparent,
@@ -485,7 +465,7 @@ fun HomeCalendar(
 
 @Composable
 fun HomeTodayPlanCountText(
-    planCount: Int = 0
+    planCount: Int = 0,
 ) {
     Box(
         modifier = Modifier
@@ -608,7 +588,7 @@ fun DayPlanItem(
     date: String,
     category: String,
     title: String,
-    onPlanItemClick: (Int) -> Unit
+    onPlanItemClick: (Int) -> Unit,
 ) {
     val tmp = date.toDate()
     val calendar: Calendar = Calendar.getInstance()
@@ -629,9 +609,12 @@ fun DayPlanItem(
                 tint = Color.Unspecified,
                 imageVector = (
                         when (category) {
-                            stringResource(R.string.create_plan_theme_list_meal) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meal)
-                            stringResource(R.string.create_plan_theme_list_trip) -> ImageVector.vectorResource(id = R.drawable.ic_plan_trip)
-                            stringResource(R.string.create_plan_theme_list_meeting) -> ImageVector.vectorResource(id = R.drawable.ic_plan_meeting)
+                            stringResource(R.string.create_plan_theme_list_meal) -> ImageVector.vectorResource(
+                                id = R.drawable.ic_plan_meal)
+                            stringResource(R.string.create_plan_theme_list_trip) -> ImageVector.vectorResource(
+                                id = R.drawable.ic_plan_trip)
+                            stringResource(R.string.create_plan_theme_list_meeting) -> ImageVector.vectorResource(
+                                id = R.drawable.ic_plan_meeting)
                             else -> ImageVector.vectorResource(id = R.drawable.ic_plan_etc)
                         }),
                 contentDescription = null,
@@ -660,7 +643,7 @@ fun HomeMonthlyPlanItem(
     id: Int,
     date: String,
     title: String,
-    onPlanItemClick: (Int) -> Unit
+    onPlanItemClick: (Int) -> Unit,
 ) {
     val time = SimpleDateFormat("aa h시", Locale.KOREA).format(date.toDate())
     val dates = SimpleDateFormat("M/d", Locale.KOREA).format(date.toDate())

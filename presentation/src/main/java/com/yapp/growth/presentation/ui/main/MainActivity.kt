@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.firebase.DYNAMIC_LINK_PARAM
@@ -17,10 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     private var createResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { _ ->
-        // TODO: send event to HomeScreen & ManageScreen
+        viewModel.setEvent(MainContract.MainEvent.FinishedCreateActivity)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
