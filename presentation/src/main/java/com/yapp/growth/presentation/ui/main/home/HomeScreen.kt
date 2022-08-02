@@ -159,31 +159,38 @@ private fun HomeUserProfile(
     userName: String,
     onUserIconClick: () -> Unit,
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .height(60.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart
     ) {
-        IconButton(
-            modifier = Modifier.size(32.dp),
-            onClick = { onUserIconClick() }) {
+        Row(
+            modifier = Modifier
+                .height(44.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onUserIconClick() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.width(8.dp))
             Image(
                 painter = painterResource(R.drawable.ic_default_user_image_32),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
+                    .size(32.dp)
                     .clip(CircleShape)
                     .border(1.dp, MainPurple900, CircleShape),
                 contentDescription = null,
             )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = userName,
+                style = PlanzTypography.h3,
+                color = Gray900,
+            )
         }
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = userName,
-            style = PlanzTypography.h3,
-            color = Gray900,
-        )
     }
 }
 

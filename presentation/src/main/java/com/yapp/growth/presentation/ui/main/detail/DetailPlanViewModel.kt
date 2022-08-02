@@ -1,6 +1,5 @@
 package com.yapp.growth.presentation.ui.main.detail
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
@@ -14,7 +13,6 @@ import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlan
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanSideEffect
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanContract.DetailPlanViewState
 import com.yapp.growth.presentation.util.ResourceProvider
-import com.yapp.growth.presentation.util.toDayAndTime
 import com.yapp.growth.presentation.util.toPlanDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
