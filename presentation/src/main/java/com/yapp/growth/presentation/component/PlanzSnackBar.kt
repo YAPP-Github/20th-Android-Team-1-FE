@@ -27,7 +27,8 @@ fun PlanzSnackBar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp),
         backgroundColor = Gray900
     ) {
         Text(
@@ -47,7 +48,8 @@ fun PlanzErrorSnackBar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 32.dp),
         backgroundColor = Gray900
     ) {
         Row(
