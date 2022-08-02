@@ -83,10 +83,11 @@ fun FixPlanBottomSheetContent(timeTable: TimeTable, currentClickTimeIndex: Pair<
 
     val respondUserText = StringBuilder()
     currentClickUserData.forEachIndexed { index, user ->
-        if (index == 3) respondUserText.append("\n")
-        if (index == 7) respondUserText.append("\n")
-        if (index == 0) respondUserText.append(user.userName)
-        else respondUserText.append(", ${user.userName}")
+        when (index) {
+            0, 3, 7 -> respondUserText.append(user.userName)
+            2, 6 -> respondUserText.append(", ${user.userName.plus("\n")}")
+            else -> respondUserText.append(", ${user.userName}")
+        }
     }
 
     Column(
@@ -146,10 +147,11 @@ fun MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: Li
 
     val respondUserText = StringBuilder()
     currentClickUserData.forEachIndexed { index, user ->
-        if (index == 3) respondUserText.append("\n")
-        if (index == 7) respondUserText.append("\n")
-        if (index == 0) respondUserText.append(user.userName)
-        else respondUserText.append(", ${user.userName}")
+        when (index) {
+            0, 3, 7 -> respondUserText.append(user.userName)
+            2, 6 -> respondUserText.append(", ${user.userName.plus("\n")}")
+            else -> respondUserText.append(", ${user.userName}")
+        }
     }
 
     Column(

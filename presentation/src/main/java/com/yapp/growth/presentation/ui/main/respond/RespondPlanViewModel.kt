@@ -116,9 +116,19 @@ class RespondPlanViewModel @Inject constructor(
         _timeCheckedOfDays.value = temp
     }
 
-    private fun clearTimeCheckedOfDays() {
-        _timeCheckedOfDays.value.forEach {
-            it.timeList.map { false }
+    private fun clearTimeCheckedOfDays() = viewModelScope.launch(Dispatchers.Default) {
+        makeRespondList(originalTable)
+        updateState { copy(clickCount = 0) }
+
+        val toIndex: Int = if (originalTable.availableDates.size < currentIndex.plus(4)) {
+            originalTable.availableDates.size
+        } else {
+            currentIndex.plus(4)
+        }
+
+        val temp: TimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(currentIndex, toIndex))
+        updateState {
+            copy(timeTable = temp)
         }
     }
 

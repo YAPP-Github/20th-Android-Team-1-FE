@@ -59,7 +59,6 @@ class FixPlanViewModel @Inject constructor(
     private fun filterCurrentSelectedUser(dateIndex: Int, minuteIndex: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val day = originalTable.availableDates[currentIndex.times(4).plus(dateIndex)]
-            var hour = originalTable.hourList[minuteIndex/2]
 
             val blockList = originalTable.timeTableDate.find { it.date == day }?.timeTableUnits
             val userList = blockList?.let { block ->

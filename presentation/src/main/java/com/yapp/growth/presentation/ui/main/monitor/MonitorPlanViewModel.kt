@@ -63,7 +63,7 @@ class MonitorPlanViewModel @Inject constructor(
     }
 
     private fun makeRespondList(data: TimeTable) {
-        val booleanArray = Array(data.totalCount*2) { false }
+        val booleanArray = Array(data.totalCount.times(2)) { false }
 
         val temp = mutableListOf<TimeCheckedOfDay>().also { list ->
             repeat(data.availableDates.size) {
@@ -80,7 +80,6 @@ class MonitorPlanViewModel @Inject constructor(
     private fun filterCurrentSelectedUser(dateIndex: Int, minuteIndex: Int) {
         viewModelScope.launch(Dispatchers.Default) {
             val day = originalTable.availableDates[currentIndex.times(4).plus(dateIndex)]
-            var hour = originalTable.hourList[minuteIndex/2]
 
             val blockList = originalTable.timeTableDate.find { it.date == day }?.timeTableUnits
             val userList = blockList?.let { block ->
