@@ -96,7 +96,7 @@ fun CreateTimeTableScreen(
         PlanzAlertDialog(
             visible = uiState.isDialogVisible,
             title = stringResource(R.string.planz_alert_dialog_title),
-            content = stringResource(R.string.planz_alert_dialog_content),
+            content = stringResource(R.string.create_plan_time_table_alert_dialog_content),
             positiveButtonText = stringResource(R.string.planz_alert_dialog_positive_button_text),
             negativeButtonText = stringResource(R.string.planz_alert_dialog_negative_button_text),
             onClickNegativeButton = {

@@ -53,7 +53,8 @@ fun PlanzError(
                     border = BorderStroke(width = 1.dp, color = MainPurple900),
                     shape = RoundedCornerShape(7.dp),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = MainPurple900),
-                    onClick = { onClickRetry() }
+                    onClick = { onClickRetry() },
+                    elevation = null,
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
