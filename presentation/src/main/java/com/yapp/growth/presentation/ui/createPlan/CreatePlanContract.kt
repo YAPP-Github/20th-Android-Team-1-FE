@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan
 
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
@@ -7,6 +8,7 @@ import com.yapp.growth.domain.entity.Category
 
 class CreatePlanContract {
     data class CreatePlanViewState(
+        val createTempPlanLoadState: LoadState = LoadState.SUCCESS,
         val category: Category? = null,
         val title: String = "",
         val place: String = "",

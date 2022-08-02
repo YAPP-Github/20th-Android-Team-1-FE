@@ -19,11 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
+import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
-import com.yapp.growth.presentation.component.PlanzButtonWithBack
-import com.yapp.growth.presentation.component.PlanzCreateStepTitle
-import com.yapp.growth.presentation.component.PlanzErrorSnackBar
+import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.model.TimeType
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract
@@ -48,6 +47,7 @@ fun TimeRangeScreen(
 ) {
     val context = LocalContext.current
     val viewState by viewModel.viewState.collectAsState()
+    val sharedViewState by sharedViewModel.viewState.collectAsState()
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scaffoldState = rememberScaffoldState()
     val startHourListState = rememberLazyListState()
@@ -60,7 +60,7 @@ fun TimeRangeScreen(
         sheetContent = {
             TimeRangeTimeBottomSheetContent(
                 timeOptions = TimeType.values(),
-                listState = if (viewState.dialogState == DialogState.START_HOUR) startHourListState else endHourListState,
+                listState = if (viewState.timeSelectDialog == DialogState.START_HOUR) startHourListState else endHourListState,
                 onItemClick = {
                     viewModel.setEvent(TimeRangeEvent.OnSelectedHourChanged(it.ordinal))
                 },
@@ -83,26 +83,50 @@ fun TimeRangeScreen(
             }
         ) { padding ->
 
-            Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                TimeRangeText(
-                    modifier = Modifier.padding(top = 140.dp),
-                    isError = viewState.isError,
-                    startHour = viewState.startHour,
-                    endHour = viewState.endHour,
-                    onStartHourClick = { viewModel.setEvent(TimeRangeEvent.OnStartHourClicked) },
-                    onEndHourClick = { viewModel.setEvent(TimeRangeEvent.OnEndHourClicked) }
-                )
+            when(sharedViewState.createTempPlanLoadState) {
+                LoadState.SUCCESS -> {
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)) {
+                        TimeRangeText(
+                            modifier = Modifier.padding(top = 140.dp),
+                            isError = viewState.isSelectedErrorRange,
+                            startHour = viewState.startHour,
+                            endHour = viewState.endHour,
+                            onStartHourClick = { viewModel.setEvent(TimeRangeEvent.OnStartHourClicked) },
+                            onEndHourClick = { viewModel.setEvent(TimeRangeEvent.OnEndHourClicked) }
+                        )
 
-                PlanzButtonWithBack(
-                    text = stringResource(id = R.string.create_plan_next_button_text),
-                    enabled = !viewState.isError,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 32.dp),
-                    onClick = { viewModel.setEvent(TimeRangeEvent.OnClickNextButton) },
-                    onBackClick = { viewModel.setEvent(TimeRangeEvent.OnClickBackButton) }
-                )
+                        PlanzButtonWithBack(
+                            text = stringResource(id = R.string.create_plan_next_button_text),
+                            enabled = !viewState.isSelectedErrorRange,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 32.dp),
+                            onClick = { viewModel.setEvent(TimeRangeEvent.OnClickNextButton) },
+                            onBackClick = { viewModel.setEvent(TimeRangeEvent.OnClickBackButton) }
+                        )
+                    }
+                }
+                LoadState.LOADING -> PlanzLoading()
+                LoadState.ERROR -> PlanzError(retryVisible = true)
             }
+
+
+
+            PlanzAlertDialog(
+                visible = viewState.isAlertDialogVisible,
+                title = stringResource(R.string.planz_alert_dialog_title),
+                content = stringResource(R.string.create_plan_time_range_alert_dialog_content),
+                positiveButtonText = stringResource(R.string.planz_alert_dialog_positive_button_text),
+                negativeButtonText = stringResource(R.string.planz_alert_dialog_negative_button_text),
+                onClickNegativeButton = {
+                    viewModel.setEvent(TimeRangeEvent.OnClickAlertDialogNegativeButton)
+                },
+                onClickPositiveButton = {
+                    viewModel.setEvent(TimeRangeEvent.OnClickAlertDialogPositiveButton)
+                },
+            )
         }
     }
 
@@ -111,14 +135,6 @@ fun TimeRangeScreen(
             when (effect) {
                 is TimeRangeSideEffect.ExitCreateScreen -> {
                     exitCreateScreen()
-                }
-                is TimeRangeSideEffect.CreateTemporaryPlan -> {
-                    sharedViewModel.setEvent(
-                        DecideTimeRange(
-                            startHour = viewState.startHour ?: DEFAULT_START_HOUR,
-                            endHour = viewState.endHour ?: DEFAULT_END_HOUR
-                        )
-                    )
                 }
                 is TimeRangeSideEffect.NavigateToPreviousScreen -> {
                     navigateToPreviousScreen()
@@ -140,6 +156,14 @@ fun TimeRangeScreen(
                             context.getString(R.string.create_plan_time_range_error_message)
                         )
                     }
+                }
+                is TimeRangeSideEffect.CreateTemporaryPlan -> {
+                    sharedViewModel.setEvent(
+                        DecideTimeRange(
+                            startHour = viewState.startHour ?: DEFAULT_START_HOUR,
+                            endHour = viewState.endHour ?: DEFAULT_END_HOUR
+                        )
+                    )
                 }
             }
         }

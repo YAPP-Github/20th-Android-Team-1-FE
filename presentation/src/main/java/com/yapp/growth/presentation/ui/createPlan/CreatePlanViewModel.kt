@@ -1,7 +1,9 @@
 package com.yapp.growth.presentation.ui.createPlan
 
+import androidx.compose.animation.core.updateTransition
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.TemporaryPlan
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
@@ -34,6 +36,7 @@ class CreatePlanViewModel @Inject constructor(
     }
 
     private fun createTemporaryPlan() = viewModelScope.launch {
+        updateState { copy(createTempPlanLoadState = LoadState.LOADING) }
         createTemporaryPlanUseCase(
             TemporaryPlan(
                 title = viewState.value.title,
@@ -44,10 +47,10 @@ class CreatePlanViewModel @Inject constructor(
                 place = viewState.value.place
             )
         ).onSuccess {
-            updateState { copy(tempPlanUuid = it.uuid) }
+            updateState { copy(createTempPlanLoadState = LoadState.SUCCESS, tempPlanUuid = it.uuid) }
             sendEffect({ CreatePlanSideEffect.NavigateToNextScreen })
         }.onError {
-
+            updateState { copy(createTempPlanLoadState = LoadState.ERROR) }
         }
     }
 }
