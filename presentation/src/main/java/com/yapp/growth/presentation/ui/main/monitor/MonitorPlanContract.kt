@@ -7,10 +7,13 @@ import com.yapp.growth.base.ViewState
 import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
+import com.yapp.growth.presentation.ui.main.fix.FixPlanContract
 
 class MonitorPlanContract {
     data class MonitorPlanViewState(
+        val bottomSheet: BottomSheet = BottomSheet.HIDE,
         val loadState: LoadState = LoadState.SUCCESS,
+        val respondents: List<User> = emptyList(),
         val timeTable: TimeTable = TimeTable(
             emptyList(),
             emptyList(),
@@ -29,7 +32,13 @@ class MonitorPlanContract {
         ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
         val currentClickUserData: List<User> = emptyList(),
-    ) : ViewState
+    ) : ViewState {
+        enum class BottomSheet {
+            HIDE,
+            RESPONDENT,
+            PARTICIPANT
+        }
+    }
 
     sealed class MonitorPlanSideEffect : ViewSideEffect {
         object ShowBottomSheet : MonitorPlanSideEffect()
@@ -44,5 +53,6 @@ class MonitorPlanContract {
         object OnClickExitIcon : MonitorPlanEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : MonitorPlanEvent()
         object OnClickErrorRetryButton : MonitorPlanEvent()
+        object OnClickAvailableColorBox : MonitorPlanEvent()
     }
 }

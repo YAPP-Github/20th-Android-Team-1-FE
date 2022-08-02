@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.base.LoadState
-import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
@@ -13,10 +12,9 @@ import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
-import dagger.hilt.android.lifecycle.HiltViewModel
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,11 +22,24 @@ import javax.inject.Inject
 class MonitorPlanViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getRespondUsersUseCase: GetRespondUsersUseCase,
-): BaseViewModel<MonitorPlanViewState, MonitorPlanSideEffect, MonitorPlanEvent>(
+) : BaseViewModel<MonitorPlanViewState, MonitorPlanSideEffect, MonitorPlanEvent>(
     MonitorPlanViewState()
 ) {
 
-    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "", Category(0,"",""))
+    private var originalTable: TimeTable = TimeTable(emptyList(),
+        emptyList(),
+        0,
+        emptyList(),
+        0,
+        "",
+        User(0, ""),
+        "",
+        "",
+        emptyList(),
+        emptyList(),
+        "",
+        "",
+        Category(0, "", ""))
     private var currentIndex = 0
     private val planId: Long = savedStateHandle.get<Long>(KEY_PLAN_ID) ?: -1L
 
@@ -46,15 +57,14 @@ class MonitorPlanViewModel @Inject constructor(
                     val sliceTimeTable: TimeTable = if (it.availableDates.size >= 4) {
                         it.copy(availableDates = it.availableDates.subList(0, 4))
                     } else {
-                        it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+                        it.copy(availableDates = it.availableDates.subList(0,
+                            it.availableDates.size))
                     }
-                    updateState {
-                        copy(timeTable = sliceTimeTable)
-                    }
-                    delay(2000L)
-                    updateState {
-                        copy(loadState = LoadState.SUCCESS)
-                    }
+                    updateState { copy(
+                            respondents = it.users,
+                            timeTable = sliceTimeTable,
+                            loadState = LoadState.SUCCESS
+                    ) }
                 }
                 .onError {
                     updateState { copy(loadState = LoadState.ERROR) }
@@ -69,9 +79,9 @@ class MonitorPlanViewModel @Inject constructor(
             repeat(data.availableDates.size) {
                 list.add(
                     TimeCheckedOfDay(
-                    date = data.availableDates[it],
-                    timeList = booleanArray.copyOf().toMutableList()
-                )
+                        date = data.availableDates[it],
+                        timeList = booleanArray.copyOf().toMutableList()
+                    )
                 )
             }
         }.toList()
@@ -144,11 +154,18 @@ class MonitorPlanViewModel @Inject constructor(
             MonitorPlanEvent.OnClickPreviousDayButton -> previousDay()
             MonitorPlanEvent.OnClickExitIcon -> sendEffect({ MonitorPlanSideEffect.HideBottomSheet })
             is MonitorPlanEvent.OnClickTimeTable -> {
-                updateState { copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex) }
+                updateState { copy(
+                    bottomSheet = MonitorPlanViewState.BottomSheet.PARTICIPANT,
+                    currentClickTimeIndex = event.dateIndex to event.minuteIndex
+                ) }
                 sendEffect({ MonitorPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
             MonitorPlanEvent.OnClickErrorRetryButton -> loadRespondUsers(planId)
+            MonitorPlanEvent.OnClickAvailableColorBox -> {
+                updateState { copy(bottomSheet = MonitorPlanViewState.BottomSheet.RESPONDENT) }
+                sendEffect({ MonitorPlanSideEffect.ShowBottomSheet })
+            }
         }
     }
 
