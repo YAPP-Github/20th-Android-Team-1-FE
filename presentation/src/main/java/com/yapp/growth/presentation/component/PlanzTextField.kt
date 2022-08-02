@@ -8,6 +8,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -34,6 +36,8 @@ fun PlanzTextField(
     text: String,
     onInputChanged: (String) -> Unit,
     onDeleteClicked: () -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     val textState = getTextState(text = text, maxLength = maxLength)
 
@@ -53,7 +57,9 @@ fun PlanzTextField(
             hint = hint,
             onInputChanged = onInputChanged,
             onDeleteClicked = onDeleteClicked,
-            textState = textState
+            textState = textState,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
         )
 
         ErrorAndLengthCounter(
@@ -72,6 +78,8 @@ fun PlanzBasicTextField(
     onInputChanged: (String) -> Unit,
     onDeleteClicked: () -> Unit,
     textState: TextInputState = getTextState(text = text, maxLength = maxLength),
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
 ) {
     TextField(
         value = text,
@@ -88,6 +96,8 @@ fun PlanzBasicTextField(
                 shape = RoundedCornerShape(8.dp)
             ),
         textStyle = PlanzTypography.body1.copy(if (text.isNotBlank()) Gray900 else Gray300),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         singleLine = true,
         trailingIcon = {
             Icon(
