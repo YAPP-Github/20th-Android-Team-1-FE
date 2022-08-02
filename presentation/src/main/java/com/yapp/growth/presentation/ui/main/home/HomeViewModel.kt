@@ -41,6 +41,7 @@ class HomeViewModel @Inject constructor(
 ) {
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
+
     @OptIn(FlowPreview::class)
     val currentDate: StateFlow<CalendarDay> = _currentDate.debounce(300).stateIn(
         scope = viewModelScope,
@@ -51,20 +52,31 @@ class HomeViewModel @Inject constructor(
     override fun handleEvents(event: HomeEvent) {
         when (event) {
             is HomeEvent.InitHomeScreen -> {
-                Timber.d("Init")
                 updateState { copy(loadState = LoadState.LOADING) }
                 checkValidLoginToken()
             }
-            is HomeEvent.OnInduceLoginClicked -> { sendEffect({ HomeSideEffect.MoveToLogin }) }
+            is HomeEvent.OnInduceLoginClicked -> {
+                sendEffect({ HomeSideEffect.MoveToLogin })
+            }
             is HomeEvent.OnCalendarDayClicked -> {
                 sendEffect({ HomeSideEffect.ShowBottomSheet })
                 updateSelectionDaysState(event.selectionDay)
             }
-            is HomeEvent.OnPlanItemClicked -> { sendEffect({ HomeSideEffect.NavigateDetailPlanScreen(event.planId) }) }
-            is HomeEvent.OnUserImageClicked -> { sendEffect({ HomeSideEffect.NavigateToMyPageScreen }) }
-            is HomeEvent.OnTodayPlanExpandedClicked -> { updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) } }
-            is HomeEvent.OnMonthlyPlanExpandedClicked -> { updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) } }
-            is HomeEvent.OnMonthlyPlanModeClicked -> { updateMonthlyPlanModeState(viewState.value.monthlyPlanMode) }
+            is HomeEvent.OnPlanItemClicked -> {
+                sendEffect({ HomeSideEffect.NavigateDetailPlanScreen(event.planId) })
+            }
+            is HomeEvent.OnUserImageClicked -> {
+                sendEffect({ HomeSideEffect.NavigateToMyPageScreen })
+            }
+            is HomeEvent.OnTodayPlanExpandedClicked -> {
+                updateState { copy(isTodayPlanExpanded = !isTodayPlanExpanded) }
+            }
+            is HomeEvent.OnMonthlyPlanExpandedClicked -> {
+                updateState { copy(isMonthlyPlanExpanded = !isMonthlyPlanExpanded) }
+            }
+            is HomeEvent.OnMonthlyPlanModeClicked -> {
+                updateMonthlyPlanModeState(viewState.value.monthlyPlanMode)
+            }
             is HomeEvent.OnMonthlyPreviousClicked -> {
                 updateCurrentDateState(HomeEvent.OnMonthlyPreviousClicked)
             }
@@ -76,36 +88,36 @@ class HomeViewModel @Inject constructor(
 
     private fun checkValidLoginToken() {
         viewModelScope.launch {
-            runCatching {
-                val isValidLoginToken = kakaoLoginSdk.isValidAccessToken()
-                if (isValidLoginToken) {
-                    updateState { copy(loginState = LoginState.LOGIN) }
-                    fetchUserInfo()
-                    fetchDayPlans()
-                    fetchMonthlyPlans()
-                } else {
+            runCatching { kakaoLoginSdk.isValidAccessToken() }
+                .onSuccess {
+                    if (it) {
+                        updateState { copy(loginState = LoginState.LOGIN) }
+                        fetchUserInfo()
+                    } else {
+                        updateState {
+                            copy(
+                                loginState = LoginState.NONE,
+                                loadState = LoadState.SUCCESS,
+                                monthlyPlanLoadState = LoadState.SUCCESS
+                            )
+                        }
+                    }
+                }
+                .onError {
                     updateState {
                         copy(
                             loginState = LoginState.NONE,
-                            loadState = LoadState.SUCCESS
+                            loadState = LoadState.ERROR
                         )
                     }
                 }
-            }.onError {
-                updateState {
-                    copy(
-                        loginState = LoginState.NONE,
-                        loadState = LoadState.ERROR
-                    )
-                }
-            }
         }
     }
 
     private suspend fun fetchUserInfo() {
         val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
 
-        if(cacheInfo == null) {
+        if (cacheInfo == null) {
             getUserInfoUseCase.invoke()
                 .onSuccess {
                     updateState {
@@ -114,6 +126,8 @@ class HomeViewModel @Inject constructor(
                             userName = it.userName
                         )
                     }
+                    fetchDayPlans()
+                    fetchMonthlyPlans()
                 }
                 .onError {
                     updateState { copy(loadState = LoadState.ERROR) }
@@ -125,40 +139,49 @@ class HomeViewModel @Inject constructor(
                     userName = cacheInfo.userName
                 )
             }
+            fetchDayPlans()
+            fetchMonthlyPlans()
         }
     }
 
     private suspend fun fetchDayPlans() {
+        updateState { copy(todayPlanLoadState = LoadState.LOADING) }
         getDayFixedPlansUseCase.invoke(CalendarDay.today().toFormatDate())
             .onSuccess { plans ->
                 updateState {
                     copy(
-                        loadState = LoadState.SUCCESS,
+                        todayPlanLoadState = LoadState.SUCCESS,
                         todayPlans = plans
                     )
                 }
             }
             .onError {
-                updateState { copy(loadState = LoadState.ERROR) }
+                updateState {
+                    copy(
+                        todayPlanLoadState = LoadState.ERROR,
+                    )
+                }
             }
     }
 
     private suspend fun fetchMonthlyPlans() {
-        currentDate.collectLatest{ currentDate ->
-        updateState { copy(loadState = LoadState.LOADING) }
-        Timber.d("collectLatest :: $currentDate")
+        currentDate.collectLatest { currentDate ->
+            updateState { copy(monthlyPlanLoadState = LoadState.LOADING) }
+            Timber.d("collectLatest :: $currentDate")
             getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
                 .onSuccess { plans ->
                     updateState {
                         copy(
-                            loadState = LoadState.SUCCESS,
+                            monthlyPlanLoadState = LoadState.SUCCESS,
                             monthlyPlans = plans,
                         )
                     }
                 }
                 .onError {
-                    updateState { copy(loadState = LoadState.ERROR) }
+                    updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
                 }
+
+
         }
     }
 
