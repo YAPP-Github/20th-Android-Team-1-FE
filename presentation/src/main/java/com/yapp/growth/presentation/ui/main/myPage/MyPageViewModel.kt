@@ -27,13 +27,12 @@ class MyPageViewModel @Inject constructor(
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
 
-    init {
-        updateState { copy(loadState = LoadState.LOADING) }
-        checkValidLoginToken()
-    }
-    
     override fun handleEvents(event: MyPageEvent) {
         when (event) {
+            is MyPageEvent.InitMyPageScreen -> {
+                updateState { copy(loadState = LoadState.LOADING) }
+                checkValidLoginToken()
+            }
             is MyPageEvent.OnTermsClicked -> {
                 sendEffect({ MyPageSideEffect.NavigateToTerms })
             }

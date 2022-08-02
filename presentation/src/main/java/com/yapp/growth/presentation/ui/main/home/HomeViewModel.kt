@@ -54,10 +54,6 @@ class HomeViewModel @Inject constructor(
         initialValue = _currentDate.value
     )
 
-    init {
-        updateState { copy(loadState = LoadState.LOADING) }
-    }
-
     override fun handleEvents(event: HomeEvent) {
         when (event) {
             is HomeEvent.InitHomeScreen -> {

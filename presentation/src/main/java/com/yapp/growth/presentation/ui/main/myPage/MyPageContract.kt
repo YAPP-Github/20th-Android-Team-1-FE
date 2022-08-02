@@ -23,6 +23,7 @@ class MyPageContract {
     }
 
     sealed class MyPageEvent : ViewEvent {
+        object InitMyPageScreen : MyPageEvent()
         object OnTermsClicked : MyPageEvent()
         object OnPolicyClicked : MyPageEvent()
         object OnLogoutClicked : MyPageEvent()
