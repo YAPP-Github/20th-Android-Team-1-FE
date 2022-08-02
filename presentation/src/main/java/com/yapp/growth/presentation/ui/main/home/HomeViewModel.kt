@@ -108,7 +108,8 @@ class HomeViewModel @Inject constructor(
                             copy(
                                 loginState = LoginState.NONE,
                                 loadState = LoadState.SUCCESS,
-                                monthlyPlanLoadState = LoadState.SUCCESS
+                                monthlyPlanLoadState = LoadState.SUCCESS,
+                                userName = resourcesProvider.getString(R.string.planz_title),
                             )
                         }
                     }
@@ -117,7 +118,7 @@ class HomeViewModel @Inject constructor(
                     updateState {
                         copy(
                             loginState = LoginState.NONE,
-                            loadState = LoadState.ERROR
+                            loadState = LoadState.ERROR,
                         )
                     }
                 }
@@ -134,7 +135,7 @@ class HomeViewModel @Inject constructor(
                         copy(
                             loadState = LoadState.SUCCESS,
                             loginState = LoginState.NONE,
-                            userName = resourcesProvider.getString(R.string.planz_title),
+                            userName = it.userName,
                         )
                     }
                     fetchDayPlans()
