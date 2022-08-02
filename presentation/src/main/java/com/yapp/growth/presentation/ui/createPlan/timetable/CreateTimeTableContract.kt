@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.createPlan.timetable
 
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
@@ -7,6 +8,7 @@ import com.yapp.growth.domain.entity.CreateTimeTable
 
 class CreateTimeTableContract {
     data class CreateTimeTableViewState(
+        val loadState: LoadState = LoadState.SUCCESS,
         val createTimeTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList()),
         val clickCount: Int = 0,
         val isDialogVisible: Boolean = false,
@@ -26,5 +28,6 @@ class CreateTimeTableContract {
         object OnClickPreviousDayButton : CreateTimeTableEvent()
         object OnClickDialogPositiveButton : CreateTimeTableEvent()
         object OnClickDialogNegativeButton : CreateTimeTableEvent()
+        object OnClickErrorRetryButton : CreateTimeTableEvent()
     }
 }
