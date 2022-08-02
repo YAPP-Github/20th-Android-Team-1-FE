@@ -34,6 +34,8 @@ import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
+import com.yapp.growth.presentation.component.PlanzError
+import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.MainContract
 import com.yapp.growth.presentation.ui.main.MainViewModel
@@ -232,13 +234,13 @@ fun ManagePagerContent(
     onCreateButtonClick: () -> Unit,
 ) {
     when (loadState) {
-        LoadState.LOADING -> {}
+        LoadState.LOADING -> PlanzLoading()
         LoadState.SUCCESS -> {
             if (plans.isNotEmpty()) {
                 ManagePlansList(plans = plans, type = type, onItemClick = onItemClick)
             } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
         }
-        LoadState.ERROR -> {}
+        LoadState.ERROR -> PlanzError()
     }
 }
 

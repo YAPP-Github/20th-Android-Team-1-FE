@@ -12,13 +12,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzButtonWithBack
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
+import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.component.PlanzTextField
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecidePlace
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTitle
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
+import com.yapp.growth.presentation.ui.createPlan.theme.ThemeChoiceButton
+import com.yapp.growth.presentation.ui.createPlan.theme.ThemeContract
 import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleEvent
 import com.yapp.growth.presentation.ui.createPlan.title.TitleContract.TitleSideEffect
 import com.yapp.growth.presentation.util.composableActivityViewModel
@@ -48,30 +52,38 @@ fun TitleScreen(
             )
         }
     ) { padding ->
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()) {
-            Column(
-                modifier = Modifier.padding(top = 44.dp),
-                verticalArrangement = Arrangement.spacedBy(26.dp)
-            ) {
-                PlanzTextField(
-                    label = stringResource(id = R.string.create_plan_title_title_label),
-                    hint = viewState.sampleTitle,
-                    maxLength = MAX_LENGTH_TITLE,
-                    text = viewState.title,
-                    onInputChanged = { viewModel.setEvent(TitleEvent.FillInTitle(it)) },
-                    onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInTitle("")) }
-                )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            when (viewState.loadState) {
+                LoadState.SUCCESS -> {
+                    Column(
+                        modifier = Modifier.padding(top = 44.dp),
+                        verticalArrangement = Arrangement.spacedBy(26.dp)
+                    ) {
+                        PlanzTextField(
+                            label = stringResource(id = R.string.create_plan_title_title_label),
+                            hint = viewState.sampleTitle,
+                            maxLength = MAX_LENGTH_TITLE,
+                            text = viewState.title,
+                            onInputChanged = { viewModel.setEvent(TitleEvent.FillInTitle(it)) },
+                            onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInTitle("")) }
+                        )
 
-                PlanzTextField(
-                    label = stringResource(id = R.string.create_plan_title_place_label),
-                    hint = stringResource(id = R.string.create_plan_title_place_hint),
-                    maxLength = MAX_LENGTH_PLACE,
-                    text = viewState.place,
-                    onInputChanged = { viewModel.setEvent(TitleEvent.FillInPlace(it)) },
-                    onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInPlace("")) }
-                )
+                        PlanzTextField(
+                            label = stringResource(id = R.string.create_plan_title_place_label),
+                            hint = stringResource(id = R.string.create_plan_title_place_hint),
+                            maxLength = MAX_LENGTH_PLACE,
+                            text = viewState.place,
+                            onInputChanged = { viewModel.setEvent(TitleEvent.FillInPlace(it)) },
+                            onDeleteClicked = { viewModel.setEvent(TitleEvent.FillInPlace("")) }
+                        )
+                    }
+                }
+                LoadState.LOADING -> {}
+                LoadState.ERROR -> PlanzError(retryVisible = true)
             }
 
             PlanzButtonWithBack(
