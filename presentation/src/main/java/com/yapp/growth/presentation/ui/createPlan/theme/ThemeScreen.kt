@@ -17,8 +17,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateStepTitle
+import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.component.PlanzMainButton
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideCategory
@@ -43,22 +45,31 @@ fun ThemeScreen(
             )
         }
     ) { padding ->
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()) {
-            Column(
-                modifier = Modifier.padding(top = 44.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                uiState.planCategories.forEach {
-                    ThemeChoiceButton(
-                        isChosen = uiState.chosenCategory == it,
-                        text = it.keyword,
-                        onClick = {
-                            viewModel.setEvent(ThemeContract.ThemeEvent.ChoosePlanCategory(it))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            when (uiState.loadState) {
+                LoadState.SUCCESS -> {
+                    Column(
+                        modifier = Modifier.padding(top = 44.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        uiState.planCategories.forEach {
+                            ThemeChoiceButton(
+                                isChosen = uiState.chosenCategory == it,
+                                text = it.keyword,
+                                onClick = {
+                                    viewModel.setEvent(ThemeContract.ThemeEvent.ChoosePlanCategory(
+                                        it))
+                                }
+                            )
                         }
-                    )
+                    }
                 }
+                LoadState.LOADING -> {}
+                LoadState.ERROR -> PlanzError(retryVisible = true)
             }
 
             PlanzMainButton(
