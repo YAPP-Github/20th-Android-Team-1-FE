@@ -3,16 +3,20 @@ package com.yapp.growth.presentation.ui.main.monitor
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
+import com.yapp.growth.domain.onError
+import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetRespondUsersUseCase
 import com.yapp.growth.presentation.ui.main.KEY_PLAN_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,21 +36,29 @@ class MonitorPlanViewModel @Inject constructor(
         loadRespondUsers(planId)
     }
 
-    private fun loadRespondUsers(promisingId: Long) {
+    private fun loadRespondUsers(planId: Long) {
         viewModelScope.launch {
-            val result = (getRespondUsersUseCase.invoke(promisingId) as? NetworkResult.Success)?.data
-            result?.let {
-                originalTable = it
-                makeRespondList(it)
-                val sliceTimeTable: TimeTable = if (it.availableDates.size >= 4) {
-                    it.copy(availableDates = it.availableDates.subList(0, 4))
-                } else {
-                    it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+            updateState { copy(loadState = LoadState.LOADING) }
+            getRespondUsersUseCase.invoke(planId)
+                .onSuccess {
+                    originalTable = it
+                    makeRespondList(it)
+                    val sliceTimeTable: TimeTable = if (it.availableDates.size >= 4) {
+                        it.copy(availableDates = it.availableDates.subList(0, 4))
+                    } else {
+                        it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+                    }
+                    updateState {
+                        copy(timeTable = sliceTimeTable)
+                    }
+                    delay(2000L)
+                    updateState {
+                        copy(loadState = LoadState.SUCCESS)
+                    }
                 }
-                updateState {
-                    copy(timeTable = sliceTimeTable)
+                .onError {
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
-            }
         }
     }
 
@@ -137,6 +149,7 @@ class MonitorPlanViewModel @Inject constructor(
                 sendEffect({ MonitorPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
+            MonitorPlanEvent.OnClickErrorRetryButton -> loadRespondUsers(planId)
         }
     }
 

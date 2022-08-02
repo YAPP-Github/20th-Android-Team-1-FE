@@ -1,5 +1,6 @@
 package com.yapp.growth.presentation.ui.main.monitor
 
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
@@ -9,6 +10,7 @@ import com.yapp.growth.domain.entity.User
 
 class MonitorPlanContract {
     data class MonitorPlanViewState(
+        val loadState: LoadState = LoadState.SUCCESS,
         val timeTable: TimeTable = TimeTable(
             emptyList(),
             emptyList(),
@@ -41,5 +43,6 @@ class MonitorPlanContract {
         object OnClickPreviousDayButton : MonitorPlanEvent()
         object OnClickExitIcon : MonitorPlanEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : MonitorPlanEvent()
+        object OnClickErrorRetryButton : MonitorPlanEvent()
     }
 }

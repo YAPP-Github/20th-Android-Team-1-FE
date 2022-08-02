@@ -155,7 +155,7 @@
     <string name="fix_plan_fix_button_title">해당 시간으로 약속 확정</string>
 
     <!-- 약속 현황 -->
-    <string name="monitor_plan_title_text">약속현황</string>
+    <string name="monitor_plan_title">약속현황</string>
     <string name="monitor_plan_join_title_text">&#160;참여자</string>
 
     <!-- 약속 응답 상태 -->
