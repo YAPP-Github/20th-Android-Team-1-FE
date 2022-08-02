@@ -80,6 +80,18 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.getFixedPlan(planId).toFixedPlan()
         }
 
+    override suspend fun getMonthlyFixedPlans(dateTime: String): NetworkResult<List<Plan.FixedPlan>> =
+        handleApi {
+            retrofitApi.getMonthlyFixedPlans(dateTime).map { it.toFixedPlan() }
+        }
+
+
+    override suspend fun getDayFixedPlans(dateTime: String): NetworkResult<List<Plan.FixedPlan>> =
+        handleApi {
+            retrofitApi.getDayFixedPlans(dateTime).map { it.toFixedPlan() }
+        }
+
+
     override suspend fun getPlanCategories(): NetworkResult<List<Category>> =
         handleApi {
             retrofitApi.getCategories().map { it.toCategory() }

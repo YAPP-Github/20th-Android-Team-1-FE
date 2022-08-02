@@ -9,7 +9,9 @@ import com.yapp.growth.domain.entity.Plan
 
 class HomeContract {
     data class HomeViewState(
-        val loadState: LoadState = LoadState.SUCCESS,
+        val loadState: LoadState = LoadState.LOADING,
+        val todayPlanLoadState: LoadState = LoadState.LOADING,
+        val monthlyPlanLoadState: LoadState = LoadState.LOADING,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "",
         val allPlans: List<Plan.FixedPlan> = emptyList(),

@@ -54,12 +54,16 @@ import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTheme
 import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.login.LoginActivity
+import com.yapp.growth.presentation.ui.main.MainContract
+import com.yapp.growth.presentation.ui.main.MainViewModel
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageEvent
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageSideEffect
+import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @Composable
 fun MyPageScreen(
+    mainViewModel: MainViewModel = composableActivityViewModel(),
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateToPolicyScreen: () -> Unit,
     navigateToTermsScreen: () -> Unit,
@@ -69,6 +73,10 @@ fun MyPageScreen(
 
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
+
+    LaunchedEffect(key1 = true) {
+        viewModel.setEvent(MyPageEvent.InitMyPageScreen)
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -91,6 +99,16 @@ fun MyPageScreen(
                 }
                 MyPageSideEffect.ModifyNickName -> {
                     navigateToModifyNickNameScreen()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = mainViewModel.effect) {
+        mainViewModel.effect.collect { effect ->
+            when (effect) {
+                is MainContract.MainSideEffect.RefreshScreen -> {
+                    viewModel.setEvent(MyPageEvent.InitMyPageScreen)
                 }
             }
         }
@@ -225,7 +243,7 @@ fun MyPageUserInfo(
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp),) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = userName,
                     color = Gray900,

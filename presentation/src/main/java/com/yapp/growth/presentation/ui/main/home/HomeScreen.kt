@@ -91,23 +91,28 @@ fun HomeScreen(
         }
     }
 
-    Scaffold(
-        backgroundColor = BackgroundColor1,
-        topBar = {
-            HomeUserProfile(
-                userName = viewState.userName,
-                onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
-            )
-        },
-        modifier = Modifier.fillMaxSize(),
-    ) { padding ->
-        when (viewState.loadState) {
-            LoadState.LOADING -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    PlanzLoading()
-                }
+    when (viewState.loadState) {
+        LoadState.LOADING -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                PlanzLoading()
             }
-            else -> {
+        }
+        LoadState.ERROR -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                PlanzError()
+            }
+        }
+        LoadState.SUCCESS -> {
+            Scaffold(
+                backgroundColor = BackgroundColor1,
+                topBar = {
+                    HomeUserProfile(
+                        userName = viewState.userName,
+                        onUserIconClick = { viewModel.setEvent(HomeEvent.OnUserImageClicked) }
+                    )
+                },
+                modifier = Modifier.fillMaxSize(),
+            ) { padding ->
                 Column(
                     modifier = Modifier
                         .padding(padding)
@@ -117,7 +122,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(3.dp))
                     when (viewState.loginState) {
                         HomeContract.LoginState.LOGIN -> HomeTodayPlan(
-                            isError = viewState.loadState == LoadState.ERROR,
+                            loadState = viewState.todayPlanLoadState,
                             expanded = viewState.isTodayPlanExpanded,
                             todayPlans = viewState.todayPlans,
                             planCount = viewState.todayPlans.size,
@@ -130,7 +135,7 @@ fun HomeScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     HomeMonthlyPlan(
-                        isError = viewState.loadState == LoadState.ERROR,
+                        loadState = viewState.monthlyPlanLoadState,
                         expanded = viewState.isMonthlyPlanExpanded,
                         monthlyPlans = viewState.monthlyPlans,
                         mode = viewState.monthlyPlanMode,
@@ -184,7 +189,7 @@ private fun HomeUserProfile(
 
 @Composable
 fun HomeTodayPlan(
-    isError: Boolean,
+    loadState: LoadState,
     expanded: Boolean,
     todayPlans: List<Plan.FixedPlan>,
     planCount: Int,
@@ -228,14 +233,22 @@ fun HomeTodayPlan(
                         style = MaterialTheme.typography.h3,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    if (isError) {
-                        Icon(
-                            tint = Color.Unspecified,
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_blue_error),
-                            contentDescription = null,
-                        )
-                    } else {
-                        HomeTodayPlanCountText(planCount)
+                    when (loadState) {
+                        LoadState.LOADING -> {
+                            Box(modifier = Modifier.size(16.dp)) {
+                                PlanzLoading()
+                            }
+                        }
+                        LoadState.ERROR -> {
+                            Icon(
+                                tint = Color.Unspecified,
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_blue_error),
+                                contentDescription = null,
+                            )
+                        }
+                        LoadState.SUCCESS -> {
+                            HomeTodayPlanCountText(planCount)
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp))
@@ -319,7 +332,7 @@ fun HomeInduceLogin(
 
 @Composable
 fun HomeMonthlyPlan(
-    isError: Boolean,
+    loadState: LoadState,
     expanded: Boolean,
     monthlyPlans: List<Plan.FixedPlan>,
     mode: HomeContract.MonthlyPlanModeState,
@@ -360,80 +373,88 @@ fun HomeMonthlyPlan(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                if (isError) {
-                    Box(modifier = Modifier.height(264.dp)) {
-                        PlanzError()
+                Spacer(modifier = Modifier.height(20.dp))
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = "${year}년 ${String.format("%02d", month)}월",
+                        style = PlanzTypography.h3,
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 112.dp)
+                            .clickable { onPreviousClick() },
+                        tint = Color.Unspecified,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
+                        contentDescription = null,
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 136.dp)
+                            .clickable { onNextClick() },
+                        tint = Color.Unspecified,
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
+                        contentDescription = null,
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterEnd)
+                            .clickable { onModeClick() },
+                        tint = Color.Unspecified,
+                        imageVector = if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
+                            ImageVector.vectorResource(R.drawable.ic_list)
+                        } else {
+                            ImageVector.vectorResource(R.drawable.ic_calendar)
+                        },
+                        contentDescription = null,
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Divider(color = Gray200, thickness = 1.dp)
+                when (loadState) {
+                    LoadState.LOADING -> {
+                        Box(modifier = Modifier.height(264.dp)) {
+                            PlanzLoading()
+                        }
                     }
-                } else {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        Text(
-                            text = "${year}년 ${String.format("%02d", month)}월",
-                            style = PlanzTypography.h3,
-                        )
-                        Icon(
-                            modifier = Modifier
-                                .padding(start = 112.dp)
-                                .clickable { onPreviousClick() },
-                            tint = Color.Unspecified,
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
-                            contentDescription = null,
-                        )
-                        Icon(
-                            modifier = Modifier
-                                .padding(start = 136.dp)
-                                .clickable { onNextClick() },
-                            tint = Color.Unspecified,
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
-                            contentDescription = null,
-                        )
-                        Icon(
-                            modifier = Modifier
-                                .align(alignment = Alignment.CenterEnd)
-                                .clickable { onModeClick() },
-                            tint = Color.Unspecified,
-                            imageVector = if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
-                                ImageVector.vectorResource(R.drawable.ic_list)
-                            } else {
-                                ImageVector.vectorResource(R.drawable.ic_calendar)
-                            },
-                            contentDescription = null,
-                        )
+                    LoadState.ERROR -> {
+                        Box(modifier = Modifier.height(264.dp)) {
+                            PlanzError()
+                        }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Divider(color = Gray200, thickness = 1.dp)
-                    if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
-                        HomeCalendar(
-                            currentDate = currentDate,
-                            monthlyPlans = monthlyPlans,
-                            onDateClick = onDateClick
-                        )
-                    } else {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        if (monthlyPlans.isNotEmpty()) {
-                            HomeMonthlyPlanList(
+                    LoadState.SUCCESS -> {
+                        if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
+                            HomeCalendar(
+                                currentDate = currentDate,
                                 monthlyPlans = monthlyPlans,
-                                expanded = expanded,
-                                onExpandedClick = onExpandedClick,
-                                onPlanItemClick = onPlanItemClick
+                                onDateClick = onDateClick
                             )
                         } else {
-                            Spacer(modifier = Modifier.height(40.dp))
-                            Image(
-                                painter = painterResource(R.drawable.ic_calendar_with_chracter),
-                                contentScale = ContentScale.Crop,
-                                contentDescription = null,
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_no_plan),
-                                color = Gray500,
-                                style = MaterialTheme.typography.body2,
-                            )
-                            Spacer(modifier = Modifier.height(52.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
+                            if (monthlyPlans.isNotEmpty()) {
+                                HomeMonthlyPlanList(
+                                    monthlyPlans = monthlyPlans,
+                                    expanded = expanded,
+                                    onExpandedClick = onExpandedClick,
+                                    onPlanItemClick = onPlanItemClick
+                                )
+                            } else {
+                                Spacer(modifier = Modifier.height(40.dp))
+                                Image(
+                                    painter = painterResource(R.drawable.ic_calendar_with_chracter),
+                                    contentScale = ContentScale.Crop,
+                                    contentDescription = null,
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(
+                                    text = stringResource(id = R.string.home_no_plan),
+                                    color = Gray500,
+                                    style = MaterialTheme.typography.body2,
+                                )
+                                Spacer(modifier = Modifier.height(52.dp))
+                            }
                         }
                     }
                 }
@@ -441,6 +462,7 @@ fun HomeMonthlyPlan(
         }
     }
 }
+
 
 @Composable
 fun HomeCalendar(
@@ -610,11 +632,14 @@ fun DayPlanItem(
                 imageVector = (
                         when (category) {
                             stringResource(R.string.create_plan_theme_list_meal) -> ImageVector.vectorResource(
-                                id = R.drawable.ic_plan_meal)
+                                id = R.drawable.ic_plan_meal
+                            )
                             stringResource(R.string.create_plan_theme_list_trip) -> ImageVector.vectorResource(
-                                id = R.drawable.ic_plan_trip)
+                                id = R.drawable.ic_plan_trip
+                            )
                             stringResource(R.string.create_plan_theme_list_meeting) -> ImageVector.vectorResource(
-                                id = R.drawable.ic_plan_meeting)
+                                id = R.drawable.ic_plan_meeting
+                            )
                             else -> ImageVector.vectorResource(id = R.drawable.ic_plan_etc)
                         }),
                 contentDescription = null,

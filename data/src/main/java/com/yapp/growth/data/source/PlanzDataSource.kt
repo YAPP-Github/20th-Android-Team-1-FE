@@ -18,6 +18,8 @@ interface PlanzDataSource {
     suspend fun getWaitingPlans(): NetworkResult<List<Plan.WaitingPlan>>
     suspend fun getFixedPlans(): NetworkResult<List<Plan.FixedPlan>>
     suspend fun getFixedPlan(planId: Long): NetworkResult<Plan.FixedPlan>
+    suspend fun getDayFixedPlans(dateTime: String): NetworkResult<List<Plan.FixedPlan>>
+    suspend fun getMonthlyFixedPlans(dateTime: String): NetworkResult<List<Plan.FixedPlan>>
 
     suspend fun getPlanCategories(): NetworkResult<List<Category>>
     suspend fun getSampleTitle(categoryId: Int): NetworkResult<String>
