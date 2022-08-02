@@ -35,12 +35,16 @@ import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.main.MainContract
+import com.yapp.growth.presentation.ui.main.MainViewModel
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageEvent
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageSideEffect
+import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ManageScreen(
+    mainViewModel: MainViewModel = composableActivityViewModel(),
     viewModel: ManageViewModel = hiltViewModel(),
     intentToCreateScreen: () -> Unit,
     navigateToFixPlanScreen: (Int) -> Unit,
@@ -115,6 +119,16 @@ fun ManageScreen(
                 }
                 is ManageSideEffect.SwitchTab -> {
                     pagerState.animateScrollToPage(effect.tabIndex)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = mainViewModel.effect) {
+        mainViewModel.effect.collect { effect ->
+            when (effect) {
+                is MainContract.MainSideEffect.RefreshScreen -> {
+                    viewModel.setEvent(ManageEvent.InitManageScreen)
                 }
             }
         }
