@@ -2,7 +2,6 @@
 
 package com.yapp.growth.presentation.component
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,6 @@ fun PlanzBottomSheetScaffoldLayout(
     sheetContent: @Composable () -> Unit,
     scaffoldState: BottomSheetScaffoldState,
     content: @Composable () -> Unit,
-    onBackPressed: (() -> Unit)? = null,
 ) {
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -32,10 +30,9 @@ fun PlanzBottomSheetScaffoldLayout(
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                PlanzBottomSheetScaffold(
-                    sheetContent = sheetContent,
-                    onBackPressed = onBackPressed
-                )
+                PlanzBottomSheetScaffold {
+                    sheetContent()
+                }
             }
         }
     ) { padding ->
@@ -47,7 +44,6 @@ fun PlanzBottomSheetScaffoldLayout(
 @Composable
 fun PlanzBottomSheetScaffold(
     sheetContent: @Composable () -> Unit,
-    onBackPressed: (() -> Unit)? = null,
 ) {
     Spacer(
         modifier = Modifier
@@ -64,8 +60,4 @@ fun PlanzBottomSheetScaffold(
             .height(28.dp)
             .background(color = Color.White)
     )
-
-    BackHandler(onBackPressed != null) {
-        onBackPressed?.invoke()
-    }
 }
