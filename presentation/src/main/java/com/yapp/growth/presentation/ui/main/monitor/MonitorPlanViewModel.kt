@@ -49,11 +49,7 @@ class MonitorPlanViewModel @Inject constructor(
                         it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
                     }
                     updateState {
-                        copy(timeTable = sliceTimeTable)
-                    }
-                    delay(2000L)
-                    updateState {
-                        copy(loadState = LoadState.SUCCESS)
+                        copy(loadState = LoadState.SUCCESS, timeTable = sliceTimeTable)
                     }
                 }
                 .onError {

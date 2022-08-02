@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -471,7 +474,7 @@ fun LocationAndAvailableColorBox(
 
             Column {
                 Text(
-                    text = "0/${timeTable.colors.size}",
+                    text = "0/${timeTable.users.size}",
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -489,7 +492,8 @@ fun LocationAndAvailableColorBox(
                     .padding(start = 6.dp, end = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                itemsIndexed(timeTable.colors) { _, color ->
+                itemsIndexed(timeTable.colors) { index , color ->
+
                     Box(
                         modifier = Modifier
                             .width(24.dp)
@@ -501,7 +505,7 @@ fun LocationAndAvailableColorBox(
 
             Column {
                 Text(
-                    text = "${timeTable.colors.size}/${timeTable.colors.size}",
+                    text = "${timeTable.users.size}/${timeTable.users.size}",
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )

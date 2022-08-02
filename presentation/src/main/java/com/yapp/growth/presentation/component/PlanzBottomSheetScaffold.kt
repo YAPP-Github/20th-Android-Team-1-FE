@@ -59,7 +59,7 @@ fun PlanzBottomSheetScaffold(
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
-            .height(20.dp)
+            .height(24.dp)
             .background(color = Color.White)
     )
 
@@ -143,7 +143,7 @@ fun FixPlanBottomSheetContent(timeTable: TimeTable, currentClickTimeIndex: Pair<
 }
 
 @Composable
-fun MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: List<User>, onClickExitIcon: () -> Unit) {
+fun  MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: List<User>, onClickExitIcon: () -> Unit) {
 
     val respondUserText = StringBuilder()
     currentClickUserData.forEachIndexed { index, user ->
@@ -160,18 +160,10 @@ fun MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: Li
             .background(Color.White)
             .padding(start = 20.dp, end = 20.dp)) {
 
-        Icon(
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable {
-                    onClickExitIcon()
-                },
-            painter = painterResource(R.drawable.ic_exit),
-            tint = Color.Unspecified,
-            contentDescription = stringResource(R.string.icon_exit_content_description),
-        )
-
-        Row {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+        ) {
             Text(
                 text = timeTable.promisingName,
                 style = PlanzTypography.subtitle1,
@@ -182,6 +174,18 @@ fun MonitorPlanBottomSheetContent(timeTable: TimeTable, currentClickUserData: Li
                 text = stringResource(id = R.string.monitor_plan_join_title_text),
                 style = PlanzTypography.subtitle1,
                 color = Gray900,
+            )
+            
+            Spacer(modifier = Modifier.weight(1f))
+
+            Icon(
+                modifier = Modifier
+                    .clickable {
+                        onClickExitIcon()
+                    },
+                painter = painterResource(R.drawable.ic_exit),
+                tint = Color.Unspecified,
+                contentDescription = stringResource(R.string.icon_exit_content_description),
             )
         }
 

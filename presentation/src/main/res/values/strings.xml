@@ -145,12 +145,11 @@
     <string name="respond_plan_complete_title_text1">가능한 약속시간</string>
     <string name="respond_plan_complete_title_text2">보내기&#160;</string>
     <string name="respond_plan_complete_title_text3">성공</string>
-    <string name="respond_plan_complete_button_text">확인하기</string>
 
     <string name="respond_plan_reject_title_text">확인하기</string>
     <string name="respond_plan_reject_title_text2">다음에 만나요:)</string>
     <string name="respond_plan_reject_info_text">약속을 거절했습니다</string>
-    <string name="respond_plan_reject_button_text">확인하기</string>
+    <string name="respond_common_button_text">홈으로 가기</string>
 
     <!-- 약속 확정 -->
     <string name="fix_plan_title">약속확정</string>

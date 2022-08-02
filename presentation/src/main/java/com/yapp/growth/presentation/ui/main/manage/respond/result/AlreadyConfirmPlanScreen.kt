@@ -57,7 +57,7 @@ fun AlreadyConfirmPlanScreen(
                 .padding(start = 16.dp, end = 16.dp, bottom = 32.dp)
         ) {
             PlanzBasicButton(modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.respond_plan_reject_button_text),
+                text = stringResource(id = R.string.respond_common_button_text),
                 onClick = navigateToPreviousScreen
             )
         }
