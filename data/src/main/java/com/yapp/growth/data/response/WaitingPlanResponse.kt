@@ -4,6 +4,7 @@ interface WaitingPlanResponse {
     val id: Int
     val title: String
     val isLeader: Boolean
+    val leader: UserResponse
     val startTime: String
     val endTime: String
     val category: CategoryResponse

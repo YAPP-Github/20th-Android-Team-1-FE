@@ -311,7 +311,9 @@ fun ManagePlansItem(
                             }
                         }
                         ManageTapMenu.WAITING_PLAN -> {
-                            "${plan.members.size}" + stringResource(id = R.string.manage_plan_completed_member_count_text)
+                            (plan as Plan.WaitingPlan).leader +
+                                    " | ${plan.members.size}" +
+                                    stringResource(id = R.string.manage_plan_completed_member_count_text)
                         }
                     },
                     style = PlanzTypography.caption,
@@ -417,6 +419,7 @@ fun WaitingPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = true,
+            leader = "member0",
             category = Category(1, "test", "식사"),
             members = listOf("member1", "member2", "member3", "member4"),
             place = "place",
