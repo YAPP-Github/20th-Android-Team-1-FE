@@ -23,6 +23,7 @@ class CreatePlanContract {
     }
 
     sealed class CreatePlanEvent : ViewEvent {
+        object EnterTimeRangeScreen : CreatePlanEvent()
         data class DecideCategory(val category: Category) : CreatePlanEvent()
         data class DecideTitle(val title: String) : CreatePlanEvent()
         data class DecidePlace(val place: String) : CreatePlanEvent()

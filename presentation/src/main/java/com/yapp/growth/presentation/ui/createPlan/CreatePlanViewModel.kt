@@ -19,6 +19,7 @@ class CreatePlanViewModel @Inject constructor(
 ) : BaseViewModel<CreatePlanViewState, CreatePlanSideEffect, CreatePlanEvent>(CreatePlanViewState()) {
     override fun handleEvents(event: CreatePlanEvent) {
         when (event) {
+            is CreatePlanEvent.EnterTimeRangeScreen -> updateState { copy(createTempPlanLoadState = LoadState.SUCCESS) }
             is CreatePlanEvent.DecideCategory -> updateState { copy(category = event.category) }
             is CreatePlanEvent.DecideTitle -> updateState { copy(title = event.title) }
             is CreatePlanEvent.DecidePlace -> updateState { copy(place = event.place) }

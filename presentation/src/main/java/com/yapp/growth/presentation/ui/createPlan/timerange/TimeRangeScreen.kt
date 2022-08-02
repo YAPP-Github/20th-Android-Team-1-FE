@@ -82,7 +82,6 @@ fun TimeRangeScreen(
                 }
             }
         ) { padding ->
-
             when(sharedViewState.createTempPlanLoadState) {
                 LoadState.SUCCESS -> {
                     Box(modifier = Modifier
@@ -111,8 +110,6 @@ fun TimeRangeScreen(
                 LoadState.LOADING -> PlanzLoading()
                 LoadState.ERROR -> PlanzError(retryVisible = true)
             }
-
-
 
             PlanzAlertDialog(
                 visible = viewState.isAlertDialogVisible,
@@ -177,6 +174,10 @@ fun TimeRangeScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(key1 = true) {
+        sharedViewModel.setEvent(CreatePlanContract.CreatePlanEvent.EnterTimeRangeScreen)
     }
 }
 
