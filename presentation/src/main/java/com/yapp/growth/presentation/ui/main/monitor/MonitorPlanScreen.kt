@@ -26,6 +26,7 @@ import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.ui.main.fix.FixPlanContract
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.MonitorPlanEvent
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.MonitorPlanSideEffect
 import kotlinx.coroutines.launch
@@ -48,11 +49,15 @@ fun MonitorPlanScreen(
     PlanzBottomSheetScaffoldLayout(
         scaffoldState = scaffoldState,
         sheetContent = {
-            MonitorPlanBottomSheetContent(
-                timeTable = uiState.timeTable,
-                currentClickUserData = uiState.currentClickUserData,
-                onClickExitIcon = { viewModel.setEvent(MonitorPlanEvent.OnClickExitIcon) }
-            )
+            if (uiState.bottomSheet == MonitorPlanContract.MonitorPlanViewState.BottomSheet.RESPONDENT) {
+                PlanzRespondentBottomSheetContent(respondents = uiState.respondents)
+            } else {
+                MonitorPlanBottomSheetContent(
+                    timeTable = uiState.timeTable,
+                    currentClickUserData = uiState.currentClickUserData,
+                    onClickExitIcon = { viewModel.setEvent(MonitorPlanEvent.OnClickExitIcon) }
+                )
+            }
         }
     ) {
         Scaffold(
@@ -94,7 +99,10 @@ fun MonitorPlanScreen(
                             height = Dimension.fillToConstraints
                         }) {
 
-                            LocationAndAvailableColorBox(timeTable = uiState.timeTable)
+                            LocationAndAvailableColorBox(
+                                timeTable = uiState.timeTable,
+                                onClickAvailableColorBox = { viewModel.setEvent(MonitorPlanEvent.OnClickAvailableColorBox) }
+                            )
 
                             PlanzPlanDateIndicator(
                                 timeTable = uiState.timeTable,
@@ -145,7 +153,7 @@ fun MonitorPlanScreen(
 fun MonitorPlanBottomSheetContent(
     timeTable: TimeTable,
     currentClickUserData: List<User>,
-    onClickExitIcon: () -> Unit
+    onClickExitIcon: () -> Unit,
 ) {
     val respondUserText = StringBuilder()
     currentClickUserData.forEachIndexed { index, user ->
