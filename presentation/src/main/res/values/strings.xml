@@ -7,8 +7,8 @@
     <string name="login_introduce_text">친구들과 함께하는\n편리한 약속 잡기</string>
     <string name="message_kakao_login_failed">카카오 로그인에 실패 하였습니다. 잠시 후 다시 시도 해 주시기 바랍니다.</string>
 
-    <string name="planz_error_text_01">문제가 발생했습니다.</string>
-    <string name="planz_error_text_02">다시 시도해주세요.</string>
+    <string name="planz_error_text_01">문제가 발생했습니다.\n다시 시도해주세요.</string>
+    <string name="planz_error_retry_button_title">다시 시도</string>
     <string name="planz_has_not_plan">오늘의 약속이 없습니다.</string>
 
     <string name="navigation_home_text">메인 홈</string>
