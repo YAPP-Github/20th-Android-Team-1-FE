@@ -2,6 +2,9 @@
 <resources>
     <string name="planz_component_text_field_error_message_text">자를 초과하였습니다</string>
     <string name="planz_component_respondent_bottom_sheet_content_title">응답자</string>
+    <string name="planz_component_alert_dialog_title">안내</string>
+    <string name="planz_component_alert_dialog_positive_button_text">확인</string>
+    <string name="planz_component_alert_dialog_negative_button_text">취소</string>
 
     <string name="planz_title">플랜즈</string>
     <string name="icon_kakao_login_title">카카오 로그인</string>
@@ -75,13 +78,13 @@
     <string name="detail_plan_info_member">참여자</string>
 
     <!-- 약속 생성 STEP 3 -->
-    <string name="create_plan_date_title_text">가능한 약속 날짜를 골라주세요!</string>
+    <string name="create_plan_date_title_text">제안할 약속 날짜를 선택해 주세요!</string>
     <string name="create_plan_date_max_day_text">* 최대 12일까지 선택 가능</string>
     <string name="create_plan_date_previous_select_text">이전 날짜는 선택이 불가합니다.</string>
     <string name="create_plan_date_maximum_select_text">최대 12일까지 선택이 가능합니다.</string>
 
     <!-- 약속 생성 STEP 4 -->
-    <string name="create_plan_time_range_title_text">약속 후보 시간대를 정해 주세요!</string>
+    <string name="create_plan_time_range_title_text">제안할 약속 시간대를 선택해 주세요!</string>
     <string name="create_plan_time_range_from_text">시 부터</string>
     <string name="create_plan_time_range_to_text">시 까지로 할래요!</string>
     <string name="create_plan_time_range_time_option_am_12">오전 12시</string>
@@ -178,10 +181,6 @@
     <string name="icon_arrow_left_content_description">Left Icon</string>
     <string name="icon_arrow_box_left_24_content_description">Left Box Icon</string>
     <string name="icon_arrow_box_right_24_content_description">Right Box Icon</string>
-    
-    <string name="planz_alert_dialog_title">안내</string>
-    <string name="planz_alert_dialog_positive_button_text">확인</string>
-    <string name="planz_alert_dialog_negative_button_text">취소</string>
 
     <string name="image_invitation_content_description">Invitation Image</string>
 </resources>

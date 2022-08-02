@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.base.LoadState
-import com.yapp.growth.domain.NetworkResult
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.model.TimeType
@@ -113,10 +112,10 @@ fun TimeRangeScreen(
 
             PlanzAlertDialog(
                 visible = viewState.isAlertDialogVisible,
-                title = stringResource(R.string.planz_alert_dialog_title),
+                title = stringResource(R.string.planz_component_alert_dialog_title),
                 content = stringResource(R.string.create_plan_time_range_alert_dialog_content),
-                positiveButtonText = stringResource(R.string.planz_alert_dialog_positive_button_text),
-                negativeButtonText = stringResource(R.string.planz_alert_dialog_negative_button_text),
+                positiveButtonText = stringResource(R.string.planz_component_alert_dialog_positive_button_text),
+                negativeButtonText = stringResource(R.string.planz_component_alert_dialog_negative_button_text),
                 onClickNegativeButton = {
                     viewModel.setEvent(TimeRangeEvent.OnClickAlertDialogNegativeButton)
                 },
