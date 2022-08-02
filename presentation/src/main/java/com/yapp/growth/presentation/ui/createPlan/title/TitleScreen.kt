@@ -14,10 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzButtonWithBack
-import com.yapp.growth.presentation.component.PlanzCreateStepTitle
-import com.yapp.growth.presentation.component.PlanzError
-import com.yapp.growth.presentation.component.PlanzTextField
+import com.yapp.growth.presentation.component.*
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecidePlace
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanContract.CreatePlanEvent.DecideTitle
 import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
@@ -82,7 +79,7 @@ fun TitleScreen(
                         )
                     }
                 }
-                LoadState.LOADING -> {}
+                LoadState.LOADING -> PlanzLoading()
                 LoadState.ERROR -> PlanzError(retryVisible = true)
             }
 
