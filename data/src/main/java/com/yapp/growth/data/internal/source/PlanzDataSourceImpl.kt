@@ -117,6 +117,11 @@ internal class PlanzDataSourceImpl @Inject constructor(
             retrofitApi.signUp().toUser()
         }
 
+    override suspend fun modifyNickName(nickName: String): NetworkResult<User> =
+            handleApi {
+                retrofitApi.modifyNickName(mapOf("userName" to nickName)).toUser()
+        }
+
     override suspend fun getUserInfo(): NetworkResult<User> =
         handleApi {
             retrofitApi.getUserInfo().toUser()

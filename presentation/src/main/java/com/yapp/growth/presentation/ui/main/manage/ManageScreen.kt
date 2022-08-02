@@ -35,12 +35,16 @@ import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
 import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.ui.main.MainContract
+import com.yapp.growth.presentation.ui.main.MainViewModel
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageEvent
 import com.yapp.growth.presentation.ui.main.manage.ManageContract.ManageSideEffect
+import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ManageScreen(
+    mainViewModel: MainViewModel = composableActivityViewModel(),
     viewModel: ManageViewModel = hiltViewModel(),
     intentToCreateScreen: () -> Unit,
     navigateToFixPlanScreen: (Int) -> Unit,
@@ -115,6 +119,16 @@ fun ManageScreen(
                 }
                 is ManageSideEffect.SwitchTab -> {
                     pagerState.animateScrollToPage(effect.tabIndex)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = mainViewModel.effect) {
+        mainViewModel.effect.collect { effect ->
+            when (effect) {
+                is MainContract.MainSideEffect.RefreshScreen -> {
+                    viewModel.setEvent(ManageEvent.InitManageScreen)
                 }
             }
         }
@@ -311,7 +325,9 @@ fun ManagePlansItem(
                             }
                         }
                         ManageTapMenu.WAITING_PLAN -> {
-                            "${plan.members.size}" + stringResource(id = R.string.manage_plan_completed_member_count_text)
+                            (plan as Plan.WaitingPlan).leader +
+                                    " | ${plan.members.size}" +
+                                    stringResource(id = R.string.manage_plan_completed_member_count_text)
                         }
                     },
                     style = PlanzTypography.caption,
@@ -417,7 +433,8 @@ fun WaitingPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = true,
-            category = Category(1, "test"),
+            leader = "member0",
+            category = Category(1, "test", "식사"),
             members = listOf("member1", "member2", "member3", "member4"),
             place = "place",
             startTime = 0,
@@ -437,7 +454,7 @@ fun FixedPlanItemPreview() {
             id = 0,
             title = "plan title",
             isLeader = false,
-            category = Category(1, "test"),
+            category = Category(1, "test", "식사"),
             members = listOf("member1", "member2", "member3", "member4", "member5"),
             place = "",
             date = "",

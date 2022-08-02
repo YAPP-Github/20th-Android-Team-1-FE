@@ -10,6 +10,8 @@ data class WaitingPlanResponseImpl(
     override val title: String,
     @Json(name = "isOwner")
     override val isLeader: Boolean,
+    @Json(name = "owner")
+    override val leader: UserResponseImpl,
     @Json(name = "minTime")
     override val startTime: String,
     @Json(name = "maxTime")

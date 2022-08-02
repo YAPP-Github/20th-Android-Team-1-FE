@@ -3,7 +3,9 @@ package com.yapp.growth.presentation.ui.main.respond
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
@@ -36,7 +38,7 @@ class RespondPlanViewModel @Inject constructor(
     val timeCheckedOfDays: StateFlow<List<TimeCheckedOfDay>>
         get() = _timeCheckedOfDays.asStateFlow()
 
-    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "")
+    private var originalTable: TimeTable = TimeTable(emptyList(), emptyList(), 0, emptyList(), 0, "", User(0, ""), "", "", emptyList(), emptyList(), "", "", Category(0,"",""))
     private var currentIndex = 0
     private var planId: Long = savedStateHandle.get<Long>(KEY_PLAN_ID) ?: -1L
 
@@ -44,23 +46,27 @@ class RespondPlanViewModel @Inject constructor(
         loadRespondUsers(planId)
     }
 
-    private fun loadRespondUsers(promisingKey: Long) {
+    private fun loadRespondUsers(planId: Long) {
         viewModelScope.launch {
-            val result = (getRespondUsersUseCase.invoke(promisingKey) as? NetworkResult.Success)?.data
-            result?.let {
-                originalTable = it
-                makeRespondList(it)
+            updateState { copy(loadState = LoadState.LOADING) }
+            getRespondUsersUseCase.invoke(planId)
+                .onSuccess {
+                    originalTable = it
+                    makeRespondList(it)
 
-                val sliceTimeTable = if (it.availableDates.size >= 4) {
-                    it.copy(availableDates = it.availableDates.subList(0, 4))
-                } else {
-                    it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
-                }
+                    val sliceTimeTable = if (it.availableDates.size >= 4) {
+                        it.copy(availableDates = it.availableDates.subList(0, 4))
+                    } else {
+                        it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+                    }
 
-                updateState {
-                    copy(timeTable = sliceTimeTable)
+                    updateState {
+                        copy(loadState = LoadState.SUCCESS, timeTable = sliceTimeTable)
+                    }
                 }
-            }
+                .onError {
+                    updateState { copy(loadState = LoadState.ERROR) }
+                }
         }
     }
 
@@ -118,23 +124,27 @@ class RespondPlanViewModel @Inject constructor(
 
     private fun sendRespondPlan(planId: Long, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
+            updateState { copy(loadState = LoadState.LOADING) }
             sendRespondPlanUseCase.invoke(planId, timeCheckedOfDays)
                 .onSuccess {
+                    updateState { copy(loadState = LoadState.SUCCESS) }
                     sendEffect({ RespondPlanSideEffect.NavigateToSendCompleteScreen })
                 }
                 .onError {
-
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
         }
 
     private fun sendRejectPlan(planId: Long) =
         viewModelScope.launch {
+            updateState { copy(loadState = LoadState.LOADING) }
             sendRejectPlanUseCase.invoke(planId)
                 .onSuccess {
+                    updateState { copy(loadState = LoadState.SUCCESS) }
                     sendEffect({ RespondPlanSideEffect.NavigateToSendRejectScreen })
                 }
                 .onError {
-
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
         }
 
@@ -154,6 +164,7 @@ class RespondPlanViewModel @Inject constructor(
             is RespondPlanEvent.OnClickSendPlanButton -> sendRespondPlan(planId, timeCheckedOfDays.value)
             is RespondPlanEvent.OnClickClearButton -> clearTimeCheckedOfDays()
             is RespondPlanEvent.OnClickRejectPlanButton -> sendRejectPlan(planId)
+            RespondPlanEvent.OnClickErrorRetryButton -> loadRespondUsers(planId)
         }
     }
 }

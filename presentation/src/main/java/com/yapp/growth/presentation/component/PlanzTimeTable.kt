@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.valentinilk.shimmer.shimmer
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
@@ -103,9 +106,10 @@ fun FixPlanTimeTable(
                         }
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                        Canvas(Modifier
-                            .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
-                            .height(1.dp)
+                        Canvas(
+                            Modifier
+                                .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
+                                .height(1.dp)
                         ) {
                             drawLine(
                                 color = Gray200,
@@ -221,9 +225,10 @@ fun PlanzPlanTimeTable(
                         }
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                        Canvas(Modifier
-                            .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
-                            .height(1.dp)
+                        Canvas(
+                            Modifier
+                                .fillParentMaxWidth(1f / (timeTable.availableDates.size + 1))
+                                .height(1.dp)
                         ) {
                             drawLine(
                                 color = Gray200,
@@ -317,9 +322,10 @@ fun CreateTimeTable(
                         )
 
                         val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                        Canvas(Modifier
-                            .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
-                            .height(1.dp)
+                        Canvas(
+                            Modifier
+                                .fillParentMaxWidth(1f / (createTimeTable.availableDates.size + 1))
+                                .height(1.dp)
                         ) {
                             drawLine(
                                 color = Gray200,
@@ -347,40 +353,114 @@ fun CreateTimeTable(
 }
 
 @Composable
+fun ShimmerLocationAndAvailableColorBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(bottom = 20.dp, start = 20.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .shimmer(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Box(
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(16.dp)
+                        .background(Gray200)
+                )
+                Box(
+                    modifier = Modifier
+                        .width(110.dp)
+                        .height(16.dp)
+                        .background(Gray200)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .width(110.dp)
+                    .height(16.dp)
+                    .background(Gray200)
+                    .align(Alignment.CenterVertically)
+            )
+        }
+    }
+}
+
+@Composable
 fun LocationAndAvailableColorBox(
     modifier: Modifier = Modifier,
-    timeTable: TimeTable
+    timeTable: TimeTable,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(bottom = 16.dp, start = 20.dp, end = 16.dp)
+            .padding(bottom = 20.dp, start = 20.dp, end = 16.dp)
     )
     {
-        Row(
+        Column(
             modifier = Modifier
                 .wrapContentWidth()
                 .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Icon(
-                modifier = Modifier
-                    .width(20.dp)
-                    .height(20.dp)
-                    .padding(vertical = 1.dp, horizontal = 3.dp),
-                tint = Color.Unspecified,
-                imageVector = ImageVector.vectorResource(R.drawable.ic_location_icon),
-                contentDescription = null
-            )
+            Row(
+                modifier = Modifier.wrapContentWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Icon(
+                    tint = Color.Unspecified,
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_location_18),
+                    contentDescription = null
+                )
 
-            Text(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                text = timeTable.placeName,
-                color = CoolGray500,
-                style = PlanzTypography.caption,
-            )
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = timeTable.placeName.ifBlank { stringResource(R.string.common_plan_location_black_title) },
+                    color = CoolGray500,
+                    style = PlanzTypography.caption,
+                )
+            }
+
+            Row(
+                modifier = Modifier.wrapContentWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Icon(
+                    tint = Color.Unspecified,
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_memer_18),
+                    contentDescription = null
+                )
+
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = timeTable.owner.userName,
+                    color = CoolGray500,
+                    style = PlanzTypography.caption,
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .width(1.dp)
+                        .height(10.dp),
+                    color = Gray500,
+                )
+
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = timeTable.category.type,
+                    color = CoolGray500,
+                    style = PlanzTypography.caption,
+                )
+            }
         }
 
         Row(
@@ -396,7 +476,7 @@ fun LocationAndAvailableColorBox(
                     color = CoolGray300
                 )
                 Text(
-                    text = "가능",
+                    text = stringResource(R.string.common_plan_colorBox_available_text),
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
@@ -426,15 +506,11 @@ fun LocationAndAvailableColorBox(
                     color = CoolGray300
                 )
                 Text(
-                    text = "가능",
+                    text = stringResource(R.string.common_plan_colorBox_available_text),
                     style = PlanzTypography.caption,
                     color = CoolGray300
                 )
             }
         }
-
     }
-
 }
-
-

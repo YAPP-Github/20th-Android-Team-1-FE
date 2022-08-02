@@ -176,6 +176,13 @@ object ModuleDependencies {
             Method.IMPLEMENTATION)
     )
 
+    val shimmer = arrayOf(
+        DependencyInfo("com.valentinilk.shimmer:compose-shimmer",
+            Versions.SHIMMER,
+            Method.IMPLEMENTATION
+        )
+    )
+
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics-ktx"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics-ktx"

@@ -17,11 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.ui.createPlan.CreatePlanViewModel
 import com.yapp.growth.presentation.ui.createPlan.timetable.CreateTimeTableContract.*
-import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @Composable
 fun CreateTimeTableScreen(
@@ -42,48 +41,56 @@ fun CreateTimeTableScreen(
         }
     ) { padding ->
 
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            val (column, button) = createRefs()
-
-            Column(modifier = Modifier.constrainAs(column) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(button.top)
-                height = Dimension.fillToConstraints
-            }) {
-
-
-                CreateTimeTableDateIndicator(
-                    createTimeTable = uiState.createTimeTable,
-                    onClickPreviousDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickPreviousDayButton) },
-                    onClickNextDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickNextDayButton) }
+        when (uiState.loadState) {
+            LoadState.LOADING -> PlanzLoading()
+            LoadState.ERROR -> {
+                PlanzError(
+                    retryVisible = true,
+                    onClickRetry = { viewModel.setEvent(CreateTimeTableEvent.OnClickErrorRetryButton) }
                 )
-
-                CreateTimeTable(
-                    createTimeTable = uiState.createTimeTable,
-                    timeCheckedOfDays = timeCheckedOfDays,
-                    onClickTimeTable = { dateIndex, minuteIndex ->
-                        viewModel.setEvent(CreateTimeTableEvent.OnClickTimeTable(dateIndex, minuteIndex))
-                    }
-                )
-
             }
+            LoadState.SUCCESS -> {
+                ConstraintLayout(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                ) {
+                    val (column, button) = createRefs()
+
+                    Column(modifier = Modifier.constrainAs(column) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(button.top)
+                        height = Dimension.fillToConstraints
+                    }) {
 
 
-            CreateTimeTableBottomButton(modifier = Modifier.constrainAs(button) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-                width = Dimension.fillToConstraints
-            }, clickCount = uiState.clickCount,
-                onClickSendPlanButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickSendButton) }
-            )
+                        CreateTimeTableDateIndicator(
+                            createTimeTable = uiState.createTimeTable,
+                            onClickPreviousDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickPreviousDayButton) },
+                            onClickNextDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickNextDayButton) }
+                        )
 
+                        CreateTimeTable(
+                            createTimeTable = uiState.createTimeTable,
+                            timeCheckedOfDays = timeCheckedOfDays,
+                            onClickTimeTable = { dateIndex, minuteIndex ->
+                                viewModel.setEvent(CreateTimeTableEvent.OnClickTimeTable(dateIndex, minuteIndex))
+                            }
+                        )
+                    }
+
+                    CreateTimeTableBottomButton(modifier = Modifier.constrainAs(button) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        width = Dimension.fillToConstraints
+                    }, clickCount = uiState.clickCount,
+                        onClickSendPlanButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickSendButton) }
+                    )
+                }
+            }
         }
 
         PlanzAlertDialog(

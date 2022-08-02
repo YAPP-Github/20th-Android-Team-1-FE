@@ -20,6 +20,10 @@ internal class UserRepositoryImpl @Inject constructor(
         return dataSource.signUp()
     }
 
+    override suspend fun modifyNickName(nickName: String): NetworkResult<User> {
+        return dataSource.modifyNickName(nickName)
+    }
+
     override suspend fun getUserInfo(): NetworkResult<User> {
         return dataSource.getUserInfo().onSuccess { cachedUserInfo = it }
     }

@@ -12,6 +12,7 @@ sealed class Plan(
         override val id: Int,
         override val title: String,
         override val isLeader: Boolean = false,
+        val leader: String,
         override val category: Category,
         override val members: List<String>,
         override val place: String,

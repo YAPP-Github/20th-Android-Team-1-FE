@@ -11,11 +11,13 @@ import com.yapp.growth.domain.runCatching
 import com.yapp.growth.domain.usecase.GetDayFixedPlansUseCase
 import com.yapp.growth.domain.usecase.GetMonthlyFixedPlansUseCase
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
+import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeViewState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.LoginState
 import com.yapp.growth.presentation.ui.main.home.HomeContract.MonthlyPlanModeState
+import com.yapp.growth.presentation.util.ResourceProvider
 import com.yapp.growth.presentation.util.toDate
 import com.yapp.growth.presentation.util.toFormatDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +37,7 @@ class HomeViewModel @Inject constructor(
     private val getDayFixedPlansUseCase: GetDayFixedPlansUseCase,
     private val getMonthlyFixedPlansUseCase: GetMonthlyFixedPlansUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val resourcesProvider: ResourceProvider,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
@@ -50,6 +53,10 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(),
         initialValue = _currentDate.value
     )
+
+    init {
+        updateState { copy(loadState = LoadState.LOADING) }
+    }
 
     override fun handleEvents(event: HomeEvent) {
         when (event) {
@@ -126,7 +133,8 @@ class HomeViewModel @Inject constructor(
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
-                            userName = it.userName
+                            loginState = LoginState.NONE,
+                            userName = resourcesProvider.getString(R.string.planz_title),
                         )
                     }
                     fetchDayPlans()

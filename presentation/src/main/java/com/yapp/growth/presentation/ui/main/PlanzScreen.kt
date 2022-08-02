@@ -4,16 +4,38 @@ import android.app.Activity
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,8 +68,14 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
-import com.yapp.growth.presentation.theme.*
-import com.yapp.growth.presentation.ui.main.confirm.FixPlanScreen
+import com.yapp.growth.presentation.ui.main.fix.FixPlanScreen
+import com.yapp.growth.presentation.theme.BackgroundColor1
+import com.yapp.growth.presentation.theme.Gray500
+import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainPurple900
+import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.Pretendard
+import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
@@ -56,6 +84,7 @@ import com.yapp.growth.presentation.ui.main.manage.respond.result.AlreadyConfirm
 import com.yapp.growth.presentation.ui.main.manage.respond.result.FulledPlanScreen
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanScreen
 import com.yapp.growth.presentation.ui.main.myPage.MyPageScreen
+import com.yapp.growth.presentation.ui.main.myPage.nickname.ModifyNickNameScreen
 import com.yapp.growth.presentation.ui.main.privacyPolicy.PrivacyPolicyScreen
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanScreen
 import com.yapp.growth.presentation.ui.main.respond.result.RespondPlanCompleteScreen
@@ -117,9 +146,15 @@ fun PlanzScreen(
                         currentDestination = currentDestination,
                         navigateToScreen = { navigationItem ->
                             navigateBottomNavigationScreen(
-                                navController,
-                                navigationItem,
-                                intentToCreatePlan
+                                navController = navController,
+                                navigationItem = navigationItem,
+                                loginState = viewState.loginState,
+                                onNoneLoginBottomNavigationClicked = {
+                                    viewModel.setEvent(
+                                        PlanzContract.PlanzEvent.OnBottomNavigationClickedWhenNotLogin
+                                    )
+                                },
+                                moveToCreatePlan = intentToCreatePlan
                             )
                         }
                     )
@@ -127,9 +162,16 @@ fun PlanzScreen(
             },
             floatingActionButton = {
                 if (bottomBarState) {
-                    CreatePlanFAB(modifier = Modifier.padding(top = 12.dp)) {
-                        intentToCreatePlan()
-                    }
+                    CreatePlanFAB(
+                        modifier = Modifier.padding(top = 12.dp),
+                        navigateToManageScreen = { intentToCreatePlan() },
+                        loginState = viewState.loginState,
+                        onNoneLoginBottomNavigationClicked = {
+                            viewModel.setEvent(
+                                PlanzContract.PlanzEvent.OnBottomNavigationClickedWhenNotLogin
+                            )
+                        },
+                    )
                 }
             },
             isFloatingActionButtonDocked = true,
@@ -152,8 +194,12 @@ fun PlanzScreen(
                             )
                         },
                         showBottomSheet = { calendarDay, fixedPlans ->
-                            viewModel.setEvent(PlanzContract.PlanzEvent.ShowBottomSheet(calendarDay,
-                                fixedPlans))
+                            viewModel.setEvent(
+                                PlanzContract.PlanzEvent.ShowBottomSheet(
+                                    calendarDay,
+                                    fixedPlans
+                                )
+                            )
                         }
                     )
                 }
@@ -254,6 +300,7 @@ fun PlanzScreen(
                         exitMyPageScreen = { navController.popBackStack() },
                         navigateToPolicyScreen = { navController.navigate(PlanzScreenRoute.PRIVACY_POLICY.route) },
                         navigateToTermsScreen = { navController.navigate(PlanzScreenRoute.TERMS.route) },
+                        navigateToModifyNickNameScreen = { navController.navigate(PlanzScreenRoute.MODIFY_NICKNAME.route) },
                     )
                 }
 
@@ -266,6 +313,12 @@ fun PlanzScreen(
                 composable(route = PlanzScreenRoute.TERMS.route) {
                     TermsScreen(
                         exitTermsScreen = { navController.popBackStack() }
+                    )
+                }
+
+                composable(route = PlanzScreenRoute.MODIFY_NICKNAME.route) {
+                    ModifyNickNameScreen(
+                        navigateToPreviousScreen = { navController.popBackStack() }
                     )
                 }
 
@@ -317,12 +370,16 @@ fun PlanzScreen(
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
-            when(effect) {
+            when (effect) {
                 PlanzContract.PlanzSideEffect.MoveToAlreadyConfirmPlan -> {
                     navController.navigate(PlanzScreenRoute.ALREADY_CONFIRM_PLAN.route)
                 }
                 PlanzContract.PlanzSideEffect.MoveToFulledPlan -> {
                     navController.navigate(PlanzScreenRoute.FULLED_PLAN.route)
+                }
+                is PlanzContract.PlanzSideEffect.MoveToLogin -> {
+                    LoginActivity.startActivity(context, null)
+                    context.finish()
                 }
                 is PlanzContract.PlanzSideEffect.MoveToConfirmPlan -> {
                     navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/${effect.planId}"))
@@ -402,12 +459,14 @@ fun PlanzBottomNavigation(
 fun CreatePlanFAB(
     modifier: Modifier = Modifier,
     navigateToManageScreen: () -> Unit,
+    loginState: PlanzContract.LoginState,
+    onNoneLoginBottomNavigationClicked: () -> Unit,
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        IconButton(onClick = { navigateToManageScreen() }) {
+        IconButton(onClick = if (loginState == PlanzContract.LoginState.NONE) onNoneLoginBottomNavigationClicked else navigateToManageScreen) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_fab_create),
                 contentDescription = null,
@@ -451,11 +510,23 @@ fun PlanzBottomSheetContent(
                     .clickable { onExitClick() },
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        PlanzPlanList(
-            dayPlans = selectDayPlans,
-            onPlanItemClick = onPlanItemClick
-        )
+        if(selectDayPlans.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(24.dp))
+            PlanzPlanList(
+                dayPlans = selectDayPlans,
+                onPlanItemClick = onPlanItemClick
+            )
+        } else {
+            Spacer(modifier = Modifier.height(70.dp))
+            Text(
+                text = stringResource(id = R.string.planz_has_not_plan),
+                style = PlanzTypography.body1,
+                color = Gray500,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(70.dp))
+        }
+
     }
 }
 
@@ -484,8 +555,15 @@ fun PlanzPlanList(
 fun navigateBottomNavigationScreen(
     navController: NavHostController,
     navigationItem: BottomNavigationItem,
+    loginState: PlanzContract.LoginState,
+    onNoneLoginBottomNavigationClicked: () -> Unit,
     moveToCreatePlan: () -> Unit,
 ) {
+    if (loginState == PlanzContract.LoginState.NONE) {
+        onNoneLoginBottomNavigationClicked()
+        return
+    }
+
     if (navigationItem == BottomNavigationItem.CREATE_PLAN) {
         moveToCreatePlan()
     } else {
@@ -552,6 +630,7 @@ enum class PlanzScreenRoute(val route: String) {
     MY_PAGE("my-page"),
     PRIVACY_POLICY("privacy-policy"),
     TERMS("terms"),
+    MODIFY_NICKNAME("modify-nickname"),
     DETAIL_PLAN("detail-plan"),
     RESPOND_PLAN("respond-plan"),
     CONFIRM_PLAN("confirm-plan"),

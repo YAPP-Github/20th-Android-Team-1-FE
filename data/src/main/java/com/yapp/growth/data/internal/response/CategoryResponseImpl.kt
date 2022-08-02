@@ -4,5 +4,6 @@ import com.yapp.growth.data.response.CategoryResponse
 
 data class CategoryResponseImpl (
     override val id: Int,
-    override val keyword: String
+    override val keyword: String,
+    override val type: String,
 ): CategoryResponse

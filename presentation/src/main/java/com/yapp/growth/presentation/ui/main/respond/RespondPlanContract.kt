@@ -1,13 +1,16 @@
 package com.yapp.growth.presentation.ui.main.respond
 
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.base.ViewEvent
 import com.yapp.growth.base.ViewSideEffect
 import com.yapp.growth.base.ViewState
+import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 
 class RespondPlanContract {
     data class RespondPlanViewState(
+        val loadState: LoadState = LoadState.SUCCESS,
         val timeTable: TimeTable = TimeTable(
             emptyList(),
             emptyList(),
@@ -21,7 +24,8 @@ class RespondPlanContract {
             emptyList(),
             emptyList(),
             "",
-            ""
+            "",
+            Category(0,"",""),
         ),
         val clickCount: Int = 0,
     ) : ViewState
@@ -40,5 +44,6 @@ class RespondPlanContract {
         object OnClickSendPlanButton : RespondPlanEvent()
         object OnClickClearButton : RespondPlanEvent()
         object OnClickRejectPlanButton : RespondPlanEvent()
+        object OnClickErrorRetryButton : RespondPlanEvent()
     }
 }
