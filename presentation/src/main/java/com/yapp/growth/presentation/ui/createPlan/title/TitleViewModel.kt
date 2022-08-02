@@ -31,10 +31,14 @@ class TitleViewModel @Inject constructor(
     }
 
     private fun getSampleTitle(categoryId: Int) = viewModelScope.launch {
-        updateState { copy(loadState = LoadState.LOADING) }
+        updateState { copy(loadState = LoadState.LOADING, isError = true) }
         getSampleTitleUseCase.invoke(categoryId)
             .onSuccess { sampleTitle ->
-                updateState { copy(loadState = LoadState.SUCCESS, sampleTitle = sampleTitle) }
+                updateState { copy(
+                    loadState = LoadState.SUCCESS,
+                    sampleTitle = sampleTitle,
+                    isError = isOverflowed(viewState.value.title, viewState.value.place)
+                ) }
             }
             .onError { updateState { copy(loadState = LoadState.ERROR) } }
     }
@@ -47,7 +51,7 @@ class TitleViewModel @Inject constructor(
             copy(
                 title = title,
                 place = place,
-                isError = isOverflowed(title, place)
+                isError = isOverflowed(title, place) || (loadState != LoadState.SUCCESS)
             )
         }
     }
