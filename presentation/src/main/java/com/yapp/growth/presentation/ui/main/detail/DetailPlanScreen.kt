@@ -55,7 +55,7 @@ fun DetailPlanScreen(
         },
         backgroundColor = Color.White,
     ) { padding ->
-        when(viewState.loadState) {
+        when (viewState.loadState) {
             LoadState.LOADING -> {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     PlanzLoading()
@@ -67,82 +67,73 @@ fun DetailPlanScreen(
                 }
             }
             LoadState.SUCCESS -> {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                    val (box, icon) = createRefs()
+                Box(
+                    modifier = Modifier
+                        .padding(top = 84.dp, start = 20.dp, end = 20.dp)
+                ) {
 
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .constrainAs(box) {
-                                top.linkTo(parent.top)
-                                start.linkTo(parent.start)
-                                bottom.linkTo(parent.bottom)
-                                end.linkTo(parent.end)
-                            }
-                            .padding(horizontal = 20.dp)
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFFFBFCFF))
+                            .border(
+                                width = 1.dp,
+                                color = Gray200,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(vertical = 30.dp, horizontal = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
 
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFFBFCFF))
-                                .border(
-                                    width = 1.dp,
-                                    color = Gray200,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .padding(vertical = 30.dp, horizontal = 24.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(7.dp),
                         ) {
+                            Text(
+                                text = viewState.category,
+                                style = PlanzTypography.h1,
+                                color = MainPurple900,
+                            )
+                            Text(
+                                text = viewState.title,
+                                style = PlanzTypography.body2,
+                                color = Gray500,
+                            )
+                        }
 
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(7.dp),
-                            ) {
-                                Text(
-                                    text = viewState.category,
-                                    style = PlanzTypography.h1,
-                                    color = MainPurple900,
-                                )
-                                Text(
-                                    text = viewState.title,
-                                    style = PlanzTypography.body2,
-                                    color = Gray500,
-                                )
-                            }
+                        Divider(color = Gray200, thickness = 1.dp)
 
-                            Divider(color = Gray200, thickness = 1.dp)
-
-                            Column(
-                                modifier = Modifier.padding(horizontal = 6.dp),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-                                DetailItem(
-                                    info = stringResource(id = R.string.detail_plan_info_when),
-                                    content = viewState.date
-                                )
-                                DetailItem(
-                                    info = stringResource(id = R.string.detail_plan_info_place),
-                                    content = viewState.place
-                                )
-                                DetailItem(
-                                    info = stringResource(id = R.string.detail_plan_info_member),
-                                    content = viewState.member
-                                )
-                            }
+                        Column(
+                            modifier = Modifier.padding(horizontal = 6.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            DetailItem(
+                                info = stringResource(id = R.string.detail_plan_info_when),
+                                content = viewState.date
+                            )
+                            DetailItem(
+                                info = stringResource(id = R.string.detail_plan_info_place),
+                                content = viewState.place
+                            )
+                            DetailItem(
+                                info = stringResource(id = R.string.detail_plan_info_member),
+                                content = viewState.member
+                            )
                         }
                     }
+                }
 
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                ) {
                     Icon(
                         modifier = Modifier
-                            .constrainAs(icon) {
-                                top.linkTo(box.top)
-                                bottom.linkTo(box.top)
-                                start.linkTo(box.start)
-                                end.linkTo(box.end)
-                            }
+                            .align(Alignment.Center)
                             .padding(bottom = 20.dp),
                         tint = Color.Unspecified,
                         imageVector = ImageVector.vectorResource(R.drawable.icon_plan_detail),
@@ -177,8 +168,91 @@ fun DetailItem(
     }
 }
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Preview
 @Composable
 fun PreviewDetailPlanScreen() {
-    DetailPlanScreen(exitDetailPlanScreen = { })
+    Scaffold(
+        topBar = {
+            PlanzExitAppBar(
+                title = stringResource(id = R.string.detail_plan_app_bar_text),
+                onExitClick = { }
+            )
+        },
+        backgroundColor = Color.White,
+    ) { padding ->
+
+        Box(
+            modifier = Modifier
+                .padding(top = 84.dp, start = 20.dp, end = 20.dp)
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFFFBFCFF))
+                    .border(
+                        width = 1.dp,
+                        color = Gray200,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(vertical = 30.dp, horizontal = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(7.dp),
+                ) {
+                    Text(
+                        text = "식사약속",
+                        style = PlanzTypography.h1,
+                        color = MainPurple900,
+                    )
+                    Text(
+                        text = "이곳은 타이틀입니다.",
+                        style = PlanzTypography.body2,
+                        color = Gray500,
+                    )
+                }
+
+                Divider(color = Gray200, thickness = 1.dp)
+
+                Column(
+                    modifier = Modifier.padding(horizontal = 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    DetailItem(
+                        info = stringResource(id = R.string.detail_plan_info_when),
+                        content = "2022.02.22"
+                    )
+                    DetailItem(
+                        info = stringResource(id = R.string.detail_plan_info_place),
+                        content = "강남역"
+                    )
+                    DetailItem(
+                        info = stringResource(id = R.string.detail_plan_info_member),
+                        content = "이곳은 참여자 영역입니다."
+                    )
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(top = 42.dp),
+                tint = Color.Unspecified,
+                imageVector = ImageVector.vectorResource(R.drawable.icon_plan_detail),
+                contentDescription = null
+            )
+        }
+    }
 }
