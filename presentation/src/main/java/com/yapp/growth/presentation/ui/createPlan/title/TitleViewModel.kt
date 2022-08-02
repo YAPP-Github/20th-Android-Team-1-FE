@@ -34,7 +34,7 @@ class TitleViewModel @Inject constructor(
         updateState { copy(loadState = LoadState.LOADING) }
         getSampleTitleUseCase.invoke(categoryId)
             .onSuccess { sampleTitle ->
-                updateState { copy(loadState = LoadState.LOADING, sampleTitle = sampleTitle) }
+                updateState { copy(loadState = LoadState.SUCCESS, sampleTitle = sampleTitle) }
             }
             .onError { updateState { copy(loadState = LoadState.ERROR) } }
     }
