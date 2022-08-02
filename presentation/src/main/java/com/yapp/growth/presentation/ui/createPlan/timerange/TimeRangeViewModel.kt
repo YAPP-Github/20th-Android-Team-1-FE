@@ -1,6 +1,7 @@
 package com.yapp.growth.presentation.ui.createPlan.timerange
 
 import com.yapp.growth.base.BaseViewModel
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.ui.createPlan.timerange.TimeRangeContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -11,20 +12,29 @@ class TimeRangeViewModel @Inject constructor(
     override fun handleEvents(event: TimeRangeEvent) {
         when (event) {
             is TimeRangeEvent.OnClickExitButton -> sendEffect({ TimeRangeSideEffect.ExitCreateScreen })
-            is TimeRangeEvent.OnClickNextButton -> sendEffect({ TimeRangeSideEffect.CreateTemporaryPlan })
+            is TimeRangeEvent.OnClickNextButton -> updateState {
+                copy(isAlertDialogVisible = true)
+            }
             is TimeRangeEvent.OnClickBackButton -> sendEffect({ TimeRangeSideEffect.NavigateToPreviousScreen })
             is TimeRangeEvent.OnSelectedHourChanged -> {
-                updateHourState(viewState.value.dialogState, event.hour)
+                updateHourState(viewState.value.timeSelectDialog, event.hour)
                 sendEffect({ TimeRangeSideEffect.HideBottomSheet })
                 checkRangeError(viewState.value.startHour, viewState.value.endHour)
             }
             is TimeRangeEvent.OnStartHourClicked -> {
-                updateState { copy(dialogState = TimeRangeViewState.DialogState.START_HOUR) }
+                updateState { copy(timeSelectDialog = TimeRangeViewState.DialogState.START_HOUR) }
                 sendEffect({ TimeRangeSideEffect.ShowBottomSheet })
             }
             is TimeRangeEvent.OnEndHourClicked -> {
-                updateState { copy(dialogState = TimeRangeViewState.DialogState.END_HOUR) }
+                updateState { copy(timeSelectDialog = TimeRangeViewState.DialogState.END_HOUR) }
                 sendEffect({ TimeRangeSideEffect.ShowBottomSheet })
+            }
+            is TimeRangeEvent.OnClickAlertDialogNegativeButton -> updateState {
+                copy(isAlertDialogVisible = false)
+            }
+            is TimeRangeEvent.OnClickAlertDialogPositiveButton -> {
+                updateState { copy(isAlertDialogVisible = false) }
+                sendEffect({ TimeRangeSideEffect.CreateTemporaryPlan })
             }
         }
     }
@@ -35,18 +45,18 @@ class TimeRangeViewModel @Inject constructor(
                 updateState {
                     copy(
                         startHour = hour,
-                        dialogState = TimeRangeViewState.DialogState.NONE
+                        timeSelectDialog = TimeRangeViewState.DialogState.NONE
                     )
                 }
             }
             TimeRangeViewState.DialogState.END_HOUR -> updateState {
                 copy(
                     endHour = hour,
-                    dialogState = TimeRangeViewState.DialogState.NONE
+                    timeSelectDialog = TimeRangeViewState.DialogState.NONE
                 )
             }
             TimeRangeViewState.DialogState.NONE -> updateState {
-                copy(dialogState = TimeRangeViewState.DialogState.NONE)
+                copy(timeSelectDialog = TimeRangeViewState.DialogState.NONE)
             }
         }
     }
@@ -66,7 +76,7 @@ class TimeRangeViewModel @Inject constructor(
     }
 
     private fun showErrorState(isError: Boolean, showSnackBar: Boolean = false) {
-        updateState { copy(isError = isError) }
+        updateState { copy(isSelectedErrorRange = isError) }
         if (isError && showSnackBar) sendEffect({ TimeRangeSideEffect.ShowSnackBar })
     }
 }
