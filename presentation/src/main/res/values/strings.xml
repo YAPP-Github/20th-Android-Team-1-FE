@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="planz_component_text_field_error_message_text">자를 초과하였습니다</string>
-    <string name="planz_alert_dialog_title">안내</string>
-    <string name="planz_alert_dialog_positive_button_text">확인</string>
-    <string name="planz_alert_dialog_negative_button_text">취소</string>
+    <string name="planz_component_alert_dialog_title">안내</string>
+    <string name="planz_component_alert_dialog_positive_button_text">확인</string>
+    <string name="planz_component_alert_dialog_negative_button_text">취소</string>
 
     <string name="planz_title">플랜즈</string>
     <string name="icon_kakao_login_title">카카오 로그인</string>
