@@ -3,7 +3,7 @@ package com.yapp.growth.presentation.ui.main.fix
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
@@ -37,35 +37,23 @@ class FixPlanViewModel @Inject constructor(
         updateState { copy(planId = this@FixPlanViewModel.planId) }
     }
 
-    private fun loadRespondUsers(promisingId: Long) {
-        viewModelScope.launch {
-            val result = (getRespondUsersUseCase.invoke(promisingId) as? NetworkResult.Success)?.data
-            result?.let {
+    private fun loadRespondUsers(planId: Long) = viewModelScope.launch {
+        updateState { copy(loadState = LoadState.LOADING) }
+        getRespondUsersUseCase.invoke(planId)
+            .onSuccess {
                 originalTable = it
-                makeRespondList(it)
                 val sliceTimeTable: TimeTable = if (it.availableDates.size >= 4) {
                     it.copy(availableDates = it.availableDates.subList(0, 4))
                 } else {
                     it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
                 }
                 updateState {
-                    copy(timeTable = sliceTimeTable)
+                    copy(loadState = LoadState.SUCCESS, timeTable = sliceTimeTable)
                 }
             }
-        }
-    }
-
-    private fun makeRespondList(data: TimeTable) {
-        val booleanArray = Array(data.totalCount*2) { false }
-
-        val temp = mutableListOf<TimeCheckedOfDay>().also { list ->
-            repeat(data.availableDates.size) {
-                list.add(TimeCheckedOfDay(
-                    date = data.availableDates[it],
-                    timeList = booleanArray.copyOf().toMutableList()
-                ))
+            .onError {
+                updateState { copy(loadState = LoadState.ERROR) }
             }
-        }.toList()
     }
 
     private fun filterCurrentSelectedUser(dateIndex: Int, minuteIndex: Int) {
@@ -130,12 +118,14 @@ class FixPlanViewModel @Inject constructor(
     }
 
     private fun sendFixPlan(date: String) = viewModelScope.launch {
+        updateState { copy(loadState = LoadState.LOADING) }
         sendFixPlanUseCase.invoke(planId, date)
             .onSuccess {
+                updateState { copy(loadState = LoadState.SUCCESS) }
                 sendEffect({ FixPlanSideEffect.NavigateToNextScreen(it.id.toLong()) })
             }
             .onError {
-
+                updateState { copy(loadState = LoadState.ERROR) }
             }
     }
 
@@ -158,6 +148,7 @@ class FixPlanViewModel @Inject constructor(
                 sendEffect({ FixPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
+            FixPlanEvent.OnClickErrorRetryButton -> loadRespondUsers(planId = planId)
         }
     }
 }

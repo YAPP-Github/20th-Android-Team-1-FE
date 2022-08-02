@@ -7,8 +7,8 @@
     <string name="login_introduce_text">친구들과 함께하는\n편리한 약속 잡기</string>
     <string name="message_kakao_login_failed">카카오 로그인에 실패 하였습니다. 잠시 후 다시 시도 해 주시기 바랍니다.</string>
 
-    <string name="planz_error_text_01">문제가 발생했습니다.</string>
-    <string name="planz_error_text_02">다시 시도해주세요.</string>
+    <string name="planz_error_text_01">문제가 발생했습니다.\n다시 시도해주세요.</string>
+    <string name="planz_error_retry_button_title">다시 시도</string>
     <string name="planz_has_not_plan">오늘의 약속이 없습니다.</string>
 
     <string name="navigation_home_text">메인 홈</string>
@@ -132,7 +132,7 @@
     <string name="common_plan_colorBox_available_text">가능</string>
 
     <!-- 약속 응답 -->
-    <string name="respond_plan_title_text">약속응답</string>
+    <string name="respond_plan_title">약속응답</string>
     <string name="respond_plan_location_text">강남역카카오프렌즈강</string>
     <string name="respond_plan_clear_select_text">선택 해제</string>
     <string name="respond_plan_send_plan_title">약속시간 보내기</string>
@@ -151,11 +151,11 @@
     <string name="respond_plan_reject_button_text">확인하기</string>
 
     <!-- 약속 확정 -->
-    <string name="fix_plan_title_text">약속확정</string>
+    <string name="fix_plan_title">약속확정</string>
     <string name="fix_plan_fix_button_title">해당 시간으로 약속 확정</string>
 
     <!-- 약속 현황 -->
-    <string name="monitor_plan_title_text">약속현황</string>
+    <string name="monitor_plan_title">약속현황</string>
     <string name="monitor_plan_join_title_text">&#160;참여자</string>
 
     <!-- 약속 응답 상태 -->

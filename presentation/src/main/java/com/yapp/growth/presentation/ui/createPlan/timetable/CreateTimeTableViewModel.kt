@@ -3,7 +3,7 @@ package com.yapp.growth.presentation.ui.createPlan.timetable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
-import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.onError
@@ -39,20 +39,24 @@ class CreateTimeTableViewModel @Inject constructor(
     }
 
     private fun loadCreateTimeTable(uuid: String) = viewModelScope.launch {
-        val result = (getCreateTimeTableUseCase.invoke(uuid) as? NetworkResult.Success)?.data
-        result?.let {
-            originalTable = it
-            makeRespondList(it)
-            val sliceCreateTimeTable = if (it.availableDates.size >= 4) {
-                it.copy(availableDates = it.availableDates.subList(0, 4))
-            } else {
-                it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
-            }
+        updateState { copy(loadState = LoadState.LOADING) }
+        getCreateTimeTableUseCase.invoke(uuid)
+            .onSuccess {
+                originalTable = it
+                makeRespondList(it)
+                val sliceCreateTimeTable = if (it.availableDates.size >= 4) {
+                    it.copy(availableDates = it.availableDates.subList(0, 4))
+                } else {
+                    it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
+                }
 
-            updateState {
-                copy(createTimeTable = sliceCreateTimeTable)
+                updateState {
+                    copy(loadState = LoadState.SUCCESS, createTimeTable = sliceCreateTimeTable)
+                }
             }
-        }
+            .onError {
+                updateState { copy(loadState = LoadState.ERROR) }
+            }
     }
 
     private fun nextDay() {
@@ -87,7 +91,7 @@ class CreateTimeTableViewModel @Inject constructor(
     }
 
     private fun makeRespondList(data: CreateTimeTable) {
-        val booleanArray = Array(data.totalCount*2) { false }
+        val booleanArray = Array(data.totalCount.times(2)) { false }
 
         val temp = mutableListOf<TimeCheckedOfDay>().also { list ->
             repeat(data.availableDates.size) {
@@ -103,19 +107,33 @@ class CreateTimeTableViewModel @Inject constructor(
 
     private fun sendMakePlan(uuid: String, timeCheckedOfDays: List<TimeCheckedOfDay>) =
         viewModelScope.launch {
+            updateState { copy(loadState = LoadState.LOADING) }
             makePlanUseCase.invoke(uuid, timeCheckedOfDays)
                 .onSuccess { planId ->
+                    updateState { copy(loadState = LoadState.SUCCESS) }
                     sendEffect({ CreateTimeTableSideEffect.NavigateToNextScreen(planId) })
                 }
                 .onError {
-                    TODO()
+                    updateState { copy(loadState = LoadState.ERROR) }
                 }
         }
 
     override fun handleEvents(event: CreateTimeTableEvent) {
         when (event) {
-            CreateTimeTableEvent.OnClickBackButton -> updateState { copy(isDialogVisible = true) }
-            CreateTimeTableEvent.OnClickExitButton -> updateState { copy(isDialogVisible = true) }
+            CreateTimeTableEvent.OnClickBackButton -> {
+                if(viewState.value.loadState == LoadState.SUCCESS) {
+                    updateState { copy(isDialogVisible = true) }
+                } else {
+                    sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
+                }
+            }
+            CreateTimeTableEvent.OnClickExitButton -> {
+                if(viewState.value.loadState == LoadState.SUCCESS) {
+                    updateState { copy(isDialogVisible = true) }
+                } else {
+                    sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
+                }
+            }
             CreateTimeTableEvent.OnClickSendButton -> sendMakePlan(uuid, timeCheckedOfDays.value)
             CreateTimeTableEvent.OnClickNextDayButton -> { nextDay() }
             CreateTimeTableEvent.OnClickPreviousDayButton -> { previousDay() }
@@ -129,6 +147,7 @@ class CreateTimeTableViewModel @Inject constructor(
             }
             CreateTimeTableEvent.OnClickDialogNegativeButton -> updateState { copy(isDialogVisible = false) }
             CreateTimeTableEvent.OnClickDialogPositiveButton -> sendEffect({ CreateTimeTableSideEffect.ExitCreateScreen })
+            CreateTimeTableEvent.OnClickErrorRetryButton -> loadCreateTimeTable(uuid)
         }
     }
 }

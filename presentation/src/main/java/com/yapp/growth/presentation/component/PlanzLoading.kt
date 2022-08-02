@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import com.yapp.growth.presentation.theme.MainPurple900
 
 @Composable
-fun PlanzLoading() {
-    Box(modifier = Modifier.fillMaxSize()) {
+fun PlanzLoading(
+    modifier: Modifier = Modifier.fillMaxSize(),
+) {
+    Box(modifier = modifier) {
         CircularProgressIndicator(
             modifier = Modifier.align(Alignment.Center),
             color = MainPurple900
