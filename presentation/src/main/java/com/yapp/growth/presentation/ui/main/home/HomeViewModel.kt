@@ -39,6 +39,8 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeViewState, HomeSideEffect, HomeEvent>(
     HomeViewState()
 ) {
+    private var isSubscribed = false
+
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
 
@@ -53,6 +55,7 @@ class HomeViewModel @Inject constructor(
         when (event) {
             is HomeEvent.InitHomeScreen -> {
                 updateState { copy(loadState = LoadState.LOADING) }
+                updateInitDateState()
                 checkValidLoginToken()
             }
             is HomeEvent.OnInduceLoginClicked -> {
@@ -165,23 +168,23 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchMonthlyPlans() {
-        currentDate.collectLatest { currentDate ->
-            updateState { copy(monthlyPlanLoadState = LoadState.LOADING) }
-            Timber.d("collectLatest :: $currentDate")
-            getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
-                .onSuccess { plans ->
-                    updateState {
-                        copy(
-                            monthlyPlanLoadState = LoadState.SUCCESS,
-                            monthlyPlans = plans,
-                        )
+        if(!isSubscribed) {
+            isSubscribed = true
+            currentDate.collectLatest { currentDate ->
+                updateState { copy(monthlyPlanLoadState = LoadState.LOADING) }
+                getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
+                    .onSuccess { plans ->
+                        updateState {
+                            copy(
+                                monthlyPlanLoadState = LoadState.SUCCESS,
+                                monthlyPlans = plans,
+                            )
+                        }
                     }
-                }
-                .onError {
-                    updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
-                }
-
-
+                    .onError {
+                        updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
+                    }
+            }
         }
     }
 
@@ -228,5 +231,14 @@ class HomeViewModel @Inject constructor(
         }
 
         _currentDate.value = CalendarDay.from(year, month - 1, 1)
+    }
+
+    // TODO : 임시, 추후 로직 수정 필요!
+    private fun updateInitDateState() {
+        if(_currentDate.value.day > 10) {
+            _currentDate.value = CalendarDay.from(_currentDate.value.year, _currentDate.value.month, 1)
+        } else {
+            _currentDate.value = CalendarDay.from(_currentDate.value.year, _currentDate.value.month, _currentDate.value.day + 1)
+        }
     }
 }
