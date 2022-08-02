@@ -26,6 +26,7 @@ object Versions {
     const val OKHTTP = "4.3.1"
     const val RETROFIT = "2.7.1"
     const val SECRETS_GRADLE = "2.0.1"
+    const val SHIMMER = "1.0.3"
     const val TIMBER = "5.0.1"
     const val MOSHI = "1.13.0"
     const val INJECT = "1"

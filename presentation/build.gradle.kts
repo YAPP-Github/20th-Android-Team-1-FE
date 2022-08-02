@@ -49,6 +49,7 @@ dependencies {
     app.ModuleDependencies.kotlinDateTime.implement(this)
     app.ModuleDependencies.kakaoOAuth.implement(this)
     app.ModuleDependencies.kakaoShare.implement(this)
+    app.ModuleDependencies.shimmer.implement(this)
 
     implementation(platform(app.ModuleDependencies.FIREBASE_BOM))
     implementation(app.ModuleDependencies.FIREBASE_ANALYTICS)
