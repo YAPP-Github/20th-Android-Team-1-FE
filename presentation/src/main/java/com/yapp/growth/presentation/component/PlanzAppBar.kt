@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.component
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,10 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.theme.Gray900
-import com.yapp.growth.presentation.theme.MainPurple900
-import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.*
 
 @Composable
 fun PlanzCreateAppBar(
@@ -60,12 +62,14 @@ fun PlanzColorTextWithExitAppBar(
     modifier: Modifier = Modifier,
     title: String,
     onExitClick: () -> Unit,
+    isLoading: Boolean,
 ) {
     PlanzColorTextAppBar(
         modifier = modifier,
         title = title,
         menu = PlanzAppBarMenu.EXIT,
         onMenuClick = onExitClick,
+        isLoading = isLoading
     )
 }
 
@@ -142,35 +146,52 @@ private fun PlanzColorTextAppBar(
     title: String,
     menu: PlanzAppBarMenu? = null,
     onMenuClick: () -> Unit,
+    isLoading: Boolean = false,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(top = 20.dp, bottom = 15.dp, start = 20.dp, end = 20.dp)
-    ) {
-
-        Text(
-            modifier = Modifier
+    if (isLoading) {
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
-                .padding()
-                .align(Alignment.CenterStart),
-            text = title,
-            style = PlanzTypography.h2,
-            color = Gray900,
-            maxLines = 1,
-        )
-
-        if(menu != null) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = menu.icon),
-                tint = Color.Unspecified,
-                contentDescription = stringResource(id = menu.contentDescription),
+                .wrapContentHeight()
+                .padding(top = 20.dp, bottom = 15.dp, start = 20.dp, end = 20.dp)
+                .shimmer()
+        ) {
+            Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(30.dp))
-                    .clickable { onMenuClick() }
-                    .align(Alignment.CenterEnd),
+                    .width(80.dp)
+                    .height(22.dp)
+                    .background(Gray200)
             )
+        }
+    } else {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(top = 20.dp, bottom = 15.dp, start = 20.dp, end = 20.dp)
+        ) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding()
+                    .align(Alignment.CenterStart),
+                text = title,
+                style = PlanzTypography.h2,
+                color = Gray900,
+                maxLines = 1,
+            )
+
+            if (menu != null) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = menu.icon),
+                    tint = Color.Unspecified,
+                    contentDescription = stringResource(id = menu.contentDescription),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(30.dp))
+                        .clickable { onMenuClick() }
+                        .align(Alignment.CenterEnd),
+                )
+            }
         }
     }
 }
@@ -226,6 +247,7 @@ fun PlanzExitAppBarPreview() {
 fun PreviewPlanzColorTextWithExitAppBar() {
     PlanzColorTextWithExitAppBar(
         title = "식사",
-        onExitClick = { }
+        onExitClick = { },
+        isLoading = true
     )
 }

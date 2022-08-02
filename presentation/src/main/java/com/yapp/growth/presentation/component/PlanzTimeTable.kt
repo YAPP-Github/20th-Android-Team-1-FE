@@ -21,8 +21,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.valentinilk.shimmer.shimmer
 import com.yapp.growth.domain.entity.CreateTimeTable
 import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
@@ -353,9 +353,49 @@ fun CreateTimeTable(
 }
 
 @Composable
+fun ShimmerLocationAndAvailableColorBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(bottom = 20.dp, start = 20.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .shimmer(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Box(
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(16.dp)
+                        .background(Gray200)
+                )
+                Box(
+                    modifier = Modifier
+                        .width(110.dp)
+                        .height(16.dp)
+                        .background(Gray200)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .width(110.dp)
+                    .height(16.dp)
+                    .background(Gray200)
+                    .align(Alignment.CenterVertically)
+            )
+        }
+    }
+}
+
+@Composable
 fun LocationAndAvailableColorBox(
     modifier: Modifier = Modifier,
-    timeTable: TimeTable
+    timeTable: TimeTable,
 ) {
     Box(
         modifier = modifier
