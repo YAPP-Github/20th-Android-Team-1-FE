@@ -11,6 +11,8 @@ import com.yapp.growth.domain.entity.User
 class FixPlanContract {
     data class FixPlanViewState(
         val loadState: LoadState = LoadState.SUCCESS,
+        val bottomSheet: BottomSheet = BottomSheet.HIDE,
+        val respondents: List<User> = emptyList(),
         val timeTable: TimeTable = TimeTable(
             emptyList(),
             emptyList(),
@@ -30,7 +32,13 @@ class FixPlanContract {
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
         val currentClickUserData: List<User> = emptyList(),
         val planId: Long = -1,
-    ) : ViewState
+    ) : ViewState {
+        enum class BottomSheet {
+            HIDE,
+            RESPONDENT,
+            PARTICIPANT
+        }
+    }
 
     sealed class FixPlanSideEffect : ViewSideEffect {
         object ShowBottomSheet : FixPlanSideEffect()
@@ -43,6 +51,7 @@ class FixPlanContract {
         object OnClickBackButton : FixPlanEvent()
         object OnClickNextDayButton : FixPlanEvent()
         object OnClickPreviousDayButton : FixPlanEvent()
+        object OnClickUserIcon : FixPlanEvent()
         data class OnClickTimeTable(val dateIndex: Int, val minuteIndex: Int) : FixPlanEvent()
         data class OnClickFixButton(val date: String) : FixPlanEvent()
         object OnClickErrorRetryButton : FixPlanEvent()
