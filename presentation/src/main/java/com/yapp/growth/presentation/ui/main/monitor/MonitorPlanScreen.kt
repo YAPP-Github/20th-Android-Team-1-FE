@@ -47,7 +47,7 @@ fun MonitorPlanScreen(
         Scaffold(
             topBar = {
                 PlanzColorTextWithExitAppBar(
-                    title = uiState.timeTable.categoryName,
+                    title = uiState.timeTable.promisingName,
                     onExitClick = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
                 )
             }
