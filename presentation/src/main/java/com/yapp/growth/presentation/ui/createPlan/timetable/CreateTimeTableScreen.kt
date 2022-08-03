@@ -69,7 +69,9 @@ fun CreateTimeTableScreen(
                         CreateTimeTableDateIndicator(
                             createTimeTable = uiState.createTimeTable,
                             onClickPreviousDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickPreviousDayButton) },
-                            onClickNextDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickNextDayButton) }
+                            onClickNextDayButton = { viewModel.setEvent(CreateTimeTableEvent.OnClickNextDayButton) },
+                            enablePrev = uiState.enablePrev,
+                            enableNext = uiState.enableNext,
                         )
 
                         CreateTimeTable(

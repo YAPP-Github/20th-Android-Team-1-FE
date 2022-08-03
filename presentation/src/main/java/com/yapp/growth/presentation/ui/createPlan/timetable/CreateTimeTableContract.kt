@@ -11,6 +11,8 @@ class CreateTimeTableContract {
         val loadState: LoadState = LoadState.SUCCESS,
         val createTimeTable: CreateTimeTable = CreateTimeTable(0,"","", emptyList(), emptyList()),
         val clickCount: Int = 0,
+        val enablePrev: Boolean = false,
+        val enableNext: Boolean = false,
         val isDialogVisible: Boolean = false,
     ): ViewState
 
