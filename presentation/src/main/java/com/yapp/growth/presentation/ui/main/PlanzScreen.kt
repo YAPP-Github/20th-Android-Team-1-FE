@@ -8,12 +8,14 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
@@ -24,6 +26,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetDefaults
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -67,10 +72,8 @@ import com.google.firebase.ktx.Firebase
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
-import com.yapp.growth.presentation.component.PlanzModalBottomSheetLayout
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
 import com.yapp.growth.presentation.firebase.SchemeType
-import com.yapp.growth.presentation.ui.main.fix.FixPlanScreen
 import com.yapp.growth.presentation.theme.BackgroundColor1
 import com.yapp.growth.presentation.theme.Gray500
 import com.yapp.growth.presentation.theme.Gray900
@@ -79,6 +82,7 @@ import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.theme.Pretendard
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.detail.DetailPlanScreen
+import com.yapp.growth.presentation.ui.main.fix.FixPlanScreen
 import com.yapp.growth.presentation.ui.main.home.DayPlanItem
 import com.yapp.growth.presentation.ui.main.home.HomeScreen
 import com.yapp.growth.presentation.ui.main.manage.ManageScreen
@@ -126,20 +130,31 @@ fun PlanzScreen(
         }
     }
 
-    if (!sheetState.isVisible) {
-        viewModel.clearSelectionPlans()
-    }
-
-    PlanzModalBottomSheetLayout(
+    ModalBottomSheetLayout(
+        sheetBackgroundColor = Color.Transparent,
         sheetState = sheetState,
         sheetContent = {
-            PlanzBottomSheetContent(
-                selectionDay = viewState.selectionDay,
-                selectDayPlans = viewState.selectDayPlans,
-                onExitClick = { viewModel.setEvent(PlanzContract.PlanzEvent.OnBottomSheetExitClicked) },
-                onPlanItemClick = { viewModel.setEvent(PlanzContract.PlanzEvent.OnPlanItemClicked(it)) }
-            )
-        }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                PlanzBottomSheetContent(
+                    sheetState = sheetState,
+                    selectionDay = viewState.selectionDay,
+                    selectDayPlans = viewState.selectDayPlans,
+                    onExitClick = { viewModel.setEvent(PlanzContract.PlanzEvent.OnBottomSheetExitClicked) },
+                    onPlanItemClick = {
+                        viewModel.setEvent(
+                            PlanzContract.PlanzEvent.OnPlanItemClicked(
+                                it
+                            )
+                        )
+                    }
+                )
+            }
+        },
+        scrimColor = ModalBottomSheetDefaults.scrimColor,
     ) {
         Scaffold(
             bottomBar = {
@@ -483,8 +498,10 @@ fun CreatePlanFAB(
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlanzBottomSheetContent(
+    sheetState: ModalBottomSheetState,
     selectionDay: CalendarDay,
     selectDayPlans: List<Plan.FixedPlan>,
     onExitClick: () -> Unit,
@@ -493,48 +510,65 @@ fun PlanzBottomSheetContent(
     val month = selectionDay.month + 1
     val day = selectionDay.day
 
-    Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(horizontal = 20.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+    if (sheetState.isVisible) {
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(24.dp)
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .background(color = Color.White)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 20.dp)
         ) {
-            Text(
-                text = "${month}월 ${day}일 약속",
-                style = PlanzTypography.h3
-            )
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_exit),
-                tint = Color.Unspecified,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(30.dp))
-                    .clickable { onExitClick() },
-            )
-        }
-        if(selectDayPlans.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(24.dp))
-            PlanzPlanList(
-                dayPlans = selectDayPlans,
-                onPlanItemClick = onPlanItemClick
-            )
-        } else {
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = stringResource(id = R.string.planz_has_not_plan),
-                style = PlanzTypography.body1,
-                color = Gray500,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "${month}월 ${day}일 약속",
+                    style = PlanzTypography.h3
+                )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_exit),
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(30.dp))
+                        .clickable { onExitClick() },
+                )
+            }
+            if (selectDayPlans.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(24.dp))
+                PlanzPlanList(
+                    dayPlans = selectDayPlans,
+                    onPlanItemClick = onPlanItemClick
+                )
+            } else {
+                Spacer(modifier = Modifier.height(68.dp))
+                Text(
+                    text = stringResource(id = R.string.planz_has_not_plan),
+                    style = PlanzTypography.body1,
+                    color = Gray500,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                Spacer(modifier = Modifier.height(68.dp))
+            }
         }
 
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(20.dp)
+                .background(color = Color.White)
+        )
+    } else {
+        Box(modifier = Modifier.size(1.dp))
     }
+
 }
 
 @Composable
