@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.theme.Gray900
@@ -22,13 +23,14 @@ import com.yapp.growth.presentation.theme.SubCoral
 @Composable
 fun PlanzSnackBar(
     message: String,
+    bottomPadding: Int,
 ) {
     Snackbar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 20.dp)
-            .padding(bottom = 32.dp),
+            .padding(bottom = bottomPadding.dp),
         backgroundColor = Gray900
     ) {
         Text(
@@ -43,13 +45,14 @@ fun PlanzSnackBar(
 @Composable
 fun PlanzErrorSnackBar(
     message: String,
+    bottomPadding: Int,
 ) {
     Snackbar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 20.dp)
-            .padding(bottom = 32.dp),
+            .padding(bottom = bottomPadding.dp),
         backgroundColor = Gray900
     ) {
         Row(

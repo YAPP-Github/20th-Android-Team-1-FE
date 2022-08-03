@@ -26,7 +26,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -46,7 +45,6 @@ class HomeViewModel @Inject constructor(
 
     // 사용자가 여러 번 클릭했을 때 버벅거리는 현상을 없애기 위해 따로 분리
     private val _currentDate = MutableStateFlow(CalendarDay.today())
-
     @OptIn(FlowPreview::class)
     val currentDate: StateFlow<CalendarDay> = _currentDate.debounce(300).stateIn(
         scope = viewModelScope,
@@ -177,7 +175,7 @@ class HomeViewModel @Inject constructor(
         if (!isSubscribed) {
             isSubscribed = true
 
-            currentDate.collectLatest { currentDate ->
+            currentDate.collect { currentDate ->
                 val calendarPlans = emptyList<Plan.FixedPlan>().toMutableList()
 
                 val month = currentDate.month
@@ -201,7 +199,7 @@ class HomeViewModel @Inject constructor(
                     .onError {
                         sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
-                        return@collectLatest
+                        return@collect
                     }
                 getMonthlyFixedPlansUseCase.invoke(previousMonth.toFormatDate())
                     .onSuccess { plans ->
@@ -210,7 +208,7 @@ class HomeViewModel @Inject constructor(
                     .onError {
                         sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
-                        return@collectLatest
+                        return@collect
                     }
                 getMonthlyFixedPlansUseCase.invoke(nextMonth.toFormatDate())
                     .onSuccess { plans ->
@@ -219,7 +217,7 @@ class HomeViewModel @Inject constructor(
                     .onError {
                         sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
-                        return@collectLatest
+                        return@collect
                     }
 
                 updateState {

@@ -76,7 +76,10 @@ fun DateScreen(
         },
         snackbarHost = { snackbarHostState ->
             SnackbarHost(hostState = snackbarHostState) { snackbarData ->
-                PlanzErrorSnackBar(message = snackbarData.message)
+                PlanzErrorSnackBar(
+                    message = snackbarData.message,
+                    bottomPadding = 100
+                )
             }
         }
     ) { padding ->
