@@ -22,5 +22,6 @@ class ThemeContract {
         data class ChoosePlanCategory(val category: Category) : ThemeEvent()
         object OnClickNextButton : ThemeEvent()
         object OnClickExitButton : ThemeEvent()
+        object OnClickErrorRetryButton : ThemeEvent()
     }
 }

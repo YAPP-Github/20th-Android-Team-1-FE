@@ -27,6 +27,7 @@ class TitleViewModel @Inject constructor(
             is TitleEvent.OnClickExitButton -> sendEffect({ TitleSideEffect.ExitCreateScreen })
             is TitleEvent.OnClickNextButton -> sendEffect({ TitleSideEffect.NavigateToNextScreen })
             is TitleEvent.OnClickBackButton -> sendEffect({ TitleSideEffect.NavigateToPreviousScreen })
+            is TitleEvent.OnClickErrorRetryButton -> getSampleTitle(event.categoryId)
         }
     }
 

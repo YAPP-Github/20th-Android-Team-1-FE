@@ -81,6 +81,7 @@ class DateViewModel @Inject constructor(
                     month = 1
                 }
             }
+            else -> {}
         }
 
         _currentDate.value = CalendarDay.from(year, month - 1, 1)

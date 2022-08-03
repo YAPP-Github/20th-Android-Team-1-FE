@@ -26,6 +26,7 @@ class ThemeViewModel @Inject constructor(
             is ThemeEvent.ChoosePlanCategory -> updateState { copy(chosenCategory = event.category) }
             is ThemeEvent.OnClickNextButton -> sendEffect({ ThemeSideEffect.NavigateToNextScreen })
             is ThemeEvent.OnClickExitButton -> sendEffect({ ThemeSideEffect.ExitCreateScreen })
+            is ThemeEvent.OnClickErrorRetryButton -> getPlanCategories()
         }
     }
 
