@@ -70,7 +70,10 @@ fun ThemeScreen(
                     }
                 }
                 LoadState.LOADING -> PlanzLoading()
-                LoadState.ERROR -> PlanzError(retryVisible = true)
+                LoadState.ERROR -> PlanzError(
+                    retryVisible = true,
+                    onClickRetry = { viewModel.setEvent(ThemeContract.ThemeEvent.OnClickErrorRetryButton) }
+                )
             }
 
             PlanzMainButton(
