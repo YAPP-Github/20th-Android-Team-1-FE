@@ -80,7 +80,9 @@ fun RespondPlanScreen(
                         PlanzPlanDateIndicator(
                             timeTable = uiState.timeTable,
                             onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton) },
-                            onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
+                            onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) },
+                            enablePrev = uiState.enablePrev,
+                            enableNext = uiState.enableNext,
                         )
 
                         PlanzPlanTimeTable(
