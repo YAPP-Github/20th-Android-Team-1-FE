@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Growth" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/main_purple</item>
+    </style>
+
+    <style name="Theme.Growth.Splash" parent="Theme.Growth">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+</resources>

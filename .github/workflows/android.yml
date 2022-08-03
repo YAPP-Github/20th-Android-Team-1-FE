@@ -1,0 +1,36 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    # Github Repository Secrets를 통해 환경 변수 파일을 생성합니다.
+    - name: Generate Environment Variables File for Production
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+        PLANZ_FIREBASE_DOMAIN: ${{ secrets.PLANZ_FIREBASE_DOMAIN }}
+        PLANZ_FIREBASE_PREFIX: ${{ secrets.PLANZ_FIREBASE_PREFIX }}
+      run: |
+        echo BASE_URL=\"$BASE_URL\" >> ./local.properties
+        echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" >> ./local.properties
+        echo PLANZ_FIREBASE_DOMAIN=\"$PLANZ_FIREBASE_DOMAIN\" >> ./local.properties
+        echo PLANZ_FIREBASE_PREFIX=\"$PLANZ_FIREBASE_PREFIX\" >> ./local.properties
+    - name: Build with Gradle
+      run: ./gradlew build

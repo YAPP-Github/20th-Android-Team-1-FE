@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yapp.growth">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".PlanzApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Growth">
+        <activity
+            android:name=".presentation.ui.splash.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Growth.Splash"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app.planz.today"
+                    android:scheme="https"/>
+
+                <data
+                    android:host="app.planz.today"
+                    android:scheme="http"/>
+
+                <data android:host="kakaolink"
+                    android:scheme="kakao${KAKAO_APP_KEY}" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao${KAKAO_APP_KEY}" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.ui.main.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Growth"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".presentation.ui.login.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Growth"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".presentation.ui.createPlan.CreatePlanActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Growth"
+            android:screenOrientation="portrait"/>
+
+    </application>
+
+</manifest>
