@@ -493,7 +493,7 @@ fun LocationAndAvailableColorBox(
                     .padding(start = 6.dp, end = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                itemsIndexed(timeTable.colors) { index , color ->
+                itemsIndexed(timeTable.colors) { _, color ->
 
                     Box(
                         modifier = Modifier
