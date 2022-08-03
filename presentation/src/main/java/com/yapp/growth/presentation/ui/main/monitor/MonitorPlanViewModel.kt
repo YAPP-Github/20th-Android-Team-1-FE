@@ -45,6 +45,7 @@ class MonitorPlanViewModel @Inject constructor(
 
     init {
         loadRespondUsers(planId)
+        updateState { copy(planId = this@MonitorPlanViewModel.planId) }
     }
 
     private fun loadRespondUsers(planId: Long) {
