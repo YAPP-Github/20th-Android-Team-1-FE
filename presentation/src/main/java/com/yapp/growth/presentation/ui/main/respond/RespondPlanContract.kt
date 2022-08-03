@@ -28,6 +28,9 @@ class RespondPlanContract {
             Category(0,"",""),
         ),
         val clickCount: Int = 0,
+        val enablePrev: Boolean = false,
+        val enableNext: Boolean = false,
+        val planId: Long = -1,
     ) : ViewState
 
     sealed class RespondPlanSideEffect : ViewSideEffect {

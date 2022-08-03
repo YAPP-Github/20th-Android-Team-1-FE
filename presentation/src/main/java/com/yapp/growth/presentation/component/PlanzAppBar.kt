@@ -56,14 +56,15 @@ fun PlanzExitAppBar(
 fun PlanzColorTextWithExitAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    onExitClick: () -> Unit,
+    onClickExitIcon: () -> Unit,
+    onClickShareIcon: () -> Unit,
     isLoading: Boolean,
 ) {
     PlanzColorTextAppBar(
         modifier = modifier,
         title = title,
-        menu = PlanzAppBarMenu.EXIT,
-        onMenuClick = onExitClick,
+        actionMenus = listOf(PlanzAppBarMenu.SHARE, PlanzAppBarMenu.EXIT),
+        onClickActionIcons = listOf(onClickShareIcon, onClickExitIcon),
         isLoading = isLoading
     )
 }
@@ -139,8 +140,8 @@ private fun PlanzAppBar(
 private fun PlanzColorTextAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    menu: PlanzAppBarMenu? = null,
-    onMenuClick: () -> Unit,
+    actionMenus: List<PlanzAppBarMenu>,
+    onClickActionIcons: List<() -> Unit>,
     isLoading: Boolean = false,
 ) {
     if (isLoading) {
@@ -176,16 +177,20 @@ private fun PlanzColorTextAppBar(
                 maxLines = 1,
             )
 
-            if (menu != null) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = menu.icon),
-                    tint = Color.Unspecified,
-                    contentDescription = stringResource(id = menu.contentDescription),
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(30.dp))
-                        .clickable { onMenuClick() }
-                        .align(Alignment.CenterEnd),
-                )
+            Row(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                actionMenus.forEachIndexed { index, menu ->
+                    Icon(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(30.dp))
+                            .clickable { onClickActionIcons[index]() },
+                        imageVector = ImageVector.vectorResource(menu.icon),
+                        tint = Color.Unspecified,
+                        contentDescription = stringResource(menu.contentDescription)
+                    )
+                }
             }
         }
     }
@@ -214,7 +219,8 @@ fun PlanzExitAppBarPreview() {
 fun PreviewPlanzColorTextWithExitAppBar() {
     PlanzColorTextWithExitAppBar(
         title = "식사",
-        onExitClick = { },
-        isLoading = true
+        onClickShareIcon = {},
+        onClickExitIcon = {},
+        isLoading = false
     )
 }

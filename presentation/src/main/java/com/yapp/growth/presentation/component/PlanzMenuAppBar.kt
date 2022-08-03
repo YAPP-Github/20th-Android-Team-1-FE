@@ -82,7 +82,7 @@ fun PlanzMenuAppBar(
 
         Row(
             modifier = Modifier.align(Alignment.CenterEnd),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             actionMenus.forEachIndexed { index, menu ->
                 Icon(

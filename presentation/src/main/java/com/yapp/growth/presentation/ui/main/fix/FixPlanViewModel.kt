@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.Category
-import com.yapp.growth.domain.entity.TimeCheckedOfDay
 import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
@@ -51,8 +50,10 @@ class FixPlanViewModel @Inject constructor(
                 updateState {
                     copy(
                         respondents = it.users,
-                        loadState = LoadState.SUCCESS,
                         timeTable = sliceTimeTable,
+                        enablePrev = false,
+                        enableNext = originalTable.availableDates.size > 4,
+                        loadState = LoadState.SUCCESS,
                     )
                 }
             }
@@ -96,7 +97,7 @@ class FixPlanViewModel @Inject constructor(
             )
         )
         updateState {
-            copy(timeTable = sliceCreateTimeTable)
+            copy(enablePrev = true, enableNext = toIndex < originalTable.availableDates.size, timeTable = sliceCreateTimeTable)
         }
     }
 
@@ -106,14 +107,14 @@ class FixPlanViewModel @Inject constructor(
         val fromIndex = currentIndex.times(4)
         val toIndex = fromIndex.plus(4)
 
-        val temp: TimeTable = originalTable.copy(
+        val sliceCreateTimeTable: TimeTable = originalTable.copy(
             availableDates = originalTable.availableDates.subList(
                 fromIndex,
                 toIndex
             )
         )
         updateState {
-            copy(timeTable = temp)
+            copy(enablePrev = currentIndex != 0, enableNext = true, timeTable = sliceCreateTimeTable)
         }
     }
 
@@ -138,10 +139,12 @@ class FixPlanViewModel @Inject constructor(
             FixPlanEvent.OnClickNextDayButton -> {
                 initCurrentClickTimeIndex()
                 nextDay()
+                sendEffect({ FixPlanSideEffect.HideBottomSheet })
             }
             FixPlanEvent.OnClickPreviousDayButton -> {
                 initCurrentClickTimeIndex()
                 previousDay()
+                sendEffect({ FixPlanSideEffect.HideBottomSheet })
             }
             FixPlanEvent.OnClickBackButton -> { sendEffect({ FixPlanSideEffect.NavigateToPreviousScreen }) }
             is FixPlanEvent.OnClickFixButton -> { sendFixPlan(event.date) }

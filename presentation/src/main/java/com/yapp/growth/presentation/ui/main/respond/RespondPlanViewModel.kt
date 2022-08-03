@@ -44,6 +44,7 @@ class RespondPlanViewModel @Inject constructor(
 
     init {
         loadRespondUsers(planId)
+        updateState { copy(planId = this@RespondPlanViewModel.planId) }
     }
 
     private fun loadRespondUsers(planId: Long) {
@@ -61,7 +62,11 @@ class RespondPlanViewModel @Inject constructor(
                     }
 
                     updateState {
-                        copy(loadState = LoadState.SUCCESS, timeTable = sliceTimeTable)
+                        copy(
+                            timeTable = sliceTimeTable,
+                            enablePrev = false,
+                            enableNext = originalTable.availableDates.size > 4,
+                            loadState = LoadState.SUCCESS,)
                     }
                 }
                 .onError {
@@ -85,7 +90,7 @@ class RespondPlanViewModel @Inject constructor(
         }
         val sliceCreateTimeTable: TimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
         updateState {
-            copy(timeTable = sliceCreateTimeTable)
+            copy(enablePrev = true, enableNext = toIndex < originalTable.availableDates.size, timeTable = sliceCreateTimeTable)
         }
     }
 
@@ -95,9 +100,9 @@ class RespondPlanViewModel @Inject constructor(
         val fromIndex = currentIndex.times(4)
         val toIndex = fromIndex.plus(4)
 
-        val temp: TimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
+        val sliceCreateTimeTable: TimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
         updateState {
-            copy(timeTable = temp)
+            copy(enablePrev = currentIndex != 0, enableNext = true, timeTable = sliceCreateTimeTable)
         }
     }
 

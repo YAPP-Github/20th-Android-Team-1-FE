@@ -31,6 +31,8 @@ class FixPlanContract {
         ),
         val currentClickTimeIndex: Pair<Int, Int> = -1 to -1,
         val currentClickUserData: List<User> = emptyList(),
+        val enablePrev: Boolean = false,
+        val enableNext: Boolean = false,
         val planId: Long = -1,
     ) : ViewState {
         enum class BottomSheet {

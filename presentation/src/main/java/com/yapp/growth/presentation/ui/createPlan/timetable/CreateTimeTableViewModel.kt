@@ -51,7 +51,12 @@ class CreateTimeTableViewModel @Inject constructor(
                 }
 
                 updateState {
-                    copy(loadState = LoadState.SUCCESS, createTimeTable = sliceCreateTimeTable)
+                    copy(
+                        createTimeTable = sliceCreateTimeTable,
+                        enablePrev = false,
+                        enableNext = originalTable.availableDates.size > 4,
+                        loadState = LoadState.SUCCESS,
+                    )
                 }
             }
             .onError {
@@ -74,7 +79,7 @@ class CreateTimeTableViewModel @Inject constructor(
         }
         val sliceCreateTimeTable: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
         updateState {
-            copy(createTimeTable = sliceCreateTimeTable)
+            copy(enablePrev = true, enableNext = toIndex < originalTable.availableDates.size, createTimeTable = sliceCreateTimeTable)
         }
     }
 
@@ -84,9 +89,9 @@ class CreateTimeTableViewModel @Inject constructor(
         val fromIndex = currentIndex.times(4)
         val toIndex = fromIndex.plus(4)
 
-        val temp: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
+        val sliceCreateTimeTable: CreateTimeTable = originalTable.copy(availableDates = originalTable.availableDates.subList(fromIndex, toIndex))
         updateState {
-            copy(createTimeTable = temp)
+            copy(enablePrev = currentIndex != 0, enableNext = true, createTimeTable = sliceCreateTimeTable)
         }
     }
 

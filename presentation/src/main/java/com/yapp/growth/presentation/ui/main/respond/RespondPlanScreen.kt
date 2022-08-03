@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -19,9 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.base.LoadState
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
+import com.yapp.growth.presentation.firebase.onDynamicLinkClick
 import com.yapp.growth.presentation.theme.Gray300
 import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanEvent
 import com.yapp.growth.presentation.ui.main.respond.RespondPlanContract.RespondPlanSideEffect
 
@@ -34,15 +35,18 @@ fun RespondPlanScreen(
 ) {
     val uiState by viewModel.viewState.collectAsState()
     val timeCheckedOfDays by viewModel.timeCheckedOfDays.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             PlanzBackAndClearAppBar(
                 title = if (uiState.loadState == LoadState.SUCCESS) uiState.timeTable.promisingName else stringResource(R.string.respond_plan_title),
                 onClickBackIcon = { viewModel.setEvent(RespondPlanEvent.OnClickBackButton) },
+                onClickShareIcon = { onDynamicLinkClick(context = context, id = uiState.planId.toString()) },
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 textIconColor = Gray500,
-                onClickClearIcon = { viewModel.setEvent(RespondPlanEvent.OnClickClearButton) }
+                onClickClearText = { viewModel.setEvent(RespondPlanEvent.OnClickClearButton) },
+                clickable = uiState.clickCount > 0,
             )
         }
     ) { padding ->
@@ -76,7 +80,9 @@ fun RespondPlanScreen(
                         PlanzPlanDateIndicator(
                             timeTable = uiState.timeTable,
                             onClickPreviousDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickPreviousDayButton) },
-                            onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) }
+                            onClickNextDayButton = { viewModel.setEvent(RespondPlanEvent.OnClickNextDayButton) },
+                            enablePrev = uiState.enablePrev,
+                            enableNext = uiState.enableNext,
                         )
 
                         PlanzPlanTimeTable(

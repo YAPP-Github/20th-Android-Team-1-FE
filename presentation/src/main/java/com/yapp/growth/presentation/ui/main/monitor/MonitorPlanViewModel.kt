@@ -45,6 +45,7 @@ class MonitorPlanViewModel @Inject constructor(
 
     init {
         loadRespondUsers(planId)
+        updateState { copy(planId = this@MonitorPlanViewModel.planId) }
     }
 
     private fun loadRespondUsers(planId: Long) {
@@ -63,6 +64,8 @@ class MonitorPlanViewModel @Inject constructor(
                     updateState { copy(
                             respondents = it.users,
                             timeTable = sliceTimeTable,
+                            enablePrev = false,
+                            enableNext = originalTable.availableDates.size > 4,
                             loadState = LoadState.SUCCESS
                     ) }
                 }
@@ -121,7 +124,7 @@ class MonitorPlanViewModel @Inject constructor(
             )
         )
         updateState {
-            copy(timeTable = sliceCreateTimeTable)
+            copy(enablePrev = true, enableNext = toIndex < originalTable.availableDates.size, timeTable = sliceCreateTimeTable)
         }
     }
 
@@ -132,14 +135,14 @@ class MonitorPlanViewModel @Inject constructor(
         val fromIndex = currentIndex.times(4)
         val toIndex = fromIndex.plus(4)
 
-        val temp: TimeTable = originalTable.copy(
+        val sliceCreateTimeTable: TimeTable = originalTable.copy(
             availableDates = originalTable.availableDates.subList(
                 fromIndex,
                 toIndex
             )
         )
         updateState {
-            copy(timeTable = temp)
+            copy(enablePrev = currentIndex != 0, enableNext = true, timeTable = sliceCreateTimeTable)
         }
     }
 
@@ -150,8 +153,16 @@ class MonitorPlanViewModel @Inject constructor(
     override fun handleEvents(event: MonitorPlanEvent) {
         when (event) {
             MonitorPlanEvent.OnClickBackButton -> sendEffect({ MonitorPlanSideEffect.NavigateToPreviousScreen })
-            MonitorPlanEvent.OnClickNextDayButton -> nextDay()
-            MonitorPlanEvent.OnClickPreviousDayButton -> previousDay()
+            MonitorPlanEvent.OnClickNextDayButton -> {
+                initCurrentClickTimeIndex()
+                nextDay()
+                sendEffect({ MonitorPlanSideEffect.HideBottomSheet })
+            }
+            MonitorPlanEvent.OnClickPreviousDayButton -> {
+                initCurrentClickTimeIndex()
+                previousDay()
+                sendEffect({ MonitorPlanSideEffect.HideBottomSheet })
+            }
             MonitorPlanEvent.OnClickExitIcon -> sendEffect({ MonitorPlanSideEffect.HideBottomSheet })
             is MonitorPlanEvent.OnClickTimeTable -> {
                 updateState { copy(

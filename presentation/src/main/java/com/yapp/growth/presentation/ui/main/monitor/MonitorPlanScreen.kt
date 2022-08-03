@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,11 +23,11 @@ import com.yapp.growth.domain.entity.TimeTable
 import com.yapp.growth.domain.entity.User
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
+import com.yapp.growth.presentation.firebase.onDynamicLinkClick
 import com.yapp.growth.presentation.theme.Gray800
 import com.yapp.growth.presentation.theme.Gray900
 import com.yapp.growth.presentation.theme.MainPurple900
 import com.yapp.growth.presentation.theme.PlanzTypography
-import com.yapp.growth.presentation.ui.main.fix.FixPlanContract
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.MonitorPlanEvent
 import com.yapp.growth.presentation.ui.main.monitor.MonitorPlanContract.MonitorPlanSideEffect
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ fun MonitorPlanScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current
     val sheetState = rememberBottomSheetState(
         initialValue = BottomSheetValue.Collapsed
     )
@@ -66,7 +68,8 @@ fun MonitorPlanScreen(
                     title = if (uiState.loadState == LoadState.SUCCESS) uiState.timeTable.promisingName else stringResource(
                         R.string.monitor_plan_title
                     ),
-                    onExitClick = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
+                    onClickShareIcon = { onDynamicLinkClick(context = context, id = uiState.planId.toString()) },
+                    onClickExitIcon = { viewModel.setEvent(MonitorPlanEvent.OnClickBackButton) },
                     isLoading = uiState.loadState == LoadState.LOADING
                 )
             }
@@ -107,7 +110,9 @@ fun MonitorPlanScreen(
                             PlanzPlanDateIndicator(
                                 timeTable = uiState.timeTable,
                                 onClickPreviousDayButton = { viewModel.setEvent(MonitorPlanEvent.OnClickPreviousDayButton) },
-                                onClickNextDayButton = { viewModel.setEvent(MonitorPlanEvent.OnClickNextDayButton) }
+                                onClickNextDayButton = { viewModel.setEvent(MonitorPlanEvent.OnClickNextDayButton) },
+                                enablePrev = uiState.enablePrev,
+                                enableNext = uiState.enableNext,
                             )
 
                             FixPlanTimeTable(
