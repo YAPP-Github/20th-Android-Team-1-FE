@@ -44,6 +44,7 @@ class RespondPlanViewModel @Inject constructor(
 
     init {
         loadRespondUsers(planId)
+        updateState { copy(planId = this@RespondPlanViewModel.planId) }
     }
 
     private fun loadRespondUsers(planId: Long) {
