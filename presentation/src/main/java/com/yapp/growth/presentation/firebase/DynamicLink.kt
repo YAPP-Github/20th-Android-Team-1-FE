@@ -7,6 +7,7 @@ import android.net.Uri
 import com.google.firebase.dynamiclinks.ktx.*
 import com.google.firebase.ktx.Firebase
 import com.yapp.growth.presentation.BuildConfig
+import com.yapp.growth.presentation.R
 
 const val DYNAMIC_LINK_PARAM = "dynamic_link_param"
 const val PLAN_ID_KEY_NAME = "planId"
@@ -21,11 +22,11 @@ fun getDeepLink(scheme: String, key: String?, id: String?): Uri {
 
 fun onDynamicLinkClick(
     context: Context,
-    scheme: SchemeType,
+    scheme: SchemeType = SchemeType.RESPOND,
     id: String? = null,
-    thumbNailTitle: String,
-    thumbNailDescription: String,
-    thumbNailImageUrl: String,
+    thumbNailTitle: String = context.getString(R.string.share_thumbnail_title),
+    thumbNailDescription: String = context.getString(R.string.share_thumbnail_description),
+    thumbNailImageUrl: String = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url),
 ) {
     Firebase.dynamicLinks.shortLinkAsync {
         link = getDeepLink(scheme.name, scheme.key, id)
