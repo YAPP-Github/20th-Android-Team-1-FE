@@ -28,42 +28,50 @@ fun LoginScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 24.dp, top = 54.dp)
+                .weight(1f)
+                .padding(top = 20.dp, bottom = 32.dp)
         ) {
-            Introduce(onClickNonLogin = onClickNonLogin)
-        }
-
-        PlanzImage()
-
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
+            Introduce(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 36.dp)
-                    .align(Alignment.BottomCenter),
-            ) {
-                KakaoLoginButton(onClickKakaoLogin = onClickKakaoLogin)
-            }
+                    .padding(horizontal = 20.dp),
+                onClickNonLogin = onClickNonLogin
+            )
+
+            Image(
+                modifier = Modifier.fillMaxWidth(),
+                painter = painterResource(id = R.drawable.ic_login_image),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, bottom = 36.dp),
+        ) {
+            KakaoLoginButton(onClickKakaoLogin = onClickKakaoLogin)
         }
 
     }
 }
 
 @Composable
-fun Introduce(onClickNonLogin: () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+fun Introduce(modifier: Modifier, onClickNonLogin: () -> Unit) {
+    Column(modifier = modifier) {
         Text(
             modifier = Modifier
                 .align(Alignment.End)
                 .clickable {
-                   onClickNonLogin()
+                    onClickNonLogin()
                 },
             text = "둘러보기",
             textDecoration = TextDecoration.Underline,
             style = PlanzTypography.body2,
         )
 
+        Spacer(modifier = Modifier.height(6.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -89,22 +97,6 @@ fun Introduce(onClickNonLogin: () -> Unit) {
                 .padding(top = 14.dp),
             text = stringResource(id = R.string.login_introduce_text),
             style = PlanzTypography.h1
-        )
-    }
-}
-
-@Composable
-fun PlanzImage() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 30.dp, bottom = 54.dp)
-    ) {
-        Image(
-            modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.ic_login_image),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth
         )
     }
 }
