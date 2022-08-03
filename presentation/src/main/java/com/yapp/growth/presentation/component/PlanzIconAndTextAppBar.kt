@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,17 +30,21 @@ fun PlanzBackAndClearAppBar(
     modifier: Modifier = Modifier,
     title: String,
     onClickBackIcon: () -> Unit,
+    onClickUserIcon: () -> Unit,
     textIconTitle: String,
     textIconColor: Color,
-    onClickClearIcon: () -> Unit,
+    onClickClearText: () -> Unit,
+    clickable: Boolean,
 ) {
     PlanzIconAndTextAppBar(
         title = title,
         menu = PlanzAppBarMenu.BACK,
-        onClickIcon = onClickBackIcon,
+        onClickNavigationIcon = onClickBackIcon,
+        actionMenu = PlanzAppBarMenu.USER,
+        onClickActionIcon = onClickUserIcon,
         textIconTitle = textIconTitle,
-        textIconColor = textIconColor,
-        onclickTextIcon = onClickClearIcon
+        textIconColor = if (clickable) MainPurple900 else textIconColor,
+        onClickText = onClickClearText
     )
 }
 
@@ -48,10 +53,12 @@ private fun PlanzIconAndTextAppBar(
     modifier: Modifier = Modifier,
     title: String,
     menu: PlanzAppBarMenu,
-    onClickIcon: () -> Unit,
+    onClickNavigationIcon: () -> Unit,
+    actionMenu: PlanzAppBarMenu,
+    onClickActionIcon: () -> Unit,
     textIconTitle: String,
     textIconColor: Color,
-    onclickTextIcon: () -> Unit
+    onClickText: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -67,7 +74,7 @@ private fun PlanzIconAndTextAppBar(
             modifier = Modifier
                 .padding(start = menu.horizontalPadding)
                 .clip(RoundedCornerShape(30.dp))
-                .clickable { onClickIcon() }
+                .clickable { onClickNavigationIcon() }
                 .align(Alignment.CenterStart),
         )
 
@@ -84,15 +91,30 @@ private fun PlanzIconAndTextAppBar(
             overflow = TextOverflow.Ellipsis
         )
 
-        Text(
-            text = textIconTitle,
-            style = PlanzTypography.caption,
-            color = textIconColor,
+        Row(
             modifier = Modifier
-                .padding(end = 20.dp)
                 .align(Alignment.CenterEnd)
-                .clickable { onclickTextIcon() }
-        )
+                .padding(end = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+
+            Icon(
+                modifier = Modifier.clickable { onClickActionIcon() },
+                painter = painterResource(actionMenu.icon),
+                tint = Color.Unspecified,
+                contentDescription = stringResource(menu.contentDescription),
+            )
+
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .clickable { onClickText() },
+                text = textIconTitle,
+                style = PlanzTypography.caption,
+                color = textIconColor,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
@@ -102,9 +124,11 @@ fun PlanzIconAndTextAppBarPreview() {
     PlanzIconAndTextAppBar(
         title = "약속응답",
         menu = PlanzAppBarMenu.BACK,
-        onClickIcon = {},
+        onClickNavigationIcon = {},
+        onClickActionIcon = {},
+        actionMenu = PlanzAppBarMenu.USER,
         textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
         textIconColor = MainPurple900,
-        onclickTextIcon = {}
+        onClickText = {}
     )
 }
