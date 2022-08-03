@@ -93,7 +93,16 @@ fun TitleScreen(
                     }
                 }
                 LoadState.LOADING -> PlanzLoading()
-                LoadState.ERROR -> PlanzError(retryVisible = true)
+                LoadState.ERROR -> PlanzError(
+                    retryVisible = true,
+                    onClickRetry = {
+                        viewModel.setEvent(
+                            TitleEvent.OnClickErrorRetryButton(
+                                sharedViewModel.viewState.value.category?.id ?: 0
+                            )
+                        )
+                    }
+                )
             }
 
             PlanzButtonWithBack(

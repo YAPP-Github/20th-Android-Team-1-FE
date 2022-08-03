@@ -29,5 +29,6 @@ class TitleContract {
         object OnClickExitButton : TitleEvent()
         object OnClickNextButton : TitleEvent()
         object OnClickBackButton : TitleEvent()
+        data class OnClickErrorRetryButton(val categoryId: Int) : TitleEvent()
     }
 }
