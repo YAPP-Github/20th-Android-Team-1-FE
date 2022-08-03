@@ -31,11 +31,6 @@ fun Date.toCalculateDiffDay(other: Date): Long {
     return (other.time - this.time) / (60 * 60 * 24 * 1000)
 }
 
-fun String.toDayAndHour(): String {
-    val dateTimeFormat = PARSE_DATE_FORMAT.parse(this) as Date
-    return SimpleDateFormat("M월 d일 aa h시", Locale.KOREA).format(dateTimeFormat)
-}
-
 fun String.toDate(): Date {
     return PARSE_DATE_FORMAT.parse(this) ?: Date()
 }

@@ -4,15 +4,41 @@ import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,14 +59,27 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCalendar
 import com.yapp.growth.presentation.component.PlanzCalendarSelectMode
 import com.yapp.growth.presentation.component.PlanzError
+import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.component.PlanzLoading
-import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.theme.BackgroundColor1
+import com.yapp.growth.presentation.theme.Gray200
+import com.yapp.growth.presentation.theme.Gray500
+import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainGradient
+import com.yapp.growth.presentation.theme.MainPurple300
+import com.yapp.growth.presentation.theme.MainPurple900
+import com.yapp.growth.presentation.theme.PlanzTypography
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.MainContract
 import com.yapp.growth.presentation.ui.main.MainViewModel
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeEvent
 import com.yapp.growth.presentation.ui.main.home.HomeContract.HomeSideEffect
-import com.yapp.growth.presentation.util.*
+import com.yapp.growth.presentation.util.advancedShadow
+import com.yapp.growth.presentation.util.composableActivityViewModel
+import com.yapp.growth.presentation.util.toDate
+import com.yapp.growth.presentation.util.toHour
+import com.yapp.growth.presentation.util.toHourAndMinute
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -56,6 +95,8 @@ fun HomeScreen(
     val viewState by viewModel.viewState.collectAsState()
     val currentDate by viewModel.currentDate.collectAsState()
     val context = LocalContext.current as Activity
+    val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
         viewModel.setEvent(HomeEvent.InitHomeScreen)
@@ -64,6 +105,11 @@ fun HomeScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                is HomeSideEffect.ShowSnackBar -> {
+                    coroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(effect.msg)
+                    }
+                }
                 is HomeSideEffect.MoveToLogin -> {
                     LoginActivity.startActivity(context, null)
                 }
@@ -111,6 +157,11 @@ fun HomeScreen(
                     )
                 },
                 modifier = Modifier.fillMaxSize(),
+                snackbarHost = { snackbarHostState ->
+                    SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                        PlanzErrorSnackBar(message = snackbarData.message)
+                    }
+                }
             ) { padding ->
                 Column(
                     modifier = Modifier
@@ -136,6 +187,7 @@ fun HomeScreen(
                     HomeMonthlyPlan(
                         loadState = viewState.monthlyPlanLoadState,
                         expanded = viewState.isMonthlyPlanExpanded,
+                        calendarPlans = viewState.calendarPlans,
                         monthlyPlans = viewState.monthlyPlans,
                         mode = viewState.monthlyPlanMode,
                         currentDate = currentDate,
@@ -158,31 +210,38 @@ private fun HomeUserProfile(
     userName: String,
     onUserIconClick: () -> Unit,
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .height(60.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart
     ) {
-        IconButton(
-            modifier = Modifier.size(32.dp),
-            onClick = { onUserIconClick() }) {
+        Row(
+            modifier = Modifier
+                .height(44.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onUserIconClick() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.width(8.dp))
             Image(
                 painter = painterResource(R.drawable.ic_default_user_image_32),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
+                    .size(32.dp)
                     .clip(CircleShape)
                     .border(1.dp, MainPurple900, CircleShape),
                 contentDescription = null,
             )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = userName,
+                style = PlanzTypography.h3,
+                color = Gray900,
+            )
         }
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = userName,
-            style = PlanzTypography.h3,
-            color = Gray900,
-        )
     }
 }
 
@@ -333,6 +392,7 @@ fun HomeInduceLogin(
 fun HomeMonthlyPlan(
     loadState: LoadState,
     expanded: Boolean,
+    calendarPlans: List<Plan.FixedPlan>,
     monthlyPlans: List<Plan.FixedPlan>,
     mode: HomeContract.MonthlyPlanModeState,
     currentDate: CalendarDay,
@@ -427,7 +487,7 @@ fun HomeMonthlyPlan(
                         if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
                             HomeCalendar(
                                 currentDate = currentDate,
-                                monthlyPlans = monthlyPlans,
+                                calendarPlans = calendarPlans,
                                 onDateClick = onDateClick
                             )
                         } else {
@@ -466,11 +526,11 @@ fun HomeMonthlyPlan(
 @Composable
 fun HomeCalendar(
     currentDate: CalendarDay,
-    monthlyPlans: List<Plan.FixedPlan>,
+    calendarPlans: List<Plan.FixedPlan>,
     onDateClick: (CalendarDay) -> Unit,
 ) {
 
-    val monthlyPlanDates = (monthlyPlans.groupingBy {
+    val calendarPlanDates = (calendarPlans.groupingBy {
         CalendarDay.from(it.date.toDate())
     }.eachCount().filter { it.value >= 1 })
 
@@ -480,7 +540,7 @@ fun HomeCalendar(
         onDateSelectedListener = { widget, date, selected ->
             onDateClick(date)
         },
-        monthlyDates = monthlyPlanDates
+        monthlyDates = calendarPlanDates
     )
 }
 

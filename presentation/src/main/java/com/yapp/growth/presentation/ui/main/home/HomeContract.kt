@@ -14,7 +14,7 @@ class HomeContract {
         val monthlyPlanLoadState: LoadState = LoadState.LOADING,
         val loginState: LoginState = LoginState.LOGIN,
         val userName: String = "",
-        val allPlans: List<Plan.FixedPlan> = emptyList(),
+        val calendarPlans: List<Plan.FixedPlan> = emptyList(),
         val todayPlans: List<Plan.FixedPlan> = emptyList(),
         val monthlyPlans: List<Plan.FixedPlan> = emptyList(),
         val selectDayPlans: List<Plan.FixedPlan> = emptyList(),
@@ -25,6 +25,7 @@ class HomeContract {
     ) : ViewState
 
     sealed class HomeSideEffect : ViewSideEffect {
+        data class ShowSnackBar(val msg: String) : HomeSideEffect()
         object MoveToLogin : HomeSideEffect()
         object NavigateToMyPageScreen : HomeSideEffect()
         data class NavigateDetailPlanScreen(val planId: Int) : HomeSideEffect()
