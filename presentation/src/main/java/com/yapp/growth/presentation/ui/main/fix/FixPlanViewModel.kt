@@ -53,6 +53,8 @@ class FixPlanViewModel @Inject constructor(
                         respondents = it.users,
                         loadState = LoadState.SUCCESS,
                         timeTable = sliceTimeTable,
+                        enablePrev = false,
+                        enableNext = originalTable.availableDates.size > 4
                     )
                 }
             }
@@ -81,6 +83,7 @@ class FixPlanViewModel @Inject constructor(
         val fromIndex = currentIndex.times(4)
         if (fromIndex >= originalTable.availableDates.size) {
             currentIndex -= 1
+            updateState { copy(enableNext = false) }
             return@launch
         }
 
@@ -96,7 +99,7 @@ class FixPlanViewModel @Inject constructor(
             )
         )
         updateState {
-            copy(timeTable = sliceCreateTimeTable)
+            copy(enablePrev = true, enableNext = toIndex < originalTable.availableDates.size, timeTable = sliceCreateTimeTable)
         }
     }
 
@@ -106,14 +109,14 @@ class FixPlanViewModel @Inject constructor(
         val fromIndex = currentIndex.times(4)
         val toIndex = fromIndex.plus(4)
 
-        val temp: TimeTable = originalTable.copy(
+        val sliceCreateTimeTable: TimeTable = originalTable.copy(
             availableDates = originalTable.availableDates.subList(
                 fromIndex,
                 toIndex
             )
         )
         updateState {
-            copy(timeTable = temp)
+            copy(enablePrev = currentIndex != 0, enableNext = true, timeTable = sliceCreateTimeTable)
         }
     }
 

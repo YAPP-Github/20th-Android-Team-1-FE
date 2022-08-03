@@ -108,7 +108,9 @@ fun FixPlanScreen(
                             PlanzPlanDateIndicator(
                                 timeTable = uiState.timeTable,
                                 onClickPreviousDayButton = { viewModel.setEvent(FixPlanEvent.OnClickPreviousDayButton) },
-                                onClickNextDayButton = { viewModel.setEvent(FixPlanEvent.OnClickNextDayButton) }
+                                onClickNextDayButton = { viewModel.setEvent(FixPlanEvent.OnClickNextDayButton) },
+                                enablePrev = uiState.enablePrev,
+                                enableNext = uiState.enableNext,
                             )
 
                             FixPlanTimeTable(
