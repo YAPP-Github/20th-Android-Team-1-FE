@@ -1,7 +1,10 @@
 package com.yapp.growth.presentation.ui.main.manage
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +37,6 @@ import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
 import com.yapp.growth.presentation.component.PlanzError
-import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.MainContract
 import com.yapp.growth.presentation.ui.main.MainViewModel
