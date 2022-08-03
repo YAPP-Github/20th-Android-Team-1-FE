@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzBasicButton
 import com.yapp.growth.presentation.theme.Gray900
@@ -76,7 +75,7 @@ fun RespondPlanRejectScreen(
                 .padding(start = 16.dp, end = 16.dp, bottom = 32.dp)
         ) {
             PlanzBasicButton(modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.respond_plan_reject_button_text),
+                text = stringResource(id = R.string.respond_common_button_text),
                 onClick = navigateToPreviousScreen
             )
         }

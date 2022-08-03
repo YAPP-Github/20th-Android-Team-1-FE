@@ -53,8 +53,8 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(context, MainActivity::class.java)
             if (uri != null) {
                 intent.putExtra(DYNAMIC_LINK_PARAM, uri)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_NEW_TASK
             }
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         }
     }

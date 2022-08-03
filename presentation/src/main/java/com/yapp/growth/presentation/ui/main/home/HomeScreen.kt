@@ -66,7 +66,6 @@ fun HomeScreen(
             when (effect) {
                 is HomeSideEffect.MoveToLogin -> {
                     LoginActivity.startActivity(context, null)
-                    context.finish()
                 }
                 is HomeSideEffect.NavigateToMyPageScreen -> {
                     navigateToMyPageScreen()

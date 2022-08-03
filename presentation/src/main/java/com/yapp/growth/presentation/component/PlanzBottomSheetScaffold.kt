@@ -48,7 +48,7 @@ fun PlanzBottomSheetScaffold(
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
-            .height(20.dp)
+            .height(24.dp)
             .background(color = Color.White)
     )
 
