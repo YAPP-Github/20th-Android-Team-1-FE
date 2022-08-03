@@ -17,8 +17,9 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -34,7 +35,9 @@ fun PlanzPlanDateIndicator(
     modifier: Modifier = Modifier,
     timeTable: TimeTable,
     onClickNextDayButton: () -> Unit,
-    onClickPreviousDayButton: () -> Unit
+    onClickPreviousDayButton: () -> Unit,
+    enablePrev: Boolean,
+    enableNext: Boolean,
 ) {
 
     Box(
@@ -59,9 +62,11 @@ fun PlanzPlanDateIndicator(
                     bottom.linkTo(parent.bottom)
                 }) {
 
-                PlanzPlanPreviousDayButton(onClick = {
-                    onClickPreviousDayButton()
-                })
+                PlanzPlanPreviousDayButton(
+                    enablePrev = enablePrev,
+                    onClick = {
+                        onClickPreviousDayButton()
+                    })
             }
 
             LazyRow(
@@ -90,9 +95,11 @@ fun PlanzPlanDateIndicator(
                     bottom.linkTo(parent.bottom)
                 }) {
 
-                PlanzPlanNextDayButton(onClick = {
-                    onClickNextDayButton()
-                })
+                PlanzPlanNextDayButton(
+                    enableNext = enableNext,
+                    onClick = {
+                        onClickNextDayButton()
+                    })
             }
         }
     }
@@ -104,7 +111,9 @@ fun CreateTimeTableDateIndicator(
     modifier: Modifier = Modifier,
     createTimeTable: CreateTimeTable,
     onClickNextDayButton: () -> Unit,
-    onClickPreviousDayButton: () -> Unit
+    onClickPreviousDayButton: () -> Unit,
+    enablePrev: Boolean,
+    enableNext: Boolean,
 ) {
     val borderSize = 1.dp
     val borderColor = Gray300
@@ -136,9 +145,11 @@ fun CreateTimeTableDateIndicator(
                     bottom.linkTo(parent.bottom)
                 }) {
 
-                PlanzPlanPreviousDayButton(onClick = {
-                    onClickPreviousDayButton()
-                })
+                PlanzPlanPreviousDayButton(
+                    enablePrev = enablePrev,
+                    onClick = {
+                        onClickPreviousDayButton()
+                    })
             }
 
             LazyRow(
@@ -167,9 +178,11 @@ fun CreateTimeTableDateIndicator(
                     bottom.linkTo(parent.bottom)
                 }) {
 
-                PlanzPlanNextDayButton(onClick = {
-                    onClickNextDayButton()
-                })
+                PlanzPlanNextDayButton(
+                    enableNext = enableNext,
+                    onClick = {
+                        onClickNextDayButton()
+                    })
             }
         }
     }
@@ -177,9 +190,9 @@ fun CreateTimeTableDateIndicator(
 }
 
 @Composable
-fun PlanzPlanPreviousDayButton(onClick: () -> Unit) {
+fun PlanzPlanPreviousDayButton(enablePrev: Boolean, onClick: () -> Unit) {
     Icon(
-        painter = painterResource(id = R.drawable.ic_arrow_box_left_24),
+        imageVector = if (enablePrev) ImageVector.vectorResource(R.drawable.ic_indicator_left_24) else ImageVector.vectorResource(R.drawable.ic_indicator_left_disable_24),
         contentDescription = stringResource(id = R.string.icon_arrow_box_left_24_content_description),
         tint = Color.Unspecified,
         modifier = Modifier.clickable {
@@ -189,9 +202,9 @@ fun PlanzPlanPreviousDayButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun PlanzPlanNextDayButton(onClick: () -> Unit) {
+fun PlanzPlanNextDayButton(enableNext: Boolean, onClick: () -> Unit) {
     Icon(
-        painter = painterResource(id = R.drawable.ic_arrow_box_right_24),
+        imageVector = if (enableNext) ImageVector.vectorResource(R.drawable.ic_indicator_right_24) else ImageVector.vectorResource(R.drawable.ic_indicator_right_disable_24),
         contentDescription = stringResource(id = R.string.icon_arrow_box_right_24_content_description),
         tint = Color.Unspecified,
         modifier = Modifier.clickable {
@@ -236,14 +249,18 @@ fun CreateTimeTableDayText(date: String) {
             text = date.toDayOfWeek(),
             color = Gray800,
             style = PlanzTypography.caption,
-            modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterHorizontally)
         )
 
         Text(
             text = date.toDay(),
             color = MainPurple900,
             style = PlanzTypography.body2,
-            modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterHorizontally)
         )
     }
 }
