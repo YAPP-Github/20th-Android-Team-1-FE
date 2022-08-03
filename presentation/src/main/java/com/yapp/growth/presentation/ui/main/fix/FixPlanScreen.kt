@@ -71,13 +71,7 @@ fun FixPlanScreen(
                     onClickBackIcon = { viewModel.setEvent(FixPlanEvent.OnClickBackButton) },
                     onClickUserIcon = { viewModel.setEvent(FixPlanEvent.OnClickUserIcon)},
                     onClickShareIcon = {
-                        onDynamicLinkClick(
-                            context, SchemeType.RESPOND,
-                            uiState.planId.toString(),
-                            thumbNailTitle = context.getString(R.string.share_thumbnail_title),
-                            thumbNailDescription = context.getString(R.string.share_thumbnail_description),
-                            thumbNailImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
-                        )
+                        onDynamicLinkClick(context = context, id = uiState.planId.toString())
                     }
                 )
             }
