@@ -29,7 +29,8 @@ fun RespondPlanCompleteScreen(
             .padding(top = 25.dp)
     ) {
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
         ) {
             Text(
                 modifier = Modifier.padding(start = 20.dp),
@@ -57,7 +58,9 @@ fun RespondPlanCompleteScreen(
             }
 
             Image(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 40.dp),
                 painter = painterResource(id = R.drawable.icon_respond_plan_complete),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth

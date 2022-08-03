@@ -37,7 +37,7 @@ fun CreatePlanScreen(
     var statusBarColor: Color by remember { mutableStateOf(Color.White) }
 
     statusBarColor = when (currentDestination?.route) {
-        CreatePlanScreenRoute.SHARE.route -> {
+        CreatePlanScreenRoute.SHARE.route.plus("/{planId}") -> {
             BackgroundColor1
         }
         else -> {

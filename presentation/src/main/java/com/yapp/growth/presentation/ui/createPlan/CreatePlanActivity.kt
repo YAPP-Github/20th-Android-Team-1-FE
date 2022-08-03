@@ -17,20 +17,6 @@ class CreatePlanActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val systemUiController = rememberSystemUiController()
-            val useDarkIcons = MaterialTheme.colors.isLight
-
-            SideEffect {
-                systemUiController.setSystemBarsColor(
-                    color = Color.White,
-                    darkIcons = useDarkIcons
-                )
-
-                systemUiController.setNavigationBarColor(
-                    color = BackgroundColor1
-                )
-            }
-
             PlanzTheme {
                 CreatePlanScreen(
                     exitCreatePlan = { exitCreatePlan() },
