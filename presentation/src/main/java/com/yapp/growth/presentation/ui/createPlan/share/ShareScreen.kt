@@ -6,10 +6,32 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +60,14 @@ import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzErrorSnackBar
 import com.yapp.growth.presentation.component.PlanzSnackBar
 import com.yapp.growth.presentation.firebase.PLAN_ID_KEY_NAME
-import com.yapp.growth.presentation.theme.*
+import com.yapp.growth.presentation.theme.BackgroundColor1
+import com.yapp.growth.presentation.theme.CoolGray500
+import com.yapp.growth.presentation.theme.Gray200
+import com.yapp.growth.presentation.theme.Gray800
+import com.yapp.growth.presentation.theme.Gray900
+import com.yapp.growth.presentation.theme.MainPurple900
+import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.SubYellow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -59,8 +88,15 @@ fun ShareScreen(
         snackbarHost = { snackbarHostState ->
             SnackbarHost(hostState = snackbarHostState) { snackbarData ->
                 when (viewState.snackBarType) {
-                    ShareContract.ShareViewState.SnackBarType.SUCCESS -> PlanzSnackBar(message = snackbarData.message)
-                    else -> PlanzErrorSnackBar(message = snackbarData.message)
+                    ShareContract.ShareViewState.SnackBarType.SUCCESS ->
+                        PlanzSnackBar(
+                            message = snackbarData.message,
+                            bottomPadding = 156
+                        )
+                    else -> PlanzErrorSnackBar(
+                        message = snackbarData.message,
+                        bottomPadding = 156
+                    )
                 }
             }
         }

@@ -149,6 +149,7 @@ fun HomeScreen(
         }
         LoadState.SUCCESS -> {
             Scaffold(
+                scaffoldState = scaffoldState,
                 backgroundColor = BackgroundColor1,
                 topBar = {
                     HomeUserProfile(
@@ -159,7 +160,10 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize(),
                 snackbarHost = { snackbarHostState ->
                     SnackbarHost(hostState = snackbarHostState) { snackbarData ->
-                        PlanzErrorSnackBar(message = snackbarData.message)
+                        PlanzErrorSnackBar(
+                            message = snackbarData.message,
+                            bottomPadding = 32
+                        )
                     }
                 }
             ) { padding ->
