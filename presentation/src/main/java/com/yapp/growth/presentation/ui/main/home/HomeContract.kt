@@ -25,6 +25,7 @@ class HomeContract {
     ) : ViewState
 
     sealed class HomeSideEffect : ViewSideEffect {
+        data class ShowSnackBar(val msg: String) : HomeSideEffect()
         object MoveToLogin : HomeSideEffect()
         object NavigateToMyPageScreen : HomeSideEffect()
         data class NavigateDetailPlanScreen(val planId: Int) : HomeSideEffect()

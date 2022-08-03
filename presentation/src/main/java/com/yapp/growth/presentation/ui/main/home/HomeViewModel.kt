@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -165,6 +164,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
             .onError {
+                sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                 updateState {
                     copy(
                         todayPlanLoadState = LoadState.ERROR,
@@ -195,29 +195,29 @@ class HomeViewModel @Inject constructor(
                 // 달력에 표현할 계획들은 바로 이전, 이후의 달도 함께 포함되어야 함
                 getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
                     .onSuccess { plans ->
-                        Timber.d("current")
                         updateState { copy(monthlyPlans = plans) }
                         calendarPlans += plans
                     }
                     .onError {
+                        sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
                         return@collectLatest
                     }
                 getMonthlyFixedPlansUseCase.invoke(previousMonth.toFormatDate())
                     .onSuccess { plans ->
-                        Timber.d("previous")
                         calendarPlans += plans
                     }
                     .onError {
+                        sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
                         return@collectLatest
                     }
                 getMonthlyFixedPlansUseCase.invoke(nextMonth.toFormatDate())
                     .onSuccess { plans ->
-                        Timber.d("next")
                         calendarPlans += plans
                     }
                     .onError {
+                        sendEffect({ HomeSideEffect.ShowSnackBar(resourcesProvider.getString(R.string.home_error_message)) })
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
                         return@collectLatest
                     }
