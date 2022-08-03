@@ -137,6 +137,7 @@ fun HomeScreen(
                     HomeMonthlyPlan(
                         loadState = viewState.monthlyPlanLoadState,
                         expanded = viewState.isMonthlyPlanExpanded,
+                        calendarPlans = viewState.calendarPlans,
                         monthlyPlans = viewState.monthlyPlans,
                         mode = viewState.monthlyPlanMode,
                         currentDate = currentDate,
@@ -341,6 +342,7 @@ fun HomeInduceLogin(
 fun HomeMonthlyPlan(
     loadState: LoadState,
     expanded: Boolean,
+    calendarPlans: List<Plan.FixedPlan>,
     monthlyPlans: List<Plan.FixedPlan>,
     mode: HomeContract.MonthlyPlanModeState,
     currentDate: CalendarDay,
@@ -435,7 +437,7 @@ fun HomeMonthlyPlan(
                         if (mode == HomeContract.MonthlyPlanModeState.CALENDAR) {
                             HomeCalendar(
                                 currentDate = currentDate,
-                                monthlyPlans = monthlyPlans,
+                                calendarPlans = calendarPlans,
                                 onDateClick = onDateClick
                             )
                         } else {
@@ -474,11 +476,11 @@ fun HomeMonthlyPlan(
 @Composable
 fun HomeCalendar(
     currentDate: CalendarDay,
-    monthlyPlans: List<Plan.FixedPlan>,
+    calendarPlans: List<Plan.FixedPlan>,
     onDateClick: (CalendarDay) -> Unit,
 ) {
 
-    val monthlyPlanDates = (monthlyPlans.groupingBy {
+    val calendarPlanDates = (calendarPlans.groupingBy {
         CalendarDay.from(it.date.toDate())
     }.eachCount().filter { it.value >= 1 })
 
@@ -488,7 +490,7 @@ fun HomeCalendar(
         onDateSelectedListener = { widget, date, selected ->
             onDateClick(date)
         },
-        monthlyDates = monthlyPlanDates
+        monthlyDates = calendarPlanDates
     )
 }
 

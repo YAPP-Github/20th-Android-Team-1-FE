@@ -5,6 +5,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.yapp.growth.LoginSdk
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.base.LoadState
+import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
@@ -173,22 +174,60 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchMonthlyPlans() {
-        if(!isSubscribed) {
+        if (!isSubscribed) {
             isSubscribed = true
+
             currentDate.collectLatest { currentDate ->
+                val calendarPlans = emptyList<Plan.FixedPlan>().toMutableList()
+
+                val month = currentDate.month
+
+                val previousMonth =
+                    if ((month - 1) == -1) CalendarDay.from(currentDate.year - 1, 11, 1)
+                    else CalendarDay.from(currentDate.year, currentDate.month - 1, 1)
+
+                val nextMonth =
+                    if ((month + 1) == 12) CalendarDay.from(currentDate.year + 1, 0, 1)
+                    else CalendarDay.from(currentDate.year, currentDate.month + 1, 1)
+
                 updateState { copy(monthlyPlanLoadState = LoadState.LOADING) }
+
+                // 달력에 표현할 계획들은 바로 이전, 이후의 달도 함께 포함되어야 함
                 getMonthlyFixedPlansUseCase.invoke(currentDate.toFormatDate())
                     .onSuccess { plans ->
-                        updateState {
-                            copy(
-                                monthlyPlanLoadState = LoadState.SUCCESS,
-                                monthlyPlans = plans,
-                            )
-                        }
+                        Timber.d("current")
+                        updateState { copy(monthlyPlans = plans) }
+                        calendarPlans += plans
                     }
                     .onError {
                         updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
+                        return@collectLatest
                     }
+                getMonthlyFixedPlansUseCase.invoke(previousMonth.toFormatDate())
+                    .onSuccess { plans ->
+                        Timber.d("previous")
+                        calendarPlans += plans
+                    }
+                    .onError {
+                        updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
+                        return@collectLatest
+                    }
+                getMonthlyFixedPlansUseCase.invoke(nextMonth.toFormatDate())
+                    .onSuccess { plans ->
+                        Timber.d("next")
+                        calendarPlans += plans
+                    }
+                    .onError {
+                        updateState { copy(monthlyPlanLoadState = LoadState.ERROR) }
+                        return@collectLatest
+                    }
+
+                updateState {
+                    copy(
+                        monthlyPlanLoadState = LoadState.SUCCESS,
+                        calendarPlans = calendarPlans,
+                    )
+                }
             }
         }
     }
@@ -196,7 +235,7 @@ class HomeViewModel @Inject constructor(
     private fun updateSelectionDaysState(selectionDay: CalendarDay) {
         updateState { copy(selectionDay = selectionDay) }
 
-        val selectionDays = viewState.value.monthlyPlans.filter {
+        val selectionDays = viewState.value.calendarPlans.filter {
             selectionDay.date.toFormatDate() == it.date.toDate().toFormatDate()
         }
 
@@ -240,10 +279,15 @@ class HomeViewModel @Inject constructor(
 
     // TODO : 임시, 추후 로직 수정 필요!
     private fun updateInitDateState() {
-        if(_currentDate.value.day > 10) {
-            _currentDate.value = CalendarDay.from(_currentDate.value.year, _currentDate.value.month, 1)
+        if (_currentDate.value.day > 10) {
+            _currentDate.value =
+                CalendarDay.from(_currentDate.value.year, _currentDate.value.month, 1)
         } else {
-            _currentDate.value = CalendarDay.from(_currentDate.value.year, _currentDate.value.month, _currentDate.value.day + 1)
+            _currentDate.value = CalendarDay.from(
+                _currentDate.value.year,
+                _currentDate.value.month,
+                _currentDate.value.day + 1
+            )
         }
     }
 }
