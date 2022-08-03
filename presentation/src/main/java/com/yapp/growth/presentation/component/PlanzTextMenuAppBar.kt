@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +29,7 @@ fun PlanzBackAndClearAppBar(
     modifier: Modifier = Modifier,
     title: String,
     onClickBackIcon: () -> Unit,
-    onClickUserIcon: () -> Unit,
+    onClickShareIcon: () -> Unit,
     textIconTitle: String,
     textIconColor: Color,
     onClickClearText: () -> Unit,
@@ -41,7 +40,7 @@ fun PlanzBackAndClearAppBar(
         menu = PlanzAppBarMenu.BACK,
         onClickNavigationIcon = onClickBackIcon,
         actionMenu = PlanzAppBarMenu.SHARE,
-        onClickActionIcon = onClickUserIcon,
+        onClickActionIcon = onClickShareIcon,
         textIconTitle = textIconTitle,
         textIconColor = if (clickable) MainPurple900 else textIconColor,
         onClickText = onClickClearText

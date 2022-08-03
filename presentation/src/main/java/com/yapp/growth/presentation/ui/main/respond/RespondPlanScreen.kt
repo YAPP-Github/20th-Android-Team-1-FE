@@ -18,10 +18,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yapp.growth.base.LoadState
-import com.yapp.growth.presentation.BuildConfig
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.*
-import com.yapp.growth.presentation.firebase.SchemeType
 import com.yapp.growth.presentation.firebase.onDynamicLinkClick
 import com.yapp.growth.presentation.theme.Gray300
 import com.yapp.growth.presentation.theme.Gray500
@@ -44,13 +42,7 @@ fun RespondPlanScreen(
             PlanzBackAndClearAppBar(
                 title = if (uiState.loadState == LoadState.SUCCESS) uiState.timeTable.promisingName else stringResource(R.string.respond_plan_title),
                 onClickBackIcon = { viewModel.setEvent(RespondPlanEvent.OnClickBackButton) },
-                onClickUserIcon = { onDynamicLinkClick(
-                    context, SchemeType.RESPOND,
-                    uiState.planId.toString(),
-                    thumbNailTitle = context.getString(R.string.share_thumbnail_title),
-                    thumbNailDescription = context.getString(R.string.share_thumbnail_description),
-                    thumbNailImageUrl = BuildConfig.BASE_URL + context.getString(R.string.share_plan_share_feed_template_image_url)
-                ) },
+                onClickShareIcon = { onDynamicLinkClick(context = context, id = uiState.planId.toString()) },
                 textIconTitle = stringResource(id = R.string.respond_plan_clear_select_text),
                 textIconColor = Gray500,
                 onClickClearText = { viewModel.setEvent(RespondPlanEvent.OnClickClearButton) },
