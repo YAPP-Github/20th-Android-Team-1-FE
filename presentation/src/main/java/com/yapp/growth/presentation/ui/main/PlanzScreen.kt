@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.main
 
 import android.app.Activity
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -177,6 +178,11 @@ fun PlanzScreen(
             isFloatingActionButtonDocked = true,
             floatingActionButtonPosition = FabPosition.Center,
         ) { innerPadding ->
+
+            BackHandler(enabled = sheetState.isVisible) {
+                coroutineScope.launch { sheetState.hide() }
+            }
+
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,

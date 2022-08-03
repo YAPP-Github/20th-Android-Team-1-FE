@@ -1,7 +1,5 @@
 package com.yapp.growth.presentation.component
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,12 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.valentinilk.shimmer.ShimmerBounds
-import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
-import com.yapp.growth.presentation.R
+import com.yapp.growth.presentation.component.type.PlanzAppBarMenu
 import com.yapp.growth.presentation.theme.*
 
 @Composable
@@ -113,7 +108,7 @@ private fun PlanzAppBar(
             maxLines = 1,
         )
 
-        if(back != null) {
+        if (back != null) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = back.icon),
                 tint = Color.Unspecified,
@@ -125,7 +120,7 @@ private fun PlanzAppBar(
                     .align(Alignment.CenterStart),
             )
         }
-        if(menu != null) {
+        if (menu != null) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = menu.icon),
                 tint = Color.Unspecified,
@@ -194,34 +189,6 @@ private fun PlanzColorTextAppBar(
             }
         }
     }
-}
-
-enum class PlanzAppBarMenu(
-    val horizontalPadding: Dp,
-    @DrawableRes val icon: Int,
-    @StringRes val contentDescription: Int,
-) {
-    CREATE(
-        horizontalPadding = 16.dp,
-        icon = R.drawable.ic_create,
-        contentDescription = R.string.icon_create_content_description
-    ),
-    EXIT(
-        horizontalPadding = 20.dp,
-        icon = R.drawable.ic_exit,
-        contentDescription = R.string.icon_exit_content_description
-    ),
-    SHARE(
-        horizontalPadding = 20.dp,
-        icon = R.drawable.ic_share_box_24,
-        contentDescription = R.string.icon_share_content_description
-    ),
-
-    BACK(
-        horizontalPadding = 20.dp,
-        icon = R.drawable.ic_arrow_left_20,
-        contentDescription = R.string.icon_arrow_left_content_description
-    ),
 }
 
 @Preview(showBackground = true)

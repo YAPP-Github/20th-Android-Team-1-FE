@@ -3,6 +3,7 @@ package com.yapp.growth.presentation.ui.main.manage
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,13 +30,13 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.valentinilk.shimmer.shimmer
 import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.entity.Category
 import com.yapp.growth.domain.entity.Plan
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.component.PlanzCreateAppBar
 import com.yapp.growth.presentation.component.PlanzError
-import com.yapp.growth.presentation.component.PlanzLoading
 import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.main.MainContract
 import com.yapp.growth.presentation.ui.main.MainViewModel
@@ -234,13 +235,36 @@ fun ManagePagerContent(
     onCreateButtonClick: () -> Unit,
 ) {
     when (loadState) {
-        LoadState.LOADING -> PlanzLoading()
+        LoadState.LOADING -> ManageShimmerLoading()
         LoadState.SUCCESS -> {
             if (plans.isNotEmpty()) {
                 ManagePlansList(plans = plans, type = type, onItemClick = onItemClick)
             } else ManageEmptyView(onCreateButtonClick = onCreateButtonClick)
         }
         LoadState.ERROR -> PlanzError()
+    }
+}
+
+@Composable
+fun ManageShimmerLoading() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
+            .shimmer(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Spacer(modifier = Modifier.height(24.dp))
+
+        repeat(2) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Gray200)
+            )
+        }
     }
 }
 

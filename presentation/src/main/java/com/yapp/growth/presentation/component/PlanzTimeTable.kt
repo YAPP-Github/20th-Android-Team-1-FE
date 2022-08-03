@@ -399,14 +399,14 @@ fun ShimmerLocationAndAvailableColorBox() {
 fun LocationAndAvailableColorBox(
     modifier: Modifier = Modifier,
     timeTable: TimeTable,
+    onClickAvailableColorBox: (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(bottom = 20.dp, start = 20.dp, end = 16.dp)
-    )
-    {
+    ) {
         Column(
             modifier = Modifier
                 .wrapContentWidth()
@@ -469,7 +469,8 @@ fun LocationAndAvailableColorBox(
         Row(
             modifier = Modifier
                 .wrapContentWidth()
-                .align(Alignment.CenterEnd),
+                .align(Alignment.CenterEnd)
+                .clickable(onClickAvailableColorBox != null) { onClickAvailableColorBox?.invoke() },
         ) {
 
             Column {

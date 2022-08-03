@@ -47,8 +47,13 @@ class FixPlanViewModel @Inject constructor(
                 } else {
                     it.copy(availableDates = it.availableDates.subList(0, it.availableDates.size))
                 }
+
                 updateState {
-                    copy(loadState = LoadState.SUCCESS, timeTable = sliceTimeTable)
+                    copy(
+                        respondents = it.users,
+                        loadState = LoadState.SUCCESS,
+                        timeTable = sliceTimeTable,
+                    )
                 }
             }
             .onError {
@@ -142,12 +147,21 @@ class FixPlanViewModel @Inject constructor(
             is FixPlanEvent.OnClickFixButton -> { sendFixPlan(event.date) }
             is FixPlanEvent.OnClickTimeTable -> {
                 updateState {
-                    copy(currentClickTimeIndex = event.dateIndex to event.minuteIndex)
+                    copy(
+                        bottomSheet = FixPlanViewState.BottomSheet.PARTICIPANT,
+                        currentClickTimeIndex = event.dateIndex to event.minuteIndex
+                    )
                 }
                 sendEffect({ FixPlanSideEffect.ShowBottomSheet })
                 filterCurrentSelectedUser(event.dateIndex, event.minuteIndex)
             }
             FixPlanEvent.OnClickErrorRetryButton -> loadRespondUsers(planId = planId)
+            FixPlanEvent.OnClickUserIcon -> {
+                updateState {
+                    copy(bottomSheet = FixPlanViewState.BottomSheet.RESPONDENT)
+                }
+                sendEffect({ FixPlanSideEffect.ShowBottomSheet })
+            }
         }
     }
 }
