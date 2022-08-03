@@ -385,7 +385,6 @@ fun PlanzScreen(
                 }
                 is PlanzContract.PlanzSideEffect.MoveToLogin -> {
                     LoginActivity.startActivity(context, null)
-                    context.finish()
                 }
                 is PlanzContract.PlanzSideEffect.MoveToConfirmPlan -> {
                     navController.navigate(PlanzScreenRoute.CONFIRM_PLAN.route.plus("/${effect.planId}"))
