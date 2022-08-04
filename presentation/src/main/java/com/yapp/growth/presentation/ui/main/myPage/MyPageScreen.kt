@@ -83,7 +83,6 @@ fun MyPageScreen(
             when (effect) {
                 is MyPageSideEffect.MoveToLogin -> {
                     LoginActivity.startActivity(context, null)
-                    context.finish()
                 }
                 is MyPageSideEffect.ExitMyPageScreen -> {
                     exitMyPageScreen()
