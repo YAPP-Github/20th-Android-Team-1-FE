@@ -7,23 +7,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,19 +31,11 @@ import com.yapp.growth.presentation.component.PlanzBackAppBar
 import com.yapp.growth.presentation.component.PlanzDialog
 import com.yapp.growth.presentation.component.PlanzError
 import com.yapp.growth.presentation.component.PlanzLoading
-import com.yapp.growth.presentation.theme.BackgroundColor1
-import com.yapp.growth.presentation.theme.Gray500
-import com.yapp.growth.presentation.theme.Gray700
-import com.yapp.growth.presentation.theme.Gray900
-import com.yapp.growth.presentation.theme.MainPurple900
-import com.yapp.growth.presentation.theme.PlanzTheme
-import com.yapp.growth.presentation.theme.PlanzTypography
+import com.yapp.growth.presentation.theme.*
 import com.yapp.growth.presentation.ui.login.LoginActivity
 import com.yapp.growth.presentation.ui.main.MainContract
 import com.yapp.growth.presentation.ui.main.MainViewModel
-import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
-import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageEvent
-import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageSideEffect
+import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.*
 import com.yapp.growth.presentation.util.composableActivityViewModel
 
 @Composable
@@ -195,30 +172,38 @@ fun MyPageSignUp(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = BackgroundColor1)
-            .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 25.dp),
+            .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 25.dp)
+            .clickable {
+                onSingUpClick()
+            },
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+
+        TextButton(
+            modifier = Modifier.wrapContentSize(),
+            onClick = onSingUpClick,
+            colors = ButtonDefaults.textButtonColors(
+                backgroundColor = Color.Transparent,
+                contentColor = MainPurple900
+            ),
+            contentPadding = PaddingValues(0.dp),
         ) {
             Text(
+                modifier = Modifier.clickable { onSingUpClick() },
                 text = stringResource(id = R.string.my_page_planz_sign_up_text),
                 color = MainPurple900,
                 style = PlanzTypography.h2,
             )
-            Spacer(modifier = Modifier.width(2.dp))
-            Box(modifier = Modifier
-                .size(24.dp)
-                .clip(RoundedCornerShape(30.dp))
-                .clickable { onSingUpClick() }) {
-                Icon(
-                    modifier = Modifier.align(Alignment.Center),
-                    tint = Color.Unspecified,
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_blue_right),
-                    contentDescription = null,
-                )
-            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                tint = Color.Unspecified,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_blue_right),
+                contentDescription = null,
+            )
         }
+
         Text(
             text = stringResource(id = R.string.my_page_induce_sign_up_text),
             color = Gray500,
@@ -251,7 +236,7 @@ fun MyPageUserInfo(
 
                 Icon(
                     modifier = Modifier.clickable { OnClickModifyNickname() },
-                    painter = painterResource(id = R.drawable.ic_nickname_modify),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_nickname_modify),
                     contentDescription = null,
                 )
             }
@@ -265,7 +250,7 @@ fun MyPageUserInfo(
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier.size(54.dp),
-            painter = painterResource(R.drawable.ic_default_user_image_54),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_default_user_image_54),
             contentDescription = null,
         )
     }
