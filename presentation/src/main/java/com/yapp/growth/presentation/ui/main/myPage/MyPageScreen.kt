@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -250,7 +251,7 @@ fun MyPageUserInfo(
         Spacer(modifier = Modifier.weight(1f))
         Image(
             modifier = Modifier.size(54.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_default_user_image_54),
+            painter = painterResource(R.drawable.ic_default_user_image_54),
             contentDescription = null,
         )
     }
