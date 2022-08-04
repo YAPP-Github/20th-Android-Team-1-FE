@@ -36,6 +36,7 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteUserInfo(): NetworkResult<Unit> {
+        cachedUserInfo = null
         return dataSource.deleteUserInfo()
     }
 }
