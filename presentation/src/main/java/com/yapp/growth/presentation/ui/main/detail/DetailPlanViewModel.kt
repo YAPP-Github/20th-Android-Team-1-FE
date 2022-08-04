@@ -66,6 +66,8 @@ class DetailPlanViewModel @Inject constructor(
 
     private fun convertMemberList(members: List<String>): String {
         var result = ""
+        if (members.isEmpty()) return result
+
         var stringNumber = members[0].length
 
         for (i in members.indices) {
