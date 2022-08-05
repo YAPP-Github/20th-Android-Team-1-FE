@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.growth.base.BaseViewModel
 import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.NetworkResult
+import com.yapp.growth.domain.entity.User
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
@@ -22,10 +23,11 @@ class ModifyNickNameViewModel @Inject constructor(
     ModifyViewState()
 ) {
 
+    private lateinit var userInfo: User
     init {
         viewModelScope.launch {
-            val userName = userInfoUseCase.getCachedUserInfo() ?: (userInfoUseCase.invoke() as? NetworkResult.Success)?.data
-            userName?.let { updateState { copy(nickNameHint = it.userName) } }
+            userInfo = userInfoUseCase.getCachedUserInfo() ?: (userInfoUseCase.invoke() as? NetworkResult.Success)?.data ?: User(0L,"")
+            userInfo.let { updateState { copy(nickNameHint = it.userName) } }
         }
     }
 
@@ -33,18 +35,18 @@ class ModifyNickNameViewModel @Inject constructor(
         updateState {
             copy(
                 nickName = nickName,
-                isError = isOverflowed(nickName)
+                isError = isOverflowed(nickName) || nickName == userInfo.userName
             )
         }
     }
 
     private fun isOverflowed(nickName: String): Boolean {
-        return nickName.isBlank() || (nickName.length > MAX_LENGTH_TITLE)
+        return nickName.isBlank() || (nickName.length > MAX_LENGTH_NICKNAME)
     }
 
     private fun modifyNickName(nickName: String) = viewModelScope.launch {
         updateState { copy(loadState = LoadState.LOADING) }
-        modifyNickNameUseCase.invoke(nickName)
+        modifyNickNameUseCase.invoke(nickName.replace("\\r\\n|\\r|\\n|\\n\\r".toRegex(),""))
             .onSuccess {
                 updateState { copy(loadState = LoadState.SUCCESS) }
                 sendEffect({ ModifyNickNameSideEffect.NavigateToPreviousScreen })
@@ -63,3 +65,5 @@ class ModifyNickNameViewModel @Inject constructor(
     }
 
 }
+
+const val MAX_LENGTH_NICKNAME = 5
