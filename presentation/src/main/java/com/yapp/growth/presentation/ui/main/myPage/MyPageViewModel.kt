@@ -8,6 +8,7 @@ import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
+import com.yapp.growth.domain.usecase.RemoveCachedUserInfoUseCase
 import com.yapp.growth.domain.usecase.RemoveUserInfoUseCase
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
@@ -22,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val removeCachedUserInfoUseCase: RemoveCachedUserInfoUseCase,
     private val removeUserInfoUseCase: RemoveUserInfoUseCase,
     private val resourcesProvider: ResourceProvider,
     private val kakaoLoginSdk: LoginSdk
@@ -97,6 +99,7 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { kakaoLoginSdk.logout() }
                 .onSuccess {
+                    removeCachedUserInfoUseCase.invoke()
                     sendEffect({ MyPageSideEffect.MoveToLogin })
                 }
                 .onError {
