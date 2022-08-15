@@ -7,8 +7,8 @@ import com.yapp.growth.base.LoadState
 import com.yapp.growth.domain.onError
 import com.yapp.growth.domain.onSuccess
 import com.yapp.growth.domain.runCatching
-import com.yapp.growth.domain.usecase.DeleteUserInfoUseCase
 import com.yapp.growth.domain.usecase.GetUserInfoUseCase
+import com.yapp.growth.domain.usecase.RemoveUserInfoUseCase
 import com.yapp.growth.presentation.R
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.LoginState
 import com.yapp.growth.presentation.ui.main.myPage.MyPageContract.MyPageEvent
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val deleteUserInfoUseCase: DeleteUserInfoUseCase,
+    private val removeUserInfoUseCase: RemoveUserInfoUseCase,
     private val resourcesProvider: ResourceProvider,
     private val kakaoLoginSdk: LoginSdk
 ) : BaseViewModel<MyPageViewState, MyPageSideEffect, MyPageEvent>(MyPageViewState()) {
@@ -107,7 +107,7 @@ class MyPageViewModel @Inject constructor(
 
     private fun withdraw() {
         viewModelScope.launch {
-            deleteUserInfoUseCase.invoke()
+            removeUserInfoUseCase.invoke()
                 .onSuccess {
                     runCatching { kakaoLoginSdk.withdraw() }
                         .onSuccess {
@@ -127,7 +127,7 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             val cacheInfo = getUserInfoUseCase.getCachedUserInfo()
 
-            if(cacheInfo == null) {
+            if (cacheInfo == null) {
                 getUserInfoUseCase.invoke()
                     .onSuccess {
                         updateState {

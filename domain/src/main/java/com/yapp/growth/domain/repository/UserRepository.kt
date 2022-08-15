@@ -14,5 +14,5 @@ interface UserRepository {
     fun removeCachedUserInfo()
 
     suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus>
-    suspend fun deleteUserInfo(): NetworkResult<Unit>
+    suspend fun removeUserInfo(): NetworkResult<Unit>
 }
