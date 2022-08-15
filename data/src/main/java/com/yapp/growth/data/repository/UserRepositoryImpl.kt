@@ -21,7 +21,7 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun modifyNickName(nickName: String): NetworkResult<User> {
-        cachedUserInfo = null
+        removeCachedUserInfo()
         return dataSource.modifyNickName(nickName)
     }
 
@@ -31,12 +31,15 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override fun getCachedUserInfo(): User? = cachedUserInfo
 
+    override fun removeCachedUserInfo() {
+        cachedUserInfo = null
+    }
+
     override suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus> {
         return dataSource.getUserPlanStatus(planId)
     }
 
     override suspend fun deleteUserInfo(): NetworkResult<Unit> {
-        cachedUserInfo = null
         return dataSource.deleteUserInfo()
     }
 }
