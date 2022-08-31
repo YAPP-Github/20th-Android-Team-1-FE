@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,10 +35,12 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -448,7 +451,11 @@ fun HomeMonthlyPlan(
                     Icon(
                         modifier = Modifier
                             .padding(start = 112.dp)
-                            .clickable { onPreviousClick() },
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(bounded = false),
+                                onClick = { onPreviousClick() }
+                            ),
                         tint = Color.Unspecified,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_20),
                         contentDescription = null,
@@ -456,7 +463,11 @@ fun HomeMonthlyPlan(
                     Icon(
                         modifier = Modifier
                             .padding(start = 136.dp)
-                            .clickable { onNextClick() },
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = rememberRipple(bounded = false),
+                                onClick = { onNextClick() }
+                            ),
                         tint = Color.Unspecified,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_20),
                         contentDescription = null,
