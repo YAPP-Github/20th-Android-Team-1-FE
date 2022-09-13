@@ -86,12 +86,13 @@ fun PlanzBasicButton(
 ) {
     Button(
         modifier = modifier.height(52.dp),
+        enabled = enabled,
         shape = RoundedCornerShape(10.dp),
-        onClick = { if (enabled) onClick() },
-        colors = when (enabled) {
-            true -> ButtonDefaults.buttonColors(backgroundColor = buttonColor)
-            else -> ButtonDefaults.buttonColors(backgroundColor = Gray300)
-        },
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = buttonColor,
+            disabledBackgroundColor = Gray300
+        ),
         elevation = null,
     ) {
         Text(
@@ -113,12 +114,13 @@ fun PlanzBasicBottomButton(
 ) {
     Button(
         modifier = modifier.height(44.dp),
+        enabled = enabled,
         shape = RoundedCornerShape(6.dp),
-        onClick = { if (enabled) onClick() },
-        colors = when (enabled) {
-            true -> ButtonDefaults.buttonColors(backgroundColor = buttonColor)
-            else -> ButtonDefaults.buttonColors(backgroundColor = Gray300)
-        },
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = buttonColor,
+            disabledBackgroundColor = Gray300
+        ),
         elevation = null,
     ) {
         Text(
