@@ -9,8 +9,10 @@ interface UserRepository {
 
     suspend fun modifyNickName(nickName: String): NetworkResult<User>
     suspend fun getUserInfo(): NetworkResult<User>
+
     fun getCachedUserInfo(): User?
+    fun removeCachedUserInfo()
 
     suspend fun getUserPlanStatus(planId: Long): NetworkResult<UserPlanStatus>
-    suspend fun deleteUserInfo(): NetworkResult<Unit>
+    suspend fun removeUserInfo(): NetworkResult<Unit>
 }
