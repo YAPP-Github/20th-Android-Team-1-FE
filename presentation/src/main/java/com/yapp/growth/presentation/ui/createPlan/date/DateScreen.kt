@@ -2,6 +2,7 @@ package com.yapp.growth.presentation.ui.createPlan.date
 
 import android.content.Context
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +18,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -160,7 +163,11 @@ fun DateCalendar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                modifier = Modifier.clickable { onMonthlyPreviousClick() },
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false),
+                    onClick = { onMonthlyPreviousClick() }
+                ),
                 tint = Color.Unspecified,
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_left_24),
                 contentDescription = null,
@@ -172,7 +179,11 @@ fun DateCalendar(
             )
             Spacer(modifier = Modifier.width(16.dp))
             Icon(
-                modifier = Modifier.clickable { onMonthlyNextClick() },
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false),
+                    onClick = { onMonthlyNextClick() }
+                ),
                 tint = Color.Unspecified,
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_box_right_24),
                 contentDescription = null,
