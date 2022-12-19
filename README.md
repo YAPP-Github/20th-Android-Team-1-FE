@@ -1,5 +1,9 @@
-# 20th-Android-Team-1-FE 플랜즈
+## YAPP 활동 종료 후에도 iOS 출시와 Android 앱 업데이트를 진행 중이에요!
+🙋‍♀️ 이후 Android 파트의 진행 상황이 궁금하신 분들은 [여기](https://github.com/Team-Planz/Planz-Android)로 오시면 보실 수 있어요! :)
 
+<br>
+
+# 20th-Android-Team-1-FE 플랜즈
 ![screen1](https://user-images.githubusercontent.com/33443660/183038971-0e87d601-16d9-485a-857e-031ae9fa285e.png)
 
 ## Description
